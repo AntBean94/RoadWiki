@@ -28,8 +28,8 @@ CREATE TABLE IF NOT EXISTS `roadwiki`.`user` (
   `createDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `image` VARCHAR(50) NULL,
   PRIMARY KEY (`uid`),
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
-  UNIQUE INDEX `uid_UNIQUE` (`uid` ASC) VISIBLE)
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) ,
+  UNIQUE INDEX `uid_UNIQUE` (`uid` ASC) )
 ENGINE = InnoDB;
 
 
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `roadwiki`.`keyword` (
   `kwid` INT NOT NULL AUTO_INCREMENT,
   `word` VARCHAR(45) NULL,
   PRIMARY KEY (`kwid`),
-  UNIQUE INDEX `kwid_UNIQUE` (`kwid` ASC) VISIBLE)
+  UNIQUE INDEX `kwid_UNIQUE` (`kwid` ASC) )
 ENGINE = InnoDB;
 
 
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `roadwiki`.`userkeyword` (
   `priority` INT NULL,
   `kwid` INT NOT NULL,
   PRIMARY KEY (`uid`, `kwid`),
-  INDEX `kwid_idx` (`kwid` ASC) VISIBLE,
+  INDEX `kwid_idx` (`kwid` ASC) ,
   CONSTRAINT `fk_user_userkeyword`
     FOREIGN KEY (`uid`)
     REFERENCES `roadwiki`.`user` (`uid`)
@@ -81,8 +81,8 @@ CREATE TABLE IF NOT EXISTS `roadwiki`.`posting` (
   `image` VARCHAR(50) NULL,
   `likeCnt` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`pid`),
-  UNIQUE INDEX `pid_UNIQUE` (`pid` ASC) VISIBLE,
-  INDEX `uid_idx` (`uid` ASC) INVISIBLE,
+  UNIQUE INDEX `pid_UNIQUE` (`pid` ASC) ,
+  INDEX `uid_idx` (`uid` ASC) ,
   CONSTRAINT `fk_user_posting`
     FOREIGN KEY (`uid`)
     REFERENCES `roadwiki`.`user` (`uid`)
@@ -103,9 +103,9 @@ CREATE TABLE IF NOT EXISTS `roadwiki`.`comment` (
   `modifyDate` TIMESTAMP NULL,
   `likeCnt` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`cid`),
-  UNIQUE INDEX `cid_UNIQUE` (`cid` ASC) VISIBLE,
-  INDEX `uid_idx` (`uid` ASC) VISIBLE,
-  INDEX `parentid_idx` (`pid` ASC) VISIBLE,
+  UNIQUE INDEX `cid_UNIQUE` (`cid` ASC) ,
+  INDEX `uid_idx` (`uid` ASC) ,
+  INDEX `parentid_idx` (`pid` ASC) ,
   CONSTRAINT `fk_user_comment`
     FOREIGN KEY (`uid`)
     REFERENCES `roadwiki`.`user` (`uid`)
@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `roadwiki`.`postinglikeuser` (
   `uid` INT NOT NULL,
   `pid` INT NOT NULL,
   PRIMARY KEY (`pid`, `uid`),
-  INDEX `pid_idx` (`pid` ASC) VISIBLE,
+  INDEX `pid_idx` (`pid` ASC) ,
   CONSTRAINT `fk_posting_postinglikeuser`
     FOREIGN KEY (`pid`)
     REFERENCES `roadwiki`.`posting` (`pid`)
@@ -147,7 +147,7 @@ CREATE TABLE IF NOT EXISTS `roadwiki`.`commentlikeuser` (
   `uid` INT NOT NULL,
   `cid` INT NOT NULL,
   PRIMARY KEY (`cid`, `uid`),
-  INDEX `cid_idx` (`cid` ASC) VISIBLE,
+  INDEX `cid_idx` (`cid` ASC) ,
   CONSTRAINT `fk_user_commentlikeuser`
     FOREIGN KEY (`uid`)
     REFERENCES `roadwiki`.`user` (`uid`)
@@ -172,8 +172,8 @@ CREATE TABLE IF NOT EXISTS `roadwiki`.`roadmap` (
   `permission` INT NULL DEFAULT 1,
   `createDate` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `tmp` TEXT NULL,
-  UNIQUE INDEX `rid_UNIQUE` (`rmid` ASC) VISIBLE,
-  INDEX `uid_idx` (`uid` ASC) VISIBLE,
+  UNIQUE INDEX `rid_UNIQUE` (`rmid` ASC) ,
+  INDEX `uid_idx` (`uid` ASC) ,
   PRIMARY KEY (`rmid`),
   CONSTRAINT `fk_user_roadmap`
     FOREIGN KEY (`uid`)
@@ -215,10 +215,10 @@ CREATE TABLE IF NOT EXISTS `roadwiki`.`curriculum` (
   `depth` INT NULL,
   `title` VARCHAR(45) NULL,
   PRIMARY KEY (`crid`),
-  INDEX `rmid_idx` (`rmid` ASC) VISIBLE,
-  INDEX `crtid_idx` (`crtid` ASC) VISIBLE,
-  INDEX `parentid_idx` (`parentid` ASC) VISIBLE,
-  INDEX `crmid_idx` (`crmid` ASC) VISIBLE,
+  INDEX `rmid_idx` (`rmid` ASC) ,
+  INDEX `crtid_idx` (`crtid` ASC) ,
+  INDEX `parentid_idx` (`parentid` ASC) ,
+  INDEX `crmid_idx` (`crmid` ASC) ,
   CONSTRAINT `fk_roadmap_curriculum`
     FOREIGN KEY (`rmid`)
     REFERENCES `roadwiki`.`roadmap` (`rmid`)
@@ -254,9 +254,9 @@ CREATE TABLE IF NOT EXISTS `roadwiki`.`recomment` (
   `modifyDate` TIMESTAMP NULL,
   `likeCnt` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`rcid`),
-  UNIQUE INDEX `rcid_UNIQUE` (`rcid` ASC) VISIBLE,
-  INDEX `fk_comment_recomment_idx` (`cid` ASC) VISIBLE,
-  INDEX `fk_user_recomment_idx` (`uid` ASC) VISIBLE,
+  UNIQUE INDEX `rcid_UNIQUE` (`rcid` ASC) ,
+  INDEX `fk_comment_recomment_idx` (`cid` ASC) ,
+  INDEX `fk_user_recomment_idx` (`uid` ASC) ,
   CONSTRAINT `fk_comment_recomment`
     FOREIGN KEY (`cid`)
     REFERENCES `roadwiki`.`comment` (`cid`)
@@ -277,7 +277,7 @@ CREATE TABLE IF NOT EXISTS `roadwiki`.`recommentlikeuser` (
   `uid` INT NOT NULL,
   `rcid` INT NOT NULL,
   PRIMARY KEY (`uid`, `rcid`),
-  INDEX `fk_recomment_recommentlikeuser_idx` (`rcid` ASC) VISIBLE,
+  INDEX `fk_recomment_recommentlikeuser_idx` (`rcid` ASC) ,
   CONSTRAINT `fk_user_recommentlikeuser`
     FOREIGN KEY (`uid`)
     REFERENCES `roadwiki`.`user` (`uid`)
