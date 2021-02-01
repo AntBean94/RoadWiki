@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.web.blog.model.dto.Roadmap;
 import com.web.blog.model.repo.RoadmapRepo;
 
@@ -19,9 +21,12 @@ public class RoadmapServiceImpl implements RoadmapService {
 	RoadmapRepo roadmaprepo;
 
 	@Override
-	public Object create(String nowuid, Roadmap map) {
+	public Object create(String nowuid, Roadmap map) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
+			JsonObject jsonObject = new JsonParser().parse(map.getTmp()).getAsJsonObject();
+			
+			
 			int nowuidnum = Integer.parseInt(nowuid);
 			int uidnum = map.getUid();
 			if (nowuidnum != uidnum)
@@ -29,7 +34,6 @@ public class RoadmapServiceImpl implements RoadmapService {
 
 			if (roadmaprepo.insert(map) != 1)
 				throw new RuntimeException("Query wrong");
-
 		} catch (Exception e) {
 			logger.error("Service create : Something wrong");
 			throw e;
@@ -41,7 +45,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 	public Object modify(String nowuid, Roadmap map) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			int nowuidnum = Integer.parseInt(nowuid); 
+			int nowuidnum = Integer.parseInt(nowuid);
 			if (nowuidnum != map.getUid())
 				throw new RuntimeException("wrong user");
 
@@ -74,7 +78,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 	}
 
 	@Override
-	public Object getRoadmapListByUid( String nowuid, String uid) {
+	public Object getRoadmapListByUid(String nowuid, String uid) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			int uidnum = Integer.parseInt(uid);
@@ -92,7 +96,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 	}
 
 	@Override
-	public Object getRoadmapListByRmorder( String nowuid, String uid, String rmorder) {
+	public Object getRoadmapListByRmorder(String nowuid, String uid, String rmorder) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			int uidnum = Integer.parseInt(uid);
@@ -102,7 +106,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 			if (uidnum != nowuidnum)
 				throw new RuntimeException("wrong user");
 
-			result.put("roadmaps", roadmaprepo.selectRoadmapListByRmorder( rmordernum, uidnum));
+			result.put("roadmaps", roadmaprepo.selectRoadmapListByRmorder(rmordernum, uidnum));
 		} catch (Exception e) {
 			logger.error("Service getRoadmapListByRmorder : Something wrong");
 		}
@@ -116,9 +120,9 @@ public class RoadmapServiceImpl implements RoadmapService {
 			int rmidnum = Integer.parseInt(rmid);
 			int uidnum = roadmaprepo.selectUidByRmid(rmidnum);
 			int nowuidnum = 0;
-			if(uidnum <0) {
+			if (uidnum < 0) {
 				nowuidnum = uidnum;
-			}else
+			} else
 				nowuidnum = Integer.parseInt(nowuid);
 			Object roadmap = null;
 			if (nowuidnum == uidnum)
