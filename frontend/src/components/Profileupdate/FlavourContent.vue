@@ -50,21 +50,36 @@ export default {
   data() {
     return {
       modalShow: false,
-        selected: [],
-        options: [
-          { text: 'Python', value: 1},
-          { text: 'JAVA', value: 2},
-          { text: 'C', value: 3},
-          { text: 'Vue', value: 4},
-          { text: 'Spring', value: 5},
-          { text: 'Frontend', value: 6},
-          { text: 'Backend', value: 7},
-          { text: 'Database', value: 8},
-          { text: 'AI', value: 9},
-          { text: '기타', value: 10},
-        ],
-      }
-    },
+      selected: [],
+      options: [
+        { text: 'Python', value: 1},
+        { text: 'JAVA', value: 2},
+        { text: 'C', value: 3},
+        { text: 'Vue', value: 4},
+        { text: 'Spring', value: 5},
+        { text: 'Frontend', value: 6},
+        { text: 'Backend', value: 7},
+        { text: 'Database', value: 8},
+        { text: 'AI', value: 9},
+        { text: '기타', value: 10},
+      ],
+      keywords: [],
+    }
+  },
+  created() {
+    axios
+      .get(`${this.$store.getters.getServer}/user/info`)
+      .then((res) => {
+        console.log(res.data)
+        // this.selected = res.data.keywords;
+      })
+      .catch(() => {
+        alert("로그인이 필요한 서비스입니다.")
+        this.$store.dispatch("LOGOUT").then(() => {
+          this.$router.replace("/")
+        })
+      })
+  },
   methods: {
     sendFlavour() {
       this.modalShow = false
