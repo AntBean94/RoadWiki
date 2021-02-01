@@ -140,8 +140,6 @@ export default {
       const uid = String(this.$store.getters.getUid)
       // page => 차후 수정해야됨
 
-      
-      
       axios.get(`${this.$store.getters.getServer}/roadmap/list/${uid}`)
         .then((res) => {
         if(res.data.msg == 'success')
@@ -156,6 +154,7 @@ export default {
     
   },
   mounted() {
+    // myDiagram 모델 선언
     myDiagram = 
         $(go.Diagram, this.$refs.myDiagramDiv,
           {
@@ -199,7 +198,7 @@ export default {
           this.makePort("B", go.Spot.Bottom, go.Spot.BottomSide, true, false)
         ));  
 
-
+      // 출발 node() 
       myDiagram.nodeTemplateMap.add("Start",
         $(go.Node, "Table", this.nodeStyle(),
           $(go.Panel, "Spot",
@@ -214,6 +213,7 @@ export default {
           this.makePort("B", go.Spot.Bottom, go.Spot.Bottom, true, false)
         ));
       
+      // 종료 node(필요한가? - 논의 필요)
       myDiagram.nodeTemplateMap.add("End",
         $(go.Node, "Table", this.nodeStyle(),
           $(go.Panel, "Spot",
@@ -246,6 +246,7 @@ export default {
         geo.spot2 = go.Spot.BottomRight;
         return geo;
       });
+
     // 메모 GUI
     myDiagram.nodeTemplateMap.add("Comment",
       $(go.Node, "Auto", this.nodeStyle(),

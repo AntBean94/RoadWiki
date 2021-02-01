@@ -559,7 +559,7 @@ export default {
     
     previewRoadmap(clickrmid, index) {
       
-      
+  
         axios.get(`${this.$store.getters.getServer}/roadmap/get/${clickrmid}`)
         .then((res) => {
           if(res.data.msg == 'success'){
