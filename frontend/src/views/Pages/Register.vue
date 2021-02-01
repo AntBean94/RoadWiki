@@ -104,12 +104,12 @@
                         <b-form-checkbox
                           v-for="option in options"
                           v-model="selected"
-                          :key="option.value"
-                          :value="option.value"
+                          :key="option.kwid"
+                          :value="option.kwid"
                           :aria-describedby="ariaDescribedby"
                           name="flavour-3a"
                         >
-                          {{ option.text }}
+                          {{ option.word }}
                         </b-form-checkbox>
                         <!-- <b-form-checkbox-group
                           id="checkbox-group-1"
@@ -122,11 +122,11 @@
 
                       </b-container>
                     </b-form-group>
-                    <b-container>
+                    <!-- <b-container>
                       <div>1순위 <strong v-if="selected.length > 0">{{ options[selected[0]-1].text }}</strong></div>
                       <div>2순위 <strong v-if="selected.length > 1">{{ options[selected[1]-1].text }}</strong></div>
                       <div>3순위 <strong v-if="selected.length > 2">{{ options[selected[2]-1].text }}</strong></div>
-                    </b-container>
+                    </b-container> -->
                   </div>
                   <hr class="my-4">
                   <b-row class=" my-4">
@@ -202,20 +202,21 @@
         confirmEmail: false,
         agree: false,
         selected: [],
-        options: [
-          { text: 'Python', value: 1},
-          { text: 'JAVA', value: 2},
-          { text: 'C', value: 3},
-          { text: 'Vue', value: 4},
-          { text: 'Spring', value: 5},
-          { text: 'Frontend', value: 6},
-          { text: 'Backend', value: 7},
-          { text: 'Database', value: 8},
-          { text: 'AI', value: 9},
-          { text: '기타', value: 10},
-        ],
+        options: [],
         isLoginModal: false,
       }
+    },
+    created() {
+      axios.get(`${this.$store.getters.getServer}/keyword/list`)
+      .then((res) => {
+        console.log('#########')
+        console.log(res.data.keywords)
+        this.options = res.data.keywords
+        // for (let i=0; i < res.data.keywords.length; i++) {
+        //   this.options[i] = res.data.keywords[i]
+        // }
+        console.log(this.options)
+      })
     },
     methods: {
       onSubmit() {
@@ -270,6 +271,9 @@
       },
     },
     watch: {
+      selected() {
+        console.log(this.selected)
+      },
       password() {
         // isPasswordEqual()
       },
@@ -277,11 +281,11 @@
         // isPasswordEqual()
       },
     },
-    // computed: {
-    //   passwordConfirmationRule() {
-    //     return () => (this.model.password === this.model.rePassword) || 'Password must match'
-    //   },
-    // },
+    computed: {
+      // passwordConfirmationRule() {
+      //   return () => (this.model.password === this.model.rePassword) || 'Password must match'
+      // },
+    },
     
   };
 </script>

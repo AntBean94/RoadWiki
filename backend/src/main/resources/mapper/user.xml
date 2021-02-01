@@ -14,7 +14,15 @@
 		where email=#{email}
 	</select>
 	
-	<select id="selectkeyword" parameterType="int" resultType="String">
+	<select id="selectkeyword" parameterType="int" resultType="int">
+		select kwid
+		from keyword
+		where kwid in (select kwid 
+						from userkeyword
+						where uid = #{uid});
+	</select>
+	
+	<select id="selectkeywordtext" parameterType="int" resultType="String">
 		select word
 		from keyword
 		where kwid in (select kwid 

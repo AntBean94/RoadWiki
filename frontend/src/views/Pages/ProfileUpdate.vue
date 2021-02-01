@@ -116,13 +116,13 @@
                 <b-badge
                   variant="warning"
                   class="mx-1"
-                  v-for="(keyword, idx) in keywords"
+                  v-for="(keyword, idx) in keywordtexts"
                   :key="idx"
                 >
                   {{ keyword }}
                 </b-badge>
               </b-col>
-              <FlavourContent class="col align-self-center pl-5 ml-5" />
+              <FlavourContent class="col align-self-center pl-5 ml-5" @changeFlavour="changeFlavour"/>
             </b-row>
             <b-row class="mb-3">
               <b-col cols="3" class="text-center" align-self="center">
@@ -138,8 +138,7 @@
               <b-col>
                 <div>
                   <b-button size="sm" @click="modalShow = !modalShow"
-                    >사진📷</b-button
-                  >
+                    >사진📷</b-button>
 
                   <b-modal v-model="modalShow" hide-footer>
                     <template #modal-title>
@@ -271,6 +270,8 @@ export default {
       profileImg: "",
       backImg: "",
       keywords: [],
+      keywordtexts: [],
+      options: [],
       follower: "",
       following: "",
       boards: "",
@@ -290,6 +291,7 @@ export default {
         this.nickname = res.data.name;
         this.email = res.data.email;
         this.keywords = res.data.keywords;
+        this.keywordtexts = res.data.keywordtexts;
       })
       .catch(() => {
         alert("로그인이 필요한 서비스입니다.");
@@ -297,6 +299,10 @@ export default {
           this.$router.replace("/");
         });
       });
+    axios.get(`${this.$store.getters.getServer}/keyword/list`)
+    .then((res) => {
+      this.options = res.data.keywords
+    })
   },
   methods: {
     withDrawal() {
@@ -309,6 +315,14 @@ export default {
         .catch(() => {
           alert("오류가 발생했습니다. 다시 시도해주세요.");
         });
+    },
+    changeFlavour(keywords) {
+      let tempkeywordtexts = new Array(keywords.length)
+      console.log(keywordtexts)
+      for (let i=0; i < keywords.length; i++) {
+        keywordtexts[i] = this.options[keywords[i]]
+      }
+      this.keywordtexts = tempkeywordtexts
     },
     updateHandler() {
       // 보낼때 명명이 중요함
