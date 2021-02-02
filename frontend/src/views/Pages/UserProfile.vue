@@ -79,8 +79,8 @@
               <i class="ni ni-hat-3 mr-2"></i> {{ major }}
             </div>
             <div class="h3 font-weight-300">
-              <b-badge variant="warning" class="mx-1" v-for="(keyword, idx) in keywords" :key="idx">
-                {{ keyword }}
+              <b-badge variant="warning" class="mx-1" v-for="(keywordtext, idx) in keywordtexts" :key="idx">
+                {{ keywordtext }}
               </b-badge>
             </div>
             <hr class="my-4">
@@ -155,7 +155,7 @@
         address: 'https://github.com/',
         profileImg: '',
         backImg: '',
-        keywords: [],
+        keywordtexts: [],
         follower: '',
         following: '',
         boards: '',
@@ -172,6 +172,7 @@
         this.nickname = res.data.name
         this.email = res.data.email
         this.keywords = res.data.keywords
+        this.keywordtexts = res.data.keywordtexts
       })
       .catch(() => {
         alert('로그인이 필요한 서비스입니다.')
