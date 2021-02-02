@@ -70,8 +70,9 @@
                       <!-- 만약 기존에 계정이 존재하는 이메일이라면 this email is already taken 보여주기 -->
                     </div>
                     <div class="col-3 pl-0">
-                      <b-button v-b-modal.modal-email v-if="!confirmEmail" @click="emailNumSend">인증하기</b-button>
-                      <ModalEmailValidation v-show="isEmailModal" @close="closeModal"/>
+                      <b-button v-if="!confirmEmail" @click="emailNumSend">인증하기</b-button>
+                      <ModalEmailValidation :isEmailModal="isEmailModal" :userEmail="email" @close="closeModal"/>
+                      <!-- <ModalEmailValidation/> -->
                       <b-button v-if="confirmEmail" disabled>인증완료</b-button>
                     </div>
                   </div>
@@ -189,13 +190,13 @@
         email: '',
         password: '',
         rePassword: '',
-        isEmailModal: false,
         isPolicyModal: false,
         confirmEmail: false,
         agree: false,
         selected: [],
         options: [],
         isLoginModal: false,
+        isEmailModal: false,
       }
     },
     created() {
@@ -220,12 +221,11 @@
       },
       emailNumSend() {
         // 이미 존재하는 이메일인 경우, 존재하는 이메일 경고창 -> 이메일 인증 막기
-        this.isEmailModal = true
         axios.get(`${this.$store.getters.getServer}/email/${this.email}`)
         .then((res) => {
           console.log(res.data.msg)
           if (res.data.msg === "success") {
-            console.log(this,'this')
+            this.isEmailModal = true
             console.log(this.isEmailModal)
             this.$store.dispatch('SETCODE', res.data['code']);
             this.$store.dispatch('SETEMAIL', res.data['email']);

@@ -76,24 +76,6 @@ export default {
   methods: {
     clickBtn() {
       this.modalShow = true
-      axios
-        .get(`${this.$store.getters.getServer}/user/info`)
-        .then((res) => {
-          console.log('여기는 selected')
-          console.log(this.selected)
-          console.log('이거는 keywords')
-          console.log(res.data.keywords)
-          console.log('이거는 data')
-          console.log(res.data)
-          this.selected = res.data.keywords;
-          console.log(this.selected)
-        })
-        .catch(() => {
-          alert("로그인이 필요한 서비스입니다.")
-          this.$store.dispatch("LOGOUT").then(() => {
-            this.$router.replace("/")
-          })
-        })
 
     },
     sendFlavour() {

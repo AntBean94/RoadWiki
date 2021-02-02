@@ -317,10 +317,11 @@ export default {
         });
     },
     changeFlavour(keywords) {
+      // 다이렉트로 넣기
+      console.log(keywords)
       let tempkeywordtexts = new Array(keywords.length)
-      console.log(keywordtexts)
       for (let i=0; i < keywords.length; i++) {
-        keywordtexts[i] = this.options[keywords[i]]
+        tempkeywordtexts[i] = this.options[keywords[i]].word
       }
       this.keywordtexts = tempkeywordtexts
     },
