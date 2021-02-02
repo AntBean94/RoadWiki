@@ -79,6 +79,7 @@
   
 </template>
 <script>
+// flatpickr 오류 수정 필요!
 import RoadMap from '@/views/Roadmap/RoadMap'
 import router from '@/routes/router'
 import flatPickr from "vue-flatpickr-component";
