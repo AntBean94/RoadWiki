@@ -1,0 +1,54 @@
+<template>
+  <div title="Sidebar" id="sidebar-right" right shadow>
+    <div id="barSpace">
+      <b-button
+        class="xl-2"
+        variant="info"
+        size="xl"
+        @click="goBack"
+        style="margin:30px 5%"
+        >&lt; go back</b-button
+      >
+      <div class="px-3 py-2">
+        <b-col cols="7">
+          <detail v-bind:pid="selPid" />
+        </b-col>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+import detail from "./Posting/Detail";
+export default {
+  components: {
+    detail
+  },
+  props: ["selPid"],
+  methods: {
+    goBack() {
+      this.$emit("goBack");
+    }
+  }
+};
+</script>
+<style>
+#sidebar-right {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 50%;
+  min-width: 700px;
+  height: 100%;
+  /* margin-left: 20%; */
+  overflow: hidden;
+  /* float: right; */
+  background-color: rgb(247, 243, 255);
+  z-index: 1000;
+  /* border-left: navy solid 1px; */
+}
+#barSpace {
+  margin: 0% 1%;
+  background-color: white;
+  height: 100%;
+}
+</style>

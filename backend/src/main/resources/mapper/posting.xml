@@ -14,56 +14,56 @@
 		select * 
 		from posting
 		where classifier=#{classifier}
-		limit #{page}, #{cnt}
+		order by pid DESC limit #{page}, #{cnt}
 	</select>
 	
 	 <select id="selectListAllTag" parameterType="Map" resultType="Posting">
 		select * 
 		from posting
 		where classifier=#{classifier} AND tag=#{tag}
-		limit #{page}, #{cnt}
+		order by pid DESC limit #{page}, #{cnt}
 	</select>
 	
 	<select id="selectListName" parameterType="Map" resultType="Posting">
 		select * 
 		from posting
 		where classifier=#{classifier} AND name=#{word}
-		limit #{page}, #{cnt}
+		order by pid DESC limit #{page}, #{cnt}
 	</select>
 	
 	<select id="selectListNameTag" parameterType="Map" resultType="Posting">
 		select * 
 		from posting
 		where classifier=#{classifier} AND name=#{word} AND tag=#{tag}
-		limit #{page}, #{cnt}
+		order by pid DESC limit #{page}, #{cnt}
 	</select>
 	
 	<select id="selectListTitle" parameterType="Map" resultType="Posting">
 		select * 
 		from posting
 		where classifier=#{classifier} AND title=concat("%", #{word}, "%")
-		limit #{page}, #{cnt}
+		order by pid DESC limit #{page}, #{cnt}
 	</select>
 	
 	<select id="selectListTitleTag" parameterType="Map" resultType="Posting">
 		select * 
 		from posting
 		where classifier=#{classifier} AND title=concat("%", #{word}, "%") AND tag=#{tag}
-		limit #{page}, #{cnt}
+		order by pid DESC limit #{page}, #{cnt}
 	</select>
 	
 	<select id="selectListContent" parameterType="Map" resultType="Posting">
 		select * 
 		from posting
 		where classifier=#{classifier} AND content=concat("%", #{word}, "%") AND tag=#{tag}
-		limit #{page}, #{cnt}
+		order by pid DESC limit #{page}, #{cnt}
 	</select>
 	
 	<select id="selectListContentTag" parameterType="Map" resultType="Posting">
 		select * 
 		from posting
 		where classifier=#{classifier} AND content=concat("%", #{word}, "%") AND tag=#{tag}
-		limit #{page}, #{cnt}
+		order by pid DESC limit #{page}, #{cnt}
 	</select>
 	
 	<insert id="insert" parameterType="Posting">

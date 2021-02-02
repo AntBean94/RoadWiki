@@ -21,6 +21,8 @@ import VueMindmap from 'vue-mindmap'
 import 'vue-mindmap/dist/vue-mindmap.css'
 import VueCarousel from 'vue-carousel'
 import "./plugins/axios"
+import moment from 'moment'
+import VueMoment from "vue-momentjs";
 
 // router setup
 import router from './routes/router';
@@ -34,6 +36,7 @@ import { mapGetters } from 'vuex'
 Vue.use(VueCarousel)
 Vue.use(DashboardPlugin);
 Vue.use(VueMindmap)
+Vue.use(VueMoment, moment);
 
 /* eslint-disable no-new */
 new Vue({
