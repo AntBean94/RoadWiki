@@ -98,7 +98,7 @@ export default {
   name: '',
   componenets: {
     RoadMap,
-    flatPickr
+    flatPickr : flatPickr
   },
   data() {
     return {

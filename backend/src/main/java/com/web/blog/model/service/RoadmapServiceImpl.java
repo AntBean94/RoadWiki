@@ -26,6 +26,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 		try {
 			JsonObject jsonObject = new JsonParser().parse(map.getTmp()).getAsJsonObject();
 			
+			jsonObject.getAsJsonArray("nodeDataArray");
 			
 			int nowuidnum = Integer.parseInt(nowuid);
 			int uidnum = map.getUid();
