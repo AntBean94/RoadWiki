@@ -70,8 +70,8 @@
                       <!-- 만약 기존에 계정이 존재하는 이메일이라면 this email is already taken 보여주기 -->
                     </div>
                     <div class="col-3 pl-0">
-                      <ModalEmailValidation v-if="isEmailModal" @close="closeModal"/>
                       <b-button v-b-modal.modal-email v-if="!confirmEmail" @click="emailNumSend">인증하기</b-button>
+                      <ModalEmailValidation v-show="isEmailModal" @close="closeModal"/>
                       <b-button v-if="confirmEmail" disabled>인증완료</b-button>
                     </div>
                   </div>
@@ -152,10 +152,6 @@
                     <b-button type="submit" variant="primary" class="mt-4" @click="signUp">가입하기</b-button>
                   </div>
                   <div class="text-center">
-                    <!-- <b-button v-b-modal.modal-login variant="default" class="mt-4" @click="isLoginModal = true">로그인</b-button> -->
-                    <!-- <LoginContent v-if="isLoginModal" @close="isLoginModal = false" /> -->
-                    <!-- <LoginContent/> -->
-                    <!-- <LogoutContent/> -->
                   </div>
                 </b-form>
               </validation-observer>
@@ -170,8 +166,6 @@
 <script>
   import ModalEmailValidation from "@/components/Validation/ModalEmailValidation.vue";
   import ModalPolicy from '@/components/Validation/ModalPolicy.vue';
-  // import LoginContent from '@/components/Login/LoginContent.vue';
-  // import LogoutContent from '@/components/Logout/LogoutContent.vue';
 
   import { extend } from 'vee-validate';
 
@@ -188,8 +182,6 @@
     components: {
       ModalEmailValidation,
       ModalPolicy,
-      // LoginContent,
-      // LogoutContent,
     },
     data() {
       return {
@@ -209,13 +201,7 @@
     created() {
       axios.get(`${this.$store.getters.getServer}/keyword/list`)
       .then((res) => {
-        console.log('#########')
-        console.log(res.data.keywords)
         this.options = res.data.keywords
-        // for (let i=0; i < res.data.keywords.length; i++) {
-        //   this.options[i] = res.data.keywords[i]
-        // }
-        console.log(this.options)
       })
     },
     methods: {
@@ -233,12 +219,20 @@
         this.agree = true
       },
       emailNumSend() {
+        // 이미 존재하는 이메일인 경우, 존재하는 이메일 경고창 -> 이메일 인증 막기
         this.isEmailModal = true
-        console.log(this.$store.getters.getServer)
         axios.get(`${this.$store.getters.getServer}/email/${this.email}`)
         .then((res) => {
-          this.$store.dispatch('SETCODE', res.data['code']);
-          this.$store.dispatch('SETEMAIL', res.data['email']);
+          console.log(res.data.msg)
+          if (res.data.msg === "success") {
+            console.log(this,'this')
+            console.log(this.isEmailModal)
+            this.$store.dispatch('SETCODE', res.data['code']);
+            this.$store.dispatch('SETEMAIL', res.data['email']);
+          } else {
+            alert('인증번호 메일 발송에 실패했습니다. 다시 시도해주세요.')
+            this.isEmailModal = false
+          }
         });
       },
       signUp() {
@@ -282,9 +276,6 @@
       },
     },
     computed: {
-      // passwordConfirmationRule() {
-      //   return () => (this.model.password === this.model.rePassword) || 'Password must match'
-      // },
     },
     
   };

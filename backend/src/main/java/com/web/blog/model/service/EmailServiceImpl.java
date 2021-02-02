@@ -63,6 +63,10 @@ public class EmailServiceImpl implements EmailService {
 		String code = (String) map.get("code");
 		String inputCode = (String) map.get("inputCode");
 		
+		if(email.length() == 0 || code.length() < 6) {
+			return new HashMap<String, Object>(){{put("msg", "fail");}};
+		}
+		
 		byte[] tmp = code.getBytes();
 		for(int i = 0; i < tmp.length; i++) 
 			tmp[i]^=(byte)1;
