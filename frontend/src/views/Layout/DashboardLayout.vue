@@ -141,6 +141,7 @@
   import LoginContent from '@/components/Login/LoginContent.vue';
   import LogoutContent from '@/components/Logout/LogoutContent.vue';
 
+
 function hasElement(className) {
   return document.getElementsByClassName(className).length > 0;
 }
@@ -155,6 +156,11 @@ function initScrollbar(className) {
     }, 100);
   }
 }
+  // flatpickr
+  // import flatPickr from "vue-flatpickr-component";
+  // import "flatpickr/dist/flatpickr.css";
+  // import 'flatpickr/dist/themes/material_blue.css';
+  // import {Hindi} from 'flatpickr/dist/l10n/hi.js';
 
   import DashboardNavbar from './DashboardNavbar.vue';
   import ContentFooter from './ContentFooter.vue';
@@ -171,7 +177,6 @@ function initScrollbar(className) {
       FadeTransition,
       LoginContent,
       LogoutContent,
-
     },
     created() {
       let url = this.$route.name;
