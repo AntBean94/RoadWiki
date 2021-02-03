@@ -27,7 +27,10 @@
                         <a slot="title-container" class="nav-link" href="#" role="button">
                             <div class="media align-items-center">
                               <span class="avatar avatar-sm rounded-circle">
-                                <img alt="Image placeholder" src="http://localhost:8085/user/image">
+                                <img 
+                                  alt="Image placeholder" 
+                                  :src="`${this.$store.getters.getServer}/user/image/${this.uid}`"
+                                >
                               </span>
                             </div>
                         </a>

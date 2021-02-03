@@ -262,7 +262,7 @@ export default {
     LoginContent,
     FlavourContent,
     // ProfileImg,
-    BackgroundImg
+    // BackgroundImg
   },
   data() {
     return {
