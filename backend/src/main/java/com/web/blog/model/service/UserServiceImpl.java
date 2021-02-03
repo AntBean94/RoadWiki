@@ -55,6 +55,7 @@ public class UserServiceImpl implements UserService {
 			result.put("createDate", tmp.getCreateDate());
 			result.put("msg", "success");
 			result.put("keywords", userRepo.selectkeyword(tmp.getUid()));
+			result.put("keywordtexts", userRepo.selectkeywordtext(tmp.getUid()));
 			return result;
 		} catch (Exception e) {
 			throw new RuntimeException("sql error");

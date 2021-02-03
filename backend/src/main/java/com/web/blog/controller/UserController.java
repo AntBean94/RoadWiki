@@ -1,6 +1,7 @@
 package com.web.blog.controller;
 
-import java.io.FileInputStream;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -16,10 +17,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -158,56 +156,91 @@ public class UserController {
 	@PostMapping("/pic")
 	public Object getImg(@RequestPart(value = "file", required = true) MultipartFile file, HttpServletRequest request)
 			throws Exception {
-		System.out.println("in");
-		System.out.println(file);
-		System.out.println(file.toString());
-
 		int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
-		System.out.println(uid);
+		//System.out.println("getImg uid : " + uid);
 		// System.out.println(dto.toString());
-
+		
 		// parent directory를 찾는다.
 //		Path directory = Paths.get(".\\src\\main\\java\\com\\web\\blog\\controller" + uid + "\\").toAbsolutePath()
 //				.normalize();
-		Path directory = Paths.get(".\\src\\main\\java\\com\\web\\blog\\controller\\").toAbsolutePath()
-				.normalize();
-
+		// Path directory =
+		Path directory = Paths.get(".\\target\\classes\\statics\\upload\\" + uid + "\\").toAbsolutePath().normalize();
+		
 		// directory 해당 경로까지 디렉토리를 모두 만든다.
 		Files.createDirectories(directory);
-
+		
 		// 파일명을 바르게 수정한다.
 		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-
+		
 		// 파일명에 '..' 문자가 들어 있다면 오류를 발생하고 아니라면 진행(해킹및 오류방지)
 		Assert.state(!fileName.contains(".."), "Name of file cannot contain '..'");
+		
 		// 파일을 저장할 경로를 Path 객체로 받는다.
 		Path targetPath = directory.resolve(fileName).normalize();
-
+		
 		// 파일이 이미 존재하는지 확인하여 존재한다면 오류를 발생하고 없다면 저장한다.
 		Assert.state(!Files.exists(targetPath), fileName + " File alerdy exists.");
+		
 		file.transferTo(targetPath);
-
-		return "good";
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("msg", "sucess");
+		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/get-text")
 	public @ResponseBody String getText() {
-	    return "Hello world";
+		return "Hello world";
 	}
-	
-	@GetMapping(value = "/image")
-	public @ResponseBody byte[] getImage() throws IOException {
-		System.out.println("이미지 실행");
-		
-	    InputStream in = getClass()
+
+	@GetMapping(value = "/image/{uid}")
+	public @ResponseBody byte[] getImage(@PathVariable String uid, HttpServletRequest request) throws IOException {
+		System.out.println("image uid : " + uid);
+//		int uuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+//		System.out.println("getImage uid : " + uuid);
+		// int uuid = (int)
+		// loginServ.getData(request.getHeader("auth-token")).get("uid");
+		// System.out.println("uid From token" + uuid);
+		InputStream in = null;
+		try {
+			in = getClass().getResourceAsStream("/statics/upload/" + uid + "/1.jpg");
 //		  	      .getResourceAsStream("../../../../../../main/resources/statics/upload/1/1.jpg");
-	    		.getResourceAsStream("1.jpg");
-	    if(in == null) {
-	    	System.out.println("여기들어와?");
-	    	in = getClass()
-	    		      .getResourceAsStream("default.png");
-	    }
-	    return IOUtils.toByteArray(in);
+			// .getResourceAsStream("/src/main/resources/statics/upload/1/1.jpg");
+			// String something =
+			// IOUtils.toString(getClass().getResourceAsStream("/img/1.jpg"), "UTF-8");
+			// System.out.println(something);
+//		Path directory = Paths.get(".\\img\\1.jpg").toAbsolutePath();
+//		in = getClass().getResourceAsStream(directory.toString());
+//			System.out.println(getClass().getResourceAsStream("/1.jpg").toString());
+//			System.out.println(Path.class.getResource("/1.jpg"));
+			if (in == null) {
+				in = getClass().getResourceAsStream("/default.png");
+			}
+		} catch (Exception e) {
+			in = getClass().getResourceAsStream("/default.png");
+		}
+		return IOUtils.toByteArray(in);
+	}
+
+	public static void fileSearch(String path) throws Exception {
+		File dir = new File(path);
+		File[] fileList = dir.listFiles();
+		FileWriter writer = new FileWriter(new File(""), true);
+
+		for (int i = 0; i < fileList.length; i++) {
+			File file = fileList[i];
+
+			if (file.isFile()) {
+				System.out.println(file.getName());
+//				if (!file.getName().equals(".DS_Store")) {
+//					System.out.println("파일 : " + file.getName());
+//					writer.write(file.getName() + "\n");
+//					writer.flush();
+//				}
+			} else if (file.isDirectory()) {
+				fileSearch(file.getCanonicalPath().toString());
+			}
+		}
 	}
 
 //	@GetMapping(value = "image")
@@ -245,7 +278,5 @@ public class UserController {
 				}
 			}, HttpStatus.NO_CONTENT);
 		}
-
 	}
-
 }

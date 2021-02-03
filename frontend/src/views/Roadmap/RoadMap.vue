@@ -37,28 +37,21 @@
           <span>How to use</span>
         </div>
       </b-button>
-      <b-form-input
-        v-model="roadmapname"
-        class="inline-block"
-        placeholder="로드맵 제목을 입력해 주세요."
-        style="width:30%; display:inline-block;"
-      ></b-form-input>
-      <!-- 커리큘럼 히스토리 보여주기 -->
+    <b-form-input v-model="roadmapname" class="inline-block" placeholder="로드맵 제목을 입력해 주세요." style="width:30%; display:inline-block;"></b-form-input>
+    <!-- 커리큘럼 히스토리 보여주기 -->
+    <div>
+      <!--부트스트랩 드롭다운-->
       <div>
-        <!-- 승환님 이거 잘되는지 확인해주세욜~~ -->
-        <!--부트스트랩 드롭다운-->
-        <div>
-          <b-dropdown id="dropdown-1" text="이전 수정 기록" class="m-md-2">
-            <b-dropdown-item
-              @click="previewRoadmap(item.rmid, index)"
-              v-for="(item, index) in logData"
-              :key="index"
-              >{{ item.createDate }} | {{ item.name }}
-            </b-dropdown-item>
-          </b-dropdown>
-        </div>
+        <b-dropdown id="dropdown-1" text="이전 수정 기록" class="m-md-2">
+          <b-dropdown-item 
+            @click="previewRoadmap(item.rmid, index)" 
+            v-for="(item, index) in logData" 
+            :key="index">{{ item.createDate }} | {{ item.name }}
+          </b-dropdown-item>
+        </b-dropdown>
       </div>
-      <!-- 커리큘럼 히스토리 끝 -->
+    </div>
+    <!-- 커리큘럼 히스토리 끝 -->
 
       <b-modal id="modal-1" title="BootstrapVue">
         <h3>로드위키 사용법</h3>
@@ -168,14 +161,9 @@
 </template>
 
 <script>
-// carousel
-import { Carousel, Slide } from "vue-carousel";
-// 날짜
-import flatPickr from "vue-flatpickr-component";
-import "flatpickr/dist/flatpickr.css";
-import "flatpickr/dist/themes/material_blue.css";
-import { Hindi } from "flatpickr/dist/l10n/hi.js";
-import dropdown from "vue-dropdowns";
+// flatPickr - Hindi: 날짜 설정 부속기능
+import {Hindi} from 'flatpickr/dist/l10n/hi.js';
+import dropdown from 'vue-dropdowns';
 
 // src\views\Roadmap\RoadMap.vue
 // Roadmap 폴더 명 변경을 위한 주석
@@ -221,8 +209,7 @@ export default {
       logData: []
     };
   },
-  created() {
-    console.log(this.test);
+  created(){
   },
   mounted() {
     myDiagram = $(go.Diagram, this.$refs.myDiagramDiv, {
@@ -497,11 +484,6 @@ export default {
       head = e.subject.part.data.text;
     });
 
-    // LinkingTool 및 RelinkingTool에서 사용하는 임시 링크도 직교합니다.
-    myDiagram.toolManager.linkingTool.temporaryLink.routing =
-      go.Link.Orthogonal;
-    myDiagram.toolManager.relinkingTool.temporaryLink.routing =
-      go.Link.Orthogonal;
 
     console.log("309", myDiagram);
 
@@ -608,59 +590,49 @@ export default {
     // read 요청보내기
     readRoadmap() {
       // 외부 json파일 초기하면에 출력
-      if (this.rmid == 0) {
-        this.test = {
-          class: "go.GraphLinksModel",
-          linkFromPortIdProperty: "fromPort",
-          linkToPortIdProperty: "toPort",
-          nodeDataArray: [],
-          linkDataArray: []
-        };
-        myDiagram.model = go.Model.fromJson(this.test);
-      } else {
-        axios
-          .get(`${this.$store.getters.getServer}/roadmap/get/${this.rmid}`)
-          .then(res => {
-            if (res.data.msg == "success") {
-              this.test = JSON.parse(res.data["roadmaps"].tmp);
-              this.roadmapname = res.data["roadmaps"].name;
-              // console.log('check', this.roadmapname, this.rmorder)
-              myDiagram.model = go.Model.fromJson(this.test);
-            } else {
-              alert("데이터 로드에 실패했습니다.");
-            }
-          })
-          .catch(e => {
-            alert("axois 오류");
-          });
+      if(this.rmid == 0){
+        this.test = { "class": "go.GraphLinksModel",
+        "linkFromPortIdProperty": "fromPort",
+        "linkToPortIdProperty": "toPort",
+        "nodeDataArray": [
+      ],
+        "linkDataArray": [
+      ]}
+       myDiagram.model = go.Model.fromJson(this.test);
+      }else{
+      axios.get(`${this.$store.getters.getServer}/roadmap/get/${this.rmid}`)
+        .then((res) => {
+          if(res.data.msg == 'success'){
+          this.test =  res.data['roadmaps'].tmp;
+          this.roadmapname = res.data['roadmaps'].name;
+          // console.log('check', this.roadmapname, this.rmorder)
+          myDiagram.model = go.Model.fromJson(this.test);
+          }else{
+            alert("데이터 로드에 실패했습니다.")
+          }
+        }).catch((e) =>{
+          alert("axois 오류")
+        });
       }
     },
     // 로드맵 로그 가져오는 함수(mounted에서 rmorder를 불러온뒤 실행)
-    readRoadmapLog() {
-      if (this.mode == 1) {
-        console.log(
-          `${this.$store.getters.getServer}/roadmap/log/${this.$store.getters.getUid}/${this.rmorder}`
-        );
-        axios
-          .get(
-            `${this.$store.getters.getServer}/roadmap/log/${this.$store.getters.getUid}/${this.rmorder}`
-          )
-          .then(res => {
-            if (res.data.msg == "success") {
-              this.logData = res.data["roadmaps"];
-            } else {
-              console.log(e);
-              alert("데이터 로드에 실패했습니다.");
-            }
-          })
-          .catch(e => {
-            alert("axois 오류");
-          });
+    readRoadmapLog(){
+      if(this.mode == 1){
+         axios.get(`${this.$store.getters.getServer}/roadmap/log/${this.$store.getters.getUid}/${this.rmorder}`)
+        .then((res) => {
+          if(res.data.msg == 'success'){
+            this.logData = res.data['roadmaps'];  
+          }else{
+            console.log(e);
+            alert("데이터 로드에 실패했습니다.")
+          }
+        }).catch((e) =>{
+          alert("axois 오류")
+        });
       }
     },
     // update 요청보내기
     updateRoadmap() {
-      console.log("실행");
       this.test = myDiagram.model.toJson();
       myDiagram.isModified = false;
       axios
@@ -669,13 +641,14 @@ export default {
           uid: this.$store.getters.getUid,
           rmorder: this.rmorder,
           name: this.roadmapname,
-          tmp: JSON.stringify(this.test)
-        })
-        .then(res => {
-          if (res.data.msg == "success") {
-            this.$router.push({ name: "godiagram" });
-          } else {
-            alert("업데이트 실패했습니다.");
+          tmp: this.test
+        }
+      )
+      .then((res) => {
+        if(res.data.msg == 'success'){
+        this.$router.push({ name: 'godiagram' })
+          }else{
+            alert("업데이트 실패했습니다.")
           }
         })
         .catch(e => {
@@ -683,7 +656,6 @@ export default {
         });
     },
     createRoadmap() {
-      console.log("실행");
       this.test = myDiagram.model.toJson();
       myDiagram.isModified = false;
       axios
@@ -691,17 +663,16 @@ export default {
           // login기능 완료되면 store에서 가져오기로 수정!!!!!!!!!!
           uid: this.$store.getters.getUid,
           name: this.roadmapname,
-          tmp: JSON.stringify(this.test)
-        })
-        .then(res => {
-          if (res.data.msg == "success") {
-            console.log(res);
-            console.log("응답");
-            this.$router.push({ name: "godiagram" });
-          } else alert("생성에 실패했습니다.");
-        })
-        .catch(e => {
-          alert("axios 오류");
+          tmp: this.test
+        }
+      )
+      .then((res) => {
+        if(res.data.msg == 'success'){
+        this.$router.push({ name: 'godiagram' })
+        }else
+          alert("생성에 실패했습니다.")
+        }).catch((e) =>{
+          alert('axios 오류')
         });
     },
     checkCur(e) {
@@ -710,15 +681,15 @@ export default {
     },
 
     previewRoadmap(clickrmid, index) {
-      axios
-        .get(`${this.$store.getters.getServer}/roadmap/get/${clickrmid}`)
-        .then(res => {
-          if (res.data.msg == "success") {
-            this.test = JSON.parse(res.data["roadmaps"].tmp);
-            this.load();
-          } else {
-            console.log("previewRoadmap");
-            alert("데이터 로드에 실패했습니다. log");
+      
+  
+        axios.get(`${this.$store.getters.getServer}/roadmap/get/${clickrmid}`)
+        .then((res) => {
+          if(res.data.msg == 'success'){
+          this.test = res.data['roadmaps'].tmp;
+          this.load();
+          }else{
+            alert("데이터 로드에 실패했습니다. log")
           }
         })
         .catch(e => {
