@@ -147,7 +147,7 @@ export default {
       .catch(() => {
         alert('로그아웃에 실패했습니다.')
       })
-    }
+    },
   }
 };
 </script>
