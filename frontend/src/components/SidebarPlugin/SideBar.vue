@@ -39,18 +39,18 @@
                             <i class="ni ni-single-02"></i>
                             <span>My profile</span>
                         </router-link>
-                        <router-link to="/profile" class="dropdown-item">
+                        <!-- <router-link to="/profile" class="dropdown-item">
                             <i class="ni ni-settings-gear-65"></i>
                             <span>Settings</span>
-                        </router-link>
+                        </router-link> -->
                         <router-link to="/profile" class="dropdown-item">
                             <i class="ni ni-calendar-grid-58"></i>
                             <span>Activity</span>
                         </router-link>
-                        <router-link to="/profile" class="dropdown-item">
+                        <!-- <router-link to="/profile" class="dropdown-item">
                             <i class="ni ni-support-16"></i>
                             <span>Support</span>
-                        </router-link>
+                        </router-link> -->
                         <div class="dropdown-divider"></div>
                         <a href="#!" class="dropdown-item">
                             <i class="ni ni-user-run"></i>
@@ -139,7 +139,16 @@
       },
       showSidebar() {
         this.$sidebar.displaySidebar(true)
-      }
+      },
+      logOut() {
+        this.$store.dispatch("LOGOUT")
+        .then(() => {
+        this.$router.push('/')
+        })
+        .catch(() => {
+          alert('로그아웃에 실패했습니다.')
+        })
+    },
     },
     beforeDestroy() {
       if (this.$sidebar.showSidebar) {
