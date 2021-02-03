@@ -11,7 +11,8 @@ import com.web.blog.model.dto.User;
 @Repository
 public interface UserRepo {
 	public User select(String email) throws SQLException;
-	public String[] selectkeyword(int uid) throws SQLException;
+	public int[] selectkeyword(int uid) throws SQLException;
+	public String[] selectkeywordtext(int uid) throws SQLException;
 	public int insert(User user) throws SQLException;
 	public int insertkeyword(Map data) throws SQLException;
 	public int update(User user) throws SQLException;

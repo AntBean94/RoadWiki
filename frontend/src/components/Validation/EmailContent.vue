@@ -24,8 +24,8 @@
               -> 인증완료 버튼 활성화
             2. 다르면 인증번호가 잘못되었다. 
               -> 재발송하기 버튼 활성화 & 리셋-->
-        <base-button v-show="!timeOut" class="col-4" @click="isCorrect">인증하기</base-button>
-        <base-button v-show="timeOut">재발송하기</base-button>
+        <b-button variant="default" v-show="!timeOut" class="col-4" @click="isCorrect">인증하기</b-button>
+        <b-button variant="danger" @click="reSend">재발송하기</b-button>
       </div>
     </b-container>
   </div>
@@ -42,6 +42,9 @@ export default {
       mailNum: '123456',
       inputNum: '',
     }
+  },
+  props: {
+    userEmail: String
   },
   created() {
     // 3분 유효 타이머 시작
@@ -96,6 +99,24 @@ export default {
       clearInterval(this.polling)
       alert('인증번호 유효시간이 초과되었습니다.')
       this.timeOut = true
+    },
+    reSend() {
+      console.log('재발송')
+      axios.get(`${this.$store.getters.getServer}/email/${this.userEmail}`)
+      .then((res) => {
+        if (res.data.msg === "success") {
+          alert('재발송했습니다.')
+          clearInterval(this.polling)
+          this.$store.dispatch('SETCODE', res.data['code'])
+          this.$store.dispatch('SETEMAIL', res.data['email'])
+          this.timeCounter = 180 // 단위는 초[sec]
+          this.resTimeData = '03 : 00'
+          this.timeOut = false
+          this.start()
+        } else {
+          alert('인증번호 메일 발송에 실패했습니다. 다시 시도해주세요.')
+        }
+      })
     },
   },
   beforeDestroy() {
