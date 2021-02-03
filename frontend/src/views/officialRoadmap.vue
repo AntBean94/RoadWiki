@@ -81,7 +81,7 @@
 <script>
 import RoadMap from '@/views/Roadmap/RoadMap'
 import router from '@/routes/router'
-import flatPickr from "vue-flatpickr-component";
+import flatPickr from 'vue-flatpickr-component';
 import "flatpickr/dist/flatpickr.css";
 import 'flatpickr/dist/themes/material_blue.css';
 import {Hindi} from 'flatpickr/dist/l10n/hi.js';
@@ -98,7 +98,7 @@ export default {
   name: '',
   componenets: {
     RoadMap,
-    flatPickr : flatPickr
+    flatPickr
   },
   data() {
     return {

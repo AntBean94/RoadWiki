@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.web.blog.model.dto.Roadmap;
@@ -26,7 +27,10 @@ public class RoadmapServiceImpl implements RoadmapService {
 		try {
 			JsonObject jsonObject = new JsonParser().parse(map.getTmp()).getAsJsonObject();
 			
-			jsonObject.getAsJsonArray("nodeDataArray");
+			JsonArray nodeDataArray = jsonObject.getAsJsonArray("nodeDataArray");
+			System.out.println(jsonObject);
+			
+			
 			
 			int nowuidnum = Integer.parseInt(nowuid);
 			int uidnum = map.getUid();
