@@ -51,7 +51,8 @@
                   <hr>
                   <b-card-text>
                     <base-input label="시작날짜-종료날짜">
-                    <flat-pickr slot-scope="{focus, blur}"
+                    <flat-pickr 
+                    slot-scope="{focus, blur}"
                     @on-open="focus"
                     @on-close="blur"
                     :config="{allowInput: true, mode: 'range',}"
@@ -87,9 +88,7 @@
 import RoadMap from '@/views/Roadmap/RoadMap'
 import router from '@/routes/router'
 import { Carousel, Slide } from 'vue-carousel';
-import flatPickr from "vue-flatpickr-component";
-import "flatpickr/dist/flatpickr.css";
-import 'flatpickr/dist/themes/material_blue.css';
+// flatpickr - Hindi : 날짜 설정 부속기능
 import {Hindi} from 'flatpickr/dist/l10n/hi.js';
 
 // 코드 변환 시작 
@@ -105,7 +104,6 @@ export default {
     RoadMap,
     Carousel,
     Slide,
-    flatPickr,
   },
   data() {
     return {
