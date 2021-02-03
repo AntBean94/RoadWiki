@@ -48,6 +48,15 @@
         >
         </sidebar-item>
 
+        <sidebar-item
+          :link="{
+            name: 'Calendar',
+            path: '/calendar',
+            icon: 'ni ni-calendar-grid-58'
+          }"
+        >
+        </sidebar-item>
+
         <!-- <sidebar-item
                 :link="{
                   name: 'Detail Content',
