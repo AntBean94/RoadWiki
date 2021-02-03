@@ -179,7 +179,6 @@ export default {
     }
   },
   created(){
-   console.log(this.test);
   },
   mounted() {
     myDiagram = 
@@ -361,7 +360,6 @@ export default {
       myDiagram.toolManager.linkingTool.temporaryLink.routing = go.Link.Orthogonal;
       myDiagram.toolManager.relinkingTool.temporaryLink.routing = go.Link.Orthogonal;
 
-      console.log('309', myDiagram)
 
       
       // 팔레트 설정 관련 코드
@@ -467,7 +465,7 @@ export default {
       axios.get(`${this.$store.getters.getServer}/roadmap/get/${this.rmid}`)
         .then((res) => {
           if(res.data.msg == 'success'){
-          this.test =  JSON.parse(res.data['roadmaps'].tmp);
+          this.test =  res.data['roadmaps'].tmp;
           this.roadmapname = res.data['roadmaps'].name;
           // console.log('check', this.roadmapname, this.rmorder)
           myDiagram.model = go.Model.fromJson(this.test);
@@ -482,7 +480,6 @@ export default {
     // 로드맵 로그 가져오는 함수(mounted에서 rmorder를 불러온뒤 실행)
     readRoadmapLog(){
       if(this.mode == 1){
-        console.log(`${this.$store.getters.getServer}/roadmap/log/${this.$store.getters.getUid}/${this.rmorder}`);
          axios.get(`${this.$store.getters.getServer}/roadmap/log/${this.$store.getters.getUid}/${this.rmorder}`)
         .then((res) => {
           if(res.data.msg == 'success'){
@@ -498,7 +495,6 @@ export default {
     },
     // update 요청보내기
     updateRoadmap() {
-      console.log('실행')
       this.test = myDiagram.model.toJson();
       myDiagram.isModified = false;
       axios.post(`${this.$store.getters.getServer}/roadmap/update`,
@@ -507,7 +503,7 @@ export default {
           uid: this.$store.getters.getUid,
           rmorder: this.rmorder,
           name: this.roadmapname,
-          tmp: JSON.stringify(this.test)
+          tmp: this.test
         }
       )
       .then((res) => {
@@ -521,7 +517,6 @@ export default {
         });
     },
     createRoadmap() {
-      console.log('실행')
       this.test = myDiagram.model.toJson();
       myDiagram.isModified = false;
       axios.post(`${this.$store.getters.getServer}/roadmap/create`,
@@ -529,13 +524,11 @@ export default {
           // login기능 완료되면 store에서 가져오기로 수정!!!!!!!!!!
           uid: this.$store.getters.getUid,
           name: this.roadmapname,
-          tmp: JSON.stringify(this.test)
+          tmp: this.test
         }
       )
       .then((res) => {
         if(res.data.msg == 'success'){
-        console.log(res)
-        console.log('응답')
         this.$router.push({ name: 'godiagram' })
         }else
           alert("생성에 실패했습니다.")
@@ -554,10 +547,9 @@ export default {
         axios.get(`${this.$store.getters.getServer}/roadmap/get/${clickrmid}`)
         .then((res) => {
           if(res.data.msg == 'success'){
-          this.test = JSON.parse(res.data['roadmaps'].tmp);
+          this.test = res.data['roadmaps'].tmp;
           this.load();
           }else{
-            console.log('previewRoadmap');
             alert("데이터 로드에 실패했습니다. log")
           }
         }).catch((e) =>{

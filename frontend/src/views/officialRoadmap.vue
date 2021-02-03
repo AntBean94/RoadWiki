@@ -127,7 +127,6 @@ export default {
   },
   created() {
       
-      console.log(this.$store.getters.getUid)
       const uid = String(this.$store.getters.getUid)
       // page => 차후 수정해야됨
 
@@ -136,9 +135,7 @@ export default {
       axios.get(`${this.$store.getters.getServer}/roadmap/Official`)
         .then((res) => {
           if(res.data.msg == 'success'){
-          console.log('data', res.data)
           this.curriculumData = res.data['roadmaps'];
-          console.log(this.curriculumData)
           }else{
             alert("데이터 로드에 실패했습니다.")
           }
@@ -379,7 +376,6 @@ export default {
         axios.get(`${this.$store.getters.getServer}/roadmap/get/${clickrmid}`)
         .then((res) => {
           if(res.data.msg == 'success'){
-          console.log(res.data['roadmaps'].tmp);
           this.test = JSON.parse(res.data['roadmaps'].tmp);
           this.load();
           }else{
