@@ -21,17 +21,16 @@
     <b-form-input v-model="roadmapname" class="inline-block" placeholder="로드맵 제목을 입력해 주세요." style="width:30%; display:inline-block;"></b-form-input>
     <!-- 커리큘럼 히스토리 보여주기 -->
     <div>
-    <!-- 승환님 이거 잘되는지 확인해주세욜~~ -->
-    <!--부트스트랩 드롭다운-->
-    <div>
-      <b-dropdown id="dropdown-1" text="이전 수정 기록" class="m-md-2">
-        <b-dropdown-item 
-          @click="previewRoadmap(item.rmid, index)" 
-          v-for="(item, index) in logData" 
-          :key="index">{{ item.createDate }} | {{ item.name }}
-        </b-dropdown-item>
-      </b-dropdown>
-    </div>
+      <!--부트스트랩 드롭다운-->
+      <div>
+        <b-dropdown id="dropdown-1" text="이전 수정 기록" class="m-md-2">
+          <b-dropdown-item 
+            @click="previewRoadmap(item.rmid, index)" 
+            v-for="(item, index) in logData" 
+            :key="index">{{ item.createDate }} | {{ item.name }}
+          </b-dropdown-item>
+        </b-dropdown>
+      </div>
     </div>
     <!-- 커리큘럼 히스토리 끝 -->
 
@@ -130,16 +129,8 @@
   </div>
 </template>
 
-
-
-
 <script>
-// carousel 
-import { Carousel, Slide } from 'vue-carousel'; 
-// 날짜  
-import flatPickr from "vue-flatpickr-component";
-import "flatpickr/dist/flatpickr.css";
-import 'flatpickr/dist/themes/material_blue.css';
+// flatPickr - Hindi: 날짜 설정 부속기능
 import {Hindi} from 'flatpickr/dist/l10n/hi.js';
 import dropdown from 'vue-dropdowns';
 
@@ -552,7 +543,7 @@ export default {
     
     previewRoadmap(clickrmid, index) {
       
-      
+  
         axios.get(`${this.$store.getters.getServer}/roadmap/get/${clickrmid}`)
         .then((res) => {
           if(res.data.msg == 'success'){
