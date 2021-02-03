@@ -12,6 +12,7 @@
               prepend-icon="ni ni-email-83"
               placeholder="email@email.com"
               v-model="user.email"
+              @keydown.enter="signIn"
       >
       </base-input>
 
@@ -22,6 +23,7 @@
                   type="password"
                   placeholder="Password"
                   v-model="user.password"
+                  @keydown.enter="signIn"
       >
       </base-input>
       <div class="text-center">

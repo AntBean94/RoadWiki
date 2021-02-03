@@ -34,12 +34,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column
-        label="NAME"
-        min-width="180px"
-        prop="name"
-        v-if="!isClicked"
-      >
+      <el-table-column label="NAME" min-width="180px" prop="name">
         <template v-slot="{ row }">
           <b-media no-body class="align-items-center">
             <b-media-body>
@@ -51,12 +46,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column
-        label="LIKE"
-        prop="like"
-        min-width="120px"
-        v-if="!isClicked"
-      >
+      <el-table-column label="LIKE" prop="like" min-width="120px">
         <template v-slot="{ row }">
           <div class="d-flex align-items-center">
             <div>
@@ -68,12 +58,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column
-        label="TAG"
-        prop="tag"
-        min-width="120px"
-        v-if="!isClicked"
-      >
+      <el-table-column label="TAG" prop="tag" min-width="120px">
         <template v-slot="{ row }">
           <div class="d-flex align-items-center">
             <div>
@@ -85,12 +70,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column
-        label="CREATEDATE"
-        prop="createdate"
-        min-width="160px"
-        v-if="!isClicked"
-      >
+      <el-table-column label="CREATEDATE" prop="createdate" min-width="160px">
         <template v-slot="{ row }">
           <div class="d-flex align-items-center">
             <div>
@@ -122,7 +102,6 @@ export default {
     //   [TableColumn.name]: TableColumn
     [TableColumn.name]: TableColumn
   },
-  props: ["isClicked"],
   data() {
     return {
       currentPage: 1,

@@ -52,7 +52,8 @@ public class EmailController {
 		logger.trace("email");
 		try {
 			logger.info(email);
-			Map<String, Object> result = (Map<String, Object>) emailServ.email(email);	
+			Map<String, Object> result = (Map<String, Object>) emailServ.email(email);
+			result.put("msg", "success");
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
