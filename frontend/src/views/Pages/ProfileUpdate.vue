@@ -21,7 +21,9 @@
             <b-container class="card-profile-image">
               <b-row>
                 <b-img
-                  src="http://localhost:8085/user/image"
+                  :src="
+                    `${this.$store.getters.getServer}/user/image/${this.uid}`
+                  "
                   rounded="circle"
                 />
               </b-row>
@@ -210,7 +212,7 @@ export default {
     LoginContent,
     FlavourContent,
     // ProfileImg,
-    BackgroundImg,
+    BackgroundImg
   },
   data() {
     return {
@@ -229,12 +231,15 @@ export default {
       modalShow: false,
       file1: null,
       files: [],
+      uid: ""
     };
   },
   created() {
+    this.uid = this.$store.getters.getUid;
+
     axios
       .get(`${this.$store.getters.getServer}/user/info`)
-      .then((res) => {
+      .then(res => {
         console.log(res.data);
         this.nickname = res.data.name;
         this.email = res.data.email;
@@ -267,12 +272,12 @@ export default {
         major: this.major,
         keyword: this.keywords,
         introduction: this.introduction,
-        file: this.file1,
+        file: this.file1
       };
       console.log("updateHandler : " + user);
       axios
         .put(`${this.$store.getters.getServer}/user/modify`, user)
-        .then((res) => {
+        .then(res => {
           console.log(res.data);
           if (res.data.msg == "success") {
             alert("회원 수정이 완료되었습니다.");
@@ -293,14 +298,13 @@ export default {
 
       await axios
         .post(`${this.$store.getters.getServer}/user/pic`, formData, {
-          headers: { "content-type": "multipart/form-data" },
+          headers: { "content-type": "multipart/form-data" }
         })
         .then(() => {
           console.log("upload 성공 ");
         });
-    },
-  },
-  
+    }
+  }
 };
 </script>
 <style></style>
