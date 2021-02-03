@@ -56,6 +56,9 @@ export default {
       this.isSelected = false;
       console.log(this.isSelected);
     }
+  },
+  created() {
+    console.log(this.$store.getters.getUid);
   }
 };
 </script>

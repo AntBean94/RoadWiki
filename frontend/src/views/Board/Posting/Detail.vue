@@ -1,37 +1,48 @@
 <template>
-  <b-container> </b-container>
+  <b-container fluid="sm">
+    <b-row>
+      <b-col cols="3">
+        title
+      </b-col>
+      <b-col cols="9">
+        {{ posting.title }}
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col cols="3">
+        tag
+      </b-col>
+      <b-col cols="9">
+        {{ posting.tag }}
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col cols="3">
+        name
+      </b-col>
+      <b-col cols="9">
+        {{ posting.name }}
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col cols="3">
+        like
+      </b-col>
+      <b-col cols="9">
+        {{ posting.like }}
+      </b-col>
+    </b-row>
+    <b-row>
+      {{ posting.content }}
+    </b-row>
+  </b-container>
 </template>
 <script>
 export default {
   data() {
     return {
       desc: "DESC",
-      frame: [
-        {
-          desc: "ID",
-          data: ""
-        },
-        {
-          desc: "TITLE",
-          data: ""
-        },
-        {
-          desc: "NAME",
-          data: ""
-        },
-        {
-          desc: "TIME",
-          data: ""
-        },
-        {
-          desc: "CONTENT",
-          data: ""
-        },
-        {
-          desc: "LIKE",
-          data: ""
-        }
-      ]
+      posting: []
     };
   },
   props: ["pid"],
@@ -46,13 +57,11 @@ export default {
       axios
         .get(adr)
         .then(response => {
-          var posting = response.data.posting;
-          this.frame[0].data = posting.pid;
-          this.frame[1].data = posting.title;
-          this.frame[2].data = response.data.name;
-          this.frame[3].data = posting.createDate;
-          this.frame[4].data = posting.content;
-          this.frame[5].data = posting.likeCnt;
+          console.log(response);
+          console.log(response.data);
+          this.posting = response.data.posting;
+          this.posting.name = response.data.name;
+          console.log(this.posting);
         })
         .catch(response => {
           console.log("FAIL", response);
