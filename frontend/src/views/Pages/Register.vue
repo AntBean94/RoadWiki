@@ -70,8 +70,9 @@
                       <!-- 만약 기존에 계정이 존재하는 이메일이라면 this email is already taken 보여주기 -->
                     </div>
                     <div class="col-3 pl-0">
-                      <ModalEmailValidation v-if="isEmailModal" @close="closeModal"/>
-                      <b-button v-b-modal.modal-email v-if="!confirmEmail" @click="emailNumSend">인증하기</b-button>
+                      <b-button v-if="!confirmEmail" @click="emailNumSend">인증하기</b-button>
+                      <ModalEmailValidation :isEmailModal="isEmailModal" :userEmail="email" @close="closeModal"/>
+                      <!-- <ModalEmailValidation/> -->
                       <b-button v-if="confirmEmail" disabled>인증완료</b-button>
                     </div>
                   </div>
@@ -104,12 +105,12 @@
                         <b-form-checkbox
                           v-for="option in options"
                           v-model="selected"
-                          :key="option.value"
-                          :value="option.value"
+                          :key="option.kwid"
+                          :value="option.kwid"
                           :aria-describedby="ariaDescribedby"
                           name="flavour-3a"
                         >
-                          {{ option.text }}
+                          {{ option.word }}
                         </b-form-checkbox>
                         <!-- <b-form-checkbox-group
                           id="checkbox-group-1"
@@ -122,11 +123,11 @@
 
                       </b-container>
                     </b-form-group>
-                    <b-container>
+                    <!-- <b-container>
                       <div>1순위 <strong v-if="selected.length > 0">{{ options[selected[0]-1].text }}</strong></div>
                       <div>2순위 <strong v-if="selected.length > 1">{{ options[selected[1]-1].text }}</strong></div>
                       <div>3순위 <strong v-if="selected.length > 2">{{ options[selected[2]-1].text }}</strong></div>
-                    </b-container>
+                    </b-container> -->
                   </div>
                   <hr class="my-4">
                   <b-row class=" my-4">
@@ -152,10 +153,6 @@
                     <b-button type="submit" variant="primary" class="mt-4" @click="signUp">가입하기</b-button>
                   </div>
                   <div class="text-center">
-                    <!-- <b-button v-b-modal.modal-login variant="default" class="mt-4" @click="isLoginModal = true">로그인</b-button> -->
-                    <!-- <LoginContent v-if="isLoginModal" @close="isLoginModal = false" /> -->
-                    <!-- <LoginContent/> -->
-                    <!-- <LogoutContent/> -->
                   </div>
                 </b-form>
               </validation-observer>
@@ -170,8 +167,6 @@
 <script>
   import ModalEmailValidation from "@/components/Validation/ModalEmailValidation.vue";
   import ModalPolicy from '@/components/Validation/ModalPolicy.vue';
-  // import LoginContent from '@/components/Login/LoginContent.vue';
-  // import LogoutContent from '@/components/Logout/LogoutContent.vue';
 
   import { extend } from 'vee-validate';
 
@@ -188,8 +183,6 @@
     components: {
       ModalEmailValidation,
       ModalPolicy,
-      // LoginContent,
-      // LogoutContent,
     },
     data() {
       return {
@@ -197,25 +190,20 @@
         email: '',
         password: '',
         rePassword: '',
-        isEmailModal: false,
         isPolicyModal: false,
         confirmEmail: false,
         agree: false,
         selected: [],
-        options: [
-          { text: 'Python', value: 1},
-          { text: 'JAVA', value: 2},
-          { text: 'C', value: 3},
-          { text: 'Vue', value: 4},
-          { text: 'Spring', value: 5},
-          { text: 'Frontend', value: 6},
-          { text: 'Backend', value: 7},
-          { text: 'Database', value: 8},
-          { text: 'AI', value: 9},
-          { text: '기타', value: 10},
-        ],
+        options: [],
         isLoginModal: false,
+        isEmailModal: false,
       }
+    },
+    created() {
+      axios.get(`${this.$store.getters.getServer}/keyword/list`)
+      .then((res) => {
+        this.options = res.data.keywords
+      })
     },
     methods: {
       onSubmit() {
@@ -232,12 +220,19 @@
         this.agree = true
       },
       emailNumSend() {
-        this.isEmailModal = true
-        console.log(this.$store.getters.getServer)
+        // 이미 존재하는 이메일인 경우, 존재하는 이메일 경고창 -> 이메일 인증 막기
         axios.get(`${this.$store.getters.getServer}/email/${this.email}`)
         .then((res) => {
-          this.$store.dispatch('SETCODE', res.data['code']);
-          this.$store.dispatch('SETEMAIL', res.data['email']);
+          console.log(res.data.msg)
+          if (res.data.msg === "success") {
+            this.isEmailModal = true
+            console.log(this.isEmailModal)
+            this.$store.dispatch('SETCODE', res.data['code']);
+            this.$store.dispatch('SETEMAIL', res.data['email']);
+          } else {
+            alert('인증번호 메일 발송에 실패했습니다. 다시 시도해주세요.')
+            this.isEmailModal = false
+          }
         });
       },
       signUp() {
@@ -270,6 +265,9 @@
       },
     },
     watch: {
+      selected() {
+        console.log(this.selected)
+      },
       password() {
         // isPasswordEqual()
       },
@@ -277,11 +275,8 @@
         // isPasswordEqual()
       },
     },
-    // computed: {
-    //   passwordConfirmationRule() {
-    //     return () => (this.model.password === this.model.rePassword) || 'Password must match'
-    //   },
-    // },
+    computed: {
+    },
     
   };
 </script>
