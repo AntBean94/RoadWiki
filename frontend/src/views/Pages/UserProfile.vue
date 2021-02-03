@@ -159,31 +159,6 @@
 // import EditProfileForm from './UserProfile/EditProfileForm.vue';
 import UserCard from "./UserProfile/UserCard.vue";
 
-export default {
-  components: {
-    // EditProfileForm,
-    UserCard
-  },
-  data() {
-    return {
-      nickname: "",
-      sentence: "",
-      address: "",
-      profileImg: "",
-      backImg: "",
-      keywords: [],
-      follower: "",
-      following: "",
-      boards: "",
-      comments: "",
-      major: "",
-      email: "",
-      uid: ""
-    };
-  },
-  created() {
-    this.uid = this.$store.getters.getUid;
-
   export default {
     components: {
       // EditProfileForm,
@@ -203,10 +178,13 @@ export default {
         comments: '',
         major: '기계공학',
         email: '',
-        roadmaps: ['첫 번째 로드맵', '두 번째 로드맵', '세 번째 로드맵']
+        roadmaps: ['첫 번째 로드맵', '두 번째 로드맵', '세 번째 로드맵'],
+        uid: "",
       }
     },
     created() {
+      this.uid = this.$store.getters.getUid;
+
       axios.get(`${this.$store.getters.getServer}/user/info`)
       .then((res) => {
         console.log(res.data)
