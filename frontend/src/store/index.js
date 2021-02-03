@@ -17,7 +17,6 @@ export default new Vuex.Store({
     name: "",
     createDate: "",
     code: "",
-    selected: [],
   },
   getters: {
     getServer(state) { 
@@ -40,9 +39,6 @@ export default new Vuex.Store({
     },
     getCode(state) { 
       return state.code;
-    },
-    getSelected(state) {
-      return state.selected;
     },
   },
   mutations: {
@@ -70,10 +66,6 @@ export default new Vuex.Store({
     SETEMAIL(state, payload) { 
       state.email = payload;
     },
-    FLAVOURSELECTED(state, payload) {
-      state.selected = payload;
-    },
-
   },
   actions: {
     LOGIN(context, user) {
@@ -104,12 +96,6 @@ export default new Vuex.Store({
     SETEMAIL(context, email) {
       context.commit("SETEMAIL", email);
     },
-    FLAVOURSELECTED(context) {
-      return axios.get(`${SERVER_URL}/user/info`)
-      .then((res) => {
-        // context.commit("FLAVOURSELECTED", selected);
-      })
-    }
   },
   modules: {}
 });
