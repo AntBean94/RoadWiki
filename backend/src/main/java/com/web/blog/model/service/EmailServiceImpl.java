@@ -23,6 +23,8 @@ public class EmailServiceImpl implements EmailService {
 	
 	@Autowired
 	public JavaMailSender javaMailSender;
+
+	static final int KEY = 106106;
 	
 	@Override
 	public Object email(String email) throws MessagingException {
@@ -31,15 +33,12 @@ public class EmailServiceImpl implements EmailService {
 		for (int i = 0; i < 6; i++)
 			sb.append(rand.nextInt(9));
 
-		byte[] tmp = sb.toString().getBytes();
-		String oriText = new String(tmp);
-		logger.info("original text : " + new String(tmp));
-		for(int i = 0; i < tmp.length; i++) 
-			tmp[i]^=(byte)1;
-		logger.info("encrypt text : " + new String(tmp));
+		int oriText = Integer.parseInt(sb.toString());
+		logger.info("original text : " + oriText);
+		int encryptText = oriText ^ KEY;
+		logger.info("encrypt text : " + String.valueOf(encryptText));
 
 		try {
-			String encryptText = new String(tmp);
 			MimeMessage message = javaMailSender.createMimeMessage();
 			MimeMessageHelper helper = new MimeMessageHelper(message, false);
 			helper.setFrom("team_code_C106");
@@ -49,7 +48,7 @@ public class EmailServiceImpl implements EmailService {
 			javaMailSender.send(message);
 
 			return new HashMap<String, Object>(){{
-				put("code", encryptText);
+				put("code", String.valueOf(encryptText));
 				put("email", email);
 			}};
 		} catch (Exception e) {
@@ -66,17 +65,14 @@ public class EmailServiceImpl implements EmailService {
 		if(email.length() == 0 || code.length() < 6) {
 			return new HashMap<String, Object>(){{put("msg", "fail");}};
 		}
-		
-		byte[] tmp = code.getBytes();
-		for(int i = 0; i < tmp.length; i++) 
-			tmp[i]^=(byte)1;
-		String decryptText = new String(tmp);
+
+		int decryptText = Integer.parseInt(code)^KEY;
 		
 		logger.info("email : " + email);
 		logger.info("user input : " + inputCode);
 		logger.info("encrypt text : " + code);
 		logger.info("decrypt text : " + decryptText);
-		if(decryptText.equals(inputCode)) {
+		if(String.valueOf(decryptText).equals(inputCode)) {
 			return new HashMap<String, Object>(){{
 				put("msg", "success");
 			}};	
