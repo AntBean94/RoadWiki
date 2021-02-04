@@ -10,9 +10,6 @@
               <b-link href="/#/main">
                 <img src="/img/brand/white_roadwiki.png" alt="roadwiki" width="250rem;">
               </b-link>
-              <!-- <h1 class="text-white">회원가입</h1> -->
-              <!-- <p class="text-lead text-white">Use these awesome forms to login or create new account in your project for
-                free.</p> -->
             </b-col>
           </b-row>
         </div>
@@ -226,7 +223,6 @@
           console.log(res.data.msg)
           if (res.data.msg === "success") {
             this.isEmailModal = true
-            console.log(this.isEmailModal)
             this.$store.dispatch('SETCODE', res.data['code']);
             this.$store.dispatch('SETEMAIL', res.data['email']);
           } else {
