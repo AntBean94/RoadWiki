@@ -140,7 +140,7 @@ export default {
           if(res.data.msg == 'success'){
           console.log('data', res.data)
           this.curriculumData = res.data['roadmaps'];
-          console.log(this.curriculumData)
+          // console.log(this.curriculumData)
           }else{
             alert("데이터 로드에 실패했습니다.")
           }
