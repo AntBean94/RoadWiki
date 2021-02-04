@@ -67,7 +67,7 @@
                       <!-- 만약 기존에 계정이 존재하는 이메일이라면 this email is already taken 보여주기 -->
                     </div>
                     <div class="col-3 pl-0">
-                      <b-button v-if="!confirmEmail" @click="emailNumSend">인증하기</b-button>
+                      <b-button v-if="!confirmEmail" @click="emailNumSend" class="mr-0 ml-0">인증하기</b-button>
                       <ModalEmailValidation :isEmailModal="isEmailModal" :userEmail="email" @close="closeModal"/>
                       <!-- <ModalEmailValidation/> -->
                       <b-button v-if="confirmEmail" disabled>인증완료</b-button>
