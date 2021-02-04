@@ -29,6 +29,12 @@ import store from './store'
 
 import { mapGetters } from 'vuex'
 
+// vue-flatpickr => 컴포넌트 날짜 설정기능
+import VueFlatPickr from 'vue-flatpickr-component';
+import "flatpickr/dist/flatpickr.css";
+import 'flatpickr/dist/themes/material_blue.css';
+Vue.use(VueFlatPickr)
+
 // plugin setup
 Vue.use(VueCarousel)
 Vue.use(DashboardPlugin);
