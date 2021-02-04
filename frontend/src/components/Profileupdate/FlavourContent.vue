@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <b-button variant="default" size="sm" @click="modalShow = !modalShow">수정하기</b-button> -->
     <b-button variant="default" size="sm" @click="clickBtn">수정하기</b-button>
 
     <b-modal v-model="modalShow" hide-footer>
@@ -11,11 +10,9 @@
         <b-form-group label="" v-slot="{ ariaDescribedby }">
           <p>가장 관심있는 것부터 순서대로 체크해주세요. (3개 이상 선택 가능)</p>
           <b-container>
-            <!-- {{selected.length}} -->
-            <!-- {{selected}} -->
             <b-form-checkbox
               v-for="option in options"
-              v-model="selected"
+              v-model="keywords"
               :key="option.kwid"
               :value="option.kwid"
               :aria-describedby="ariaDescribedby"
@@ -23,19 +20,19 @@
             >
               {{ option.word }}
             </b-form-checkbox>
-            <hr>
-            <b-row class="justify-content-md-center">
+            <!-- <hr> -->
+            <!-- <b-row class="justify-content-md-center">
               <b-col class="ml-3">1순위</b-col> 
-              <b-col v-if="selected.length > 0">{{ options[selected[0]-1].word }}</b-col>
+              <b-col v-if="keywords.length > 0">{{ options[keywords[0]-1].word }}</b-col>
             </b-row>
             <b-row class="justify-content-md-center">
               <b-col class="ml-3">2순위</b-col> 
-              <b-col v-if="selected.length > 1">{{ options[selected[1]-1].word }}</b-col>
+              <b-col v-if="keywords.length > 1">{{ options[keywords[1]-1].word }}</b-col>
             </b-row>
             <b-row class="justify-content-md-center">
               <b-col class="ml-3">3순위</b-col> 
-              <b-col v-if="selected.length > 2">{{ options[selected[2]-1].word }}</b-col>
-            </b-row>
+              <b-col v-if="keywords.length > 2">{{ options[keywords[2]-1].word }}</b-col>
+            </b-row> -->
           </b-container>
         </b-form-group>
       </div>
@@ -50,10 +47,10 @@
 
 <script>
 export default {
+  props: ['keywords'],
   data() {
     return {
       modalShow: false,
-      selected: [],
       options: [],
     }
   },
@@ -63,16 +60,6 @@ export default {
       this.options = res.data.keywords
     })
   },
-  watch: {
-    selected() {
-      console.log(this.selected)
-    }
-  },
-  // computed: {
-  //   selectedNum() {
-
-  //   },
-  // },
   methods: {
     clickBtn() {
       this.modalShow = true
@@ -80,7 +67,7 @@ export default {
     },
     sendFlavour() {
       this.modalShow = false
-      this.$emit('changeFlavour', this.selected)
+      this.$emit('changeFlavour', this.keywords)
     },
   },
 }
