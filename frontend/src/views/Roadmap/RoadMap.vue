@@ -6,7 +6,8 @@
     <button v-if="mode" class="btn" @click="updateRoadmap" style="background-color: rgba(256, 256, 256, 0.95);">수정완료</button>
     <button v-else class="btn" @click="createRoadmap" style="background-color: rgb(181, 199, 211);">생성완료</button>
     <!-- 사용법 modal / start -->
-      <b-button 
+    <b-button @click="deleteNode" type="button">선택한 노드 삭제</b-button>
+      <b-button
         v-b-modal.modal-1
         type="button" 
         class="btn ml-4" 
@@ -32,9 +33,9 @@
         </b-dropdown-item>
       </b-dropdown>
     </div>
+    
     </div>
     <!-- 커리큘럼 히스토리 끝 -->
-
       <b-modal id="modal-1" title="BootstrapVue">
         <h3>로드위키 사용법</h3>
         <h4>❤ Read</h4>
@@ -129,8 +130,6 @@
     </b-container>
   </div>
 </template>
-
-
 
 
 <script>
@@ -371,7 +370,6 @@ export default {
       myDiagram.toolManager.relinkingTool.temporaryLink.routing = go.Link.Orthogonal;
 
       console.log('309', myDiagram)
-
       
       // 팔레트 설정 관련 코드
       let myPalette =
@@ -577,6 +575,11 @@ export default {
     load() {
       myDiagram.model = go.Model.fromJson(this.test);
       this.ismounted = true
+    },
+    deleteNode(){
+      console.log(585)
+      // myDiagram.model.removeNodeData({ key : })
+       
     },
   },
 }

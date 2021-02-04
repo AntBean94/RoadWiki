@@ -29,7 +29,6 @@ import store from './store'
 
 import { mapGetters } from 'vuex'
 
-
 // plugin setup
 Vue.use(VueCarousel)
 Vue.use(DashboardPlugin);
