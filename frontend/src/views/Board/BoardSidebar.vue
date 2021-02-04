@@ -35,13 +35,11 @@ export default {
 #sidebar-right {
   position: fixed;
   right: 0;
-  top: 0;
-  width: 50%;
-  min-width: 700px;
+  top: 260px;
   height: 100%;
-  /* margin-left: 20%; */
+  width: 50%;
+  min-width: 500px;
   overflow: hidden;
-  /* float: right; */
   background-color: rgb(247, 243, 255);
   z-index: 1000;
   /* border-left: navy solid 1px; */
