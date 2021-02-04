@@ -10,9 +10,6 @@
               <b-link href="/#/main">
                 <img src="/img/brand/white_roadwiki.png" alt="roadwiki" width="250rem;">
               </b-link>
-              <!-- <h1 class="text-white">회원가입</h1> -->
-              <!-- <p class="text-lead text-white">Use these awesome forms to login or create new account in your project for
-                free.</p> -->
             </b-col>
           </b-row>
         </div>
@@ -70,7 +67,7 @@
                       <!-- 만약 기존에 계정이 존재하는 이메일이라면 this email is already taken 보여주기 -->
                     </div>
                     <div class="col-3 pl-0">
-                      <b-button v-if="!confirmEmail" @click="emailNumSend">인증하기</b-button>
+                      <b-button v-if="!confirmEmail" @click="emailNumSend" class="mr-0 ml-0">인증하기</b-button>
                       <ModalEmailValidation :isEmailModal="isEmailModal" :userEmail="email" @close="closeModal"/>
                       <!-- <ModalEmailValidation/> -->
                       <b-button v-if="confirmEmail" disabled>인증완료</b-button>
@@ -226,7 +223,6 @@
           console.log(res.data.msg)
           if (res.data.msg === "success") {
             this.isEmailModal = true
-            console.log(this.isEmailModal)
             this.$store.dispatch('SETCODE', res.data['code']);
             this.$store.dispatch('SETEMAIL', res.data['email']);
           } else {
