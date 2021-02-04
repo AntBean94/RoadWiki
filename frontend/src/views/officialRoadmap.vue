@@ -79,8 +79,10 @@
   
 </template>
 <script>
+// flatpickr 오류 수정 필요!
 import RoadMap from '@/views/Roadmap/RoadMap'
 import router from '@/routes/router'
+// flatpickr - Hindi : 날짜 설정 부속기능
 import {Hindi} from 'flatpickr/dist/l10n/hi.js';
 
 // 코드 변환 시작 
@@ -125,7 +127,6 @@ export default {
   },
   created() {
       
-      console.log(this.$store.getters.getUid)
       const uid = String(this.$store.getters.getUid)
       // page => 차후 수정해야됨
 
@@ -134,9 +135,7 @@ export default {
       axios.get(`${this.$store.getters.getServer}/roadmap/Official`)
         .then((res) => {
           if(res.data.msg == 'success'){
-          console.log('data', res.data)
           this.curriculumData = res.data['roadmaps'];
-          // console.log(this.curriculumData)
           }else{
             alert("데이터 로드에 실패했습니다.")
           }
@@ -377,7 +376,6 @@ export default {
         axios.get(`${this.$store.getters.getServer}/roadmap/get/${clickrmid}`)
         .then((res) => {
           if(res.data.msg == 'success'){
-          console.log(res.data['roadmaps'].tmp);
           this.test = JSON.parse(res.data['roadmaps'].tmp);
           this.load();
           }else{

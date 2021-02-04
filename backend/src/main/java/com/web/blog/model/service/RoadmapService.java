@@ -4,7 +4,7 @@ import com.web.blog.model.dto.Roadmap;
 
 public interface RoadmapService {
 	
-	public Object create(String nowuid,Roadmap map);
+	public Object create(String nowuid,Roadmap map) throws Exception;
 	public Object modify(String nowuid,Roadmap map);
 	public Object getRoadmapListByUid(String nowuid,String uid); // rmorder createdate가장나중
 	public Object getRoadmap(String nowuid,String rmid);

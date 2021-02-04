@@ -58,15 +58,15 @@
         </sidebar-item>
 
         <sidebar-item
-                  :link="{
-                    name: 'Register',
-                    path: '/register',
-                    icon: 'ni ni-circle-08 text-pink'
-                  }"
-                  v-if="!getAccessToken"
-                  >
+          :link="{
+            name: 'Register',
+            path: '/register',
+            icon: 'ni ni-circle-08 text-pink'
+          }"
+          v-if="!getAccessToken"
+        >
         </sidebar-item>
-        
+
         <sidebar-item
           :link="{
             name: 'Board',
@@ -112,17 +112,23 @@
           <router-view></router-view>
         </fade-transition>
       </div>
+
       <content-footer v-if="!$route.meta.hideFooter"></content-footer>
     </div>
+    <!-- <div id="testdiv">
+      <p>
+        div 영역입니다!!!
+      </p>
+    </div> -->
   </div>
 </template>
 <script>
+/* eslint-disable no-new */
+import PerfectScrollbar from "perfect-scrollbar";
+import "perfect-scrollbar/css/perfect-scrollbar.css";
+import LoginContent from "@/components/Login/LoginContent.vue";
+import LogoutContent from "@/components/Logout/LogoutContent.vue";
 
-  /* eslint-disable no-new */
-  import PerfectScrollbar from 'perfect-scrollbar';
-  import 'perfect-scrollbar/css/perfect-scrollbar.css';
-  import LoginContent from '@/components/Login/LoginContent.vue';
-  import LogoutContent from '@/components/Logout/LogoutContent.vue';
 
 function hasElement(className) {
   return document.getElementsByClassName(className).length > 0;
@@ -138,29 +144,32 @@ function initScrollbar(className) {
     }, 100);
   }
 }
+  // flatpickr
+  // import flatPickr from "vue-flatpickr-component";
+  // import "flatpickr/dist/flatpickr.css";
+  // import 'flatpickr/dist/themes/material_blue.css';
+  // import {Hindi} from 'flatpickr/dist/l10n/hi.js';
 
-  import DashboardNavbar from './DashboardNavbar.vue';
-  import ContentFooter from './ContentFooter.vue';
-  import DashboardContent from './Content.vue';
-  import { FadeTransition } from 'vue2-transitions';
-  import { mapGetters } from 'vuex'
+import DashboardNavbar from "./DashboardNavbar.vue";
+import ContentFooter from "./ContentFooter.vue";
+import DashboardContent from "./Content.vue";
+import { FadeTransition } from "vue2-transitions";
+import { mapGetters } from "vuex";
 
+export default {
+  components: {
+    DashboardNavbar,
+    ContentFooter,
+    DashboardContent,
+    FadeTransition,
+    LoginContent,
+    LogoutContent
+  },
+  created() {
+    let url = this.$route.name;
+    this.checkUrl(url);
+  },
 
-  export default {
-    components: {
-      DashboardNavbar,
-      ContentFooter,
-      DashboardContent,
-      FadeTransition,
-      LoginContent,
-      LogoutContent,
-
-    },
-    created() {
-      let url = this.$route.name;
-      this.checkUrl(url)
-    },
-    
   data() {
     return {
       isHeader: true
@@ -177,36 +186,44 @@ function initScrollbar(className) {
     checkUrl(url) {
       let array = ["roadmap"];
 
-        let isHeader = true;
-        array.map((path) => {
-          if (url === path) isHeader = false;
-        })
-        this.isHeader = isHeader
-      }
-    },
-    logOut() {
-      this.$store.dispatch("LOGOUT").then(() => {
-        this.$router.push('/')
+      let isHeader = true;
+      array.map(path => {
+        if (url === path) isHeader = false;
+      });
+      this.isHeader = isHeader;
+    }
+  },
+  logOut() {
+    this.$store
+      .dispatch("LOGOUT")
+      .then(() => {
+        this.$router.push("/");
       })
       .catch(() => {
-        alert('로그아웃에 실패했습니다.')
-      })
-    },
-    mounted() {
-      this.initScrollbar()
-    },
-    watch: {
-      $route(to) {
-        this.checkUrl(to.name)
-      },
-    },
-    computed: {
-      ...mapGetters(['getAccessToken'])
-
-    },
-  };
-
+        alert("로그아웃에 실패했습니다.");
+      });
+  },
+  mounted() {
+    this.initScrollbar();
+  },
+  watch: {
+    $route(to) {
+      this.checkUrl(to.name);
+    }
+  },
+  computed: {
+    ...mapGetters(["getAccessToken"])
+  }
+};
 </script>
-<style lang="scss">
-
+<style>
+/* #testdiv {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 30%;
+  height: 100%;
+  overflow: hidden;
+  background-color: darkred;
+} */
 </style>
