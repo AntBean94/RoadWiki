@@ -2,29 +2,11 @@
   <div>
     <base-header class="pb-5 pb-2 pt-2 pt-md-2 bg-gradient-default">
       <!-- Card stats -->
-      <a
-        :href="goToBack"
-        class="btn"
-        style="background-color: rgb(242, 214, 174);"
-        >돌아가기</a
-      >
-      <button
-        v-if="mode"
-        class="btn"
-        @click="updateRoadmap"
-        style="background-color: rgba(256, 256, 256, 0.95);"
-      >
-        수정완료
-      </button>
-      <button
-        v-else
-        class="btn"
-        @click="createRoadmap"
-        style="background-color: rgb(181, 199, 211);"
-      >
-        생성완료
-      </button>
-      <!-- 사용법 modal / start -->
+    <a :href="goToBack" class="btn" style="background-color: rgb(242, 214, 174);">돌아가기</a> 
+    <button v-if="mode" class="btn" @click="updateRoadmap" style="background-color: rgba(256, 256, 256, 0.95);">수정완료</button>
+    <button v-else class="btn" @click="createRoadmap" style="background-color: rgb(181, 199, 211);">생성완료</button>
+    <!-- 사용법 modal / start -->
+    <b-button @click="deleteNode" type="button">선택한 노드 삭제</b-button>
       <b-button
         v-b-modal.modal-1
         type="button"
@@ -52,7 +34,6 @@
       </div>
     </div>
     <!-- 커리큘럼 히스토리 끝 -->
-
       <b-modal id="modal-1" title="BootstrapVue">
         <h3>로드위키 사용법</h3>
         <h4>❤ Read</h4>
@@ -229,28 +210,22 @@ export default {
       }
     });
 
-    // GUI 시작
-    myDiagram.nodeTemplateMap.add(
-      "", // the default category
-      $(
-        go.Node,
-        "Table",
-        this.nodeStyle(),
-        // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
-        $(
-          go.Panel,
-          "Auto",
-          $(
-            go.Shape,
-            "RoundedRectangle",
-            {
-              fill: "#D4E0DE",
-              stroke: "#307363",
-              strokeWidth: 3.5,
-              strokeJoin: "round",
-              strokeCap: "square"
-            },
-            new go.Binding("figure", "figure")
+      // GUI 시작 
+      myDiagram.nodeTemplateMap.add("",  // the default category
+        $(go.Node, "Table", this.nodeStyle(),
+          // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
+          $(go.Panel, "Auto",
+            $(go.Shape, "RoundedRectangle",
+              { fill: "rgb(255, 255 ,255)", stroke: "rgb(15, 76, 129)", strokeWidth: 3.5, strokeJoin: "round", strokeCap: "square" },
+              new go.Binding("figure", "figure")),
+            $(go.TextBlock, this.textStyle(),
+              {
+                margin: 8,
+                maxSize: new go.Size(160, NaN),
+                wrap: go.TextBlock.WrapFit,
+                editable: true
+              },
+              new go.Binding("text").makeTwoWay())
           ),
           $(
             go.TextBlock,
@@ -484,33 +459,32 @@ export default {
       head = e.subject.part.data.text;
     });
 
+      console.log('309', myDiagram)
+      
+      // 팔레트 설정 관련 코드
+      let myPalette =
+        $(go.Palette, this.$refs.myPaletteDiv, // must name or refer to the DIV HTML element
+          {
+            // Instead of the default animation, use a custom fade-down
+            "animationManager.initialAnimationStyle": go.AnimationManager.None,
+            "InitialAnimationStarting": this.animateFadeDown, // Instead, animate with this function
+  
+            nodeTemplateMap: myDiagram.nodeTemplateMap,  // share the templates used by myDiagram
+            model: new go.GraphLinksModel([  // specify the contents of the Palette
+              { category: "Start", text: "Start" },
+              { text: "알고리즘 심화" },
+              { category: "Conditional", text: "???" },
+              { category: "End", text: "End" },
+              { category: "Comment", text: "Comment" }
+            ])
+          })
 
-    console.log("309", myDiagram);
-
-    // 팔레트 설정 관련 코드
-    let myPalette = $(
-      go.Palette,
-      this.$refs.myPaletteDiv, // must name or refer to the DIV HTML element
-      {
-        // Instead of the default animation, use a custom fade-down
-        "animationManager.initialAnimationStyle": go.AnimationManager.None,
-        InitialAnimationStarting: this.animateFadeDown, // Instead, animate with this function
-
-        nodeTemplateMap: myDiagram.nodeTemplateMap, // share the templates used by myDiagram
-        model: new go.GraphLinksModel([
-          // specify the contents of the Palette
-          { category: "Start", text: "Start" },
-          { text: "알고리즘 심화" },
-          { category: "Conditional", text: "???" },
-          { category: "End", text: "End" },
-          { category: "Comment", text: "Comment" }
-        ])
-      }
-    );
-
-    this.readRoadmap();
-    // 수정로그 가져오기
-    this.readRoadmapLog();
+      myDiagram.toolManager.linkingTool.temporaryLink.routing = go.Link.Orthogonal;
+      myDiagram.toolManager.relinkingTool.temporaryLink.routing = go.Link.Orthogonal;    
+      
+      this.readRoadmap();
+      // 수정로그 가져오기
+      this.readRoadmapLog();
   },
   watch: {},
   computed: {},
@@ -699,10 +673,15 @@ export default {
     },
     load() {
       myDiagram.model = go.Model.fromJson(this.test);
-      this.ismounted = true;
-    }
-  }
-};
+      this.ismounted = true
+    },
+    deleteNode(){
+      console.log(585)
+      // myDiagram.model.removeNodeData({ key : })
+       
+    },
+  },
+}
 </script>
 
 <style></style>
