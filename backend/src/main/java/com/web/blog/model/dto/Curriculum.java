@@ -1,38 +1,23 @@
 package com.web.blog.model.dto;
 
 public class Curriculum {
- 
-	private int crid;
-	private int crtid;
+	private int key;
 	private int rmid;
-	private int parentid;
+	private int sdid;
+	private int mdid;
+	private int bdid;
+	private String loc;
 	private String memo;
-	private Curriculumtext curriculumtext;
-	
-	public Curriculum() {
-		super();
+	private String text;
+	private String content;
+	private String startdate;
+	private String enddate;
+	private String categori;
+	public int getKey() {
+		return key;
 	}
-	
-	public Curriculum(int crid, int crtid, int rmid, int parentid, String memo) {
-		super();
-		this.crid = crid;
-		this.crtid = crtid;
-		this.rmid = rmid;
-		this.parentid = parentid;
-		this.memo = memo;
-	}
-	
-	public int getCrid() {
-		return crid;
-	}
-	public void setCrid(int crid) {
-		this.crid = crid;
-	}
-	public int getCrtid() {
-		return crtid;
-	}
-	public void setCrtid(int crtid) {
-		this.crtid = crtid;
+	public void setKey(int key) {
+		this.key = key;
 	}
 	public int getRmid() {
 		return rmid;
@@ -40,11 +25,29 @@ public class Curriculum {
 	public void setRmid(int rmid) {
 		this.rmid = rmid;
 	}
-	public int getParentid() {
-		return parentid;
+	public int getSdid() {
+		return sdid;
 	}
-	public void setParentid(int parentid) {
-		this.parentid = parentid;
+	public void setSdid(int sdid) {
+		this.sdid = sdid;
+	}
+	public int getMdid() {
+		return mdid;
+	}
+	public void setMdid(int mdid) {
+		this.mdid = mdid;
+	}
+	public int getBdid() {
+		return bdid;
+	}
+	public void setBdid(int bdid) {
+		this.bdid = bdid;
+	}
+	public String getLoc() {
+		return loc;
+	}
+	public void setLoc(String loc) {
+		this.loc = loc;
 	}
 	public String getMemo() {
 		return memo;
@@ -52,11 +55,60 @@ public class Curriculum {
 	public void setMemo(String memo) {
 		this.memo = memo;
 	}
+	public String getText() {
+		return text;
+	}
+	public void setText(String text) {
+		this.text = text;
+	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	public String getStartdate() {
+		return startdate;
+	}
+	public void setStartdate(String startdate) {
+		this.startdate = startdate;
+	}
+	public String getEnddate() {
+		return enddate;
+	}
+	public void setEnddate(String enddate) {
+		this.enddate = enddate;
+	}
+	public String getCategori() {
+		return categori;
+	}
+	public void setCategori(String categori) {
+		this.categori = categori;
+	}
+	public Curriculum(int key, int rmid, int sdid, int mdid, int bdid, String loc, String memo, String text,
+			String content, String startdate, String enddate, String categori) {
+		super();
+		this.key = key;
+		this.rmid = rmid;
+		this.sdid = sdid;
+		this.mdid = mdid;
+		this.bdid = bdid;
+		this.loc = loc;
+		this.memo = memo;
+		this.text = text;
+		this.content = content;
+		this.startdate = startdate;
+		this.enddate = enddate;
+		this.categori = categori;
+	}
+	public Curriculum() {
+		super();
+	}
 	@Override
 	public String toString() {
-		return "Curriculum [crid=" + crid + ", crtid=" + crtid + ", rmid=" + rmid + ", parentid=" + parentid + ", memo="
-				+ memo + "]";
+		return "Curriculum [key=" + key + ", rmid=" + rmid + ", sdid=" + sdid + ", mdid=" + mdid + ", bdid=" + bdid
+				+ ", loc=" + loc + ", memo=" + memo + ", text=" + text + ", content=" + content + ", startdate="
+				+ startdate + ", enddate=" + enddate + ", categori=" + categori + "]";
 	}
-	
 	
 }

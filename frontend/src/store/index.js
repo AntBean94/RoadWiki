@@ -12,10 +12,13 @@ export default new Vuex.Store({
   state: {
     server: SERVER_URL,
     accessToken: null,
-    uid: "",
-    email: "",
-    name: "",
-    createDate: "",
+    user: {
+      uid: "",
+      uid: "",
+      email: "",
+      name: "",
+      createDate: "",
+    },
     code: "",
   },
   getters: {
@@ -26,45 +29,55 @@ export default new Vuex.Store({
       return state.accessToken;
     },
     getUid(state) { 
-      return state.uid;
+      return state.user.uid;
     },
     getEmail(state) {
-      return state.email;
+      return state.user.email;
     },
     getName(state) {
-      return state.name;
+      return state.user.name;
     },
     getCreateDate(state) {
-      return state.createDate;
+      return state.user.createDate;
     },
     getCode(state) { 
       return state.code;
     },
+    getUser(state) { 
+      return state.user;
+    }
   },
   mutations: {
+    LOADUSERTOKEN(state) {
+      console.log("set token");
+      state.accessToken = sessionStorage.getItem('auth-token');
+      state.user = JSON.parse(sessionStorage.getItem('user'));
+      console.log("load : " + state.user);
+      axios.defaults.headers.common["auth-token"] = state.accessToken;
+    },
     LOGIN(state, payload) {
-      state.uid = payload["uid"];
       state.accessToken = payload["authorizationToken"];
-      state.email = payload["email"];
-      state.name = payload["name"];
-      state.createDate = payload["createDate"];
+      state.user.uid = payload["uid"];
+      state.user.email = payload["email"];
+      state.user.name = payload["name"];
+      state.user.createDate = payload["createDate"];
     },
     LOGOUT(state) {
-      state.uid = "";
       state.accessToken = null;
-      state.email = "";
-      state.name = "";
-      state.createDate = "";
+      state.user.uid = "";
+      state.user.email = "";
+      state.user.name = "";
+      state.user.createDate = "";
     },
     SETINFO(state, payload) { 
-      state.name = payload["name"];
-      state.email = payload["email"];
+      state.user.name = payload["name"];
+      state.user.email = payload["email"];
+    },
+    SETEMAIL(state, payload) { 
+      state.user.email = payload;
     },
     SETCODE(state, payload) { 
       state.code = payload;
-    },
-    SETEMAIL(state, payload) { 
-      state.email = payload;
     },
   },
   actions: {
@@ -77,6 +90,7 @@ export default new Vuex.Store({
           if(`${response.data["authorizationToken"]}` == "undefined") reject();
           axios.defaults.headers.common["auth-token"] = `${response.data["authorizationToken"]}`;
           sessionStorage.setItem('auth-token', `${response.data["authorizationToken"]}`)
+          sessionStorage.setItem('user', JSON.stringify(this.getters.getUser));
         })
         .catch(() => {
           reject();
@@ -84,7 +98,7 @@ export default new Vuex.Store({
     },
     LOGOUT(context) {
       context.commit("LOGOUT");
-      axios.defaults.headers.common["auth-token"] = undefined;
+      axios.defaults.headers.common["auth-token"] = null;
       sessionStorage.removeItem('auth-token');
     },
     SETINFO(context, user) {
