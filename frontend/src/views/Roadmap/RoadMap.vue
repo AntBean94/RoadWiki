@@ -2,11 +2,30 @@
   <div>
     <base-header class="pb-5 pb-2 pt-2 pt-md-2 bg-gradient-default">
       <!-- Card stats -->
-    <a :href="goToBack" class="btn" style="background-color: rgb(242, 214, 174);">돌아가기</a> 
-    <button v-if="mode" class="btn" @click="updateRoadmap" style="background-color: rgba(256, 256, 256, 0.95);">수정완료</button>
-    <button v-else class="btn" @click="createRoadmap" style="background-color: rgb(181, 199, 211);">생성완료</button>
-    <!-- 사용법 modal / start -->
-    <b-button @click="deleteNode" type="button">선택한 노드 삭제</b-button>
+      <a
+        :href="goToBack"
+        class="btn"
+        style="background-color: rgb(242, 214, 174);"
+        >돌아가기</a
+      >
+      <button
+        v-if="mode"
+        class="btn"
+        @click="updateRoadmap"
+        style="background-color: rgba(256, 256, 256, 0.95);"
+      >
+        수정완료
+      </button>
+      <button
+        v-else
+        class="btn"
+        @click="createRoadmap"
+        style="background-color: rgb(181, 199, 211);"
+      >
+        생성완료
+      </button>
+      <!-- 사용법 modal / start -->
+      <b-button @click="deleteNode" type="button">선택한 노드 삭제</b-button>
       <b-button
         v-b-modal.modal-1
         type="button"
@@ -19,21 +38,27 @@
           <span>How to use</span>
         </div>
       </b-button>
-    <b-form-input v-model="roadmapname" class="inline-block" placeholder="로드맵 제목을 입력해 주세요." style="width:30%; display:inline-block;"></b-form-input>
-    <!-- 커리큘럼 히스토리 보여주기 -->
-    <div>
-      <!--부트스트랩 드롭다운-->
+      <b-form-input
+        v-model="roadmapname"
+        class="inline-block"
+        placeholder="로드맵 제목을 입력해 주세요."
+        style="width:30%; display:inline-block;"
+      ></b-form-input>
+      <!-- 커리큘럼 히스토리 보여주기 -->
       <div>
-        <b-dropdown id="dropdown-1" text="이전 수정 기록" class="m-md-2">
-          <b-dropdown-item 
-            @click="previewRoadmap(item.rmid, index)" 
-            v-for="(item, index) in logData" 
-            :key="index">{{ item.createDate }} | {{ item.name }}
-          </b-dropdown-item>
-        </b-dropdown>
+        <!--부트스트랩 드롭다운-->
+        <div>
+          <b-dropdown id="dropdown-1" text="이전 수정 기록" class="m-md-2">
+            <b-dropdown-item
+              @click="previewRoadmap(item.rmid, index)"
+              v-for="(item, index) in logData"
+              :key="index"
+              >{{ item.createDate }} | {{ item.name }}
+            </b-dropdown-item>
+          </b-dropdown>
+        </div>
       </div>
-    </div>
-    <!-- 커리큘럼 히스토리 끝 -->
+      <!-- 커리큘럼 히스토리 끝 -->
       <b-modal id="modal-1" title="BootstrapVue">
         <h3>로드위키 사용법</h3>
         <h4>❤ Read</h4>
@@ -143,8 +168,8 @@
 
 <script>
 // flatPickr - Hindi: 날짜 설정 부속기능
-import {Hindi} from 'flatpickr/dist/l10n/hi.js';
-import dropdown from 'vue-dropdowns';
+import { Hindi } from "flatpickr/dist/l10n/hi.js";
+import dropdown from "vue-dropdowns";
 
 // src\views\Roadmap\RoadMap.vue
 // Roadmap 폴더 명 변경을 위한 주석
@@ -190,8 +215,7 @@ export default {
       logData: []
     };
   },
-  created(){
-  },
+  created() {},
   mounted() {
     myDiagram = $(go.Diagram, this.$refs.myDiagramDiv, {
       initialContentAlignment: go.Spot.Center
@@ -210,22 +234,28 @@ export default {
       }
     });
 
-      // GUI 시작 
-      myDiagram.nodeTemplateMap.add("",  // the default category
-        $(go.Node, "Table", this.nodeStyle(),
-          // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
-          $(go.Panel, "Auto",
-            $(go.Shape, "RoundedRectangle",
-              { fill: "rgb(255, 255 ,255)", stroke: "rgb(15, 76, 129)", strokeWidth: 3.5, strokeJoin: "round", strokeCap: "square" },
-              new go.Binding("figure", "figure")),
-            $(go.TextBlock, this.textStyle(),
-              {
-                margin: 8,
-                maxSize: new go.Size(160, NaN),
-                wrap: go.TextBlock.WrapFit,
-                editable: true
-              },
-              new go.Binding("text").makeTwoWay())
+    // GUI 시작
+    myDiagram.nodeTemplateMap.add(
+      "", // the default category
+      $(
+        go.Node,
+        "Table",
+        this.nodeStyle(),
+        // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
+        $(
+          go.Panel,
+          "Auto",
+          $(
+            go.Shape,
+            "RoundedRectangle",
+            {
+              fill: "rgb(255, 255 ,255)",
+              stroke: "rgb(15, 76, 129)",
+              strokeWidth: 3.5,
+              strokeJoin: "round",
+              strokeCap: "square"
+            },
+            new go.Binding("figure", "figure")
           ),
           $(
             go.TextBlock,
@@ -239,12 +269,23 @@ export default {
             new go.Binding("text").makeTwoWay()
           )
         ),
-        // four named ports, one on each side: node의 가지 옵션
-        this.makePort("T", go.Spot.Top, go.Spot.TopSide, false, true),
-        this.makePort("L", go.Spot.Left, go.Spot.LeftSide, true, true),
-        this.makePort("R", go.Spot.Right, go.Spot.RightSide, true, true),
-        this.makePort("B", go.Spot.Bottom, go.Spot.BottomSide, true, false)
-      )
+        $(
+          go.TextBlock,
+          this.textStyle(),
+          {
+            margin: 8,
+            maxSize: new go.Size(160, NaN),
+            wrap: go.TextBlock.WrapFit,
+            editable: true
+          },
+          new go.Binding("text").makeTwoWay()
+        )
+      ),
+      // four named ports, one on each side: node의 가지 옵션
+      this.makePort("T", go.Spot.Top, go.Spot.TopSide, false, true),
+      this.makePort("L", go.Spot.Left, go.Spot.LeftSide, true, true),
+      this.makePort("R", go.Spot.Right, go.Spot.RightSide, true, true),
+      this.makePort("B", go.Spot.Bottom, go.Spot.BottomSide, true, false)
     );
 
     myDiagram.nodeTemplateMap.add(
@@ -459,32 +500,37 @@ export default {
       head = e.subject.part.data.text;
     });
 
-      console.log('309', myDiagram)
-      
-      // 팔레트 설정 관련 코드
-      let myPalette =
-        $(go.Palette, this.$refs.myPaletteDiv, // must name or refer to the DIV HTML element
-          {
-            // Instead of the default animation, use a custom fade-down
-            "animationManager.initialAnimationStyle": go.AnimationManager.None,
-            "InitialAnimationStarting": this.animateFadeDown, // Instead, animate with this function
-  
-            nodeTemplateMap: myDiagram.nodeTemplateMap,  // share the templates used by myDiagram
-            model: new go.GraphLinksModel([  // specify the contents of the Palette
-              { category: "Start", text: "Start" },
-              { text: "알고리즘 심화" },
-              { category: "Conditional", text: "???" },
-              { category: "End", text: "End" },
-              { category: "Comment", text: "Comment" }
-            ])
-          })
+    console.log("309", myDiagram);
 
-      myDiagram.toolManager.linkingTool.temporaryLink.routing = go.Link.Orthogonal;
-      myDiagram.toolManager.relinkingTool.temporaryLink.routing = go.Link.Orthogonal;    
-      
-      this.readRoadmap();
-      // 수정로그 가져오기
-      this.readRoadmapLog();
+    // 팔레트 설정 관련 코드
+    let myPalette = $(
+      go.Palette,
+      this.$refs.myPaletteDiv, // must name or refer to the DIV HTML element
+      {
+        // Instead of the default animation, use a custom fade-down
+        "animationManager.initialAnimationStyle": go.AnimationManager.None,
+        InitialAnimationStarting: this.animateFadeDown, // Instead, animate with this function
+
+        nodeTemplateMap: myDiagram.nodeTemplateMap, // share the templates used by myDiagram
+        model: new go.GraphLinksModel([
+          // specify the contents of the Palette
+          { category: "Start", text: "Start" },
+          { text: "알고리즘 심화" },
+          { category: "Conditional", text: "???" },
+          { category: "End", text: "End" },
+          { category: "Comment", text: "Comment" }
+        ])
+      }
+    );
+
+    myDiagram.toolManager.linkingTool.temporaryLink.routing =
+      go.Link.Orthogonal;
+    myDiagram.toolManager.relinkingTool.temporaryLink.routing =
+      go.Link.Orthogonal;
+
+    this.readRoadmap();
+    // 수정로그 가져오기
+    this.readRoadmapLog();
   },
   watch: {},
   computed: {},
@@ -564,45 +610,51 @@ export default {
     // read 요청보내기
     readRoadmap() {
       // 외부 json파일 초기하면에 출력
-      if(this.rmid == 0){
-        this.test = { "class": "go.GraphLinksModel",
-        "linkFromPortIdProperty": "fromPort",
-        "linkToPortIdProperty": "toPort",
-        "nodeDataArray": [
-      ],
-        "linkDataArray": [
-      ]}
-       myDiagram.model = go.Model.fromJson(this.test);
-      }else{
-      axios.get(`${this.$store.getters.getServer}/roadmap/get/${this.rmid}`)
-        .then((res) => {
-          if(res.data.msg == 'success'){
-          this.test =  res.data['roadmaps'].tmp;
-          this.roadmapname = res.data['roadmaps'].name;
-          // console.log('check', this.roadmapname, this.rmorder)
-          myDiagram.model = go.Model.fromJson(this.test);
-          }else{
-            alert("데이터 로드에 실패했습니다.")
-          }
-        }).catch((e) =>{
-          alert("axois 오류")
-        });
+      if (this.rmid == 0) {
+        this.test = {
+          class: "go.GraphLinksModel",
+          linkFromPortIdProperty: "fromPort",
+          linkToPortIdProperty: "toPort",
+          nodeDataArray: [],
+          linkDataArray: []
+        };
+        myDiagram.model = go.Model.fromJson(this.test);
+      } else {
+        axios
+          .get(`${this.$store.getters.getServer}/roadmap/get/${this.rmid}`)
+          .then(res => {
+            if (res.data.msg == "success") {
+              this.test = res.data["roadmaps"].tmp;
+              this.roadmapname = res.data["roadmaps"].name;
+              // console.log('check', this.roadmapname, this.rmorder)
+              myDiagram.model = go.Model.fromJson(this.test);
+            } else {
+              alert("데이터 로드에 실패했습니다.");
+            }
+          })
+          .catch(e => {
+            alert("axois 오류");
+          });
       }
     },
     // 로드맵 로그 가져오는 함수(mounted에서 rmorder를 불러온뒤 실행)
-    readRoadmapLog(){
-      if(this.mode == 1){
-         axios.get(`${this.$store.getters.getServer}/roadmap/log/${this.$store.getters.getUid}/${this.rmorder}`)
-        .then((res) => {
-          if(res.data.msg == 'success'){
-            this.logData = res.data['roadmaps'];  
-          }else{
-            console.log(e);
-            alert("데이터 로드에 실패했습니다.")
-          }
-        }).catch((e) =>{
-          alert("axois 오류")
-        });
+    readRoadmapLog() {
+      if (this.mode == 1) {
+        axios
+          .get(
+            `${this.$store.getters.getServer}/roadmap/log/${this.$store.getters.getUid}/${this.rmorder}`
+          )
+          .then(res => {
+            if (res.data.msg == "success") {
+              this.logData = res.data["roadmaps"];
+            } else {
+              console.log(e);
+              alert("데이터 로드에 실패했습니다.");
+            }
+          })
+          .catch(e => {
+            alert("axois 오류");
+          });
       }
     },
     // update 요청보내기
@@ -616,13 +668,12 @@ export default {
           rmorder: this.rmorder,
           name: this.roadmapname,
           tmp: this.test
-        }
-      )
-      .then((res) => {
-        if(res.data.msg == 'success'){
-        this.$router.push({ name: 'godiagram' })
-          }else{
-            alert("업데이트 실패했습니다.")
+        })
+        .then(res => {
+          if (res.data.msg == "success") {
+            this.$router.push({ name: "godiagram" });
+          } else {
+            alert("업데이트 실패했습니다.");
           }
         })
         .catch(e => {
@@ -638,15 +689,14 @@ export default {
           uid: this.$store.getters.getUid,
           name: this.roadmapname,
           tmp: this.test
-        }
-      )
-      .then((res) => {
-        if(res.data.msg == 'success'){
-        this.$router.push({ name: 'godiagram' })
-        }else
-          alert("생성에 실패했습니다.")
-        }).catch((e) =>{
-          alert('axios 오류')
+        })
+        .then(res => {
+          if (res.data.msg == "success") {
+            this.$router.push({ name: "godiagram" });
+          } else alert("생성에 실패했습니다.");
+        })
+        .catch(e => {
+          alert("axios 오류");
         });
     },
     checkCur(e) {
@@ -655,15 +705,14 @@ export default {
     },
 
     previewRoadmap(clickrmid, index) {
-      
-  
-        axios.get(`${this.$store.getters.getServer}/roadmap/get/${clickrmid}`)
-        .then((res) => {
-          if(res.data.msg == 'success'){
-          this.test = res.data['roadmaps'].tmp;
-          this.load();
-          }else{
-            alert("데이터 로드에 실패했습니다. log")
+      axios
+        .get(`${this.$store.getters.getServer}/roadmap/get/${clickrmid}`)
+        .then(res => {
+          if (res.data.msg == "success") {
+            this.test = res.data["roadmaps"].tmp;
+            this.load();
+          } else {
+            alert("데이터 로드에 실패했습니다. log");
           }
         })
         .catch(e => {
@@ -673,15 +722,14 @@ export default {
     },
     load() {
       myDiagram.model = go.Model.fromJson(this.test);
-      this.ismounted = true
+      this.ismounted = true;
     },
-    deleteNode(){
-      console.log(585)
+    deleteNode() {
+      console.log(585);
       // myDiagram.model.removeNodeData({ key : })
-       
-    },
-  },
-}
+    }
+  }
+};
 </script>
 
 <style></style>
