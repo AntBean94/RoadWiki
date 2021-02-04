@@ -136,9 +136,6 @@
 // carousel 
 import { Carousel, Slide } from 'vue-carousel'; 
 // 날짜  
-import flatPickr from "vue-flatpickr-component";
-import "flatpickr/dist/flatpickr.css";
-import 'flatpickr/dist/themes/material_blue.css';
 import {Hindi} from 'flatpickr/dist/l10n/hi.js';
 import dropdown from 'vue-dropdowns';
 
@@ -215,7 +212,7 @@ export default {
           // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
           $(go.Panel, "Auto",
             $(go.Shape, "RoundedRectangle",
-              { fill: "#D4E0DE", stroke: "#307363", strokeWidth: 3.5, strokeJoin: "round", strokeCap: "square" },
+              { fill: "rgb(255, 255 ,255)", stroke: "rgb(15, 76, 129)", strokeWidth: 3.5, strokeJoin: "round", strokeCap: "square" },
               new go.Binding("figure", "figure")),
             $(go.TextBlock, this.textStyle(),
               {
@@ -388,7 +385,10 @@ export default {
               { category: "Comment", text: "Comment" }
             ])
           })
-          
+
+      myDiagram.toolManager.linkingTool.temporaryLink.routing = go.Link.Orthogonal;
+      myDiagram.toolManager.relinkingTool.temporaryLink.routing = go.Link.Orthogonal;    
+      
       this.readRoadmap();
       // 수정로그 가져오기
       this.readRoadmapLog();

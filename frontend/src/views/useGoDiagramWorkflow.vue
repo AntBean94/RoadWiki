@@ -87,9 +87,6 @@
 import RoadMap from '@/views/Roadmap/RoadMap'
 import router from '@/routes/router'
 import { Carousel, Slide } from 'vue-carousel';
-import flatPickr from "vue-flatpickr-component";
-import "flatpickr/dist/flatpickr.css";
-import 'flatpickr/dist/themes/material_blue.css';
 import {Hindi} from 'flatpickr/dist/l10n/hi.js';
 
 // 코드 변환 시작 
@@ -105,7 +102,6 @@ export default {
     RoadMap,
     Carousel,
     Slide,
-    flatPickr,
   },
   data() {
     return {
@@ -181,7 +177,7 @@ export default {
           // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
           $(go.Panel, "Auto",
             $(go.Shape, "RoundedRectangle",
-              { fill: "#D4E0DE", stroke: "#307363", strokeWidth:  3.5, strokeJoin: "round", strokeCap: "square" },
+              { fill: "rgb(255, 255 ,255)", stroke: "rgb(15, 76, 129)", strokeWidth:  3.5, strokeJoin: "round", strokeCap: "square" },
               new go.Binding("figure", "figure")),
             $(go.TextBlock, this.textStyle(),
               {
