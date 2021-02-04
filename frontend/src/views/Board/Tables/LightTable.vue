@@ -83,11 +83,21 @@
       </el-table-column>
     </el-table>
     <b-card-footer class="py-4 d-flex justify-content-end">
+      <!-- 
+        selector 종류는 none, name, title, content 중 하나여야 하므로 selectbox 등을 활용해야합니다.
+        검색어는 word입니다.
+        검색 시 selector가 none이면 전체 리스트 출력이고 word는 무시됩니다.
+        getList() 메소드를 실행시키면 현재 조건에 맞춰 테이블이 갱신됩니다.
+       -->
+
+      <!-- 페이지 눌린 숫자를 currentPage로 지정한 후 getList() 메소드 실행시키면 테이블 페이지를 넘길 수 있습니다. -->
       <base-pagination
         v-model="currentPage"
         :per-page="10"
         :total="30"
       ></base-pagination>
+
+      <!-- 글 작성은 uid가 반드시 필요하므로, vuex에 user 정보가 존재할 경우만 작성 가능하고 서버에는 uid도 함께 보내줘야 합니다. -->
     </b-card-footer>
   </b-card>
 </template>
@@ -141,6 +151,7 @@ export default {
     }
   },
   created() {
+    this.currentPage = 1;
     this.getList();
   }
 };

@@ -37,7 +37,6 @@ import "flatpickr/dist/flatpickr.css";
 import 'flatpickr/dist/themes/material_blue.css';
 Vue.use(VueFlatPickr)
 
-
 // plugin setup
 Vue.use(VueCarousel)
 Vue.use(DashboardPlugin);
