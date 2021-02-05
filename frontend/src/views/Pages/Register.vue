@@ -109,22 +109,8 @@
                         >
                           {{ option.word }}
                         </b-form-checkbox>
-                        <!-- <b-form-checkbox-group
-                          id="checkbox-group-1"
-                          v-model="selected"
-                          :options="options"
-                          :aria-describedby="ariaDescribedby"
-                          name="flavour-1"
-                        >
-                        </b-form-checkbox-group> -->
-
                       </b-container>
                     </b-form-group>
-                    <!-- <b-container>
-                      <div>1순위 <strong v-if="selected.length > 0">{{ options[selected[0]-1].text }}</strong></div>
-                      <div>2순위 <strong v-if="selected.length > 1">{{ options[selected[1]-1].text }}</strong></div>
-                      <div>3순위 <strong v-if="selected.length > 2">{{ options[selected[2]-1].text }}</strong></div>
-                    </b-container> -->
                   </div>
                   <hr class="my-4">
                   <b-row class=" my-4">
@@ -239,7 +225,7 @@
           password: this.password,
           keyword: this.selected,
         }
-        if (this.confirmEmail && this.selected.length >= 3) {
+        if (this.confirmEmail && this.selected.length >= 3 && this.password.length >= 8 && this.password === this.rePassword && this.agree === true) {
           axios.post(`${this.$store.getters.getServer}/user/join`, user)
           .then(() => {
             console.log('잘 가나요오오오오오오오오오오')
@@ -256,7 +242,7 @@
         } else {
           if (!this.confirmEmail) {
             alert('이메일 인증이 완료되지 않았습니다.')
-          } else {alert('관심 개발 분야가 선택되지 않았습니다.')}
+          } else {alert('입력을 완료해주세요.')}
         }
       },
     },
