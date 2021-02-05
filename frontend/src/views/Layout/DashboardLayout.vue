@@ -48,31 +48,14 @@
         >
         </sidebar-item>
 
-        <!-- <sidebar-item
-                :link="{
-                  name: 'Detail Content',
-                  path: '/detail-contents',
-                  icon: 'ni ni-bullet-list-67 text-red'
-                }">
-        </sidebar-item> -->
-
-        <!-- <sidebar-item
-                  :link="{
-                    name: 'Logout',
-                    path: '*',
-                    icon: 'ni ni-key-25 text-info'
-                  }"
-                  @click="logOut"
-                  >
-        </sidebar-item> -->
-
-        <!-- <div class="ml-5">
-          <LoginContent v-if="!getAccessToken"/>
-        </div>
-
-        <div class="ml-5">
-          <LogoutContent v-if="getAccessToken"/>
-        </div> -->
+        <sidebar-item
+          :link="{
+            name: 'Calendar',
+            path: '/calendar',
+            icon: 'ni ni-calendar-grid-58'
+          }"
+        >
+        </sidebar-item>
 
         <sidebar-item
           :link="{

@@ -124,7 +124,11 @@
                   {{ keyword }}
                 </b-badge>
               </b-col>
-              <FlavourContent class="col align-self-center pl-5 ml-5" @changeFlavour="changeFlavour"/>
+              <FlavourContent 
+                class="col align-self-center pl-5 ml-5" 
+                @changeFlavour="changeFlavour"
+                :keywords="keywords"
+              />
             </b-row>
             <b-row class="mb-3">
               <b-col cols="3" class="text-center" align-self="center">
@@ -236,14 +240,6 @@
           </b-container>
         </b-card-body>
       </b-card>
-      <!-- <b-row> -->
-      <!-- <b-col xl="4" class="order-xl-2 mb-5"> -->
-      <!-- <user-card></user-card> -->
-      <!-- </b-col> -->
-      <!-- <b-col xl="8" class="order-xl-1"> -->
-      <!-- <edit-profile-form></edit-profile-form> -->
-      <!-- </b-col> -->
-      <!-- </b-row> -->
     </b-container>
   </div>
 </template>
@@ -315,20 +311,23 @@ export default {
         .delete(`${this.$store.getters.getServer}/user/withdraw`)
         .then(() => {
           alert("회원 탈퇴가 완료되었습니다.");
-          this.$router.replace("/main");
         })
         .catch(() => {
           alert("오류가 발생했습니다. 다시 시도해주세요.");
         });
+      this.$store.dispatch("LOGOUT").then(() => {
+        this.$router.replace("/main");
+      })
     },
     changeFlavour(keywords) {
       // 다이렉트로 넣기
       console.log(keywords)
       let tempkeywordtexts = new Array(keywords.length)
       for (let i=0; i < keywords.length; i++) {
-        tempkeywordtexts[i] = this.options[keywords[i]].word
+        tempkeywordtexts[i] = this.options[keywords[i]-1].word
       }
       this.keywordtexts = tempkeywordtexts
+      this.keywords = keywords
     },
     updateHandler() {
       // 보낼때 명명이 중요함

@@ -2,9 +2,8 @@ package com.web.blog.model.dto;
 
 public class Comment {
 	private int cid;
-	private int parentid;
+	private int pid;
 	private int uid;
-	private String type;
 	private String content;
 	private String createDate;
 	private String modifyDate;
@@ -13,19 +12,20 @@ public class Comment {
 	public Comment() {
 		super();
 	}
-
-	public Comment(int cid, int parentid, int uid, String type, String content, String createDate, String modifyDate,
+	
+	public Comment(int cid, int pid, int uid, String content, String createDate, String modifyDate,
 			int likeCnt) {
 		super();
 		this.cid = cid;
-		this.parentid = parentid;
+		this.pid = pid;
 		this.uid = uid;
-		this.type = type;
 		this.content = content;
 		this.createDate = createDate;
 		this.modifyDate = modifyDate;
 		this.likeCnt = likeCnt;
 	}
+
+
 
 	public int getCid() {
 		return cid;
@@ -35,12 +35,12 @@ public class Comment {
 		this.cid = cid;
 	}
 
-	public int getParentid() {
-		return parentid;
+	public int getPid() {
+		return pid;
 	}
 
-	public void setParentid(int parentid) {
-		this.parentid = parentid;
+	public void setPid(int pid) {
+		this.pid = pid;
 	}
 
 	public int getUid() {
@@ -49,14 +49,6 @@ public class Comment {
 
 	public void setUid(int uid) {
 		this.uid = uid;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
 	}
 
 	public String getContent() {
@@ -93,10 +85,9 @@ public class Comment {
 
 	@Override
 	public String toString() {
-		return "Comment [cid=" + cid + ", parentid=" + parentid + ", uid=" + uid + ", type=" + type + ", content="
-				+ content + ", createDate=" + createDate + ", modifyDate=" + modifyDate + ", likeCnt=" + likeCnt + "]";
+		return "Comment [cid=" + cid + ", pid=" + pid + ", uid=" + uid + ", content=" + content
+				+ ", createDate=" + createDate + ", modifyDate=" + modifyDate + ", likeCnt=" + likeCnt + "]";
 	}
-	
-	
+
 	
 }

@@ -143,7 +143,9 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 			Posting posting = postingRepo.select(Integer.parseInt(pid));
 			Comment[] comments = commentRepo.selectListPid(Integer.parseInt(pid));
 			if(posting == null) throw new RuntimeException("cant fine posting");
-			if(comments != null)result.put("comments", comments);
+			if(comments != null) {
+				result.put("comments", comments);
+			}
 			result.put("posting", posting);
 			result.put("name", userRepo.getName(posting.getUid()));
 			result.put("msg", "success");
