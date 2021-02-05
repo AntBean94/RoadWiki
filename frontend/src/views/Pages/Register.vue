@@ -242,7 +242,23 @@
         } else {
           if (!this.confirmEmail) {
             alert('이메일 인증이 완료되지 않았습니다.')
-          } else {alert('입력을 완료해주세요.')}
+          } else {
+            if (this.password.length < 8) {
+              alert('비밀번호는 8자리 이상으로 입력해주세요.')
+            } else {
+              if (this.password !== this.rePassword) {
+                alert('비밀번호를 다시 확인해주세요')
+              } else {
+                if (this.selected.length < 3) {
+                  alert('관심 개발 분야 3개 이상 체크해주세요.')
+                } else {
+                  if (!this.agree) {
+                    alert('약관 동의해주세요')
+                  }
+                }
+              }
+            }
+          }
         }
       },
     },
