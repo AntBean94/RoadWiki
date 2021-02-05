@@ -136,7 +136,7 @@ public class UserController {
 	@DeleteMapping("/withdraw")
 	public Object withdraw(HttpServletRequest request) {
 		logger.trace("withdraw");
-		System.out.println(request.getHeader("auth-token"));
+		System.out.println("회원탈퇴" + request.getHeader("auth-token"));
 		try {
 			String email = (String) loginServ.getData(request.getHeader("auth-token")).get("email");
 			logger.info(email);
