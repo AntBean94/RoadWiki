@@ -218,7 +218,8 @@ export default {
   created() {},
   mounted() {
     myDiagram = $(go.Diagram, this.$refs.myDiagramDiv, {
-      initialContentAlignment: go.Spot.Center
+      initialContentAlignment: go.Spot.Center,
+      "undoManager.isEnabled": true  // enable undo & redo
     });
 
     // 페이지에 변화가 있을 때 title 및 save 버튼 활성화
@@ -269,23 +270,12 @@ export default {
             new go.Binding("text").makeTwoWay()
           )
         ),
-        $(
-          go.TextBlock,
-          this.textStyle(),
-          {
-            margin: 8,
-            maxSize: new go.Size(160, NaN),
-            wrap: go.TextBlock.WrapFit,
-            editable: true
-          },
-          new go.Binding("text").makeTwoWay()
-        )
-      ),
       // four named ports, one on each side: node의 가지 옵션
       this.makePort("T", go.Spot.Top, go.Spot.TopSide, false, true),
       this.makePort("L", go.Spot.Left, go.Spot.LeftSide, true, true),
       this.makePort("R", go.Spot.Right, go.Spot.RightSide, true, true),
       this.makePort("B", go.Spot.Bottom, go.Spot.BottomSide, true, false)
+      )
     );
 
     myDiagram.nodeTemplateMap.add(
@@ -624,7 +614,7 @@ export default {
           .get(`${this.$store.getters.getServer}/roadmap/get/${this.rmid}`)
           .then(res => {
             if (res.data.msg == "success") {
-              this.test = res.data["roadmaps"].tmp;
+              this.test = res.data['roadmaps'].tmp;
               this.roadmapname = res.data["roadmaps"].name;
               // console.log('check', this.roadmapname, this.rmorder)
               myDiagram.model = go.Model.fromJson(this.test);
