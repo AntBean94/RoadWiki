@@ -4,16 +4,16 @@ import com.web.blog.model.dto.Comment;
 import com.web.blog.model.dto.Posting;
 
 public interface FreeBoardService {
-	public Object getPostingListAll(String page_s, String classifier, String...tags);
-	public Object getPostingListByName(String page_s, String classifier, String word, String...tags);
-	public Object getPostingListByTitle(String page_s, String classifier, String word, String...tags);
-	public Object getPostingListByContent(String page_s, String classifier, String word, String...tags);
-	public Object getPosting(String pid);
-	public Object registPosting(Posting posting, String uid);
-	public Object editPosting(Posting posting, String uid);
-	public Object deletePosting(String pid, String uid);
-	public Object registComment(Comment comment, String uid);
-	public Object editComment(Comment comment, String uid);
-	public Object deleteComment(String cid, String uid);
+	public Object getPostingListAll(String page_s, String classifier, String...tags)  throws Exception;
+	public Object getPostingListByName(String page_s, String classifier, String word, String...tags) throws Exception;
+	public Object getPostingListByTitle(String page_s, String classifier, String word, String...tags) throws Exception;
+	public Object getPostingListByContent(String page_s, String classifier, String word, String...tags) throws Exception;
+	public Object getPosting(String pid) throws Exception;
+	public Object registPosting(Posting posting, String uid) throws Exception;
+	public Object editPosting(Posting posting, String uid) throws Exception;
+	public Object deletePosting(String pid, String uid) throws Exception;
+	public Object registComment(Comment comment, String uid) throws Exception;
+	public Object editComment(Comment comment, String uid) throws Exception;
+	public Object deleteComment(String cid, String uid) throws Exception;
 
 }

@@ -18,13 +18,13 @@
 	
 	<insert id="insert" parameterType="Comment">
 		insert 
-		into comment(parentid, uid, type, content)
+		into comment(pid, uid, type, content)
 		values(#{pid}, #{uid}, #{type}, #{content})
 	</insert>
 	
 	<update id="update" parameterType="Comment">
 		update comment
-		set content=#{content}, modifyDate=#{content}
+		set content=#{content}, modifyDate=#{modifyDate}
 		where cid=#{cid}
 	</update>
 	
