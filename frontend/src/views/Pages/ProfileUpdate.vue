@@ -311,9 +311,9 @@ export default {
         .delete(`${this.$store.getters.getServer}/user/withdraw`)
         .then(() => {
           alert("회원 탈퇴가 완료되었습니다.");
-            this.$store.dispatch("LOGOUT").then(() => {
-              this.$router.replace("/main");
-            })
+          this.$store.dispatch("LOGOUT").then(() => {
+            this.$router.replace("/main");
+          })
         })
         .catch(() => {
           alert("오류가 발생했습니다. 다시 시도해주세요.");

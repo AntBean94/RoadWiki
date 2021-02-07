@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -111,6 +112,17 @@ public class UserController {
 				}
 			}, HttpStatus.NO_CONTENT);
 		}
+	}
+	
+	@GetMapping("/canjoin/{email}")
+	public Object canJoin(@PathVariable String email) throws SQLException {
+		Map<String, Object> result = new HashMap<String, Object>();
+		if (userServ.checkUser(email) == null) {
+			result.put("msg", "success");
+		} else {
+			result.put("msg", "fail");
+		}
+		return result;
 	}
 
 	@PutMapping("/modify")
