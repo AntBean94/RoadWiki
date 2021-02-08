@@ -67,6 +67,23 @@ const routes = [
         component: () => import('../views/Board/Board.vue')
       },
       {
+        path: '/create-board',
+        name: 'create_board',
+        component: () => import('../views/Board/CreateBoard.vue')
+      },
+      {
+        path: '/detail-board',
+        name: 'detail_board',
+        props: true,
+        component: () => import('../views/Board/DetailBoard.vue')
+      },
+      {
+        path: '/update-board',
+        name: 'update_board',
+        props: true,
+        component: () => import('../views/Board/UpdateBoard.vue')
+      },
+      {
         path: '/officialRoadmap',
         name: 'officialRoadmap',
         component: () => import('../views/officialRoadmap.vue'),

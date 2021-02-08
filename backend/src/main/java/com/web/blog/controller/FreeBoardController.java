@@ -53,6 +53,7 @@ public class FreeBoardController {
 			@PathVariable String page,
 			@PathVariable(required = false) String tag) {
 		logger.trace("getList");
+//		System.out.println(classifier + " " + selector + " " + word + " " + page);
 		try {
 			Map<String, Object> result;
 			if(word == " ") word = "";
@@ -102,11 +103,11 @@ public class FreeBoardController {
 	}
 	
 	@PostMapping("/posting")
-	public Object registPosting(@RequestBody Map<String, Object> map, HttpServletRequest request) {
+	public Object registPosting(@RequestBody Posting posting, HttpServletRequest request) {
 		try {
 			Map<String, Object> result;
-			String uid = (String) loginServ.getData(request.getHeader("auth-token")).get("uid");
-			result = (Map<String, Object>) fBoardServ.registPosting((Posting)map.get("posting"), uid);
+			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			result = (Map<String, Object>) fBoardServ.registPosting(posting, uid);
 			result.put("msg", SUCCESS);
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		} catch(Exception e) {
@@ -122,7 +123,7 @@ public class FreeBoardController {
 	public Object editPosting(@RequestBody Map<String, Object> map, HttpServletRequest request) {
 		try {
 			Map<String, Object> result;
-			String uid = (String) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) fBoardServ.editPosting((Posting)map.get("posting"), uid);
 			result.put("msg", SUCCESS);
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
@@ -139,7 +140,7 @@ public class FreeBoardController {
 	public Object deletePosting(@PathVariable String pid, HttpServletRequest request) {
 		try {
 			Map<String, Object> result;
-			String uid = (String) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) fBoardServ.deletePosting(pid, uid);
 			result.put("msg", SUCCESS);
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
@@ -156,7 +157,7 @@ public class FreeBoardController {
 	public Object registComment(@RequestBody Map<String, Object> map, HttpServletRequest request) {
 		try {
 			Map<String, Object> result;
-			String uid = (String) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) fBoardServ.registComment((Comment)map.get("posting"), uid);
 			
 			result.put("msg", SUCCESS);
@@ -174,7 +175,7 @@ public class FreeBoardController {
 	public Object editComment(@RequestBody Map<String, Object> map, HttpServletRequest request) {
 		try {
 			Map<String, Object> result;
-			String uid = (String) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) fBoardServ.editComment((Comment)map.get("posting"), uid);
 			result.put("msg", SUCCESS);
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
@@ -191,8 +192,24 @@ public class FreeBoardController {
 	public Object deleteComment(@PathVariable String cid, HttpServletRequest request) {
 		try {
 			Map<String, Object> result;
-			String uid = (String) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) fBoardServ.deleteComment(cid, uid);
+			result.put("msg", SUCCESS);
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	@GetMapping("/totalCount")
+	public Object totalCount() {
+		try {
+			Map<String, Object> result;
+			result = (Map<String, Object>) fBoardServ.totalCount();
 			result.put("msg", SUCCESS);
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		} catch(Exception e) {
