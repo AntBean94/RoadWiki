@@ -31,8 +31,8 @@
       </b-row>
       <b-row align-h="end" class="my-2">
         <!-- 게시물의 uid와 현재 uid가 동일 할 때 보여줄 내용 -->
-        <i class="far fa-trash-alt fa-lg mr-3"></i>
-        <i class="far fa-edit fa-lg mr-3"></i>
+        <i class="far fa-trash-alt fa-lg mr-3" style="color: tomato"></i>
+        <i class="far fa-edit fa-lg mr-3" style="color: Dodgerblue" @click="updateBoard"></i>
       </b-row>
       <b-row>
         <i class="far fa-thumbs-up fa-2x ml-3"><span class="h3">좋아요{{likeCnt}}</span></i>
@@ -102,6 +102,12 @@ export default {
     // }).then(data => {
     //   this.content = data;
     // })
+  },
+  methods: {
+    updateBoard() {
+      const pid = this.$route.query.pid
+      this.$router.push({name: 'update_board', query: { pid }})
+    },
   },
 }
 </script>

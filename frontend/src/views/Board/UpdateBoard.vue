@@ -14,13 +14,14 @@
     <div>
       <editor
         ref="toastuiEditor"
-        :initialValue="initialText"
         :options="editorOptions"
         height="500px"
         initialEditType="wysiwyg"
         previewStyle="vertical"
         class="mx-4"
-        v-model="editorText"
+        v-model="content"
+        id="editor"
+        @load="onEditorLoad"
       />
     </div>
 
@@ -67,6 +68,7 @@
 import '@toast-ui/editor/dist/toastui-editor.css'
 import 'codemirror/lib/codemirror.css'
 import { Editor } from '@toast-ui/vue-editor'
+// import Editor from ‘tui-editor’;
 
 export default {
   name: 'Editor',
@@ -75,11 +77,11 @@ export default {
   },
   data() {
     return {
-      initialText: '내용을 입력해주세요',
+      content: '',
       editorOptions: {
         hideModeSwitch: false,
       },
-      editorText: '',
+      // editorText: '',
       tags: ['첫번째 태그', '두번째 태그', '세번째 태그', '네번째 태그'],
       tagInput: '',
       title: '',
@@ -87,6 +89,7 @@ export default {
   },
   methods: {
     datachange() {
+
       const content = this.$refs.toastuiEditor.invoke("getMarkdown");
       // console.log(typeof(content))
       axios
@@ -100,7 +103,6 @@ export default {
       // this.$refs.toastuiViewer.editor.markdownValue = content
     },
     tagEnter() {
-      console.log('엔터 찍힘')
       if (this.tagInput) {
         this.tags.push(this.tagInput)
         this.tagInput = ''
@@ -109,12 +111,54 @@ export default {
     delTag(idx) {
       this.tags.splice(idx, 1);
     },
+    onEditorLoad() {
+      axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
+      .then((res) => {
+        
+        console.log(res.data.posting)
+        this.name = res.data.name
+        this.classifier = res.data.posting.classifier
+        this.title = res.data.posting.title
+        console.log(res.data.posting.content)
+        console.log(typeof(res.data.posting.content))
+        console.log(this.$refs.toastuiEditor)
+        // editor.convertor
+        this.$refs.toastuiEditor.editor.convertor(res.data.posting.content)
+        // this.$refs.toastuiEditor.setMarkdown(res.data.posting.content)
+        // this.content = res.data.posting.content
+        this.createDate = res.data.posting.createDate
+        this.modifyDate = res.data.posting.modifyDate
+        this.uid = res.data.posting.uid
+        this.likeCnt = res.data.posting.likeCnt
+      })
+    },
+    // setMarkdown(markdown) {
+    //   this.content = markdown
+    // },
   },
-  // watch: {
-  //   editorText() {
-  //     console.log(this.editorText)
-  //   }
-  // },
+  created() {
+    // const content = this.$refs.toastuiEditor.invoke("setMarkdown");
+    console.log('###################')
+    // console.log(content)
+
+    // axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
+    // .then((res) => {
+    //   console.log(res.data.posting)
+    //   this.name = res.data.name
+    //   this.classifier = res.data.posting.classifier
+    //   this.title = res.data.posting.title
+    //   this.content = res.data.posting.content
+    //   this.createDate = res.data.posting.createDate
+    //   this.modifyDate = res.data.posting.modifyDate
+    //   this.uid = res.data.posting.uid
+    //   this.likeCnt = res.data.posting.likeCnt
+    // })
+    // .catch((err) => {})
+  },
+  mounted() {
+    // const editor = new Editor({ el: document.querySelector('#editor')})
+    // this.editor.setMarkdown('# Hello NHN Forward!');
+  },
 }
 </script>
 
