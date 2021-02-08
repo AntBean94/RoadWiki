@@ -17,7 +17,7 @@ const routes = [
     children: [
       {
         path: '/dashboard',
-        redirect: '/godiagram',
+        redirect: '/read-user-roadmap',
         name: 'dashboard',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
@@ -51,17 +51,6 @@ const routes = [
         component: () => import(/* webpackChunkName: "demo" */ '../components/Board/DetailContent.vue')
       },
       {
-        path: '/godiagram',
-        name: 'godiagram',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/useGoDiagramWorkflow.vue')
-      },
-      {
-        path: '/roadmap',
-        name: 'roadmap',
-        component: () => import('../views/Roadmap/RoadMap.vue'),
-        props: true
-      },
-      {
         path: '/tmp_board',
         name: 'tmp_board',
         component: () => import('../views/Board/Board.vue')
@@ -84,10 +73,26 @@ const routes = [
         component: () => import('../views/Board/UpdateBoard.vue')
       },
       {
-        path: '/officialRoadmap',
-        name: 'officialRoadmap',
-        component: () => import('../views/officialRoadmap.vue'),
+        path: '/read-user-roadmap',
+        name: 'read_user_roadmap',
+        component: () => import(/* webpackChunkName: "demo" */ '../views/Roadmap/ReadUserRoadmap.vue')
+      },
+      {
+        path: '/update-user-roadmap',
+        name: 'update_user_roamdap',
+        component: () => import('../views/Roadmap/UpdateUserRoadmap.vue'),
         props: true
+      },
+      {
+        path: '/official-roadmap',
+        name: 'official_roadmap',
+        component: () => import('../views/Roadmap/OfficialRoadmap.vue'),
+        props: true
+      },
+      {
+        path: '/admin',
+        name: 'admin',
+        component: () => import('../views/Roadmap/AdminRoadmap.vue'),
       },
       {
         path: '/calendar',

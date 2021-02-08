@@ -3,28 +3,11 @@
     <notifications></notifications>
     <side-bar v-if="isHeader">
       <template slot="links">
-        <!-- <sidebar-item
-          :link="{
-            name: 'Dashboard',
-            path: '/dashboard',
-            icon: 'ni ni-tv-2 text-primary'
-          }"
-        >
-        </sidebar-item> -->
-
-        <!-- <sidebar-item
-          :link="{
-            name: 'Icons',
-            path: '/icons',
-            icon: 'ni ni-planet text-blue'
-          }"
-        >
-        </sidebar-item> -->
 
         <sidebar-item
           :link="{
             name: 'User Roadmap',
-            path: '/godiagram',
+            path: '/read-user-roadmap',
             icon: 'ni ni-pin-3 text-orange'
           }"
         >
@@ -33,7 +16,7 @@
         <sidebar-item
           :link="{
             name: 'Official Roadmap',
-            path: '/officialRoadmap',
+            path: '/official-roadmap',
             icon: 'ni ni-tv-2 text-primary'
           }"
         >
@@ -184,8 +167,7 @@ export default {
     },
     // 특정 컴포넌트에서 nav바 제거
     checkUrl(url) {
-      let array = ["roadmap"];
-
+      let array = ["Roadmap", "update_user_roamdap"];
       let isHeader = true;
       array.map(path => {
         if (url === path) isHeader = false;
