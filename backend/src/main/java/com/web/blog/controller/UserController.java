@@ -34,7 +34,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ser.std.FileSerializer;
 import com.web.blog.model.dto.User;
+import com.web.blog.model.service.FileService;
 import com.web.blog.model.service.LoginServiceImpl;
 import com.web.blog.model.service.UserService;
 
@@ -52,7 +54,10 @@ public class UserController {
 
 	@Autowired
 	UserService userServ;
-
+	
+	@Autowired
+	FileService fileService;
+	
 	@Autowired
 	LoginServiceImpl loginServ;
 
@@ -169,109 +174,32 @@ public class UserController {
 	public Object getImg(@RequestPart(value = "file", required = true) MultipartFile file, HttpServletRequest request)
 			throws Exception {
 		int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
-		//System.out.println("getImg uid : " + uid);
-		// System.out.println(dto.toString());
-		
-		// parent directory를 찾는다.
-//		Path directory = Paths.get(".\\src\\main\\java\\com\\web\\blog\\controller" + uid + "\\").toAbsolutePath()
-//				.normalize();
-		// Path directory =
-		Path directory = Paths.get(".\\target\\classes\\statics\\upload\\" + uid + "\\").toAbsolutePath().normalize();
-		
-		// directory 해당 경로까지 디렉토리를 모두 만든다.
-		Files.createDirectories(directory);
-		
-		// 파일명을 바르게 수정한다.
-		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-		
-		// 파일명에 '..' 문자가 들어 있다면 오류를 발생하고 아니라면 진행(해킹및 오류방지)
-		Assert.state(!fileName.contains(".."), "Name of file cannot contain '..'");
-		
-		// 파일을 저장할 경로를 Path 객체로 받는다.
-		Path targetPath = directory.resolve(fileName).normalize();
-		
-		// 파일이 이미 존재하는지 확인하여 존재한다면 오류를 발생하고 없다면 저장한다.
-		Assert.state(!Files.exists(targetPath), fileName + " File alerdy exists.");
-		
-		file.transferTo(targetPath);
-		
-		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("msg", "sucess");
+		//System.out.println("uploaduid : " + uid);
+		Map<String, Object> result = (Map<String, Object>) fileService.uploadImg(file, request, uid);
 		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 	}
 
-	@GetMapping("/get-text")
-	public @ResponseBody String getText() {
-		return "Hello world";
-	}
-
 	@GetMapping(value = "/image/{uid}")
-	public @ResponseBody byte[] getImage(@PathVariable String uid, HttpServletRequest request) throws IOException {
-//		int uuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
-//		System.out.println("getImage uid : " + uuid);
-		// int uuid = (int)
-		// loginServ.getData(request.getHeader("auth-token")).get("uid");
-		// System.out.println("uid From token" + uuid);
-		InputStream in = null;
-		try {
-			in = getClass().getResourceAsStream("/statics/upload/" + uid + "/1.jpg");
-//		  	      .getResourceAsStream("../../../../../../main/resources/statics/upload/1/1.jpg");
-			// .getResourceAsStream("/src/main/resources/statics/upload/1/1.jpg");
-			// String something =
-			// IOUtils.toString(getClass().getResourceAsStream("/img/1.jpg"), "UTF-8");
-			// System.out.println(something);
-//		Path directory = Paths.get(".\\img\\1.jpg").toAbsolutePath();
-//		in = getClass().getResourceAsStream(directory.toString());
-//			System.out.println(getClass().getResourceAsStream("/1.jpg").toString());
-//			System.out.println(Path.class.getResource("/1.jpg"));
-			if (in == null) {
-				in = getClass().getResourceAsStream("/default.png");
-			}
-		} catch (Exception e) {
-			in = getClass().getResourceAsStream("/default.png");
-		}
-		return IOUtils.toByteArray(in);
+	public @ResponseBody byte[] getImage(@PathVariable String uid, HttpServletRequest request) throws Exception {
+		//System.out.println("image uid : " + uid);
+		return fileService.showImg(uid, request);
+	}
+	
+	@PostMapping("/bgpic")
+	public Object getbgImg(@RequestPart(value = "file", required = true) MultipartFile file, HttpServletRequest request)
+			throws Exception {
+		int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+		//System.out.println("uploaduid : " + uid);
+		Map<String, Object> result = (Map<String, Object>) fileService.uploadbgImg(file, request, uid);
+		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 	}
 
-	public static void fileSearch(String path) throws Exception {
-		File dir = new File(path);
-		File[] fileList = dir.listFiles();
-		FileWriter writer = new FileWriter(new File(""), true);
-
-		for (int i = 0; i < fileList.length; i++) {
-			File file = fileList[i];
-
-			if (file.isFile()) {
-				System.out.println(file.getName());
-//				if (!file.getName().equals(".DS_Store")) {
-//					System.out.println("파일 : " + file.getName());
-//					writer.write(file.getName() + "\n");
-//					writer.flush();
-//				}
-			} else if (file.isDirectory()) {
-				fileSearch(file.getCanonicalPath().toString());
-			}
-		}
+	@GetMapping(value = "/bgimage/{uid}")
+	public @ResponseBody byte[] getbgImage(@PathVariable String uid, HttpServletRequest request) throws Exception {
+		//System.out.println("image uid : " + uid);
+		return fileService.showbgImg(uid, request);
 	}
-
-//	@GetMapping(value = "image")
-//	public Object userSearch() throws IOException {
-//		Path file = Paths.get(".\\src\\main\\resources\\statics\\upload\\" + 1 + "\\").resolve("1.jpg");
-//		Resource resource = new UrlResource(file.toUri());
-//		if (resource.exists() || resource.isReadable()) {
-//			System.out.println("파일 리소스 나오긴 함 @@@@@@@@@@@@@@@@@@");
-//		}
-//
-//		InputStream imageStream = new FileInputStream(
-//				".\\src\\main\\resources\\statics\\upload\\" + 1 + "\\" + "1.jpg");
-//		System.out.println("File null? : " + imageStream);
-//		byte[] imageByteArray = IOUtils.toByteArray(imageStream);
-//		imageStream.close();
-//
-//		Map<String, Object> result = new HashMap<String, Object>();
-//		result.put("image", imageByteArray);
-//		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
-//	}
+	
 
 	@GetMapping("/name/{uid}")
 	public Object getName(@PathVariable String uid) {
