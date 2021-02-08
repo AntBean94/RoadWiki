@@ -1,5 +1,6 @@
 package com.web.blog.model.service;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +42,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	final static String[] TAG = new String[] {"tag"};
 	final static int[] PAGESIZE = new int[]{10};
 	
+	@Override
 	public Object getPostingListAll(String page_s, String classifier, String...tags) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -65,6 +67,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		return result;
 	}
 	
+	@Override
 	public Object getPostingListByName(String page_s, String classifier, String word, String...tags) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -89,6 +92,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		return result;
 	}
 	
+	@Override
 	public Object getPostingListByTitle(String page_s, String classifier, String word, String...tags) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -113,6 +117,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		return result;
 	}
 	
+	@Override
 	public Object getPostingListByContent(String page_s, String classifier, String word, String...tags) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -136,6 +141,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		return result;
 	}
 	
+	@Override
 	public Object getPosting(String pid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -163,24 +169,34 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		return result;
 	}
 	
-	public Object registPosting(Posting posting, String uid) throws Exception {
+	@Override
+	public Object registPosting(Posting posting, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			if(postingRepo.select(posting.getPid()).getUid() != Integer.parseInt(uid)) throw new RuntimeException("wrong user");
+			System.out.println(uid);
+			System.out.println(posting);
+			if(posting.getUid() != uid) throw new RuntimeException("wrong user");
+			System.out.println("177");
 			if(postingRepo.insert(posting) == 1) result.put("msg", "success");
 			else result.put("msg", "fail");
+			System.out.println("179");
 		} catch(NumberFormatException e){
+			System.out.println("182");
 			throw new RuntimeException("input data type error");
 		} catch(Exception e) {
+			e.printStackTrace();
+			
 			throw e;
 		}
+		System.out.println("188");
 		return result;
 	}
 	
-	public Object editPosting(Posting posting, String uid) throws Exception {
+	@Override
+	public Object editPosting(Posting posting, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			if(postingRepo.select(posting.getPid()).getUid() != Integer.parseInt(uid)) throw new RuntimeException("wrong user");
+			if(postingRepo.select(posting.getPid()).getUid() != uid) throw new RuntimeException("wrong user");
 			if(postingRepo.update(posting) == 1) result.put("msg", "success");
 			else result.put("msg", "fail");
 		} catch(NumberFormatException e){
@@ -191,11 +207,12 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		return result;
 	}
 	
-	public Object deletePosting(String pid_s, String uid) throws Exception {
+	@Override
+	public Object deletePosting(String pid_s, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			int pid = Integer.parseInt(pid_s);
-			if(postingRepo.select(pid).getUid() != Integer.parseInt(uid)) throw new RuntimeException("wrong user");
+			if(postingRepo.select(pid).getUid() != uid) throw new RuntimeException("wrong user");
 			if(postingRepo.delete(pid) == 1) result.put("msg", "success");
 			else result.put("msg", "fail");
 		} catch(NumberFormatException e){
@@ -206,10 +223,11 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		return result;
 	}
 	
-	public Object registComment(Comment comment, String uid) throws Exception {
+	@Override
+	public Object registComment(Comment comment, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			if(commentRepo.select(comment.getCid()).getUid() != Integer.parseInt(uid)) throw new RuntimeException("wrong user");
+			if(commentRepo.select(comment.getCid()).getUid() != uid) throw new RuntimeException("wrong user");
 			if(commentRepo.insert(comment) == 1) result.put("msg", "success");
 			else result.put("msg", "fail");
 		} catch(NumberFormatException e){
@@ -220,10 +238,11 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		return result;
 	}
 	
-	public Object editComment(Comment comment, String uid) throws Exception {
+	@Override
+	public Object editComment(Comment comment, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			if(commentRepo.select(comment.getCid()).getUid() != Integer.parseInt(uid)) throw new RuntimeException("wrong user");
+			if(commentRepo.select(comment.getCid()).getUid() != uid) throw new RuntimeException("wrong user");
 			if(commentRepo.update(comment) == 1) result.put("msg", "success");
 			else result.put("msg", "fail");
 		} catch(NumberFormatException e){
@@ -234,10 +253,11 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		return result;
 	}
 	
-	public Object deleteComment(String cid, String uid) throws Exception {
+	@Override
+	public Object deleteComment(String cid, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			if(commentRepo.select(Integer.parseInt(cid)).getUid() != Integer.parseInt(uid)) throw new RuntimeException("wrong user");
+			if(commentRepo.select(Integer.parseInt(cid)).getUid() != uid) throw new RuntimeException("wrong user");
 			if(commentRepo.delete(Integer.parseInt(cid)) == 1) result.put("msg", "success");
 			else result.put("msg", "fail");
 		} catch(NumberFormatException e){
@@ -249,7 +269,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
-	public Object totalCount() {
+	public Object totalCount() throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			int total = postingRepo.totalCount();

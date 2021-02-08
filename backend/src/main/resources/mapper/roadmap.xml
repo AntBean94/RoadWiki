@@ -9,7 +9,13 @@
 		from roadmap
 		where rmid = #{rmid}
 	</select>
-
+	
+	<select id="selectlastRmidByUid" parameterType="int" resultType ="int">
+		select rmid 
+		from roadmap
+		where uid = #{uid} and createDate in (select max(createDate) from roadmap) 
+		
+	</select>
 	<!-- 	permission  0:private 1 : public -->
 	<select id="selectMyRoadmap" parameterType="int" resultType="Roadmap">
 		select *

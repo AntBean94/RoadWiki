@@ -15,6 +15,7 @@
       <editor
         ref="toastuiEditor"
         :options="editorOptions"
+        :initialValue="content"
         height="500px"
         initialEditType="wysiwyg"
         previewStyle="vertical"
@@ -81,7 +82,6 @@ export default {
       editorOptions: {
         hideModeSwitch: false,
       },
-      // editorText: '',
       tags: ['첫번째 태그', '두번째 태그', '세번째 태그', '네번째 태그'],
       tagInput: '',
       title: '',
@@ -99,8 +99,6 @@ export default {
         'content': content
       })
       .then(() => {})
-      // this.editorText = content
-      // this.$refs.toastuiViewer.editor.markdownValue = content
     },
     tagEnter() {
       if (this.tagInput) {
@@ -114,7 +112,6 @@ export default {
     onEditorLoad() {
       axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
       .then((res) => {
-        
         console.log(res.data.posting)
         this.name = res.data.name
         this.classifier = res.data.posting.classifier
@@ -122,25 +119,15 @@ export default {
         console.log(res.data.posting.content)
         console.log(typeof(res.data.posting.content))
         console.log(this.$refs.toastuiEditor)
-        // editor.convertor
-        this.$refs.toastuiEditor.editor.convertor(res.data.posting.content)
-        // this.$refs.toastuiEditor.setMarkdown(res.data.posting.content)
-        // this.content = res.data.posting.content
         this.createDate = res.data.posting.createDate
         this.modifyDate = res.data.posting.modifyDate
         this.uid = res.data.posting.uid
         this.likeCnt = res.data.posting.likeCnt
       })
     },
-    // setMarkdown(markdown) {
-    //   this.content = markdown
-    // },
   },
   created() {
-    // const content = this.$refs.toastuiEditor.invoke("setMarkdown");
     console.log('###################')
-    // console.log(content)
-
     // axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
     // .then((res) => {
     //   console.log(res.data.posting)
@@ -153,11 +140,8 @@ export default {
     //   this.uid = res.data.posting.uid
     //   this.likeCnt = res.data.posting.likeCnt
     // })
-    // .catch((err) => {})
   },
   mounted() {
-    // const editor = new Editor({ el: document.querySelector('#editor')})
-    // this.editor.setMarkdown('# Hello NHN Forward!');
   },
 }
 </script>

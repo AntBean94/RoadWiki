@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -20,23 +22,28 @@ public class RoadmapServiceImpl implements RoadmapService {
 
 	@Autowired
 	RoadmapRepo roadmaprepo;
+	@Autowired
+	CurriculumService curriservice;
 
 	@Override
+	@Transactional(isolation=Isolation.READ_UNCOMMITTED)
 	public Object create(String nowuid, Roadmap map) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			JsonObject jsonObject = new JsonParser().parse(map.getTmp()).getAsJsonObject();
-			
-			JsonArray nodeDataArray = jsonObject.getAsJsonArray("nodeDataArray");
-			System.out.println(jsonObject);
-			
-			int nowuidnum = Integer.parseInt(nowuid);
 			int uidnum = map.getUid();
+			int nowuidnum = Integer.parseInt(nowuid);
 			if (nowuidnum != uidnum)
 				throw new RuntimeException("wrong user");
-
+			
+			JsonObject jsonObject = new JsonParser().parse(map.getTmp()).getAsJsonObject();
+			JsonArray nodeDataArray = jsonObject.getAsJsonArray("nodeDataArray");
+			jsonObject.remove("nodeDataArray");
+			map.setTmp(jsonObject.toString());
+			
 			if (roadmaprepo.insert(map) != 1)
 				throw new RuntimeException("Query wrong");
+			int rmid = roadmaprepo.selectlastRmidByUid(nowuidnum);
+			curriservice.create(rmid, nodeDataArray);
 		} catch (Exception e) {
 			logger.error("Service create : Something wrong");
 			throw e;
@@ -45,6 +52,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 	}
 
 	@Override
+	@Transactional(isolation=Isolation.READ_UNCOMMITTED)
 	public Object modify(String nowuid, Roadmap map) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -52,8 +60,17 @@ public class RoadmapServiceImpl implements RoadmapService {
 			if (nowuidnum != map.getUid())
 				throw new RuntimeException("wrong user");
 
+			JsonObject jsonObject = new JsonParser().parse(map.getTmp()).getAsJsonObject();
+			JsonArray nodeDataArray = jsonObject.getAsJsonArray("nodeDataArray");
+			jsonObject.remove("nodeDataArray");
+			map.setTmp(jsonObject.toString());
+			
 			if (roadmaprepo.update(map) != 1)
 				throw new RuntimeException("Query wrong");
+			
+			int rmid = roadmaprepo.selectlastRmidByUid(nowuidnum);
+			curriservice.create(rmid, nodeDataArray);
+			
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			logger.error("Service modify : Something wrong");
@@ -113,6 +130,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 		} catch (Exception e) {
 			logger.error("Service getRoadmapListByRmorder : Something wrong");
 		}
+		
 		return result;
 	}
 
@@ -127,7 +145,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 				nowuidnum = uidnum;
 			} else
 				nowuidnum = Integer.parseInt(nowuid);
-			Object roadmap = null;
+			Roadmap roadmap = null;
 			if (nowuidnum == uidnum)
 				roadmap = roadmaprepo.selectMyRoadmap(rmidnum);
 			else
@@ -135,6 +153,10 @@ public class RoadmapServiceImpl implements RoadmapService {
 
 			if (roadmap == null)
 				new RuntimeException("access denied");
+			JsonObject jsonObject = new JsonParser().parse(roadmap.getTmp()).getAsJsonObject();
+			JsonArray nodeDataArray = curriservice.getCurriculumByrmid(rmidnum);
+			jsonObject.add("nodeDataArray", nodeDataArray);
+			roadmap.setTmp(jsonObject.toString());
 			result.put("roadmaps", roadmap);
 		} catch (Exception e) {
 			logger.error("Service getRoadmap : Something wrong");
