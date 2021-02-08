@@ -1,7 +1,11 @@
 package com.web.blog.model.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.management.RuntimeErrorException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.web.blog.model.dto.Comment;
 import com.web.blog.model.dto.Posting;
+import com.web.blog.model.dto.Recomment;
 import com.web.blog.model.repo.CommentRepo;
 import com.web.blog.model.repo.PostingRepo;
+import com.web.blog.model.repo.RecommentRepo;
 import com.web.blog.model.repo.UserRepo;
 
 @Service
@@ -21,10 +27,13 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
 	
 	@Autowired
-	CommentRepo commentRepo;
+	PostingRepo postingRepo;
 	
 	@Autowired
-	PostingRepo postingRepo;
+	CommentRepo commentRepo;
+
+	@Autowired
+	RecommentRepo recommentRepo;
 	
 	@Autowired
 	UserRepo userRepo;
@@ -32,7 +41,7 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 	final static String[] TAG = new String[] {"tag"};
 	final static int[] PAGESIZE = new int[]{10};
 	
-	public Object getPostingListAll(String page_s, String classifier, String...tags) {
+	public Object getPostingListAll(String page_s, String classifier, String...tags) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			int cnt = PAGESIZE[0];
@@ -49,17 +58,14 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 			result.put("names", names);
 			result.put("msg", "success");
 		} catch(NumberFormatException e){
-			logger.error("input data type error");
-			result.put("msg", "fail");
+			throw new RuntimeException("input data type error");
 		} catch(Exception e) {
-			e.printStackTrace();
-			logger.error("i dont know");
-			result.put("msg", "fail");
+			throw e;
 		}
 		return result;
 	}
 	
-	public Object getPostingListByName(String page_s, String classifier, String word, String...tags) {
+	public Object getPostingListByName(String page_s, String classifier, String word, String...tags) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			int cnt = PAGESIZE[0];
@@ -76,16 +82,14 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 			result.put("names", names);
 			result.put("msg", "success");
 		} catch(NumberFormatException e){
-			logger.error("input data type error");
-			result.put("msg", "fail");
+			throw new RuntimeException("input data type error");
 		} catch(Exception e) {
-			logger.error("i dont know");
-			result.put("msg", "fail");
+			throw e;
 		}
 		return result;
 	}
 	
-	public Object getPostingListByTitle(String page_s, String classifier, String word, String...tags) {
+	public Object getPostingListByTitle(String page_s, String classifier, String word, String...tags) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			int cnt = PAGESIZE[0];
@@ -102,16 +106,14 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 			result.put("names", names);
 			result.put("msg", "success");
 		} catch(NumberFormatException e){
-			logger.error("input data type error");
-			result.put("msg", "fail");
+			throw new RuntimeException("input data type error");
 		} catch(Exception e) {
-			logger.error("i dont know");
-			result.put("msg", "fail");
+			throw e;
 		}
 		return result;
 	}
 	
-	public Object getPostingListByContent(String page_s, String classifier, String word, String...tags) {
+	public Object getPostingListByContent(String page_s, String classifier, String word, String...tags) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			int cnt = PAGESIZE[0];
@@ -126,134 +128,122 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 			for(int i = 0; i < Postings.length; i++) 
 				names[i] = userRepo.getName(Postings[i].getUid());
 			result.put("names", names);
-			result.put("msg", "success");
 		} catch(NumberFormatException e){
-			logger.error("input data type error");
-			result.put("msg", "fail");
+			throw new RuntimeException("input data type error");
 		} catch(Exception e) {
-			logger.error("i dont know");
-			result.put("msg", "fail");
+			throw e;
 		}
 		return result;
 	}
 	
-	public Object getPosting(String pid) {
+	public Object getPosting(String pid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			Posting posting = postingRepo.select(Integer.parseInt(pid));
-			Comment[] comments = commentRepo.selectListPid(Integer.parseInt(pid));
-			if(posting == null) throw new RuntimeException("cant fine posting");
-			if(comments != null) {
-				result.put("comments", comments);
-			}
+			if(posting == null) throw new RuntimeException("cannot fine posting");
 			result.put("posting", posting);
+			
+			List<Comment> comments = new ArrayList<>();
+			for(Comment c : commentRepo.selectListPid(Integer.parseInt(pid))) 
+				comments.add(c);
+			result.put("comments", comments);
+			
+			List<Recomment> recomments = new ArrayList<>();
+			for(Comment c : comments) 
+				for(Recomment rc : recommentRepo.selectListCid(c.getCid()))
+					recomments.add(rc);
+			result.put("recomments", recomments);
+
 			result.put("name", userRepo.getName(posting.getUid()));
-			result.put("msg", "success");
 		} catch(NumberFormatException e){
-			logger.error("input data type error");
-			result.put("msg", "fail");
+			throw new RuntimeException("input data type error");
 		} catch(Exception e) {
-			e.printStackTrace();
-			logger.error("i dont know");
-			result.put("msg", "fail");
+			throw e;
 		}
 		return result;
 	}
 	
-	public Object registPosting(Posting posting, String uid) {
+	public Object registPosting(Posting posting, String uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			if(postingRepo.select(posting.getPid()).getUid() != Integer.parseInt(uid)) throw new RuntimeException("wrong user");
 			if(postingRepo.insert(posting) == 1) result.put("msg", "success");
 			else result.put("msg", "fail");
 		} catch(NumberFormatException e){
-			logger.error("input data type error");
-			result.put("msg", "fail");
+			throw new RuntimeException("input data type error");
 		} catch(Exception e) {
-			logger.error("i dont know");
-			result.put("msg", "fail");
+			throw e;
 		}
 		return result;
 	}
 	
-	public Object editPosting(Posting posting, String uid) {
+	public Object editPosting(Posting posting, String uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			if(postingRepo.select(posting.getPid()).getUid() != Integer.parseInt(uid)) throw new RuntimeException("wrong user");
 			if(postingRepo.update(posting) == 1) result.put("msg", "success");
 			else result.put("msg", "fail");
 		} catch(NumberFormatException e){
-			logger.error("input data type error");
-			result.put("msg", "fail");
+			throw new RuntimeException("input data type error");
 		} catch(Exception e) {
-			logger.error("i dont know");
-			result.put("msg", "fail");
+			throw e;
 		}
 		return result;
 	}
 	
-	public Object deletePosting(String pid_s, String uid) {
+	public Object deletePosting(String pid_s, String uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			int pid = Integer.parseInt(pid_s);
 			if(postingRepo.select(pid).getUid() != Integer.parseInt(uid)) throw new RuntimeException("wrong user");
 			if(postingRepo.delete(pid) == 1) result.put("msg", "success");
 			else result.put("msg", "fail");
-//			commentRepo.deletePid(pid);
 		} catch(NumberFormatException e){
-			logger.error("input data type error");
-			result.put("msg", "fail");
+			throw new RuntimeException("input data type error");
 		} catch(Exception e) {
-			logger.error("i dont know");
-			result.put("msg", "fail");
+			throw e;
 		}
 		return result;
 	}
 	
-	public Object registComment(Comment comment, String uid) {
+	public Object registComment(Comment comment, String uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			if(commentRepo.select(comment.getCid()).getUid() != Integer.parseInt(uid)) throw new RuntimeException("wrong user");
 			if(commentRepo.insert(comment) == 1) result.put("msg", "success");
 			else result.put("msg", "fail");
 		} catch(NumberFormatException e){
-			logger.error("input data type error");
-			result.put("msg", "fail");
+			throw new RuntimeException("input data type error");
 		} catch(Exception e) {
-			logger.error("i dont know");
-			result.put("msg", "fail");
+			throw e;
 		}
 		return result;
 	}
 	
-	public Object editComment(Comment comment, String uid) {
+	public Object editComment(Comment comment, String uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			if(commentRepo.select(comment.getCid()).getUid() != Integer.parseInt(uid)) throw new RuntimeException("wrong user");
 			if(commentRepo.update(comment) == 1) result.put("msg", "success");
 			else result.put("msg", "fail");
 		} catch(NumberFormatException e){
-			logger.error("input data type error");
-			result.put("msg", "fail");
+			throw new RuntimeException("input data type error");
 		} catch(Exception e) {
-			logger.error("i dont know");
-			result.put("msg", "fail");
+			throw e;
 		}
 		return result;
 	}
 	
-	public Object deleteComment(String cid, String uid) {
+	public Object deleteComment(String cid, String uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			if(commentRepo.select(Integer.parseInt(cid)).getUid() != Integer.parseInt(uid)) throw new RuntimeException("wrong user");
 			if(commentRepo.delete(Integer.parseInt(cid)) == 1) result.put("msg", "success");
 			else result.put("msg", "fail");
 		} catch(NumberFormatException e){
-			logger.error("input data type error");
-			result.put("msg", "fail");
+			throw new RuntimeException("input data type error");
 		} catch(Exception e) {
-			logger.error("i dont know");
-			result.put("msg", "fail");
+			throw e;
 		}
 		return result;
 	}
