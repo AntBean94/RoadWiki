@@ -22,10 +22,10 @@ import com.web.blog.model.repo.RecommentRepo;
 import com.web.blog.model.repo.UserRepo;
 
 @Service
-public class FreeBoardServiceImpl implements FreeBoardService{
-	
+public class FreeBoardServiceImpl implements FreeBoardService {
+
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
-	
+
 	@Autowired
 	PostingRepo postingRepo;
 	
@@ -45,15 +45,15 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			int cnt = PAGESIZE[0];
-			int page = 1 + (Integer.parseInt(page_s) - 1) * cnt;
-			if(tags.length == 0) {
+			int page = (Integer.parseInt(page_s) - 1) * cnt;
+			if (tags.length == 0) {
 				result.put("postings", postingRepo.selectListAll(page, cnt, classifier));
 			} else {
 				result.put("postings", postingRepo.selectListAllTag(page, cnt, classifier, tags[0]));
 			}
 			Posting[] Postings = (Posting[]) result.get("postings");
 			String[] names = new String[Postings.length];
-			for(int i = 0; i < Postings.length; i++) 
+			for (int i = 0; i < Postings.length; i++)
 				names[i] = userRepo.getName(Postings[i].getUid());
 			result.put("names", names);
 			result.put("msg", "success");
@@ -70,14 +70,14 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 		try {
 			int cnt = PAGESIZE[0];
 			int page = 1 + (Integer.parseInt(page_s) - 1) * cnt;
-			if(tags.length == 0) {
+			if (tags.length == 0) {
 				result.put("postings", postingRepo.selectListName(page, cnt, classifier, word));
 			} else {
 				result.put("postings", postingRepo.selectListNameTag(page, cnt, classifier, word, tags[0]));
 			}
 			Posting[] Postings = (Posting[]) result.get("postings");
 			String[] names = new String[Postings.length];
-			for(int i = 0; i < Postings.length; i++) 
+			for (int i = 0; i < Postings.length; i++)
 				names[i] = userRepo.getName(Postings[i].getUid());
 			result.put("names", names);
 			result.put("msg", "success");
@@ -94,14 +94,14 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 		try {
 			int cnt = PAGESIZE[0];
 			int page = 1 + (Integer.parseInt(page_s) - 1) * cnt;
-			if(tags.length == 0) {
+			if (tags.length == 0) {
 				result.put("postings", postingRepo.selectListTitle(page, cnt, classifier, word));
 			} else {
 				result.put("postings", postingRepo.selectListTitleTag(page, cnt, classifier, word, tags[0]));
 			}
 			Posting[] Postings = (Posting[]) result.get("postings");
 			String[] names = new String[Postings.length];
-			for(int i = 0; i < Postings.length; i++) 
+			for (int i = 0; i < Postings.length; i++)
 				names[i] = userRepo.getName(Postings[i].getUid());
 			result.put("names", names);
 			result.put("msg", "success");
@@ -118,14 +118,14 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 		try {
 			int cnt = PAGESIZE[0];
 			int page = 1 + (Integer.parseInt(page_s) - 1) * cnt;
-			if(tags.length == 0) {
+			if (tags.length == 0) {
 				result.put("postings", postingRepo.selectListContent(page, cnt, classifier, word));
 			} else {
 				result.put("postings", postingRepo.selectListContentTag(page, cnt, classifier, word, tags[0]));
 			}
 			Posting[] Postings = (Posting[]) result.get("postings");
 			String[] names = new String[Postings.length];
-			for(int i = 0; i < Postings.length; i++) 
+			for (int i = 0; i < Postings.length; i++)
 				names[i] = userRepo.getName(Postings[i].getUid());
 			result.put("names", names);
 		} catch(NumberFormatException e){
@@ -247,5 +247,19 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 		}
 		return result;
 	}
-	
+
+	@Override
+	public Object totalCount() {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			int total = postingRepo.totalCount();
+			result.put("total", total);
+			result.put("msg", "success");
+		} catch (SQLException e) {
+			logger.error("sql error");
+			result.put("msg", "fail");
+		}
+		return result;
+	}
+
 }

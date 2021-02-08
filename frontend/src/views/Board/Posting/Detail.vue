@@ -47,13 +47,13 @@ export default {
   },
   props: ["pid"],
   watch: {
-    pid: function(pid, old) {
+    pid(pid, old) {
       this.getPosting();
     }
   },
   methods: {
     getPosting() {
-      var adr = `${this.$store.getters.getServer}/freeboard/posting/${this.pid}`;
+      const adr = `${this.$store.getters.getServer}/freeboard/posting/${this.pid}`;
       axios
         .get(adr)
         .then(response => {
