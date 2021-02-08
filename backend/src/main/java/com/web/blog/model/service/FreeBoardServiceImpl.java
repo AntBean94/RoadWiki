@@ -1,5 +1,6 @@
 package com.web.blog.model.service;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -249,7 +250,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
-	public Object totalCount() {
+	public Object totalCount() throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			int total = postingRepo.totalCount();
@@ -260,6 +261,42 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			result.put("msg", "fail");
 		}
 		return result;
+	}
+
+	@Override
+	public Object registPosting(Posting posting, int uid) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object editPosting(Posting posting, int uid) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object deletePosting(String pid, int uid) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object registComment(Comment comment, int uid) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object editComment(Comment comment, int uid) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object deleteComment(String cid, int uid) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
