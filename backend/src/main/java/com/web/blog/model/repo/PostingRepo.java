@@ -20,4 +20,5 @@ public interface PostingRepo {
 	public int insert(Posting posting) throws SQLException;
 	public int update(Posting posting) throws SQLException;
 	public int delete(int pid) throws SQLException;
+	public int totalCount() throws SQLException;
 }

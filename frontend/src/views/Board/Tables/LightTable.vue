@@ -3,20 +3,20 @@
     <!-- <b-card-header class="border-0">
       <h3 class="mb-0">TMP_BOARD</h3>
     </b-card-header> -->
-
     <el-table
       class="table-responsive table"
       header-row-class-name="thead-light"
       :data="postings"
       @row-click="openDetail"
+      id="mhtable"
     >
       <el-table-column label="ID" min-width="120px" prop="ID">
         <template v-slot="{ row }">
           <b-media no-body class="align-items-center">
             <b-media-body>
-              <span class="font-weight-600 name mb-0 text-sm">{{
-                row.pid
-              }}</span>
+              <span class="font-weight-600 name mb-0 text-sm">
+                {{row.pid}}
+              </span>
             </b-media-body>
           </b-media>
         </template>
@@ -91,11 +91,12 @@
        -->
 
       <!-- 페이지 눌린 숫자를 currentPage로 지정한 후 getList() 메소드 실행시키면 테이블 페이지를 넘길 수 있습니다. -->
-      <base-pagination
+      <b-pagination
         v-model="currentPage"
         :per-page="10"
-        :total="30"
-      ></base-pagination>
+        :total-rows="totalPageNum"
+        aria-controls="mhtable"
+      ></b-pagination>
 
       <!-- 글 작성은 uid가 반드시 필요하므로, vuex에 user 정보가 존재할 경우만 작성 가능하고 서버에는 uid도 함께 보내줘야 합니다. -->
     </b-card-footer>
@@ -115,16 +116,18 @@ export default {
   data() {
     return {
       currentPage: 1,
+      currentPosts: "",
       word: "",
       selector: "none",
       tag: "",
       postings: [],
-      names: []
+      names: [],
+      totalPageNum: "",
     };
   },
   methods: {
-    getList: function() {
-      var adr = `${this.$store.getters.getServer}/freeboard/list/board/${this.selector}`;
+    getList() {
+      let adr = `${this.$store.getters.getServer}/freeboard/list/board/${this.selector}`;
       if (this.word === "") adr += "/ ";
       else adr + `/${this.word}`;
       adr += `/${this.currentPage}`;
@@ -132,27 +135,38 @@ export default {
       axios
         .get(adr)
         .then(response => {
-          console.log("SUCCESS");
           this.postings = response.data.postings;
           this.names = response.data.names;
-          for (var i = 0; i < this.postings.length; i++) {
+          for (let i = 0; i < this.postings.length; i++) {
             this.postings[i].createDate = this.$moment(
               this.postings[i].createDate
             ).format("MM/DD HH:mm");
             this.postings[i].name = this.names[i];
           }
         })
-        .catch(response => {
-          console.log("FAIL", response);
+        .catch((err) => {
+          alert('문제가 생겼습니다')
         });
     },
-    openDetail: function(row) {
-      this.$emit("clickRow", row.pid);
-    }
+    openDetail(row) {
+      const pid = row.pid
+      this.$router.push({name: 'detail_board', query: { pid }})
+    },
+    getTotalNum() {
+      axios.get(`${this.$store.getters.getServer}/freeboard/totalCount`)
+      .then((res) => {
+        this.totalPageNum = res.data.total;
+      })
+    },
   },
   created() {
-    this.currentPage = 1;
     this.getList();
-  }
+    this.getTotalNum();
+  },
+  watch: {
+    currentPage() {
+      this.getList();
+    },
+  },
 };
 </script>

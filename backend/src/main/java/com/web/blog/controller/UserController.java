@@ -207,7 +207,6 @@ public class UserController {
 
 	@GetMapping(value = "/image/{uid}")
 	public @ResponseBody byte[] getImage(@PathVariable String uid, HttpServletRequest request) throws IOException {
-		System.out.println("image uid : " + uid);
 //		int uuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 //		System.out.println("getImage uid : " + uuid);
 		// int uuid = (int)
