@@ -1,8 +1,9 @@
 
 
 <center>
-    <img src="documents/roadwiki_logo.png" height="300">
+    <img src="documents/picture/roadwiki_logo.png" height="300">
 </center>
+
 
 
  
@@ -13,7 +14,7 @@
 
 개발자를 위한 개발자 로드맵 제시 및 개인 커스터마이징 로드맵 제공 웹 페이지
 
-![main_page](documents/main_page.PNG)
+![main_page](documents/picture/main_page.PNG)
 
 ## 🚀 Getting Started
 
@@ -153,7 +154,7 @@ sub02
 
 ## 🖌ERD (Entity-Relationship Diagram)
 
-![ERD](documents/ERD.png)
+![ERD](documents/picture/ERD.png)
 
 
 
@@ -165,11 +166,11 @@ sub02
 
 
 
-![swagger_email_validation](documents/swagger_email_validation.png)
+![swagger_email_validation](documents/picture/swagger_email_validation.png)
 
-![swagger_email_send](documents/swagger_email_send.png)
+![swagger_email_send](documents/picture/swagger_email_send.png)
 
-![swagger_email_controller_](documents/swagger_email_controller_.png)
+![swagger_email_controller_](documents/picture/swagger_email_controller_.png)
 
 
 

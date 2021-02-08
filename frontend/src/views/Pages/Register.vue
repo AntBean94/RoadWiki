@@ -10,9 +10,6 @@
               <b-link href="/#/main">
                 <img src="/img/brand/white_roadwiki.png" alt="roadwiki" width="250rem;">
               </b-link>
-              <!-- <h1 class="text-white">회원가입</h1> -->
-              <!-- <p class="text-lead text-white">Use these awesome forms to login or create new account in your project for
-                free.</p> -->
             </b-col>
           </b-row>
         </div>
@@ -70,7 +67,7 @@
                       <!-- 만약 기존에 계정이 존재하는 이메일이라면 this email is already taken 보여주기 -->
                     </div>
                     <div class="col-3 pl-0">
-                      <b-button v-if="!confirmEmail" @click="emailNumSend">인증하기</b-button>
+                      <b-button v-if="!confirmEmail" @click="emailNumSend" class="mr-0 ml-0">인증하기</b-button>
                       <ModalEmailValidation :isEmailModal="isEmailModal" :userEmail="email" @close="closeModal"/>
                       <!-- <ModalEmailValidation/> -->
                       <b-button v-if="confirmEmail" disabled>인증완료</b-button>
@@ -112,22 +109,8 @@
                         >
                           {{ option.word }}
                         </b-form-checkbox>
-                        <!-- <b-form-checkbox-group
-                          id="checkbox-group-1"
-                          v-model="selected"
-                          :options="options"
-                          :aria-describedby="ariaDescribedby"
-                          name="flavour-1"
-                        >
-                        </b-form-checkbox-group> -->
-
                       </b-container>
                     </b-form-group>
-                    <!-- <b-container>
-                      <div>1순위 <strong v-if="selected.length > 0">{{ options[selected[0]-1].text }}</strong></div>
-                      <div>2순위 <strong v-if="selected.length > 1">{{ options[selected[1]-1].text }}</strong></div>
-                      <div>3순위 <strong v-if="selected.length > 2">{{ options[selected[2]-1].text }}</strong></div>
-                    </b-container> -->
                   </div>
                   <hr class="my-4">
                   <b-row class=" my-4">
@@ -226,7 +209,6 @@
           console.log(res.data.msg)
           if (res.data.msg === "success") {
             this.isEmailModal = true
-            console.log(this.isEmailModal)
             this.$store.dispatch('SETCODE', res.data['code']);
             this.$store.dispatch('SETEMAIL', res.data['email']);
           } else {
@@ -243,7 +225,7 @@
           password: this.password,
           keyword: this.selected,
         }
-        if (this.confirmEmail && this.selected.length >= 3) {
+        if (this.confirmEmail && this.selected.length >= 3 && this.password.length >= 8 && this.password === this.rePassword && this.agree === true) {
           axios.post(`${this.$store.getters.getServer}/user/join`, user)
           .then(() => {
             console.log('잘 가나요오오오오오오오오오오')
@@ -260,7 +242,23 @@
         } else {
           if (!this.confirmEmail) {
             alert('이메일 인증이 완료되지 않았습니다.')
-          } else {alert('관심 개발 분야가 선택되지 않았습니다.')}
+          } else {
+            if (this.password.length < 8) {
+              alert('비밀번호는 8자리 이상으로 입력해주세요.')
+            } else {
+              if (this.password !== this.rePassword) {
+                alert('비밀번호를 다시 확인해주세요')
+              } else {
+                if (this.selected.length < 3) {
+                  alert('관심 개발 분야 3개 이상 체크해주세요.')
+                } else {
+                  if (!this.agree) {
+                    alert('약관 동의해주세요')
+                  }
+                }
+              }
+            }
+          }
         }
       },
     },

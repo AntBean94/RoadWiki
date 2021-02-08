@@ -17,7 +17,6 @@ import com.web.blog.model.service.KeywordService;
 
 @RestController
 @RequestMapping("/keyword")
-@CrossOrigin(origins = { "*" }, maxAge = 6000)
 public class KeywordController {
 	
 	@Autowired

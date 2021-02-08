@@ -72,6 +72,13 @@ const routes = [
         component: () => import('../views/officialRoadmap.vue'),
         props: true
       },
+      {
+        path: '/calendar',
+        name: 'calendar',
+        component: () => import('../views/Calendar/Calendar.vue'),
+        props: true
+      },
+
     ]
   },
   {

@@ -178,7 +178,7 @@ export default {
           // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
           $(go.Panel, "Auto",
             $(go.Shape, "RoundedRectangle",
-              { fill: "#D4E0DE", stroke: "#307363", strokeWidth:  3.5, strokeJoin: "round", strokeCap: "square" },
+              { fill: "rgb(255, 255 ,255)", stroke: "rgb(15, 76, 129)", strokeWidth:  3.5, strokeJoin: "round", strokeCap: "square" },
               new go.Binding("figure", "figure")),
             $(go.TextBlock, this.textStyle(),
               {
