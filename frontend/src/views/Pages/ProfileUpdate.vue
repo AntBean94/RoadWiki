@@ -21,16 +21,9 @@
           <b-col lg="3" class="order-lg-2">
             <b-container class="card-profile-image">
               <b-row>
-                <b-img
-                  :src="
-                    `${this.$store.getters.getServer}/user/image/${this.uid}`
-                  "
-                  rounded="circle"
-                />
+                <b-img :src="rqprofileURL" rounded="circle" />
               </b-row>
-              <b-row class="justify-content-end">
-
-              </b-row>
+              <b-row class="justify-content-end"> </b-row>
             </b-container>
           </b-col>
         </b-row>
@@ -86,9 +79,7 @@
               </b-col>
               <b-col>
                 <!-- address 수정 -->
-                <b-form-input
-                  :value="address"
-                ></b-form-input>
+                <b-form-input :value="address"></b-form-input>
               </b-col>
             </b-row>
             <b-row class="mb-3">
@@ -124,7 +115,10 @@
                   {{ keyword }}
                 </b-badge>
               </b-col>
-              <FlavourContent class="col align-self-center pl-5 ml-5" @changeFlavour="changeFlavour"/>
+              <FlavourContent
+                class="col align-self-center pl-5 ml-5"
+                @changeFlavour="changeFlavour"
+              />
             </b-row>
             <b-row class="mb-3">
               <b-col cols="3" class="text-center" align-self="center">
@@ -140,7 +134,8 @@
               <b-col>
                 <div>
                   <b-button size="sm" @click="modalShow = !modalShow"
-                    >사진📷</b-button>
+                    >사진📷</b-button
+                  >
 
                   <b-modal v-model="modalShow" hide-footer>
                     <template #modal-title>
@@ -260,14 +255,15 @@ export default {
     // EditProfileForm,
     UserCard,
     LoginContent,
-    FlavourContent,
+    FlavourContent
     // ProfileImg,
     // BackgroundImg
   },
   data() {
     return {
       nickname: "",
-      introduction: "술잔을 들자하니 천하가 내발아래 있고 6팀 친구들 또한 옆에 있으니 염라대왕 두렵지 않구나",
+      introduction:
+        "술잔을 들자하니 천하가 내발아래 있고 6팀 친구들 또한 옆에 있으니 염라대왕 두렵지 않구나",
       address: "https://github.com",
       profileImg: "",
       backImg: "",
@@ -283,12 +279,18 @@ export default {
       modalShow: false,
       file1: null,
       files: [],
-      uid: ""
+      uid: "",
+      profileURL: ""
     };
+  },
+  computed: {
+    rqprofileURL: function() {
+      return require(this.profileURL);
+    }
   },
   created() {
     this.uid = this.$store.getters.getUid;
-
+    this.profileURL = `(${this.$store.getters.getServer}/user/image/${this.uid})`;
     axios
       .get(`${this.$store.getters.getServer}/user/info`)
       .then(res => {
@@ -304,10 +306,9 @@ export default {
           this.$router.replace("/");
         });
       });
-    axios.get(`${this.$store.getters.getServer}/keyword/list`)
-    .then((res) => {
-      this.options = res.data.keywords
-    })
+    axios.get(`${this.$store.getters.getServer}/keyword/list`).then(res => {
+      this.options = res.data.keywords;
+    });
   },
   methods: {
     withDrawal() {
@@ -323,12 +324,12 @@ export default {
     },
     changeFlavour(keywords) {
       // 다이렉트로 넣기
-      console.log(keywords)
-      let tempkeywordtexts = new Array(keywords.length)
-      for (let i=0; i < keywords.length; i++) {
-        tempkeywordtexts[i] = this.options[keywords[i]].word
+      //console.log(keywords);
+      let tempkeywordtexts = new Array(keywords.length);
+      for (let i = 0; i < keywords.length; i++) {
+        tempkeywordtexts[i] = this.options[keywords[i]].word;
       }
-      this.keywordtexts = tempkeywordtexts
+      this.keywordtexts = tempkeywordtexts;
     },
     updateHandler() {
       // 보낼때 명명이 중요함
@@ -340,7 +341,7 @@ export default {
         introduction: this.introduction,
         file: this.file1
       };
-      console.log("updateHandler : " + user);
+      //console.log("updateHandler : " + user);
       axios
         .put(`${this.$store.getters.getServer}/user/modify`, user)
         .then(res => {
@@ -359,15 +360,17 @@ export default {
       // frm.append("photo", photoFile.files[0]);
 
       // this.modalShow = false;
-      console.log("upload 시작 ");
-      console.log(this.files);
+      //console.log("upload 시작 ");
+      //console.log(this.files);
 
       await axios
         .post(`${this.$store.getters.getServer}/user/pic`, formData, {
           headers: { "content-type": "multipart/form-data" }
         })
-        .then(() => {
-          console.log("upload 성공 ");
+        .then(res => {
+          //console.log("upload 성공 ");
+          //console.log(res.data.path);
+          this.profileURL = `${this.$store.getters.getServer}/user/image/${this.uid}`;
         });
     }
   }

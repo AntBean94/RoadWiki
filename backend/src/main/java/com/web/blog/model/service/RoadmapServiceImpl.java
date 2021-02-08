@@ -30,8 +30,6 @@ public class RoadmapServiceImpl implements RoadmapService {
 			JsonArray nodeDataArray = jsonObject.getAsJsonArray("nodeDataArray");
 			System.out.println(jsonObject);
 			
-			
-			
 			int nowuidnum = Integer.parseInt(nowuid);
 			int uidnum = map.getUid();
 			if (nowuidnum != uidnum)
