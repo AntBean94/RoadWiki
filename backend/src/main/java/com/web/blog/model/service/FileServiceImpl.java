@@ -105,6 +105,7 @@ public class FileServiceImpl implements FileService {
 		}
 		return IOUtils.toByteArray(in);
 	}
+	
 //	@GetMapping(value = "image")
 //	public Object userSearch() throws IOException {
 //		Path file = Paths.get(".\\src\\main\\resources\\statics\\upload\\" + 1 + "\\").resolve("1.jpg");
