@@ -1,15 +1,17 @@
 package com.web.blog.model.service;
 
-import java.util.List;
-
-import com.web.blog.model.dto.Curriculum;
+import com.google.gson.JsonArray;
 import com.web.blog.model.dto.Curriculumtext;
 
 public interface CurriculumService {
 	
-	public Object insertText(Curriculumtext curriculumtext);
-	public Object deleteText(Curriculumtext curriculumtext);
-	public Object create(List<Curriculum> curriculumlist);
-	public Object getCurriculumByrmid(int rmid);
+	public Object insertText(String uid,Curriculumtext curriculumtext);
+	public Object deleteText(String uid,Curriculumtext curriculumtext);
+	public Object getSuggest();
+	public Object getSuggestBybdid(String bdid);
+	public Object getSuggestBybdidmdid(String bdid, String mdid);
+
 	
+	public void create(int rmid,JsonArray nodeDataArray);
+	public JsonArray getCurriculumByrmid(int rmid);
 }	
