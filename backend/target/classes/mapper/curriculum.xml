@@ -83,7 +83,8 @@
 
 	<select id="selectBigByRmid" parameterType="int"
 		resultType="Curriculum">
-		select big.*,bigdata.text,bigdata.content from big left join bigdata on
+		select big.*,bigdata.text,bigdata.content from big left
+		join bigdata on
 		big.bdid = bigdata.bdid where rmid = #{rmid};
 	</select>
 
