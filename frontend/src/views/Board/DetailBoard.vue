@@ -29,14 +29,16 @@
           {{ content }}
         </p> -->
       </b-row>
-      <b-row align-h="end" class="my-2">
+      <b-row align-h="end" class="my-2" v-if="isWritter">
         <!-- 게시물의 uid와 현재 uid가 동일 할 때 보여줄 내용 -->
-        <i class="far fa-trash-alt fa-lg mr-3" style="color: tomato"></i>
+        <i class="far fa-trash-alt fa-lg mr-3" style="color: tomato" @click="deleteBoard"></i>
         <i class="far fa-edit fa-lg mr-3" style="color: Dodgerblue" @click="updateBoard"></i>
       </b-row>
       <b-row>
-        <i class="far fa-thumbs-up fa-2x ml-3"><span class="h3">좋아요{{likeCnt}}</span></i>
-        <i class="far fa-thumbs-down fa-2x ml-3"><span class="h3">싫어요</span></i>
+        <i class="far fa-thumbs-up fa-2x ml-3" v-if="!like" @click="clickLike"><span class="h3 ml-1">좋아요{{likeCnt}}</span></i>
+        <i class="fas fa-thumbs-up fa-2x ml-3" v-if="like" @click="cancelLike"><span class="h3 ml-1">좋아요{{likeCnt}}</span></i>
+        <i class="far fa-thumbs-down fa-2x ml-3" v-if="!dislike" @click="clickDislike"><span class="h3 ml-1">싫어요{{dislikeCnt}}</span></i>
+        <i class="fas fa-thumbs-down fa-2x ml-3" v-if="dislike" @click="cancelDislike"><span class="h3 ml-1">싫어요{{dislikeCnt}}</span></i>
       </b-row>
     </b-container>
 
@@ -47,9 +49,9 @@
       <hr class="my-2">
       <!-- 댓글 폼 필요 -->
       
-      <CommentForm/>      
+      <CommentForm :pid="pid"/>      
       <hr class="my-2">
-      <CommentList/>      
+      <CommentList :comments="comments" :recomments="recomments"/>      
     </b-container>
   </div>
 </template>
@@ -77,13 +79,20 @@ export default {
       modifyDate: '',
       uid: '',
       classifier: '',
+      like: false,
+      dislike: false,
       likeCnt: '',
+      dislikeCnt: '',
+      pid: '',
+      isWritter: false,
+      comments: [],
+      recomments: [],
     }
   },
   mounted() {
     axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
     .then((res) => {
-      console.log(res.data.posting)
+      console.log(res.data)
       this.name = res.data.name
       this.classifier = res.data.posting.classifier
       this.title = res.data.posting.title
@@ -92,21 +101,56 @@ export default {
       this.modifyDate = res.data.posting.modifyDate
       this.uid = res.data.posting.uid
       this.likeCnt = res.data.posting.likeCnt
+      this.pid = res.data.posting.pid
+      this.comments = res.data.comments
+      this.recomments = res.data.recomments
     })
-    // fetch(`데이터가 담겨이쓴 주소`).then((res) => {
-    //   if (res.ok) {
-    //     return res.json();
-    //   } else {
-    //     throw res;
-    //   }
-    // }).then(data => {
-    //   this.content = data;
-    // })
+
+    .catch((err) => {
+      console.log(err)
+    })
+
+    .finally(() => {
+      if (this.uid === this.$store.getters.getUid) {
+        this.isWritter = true
+      } else {
+        this.isWritter = false
+      }
+    })
   },
   methods: {
     updateBoard() {
       const pid = this.$route.query.pid
       this.$router.push({name: 'update_board', query: { pid }})
+    },
+    deleteBoard() {
+      axios.delete(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
+      .then(() => {
+        alert('삭제가 정상적으로 완료되었습니다.')
+        this.$router.push('/tmp_board')
+      })
+    },
+    clickLike() {
+      if (this.dislike) {
+        this.cancelDislike()
+      }
+      this.like = true
+      this.likeCnt ++
+    },
+    cancelLike() {
+      this.like = false
+      this.likeCnt -- 
+    },
+    clickDislike() {
+      if (this.like) {
+        this.cancelLike()
+      }
+      this.dislike = true
+      this.dislikeCnt ++
+    },
+    cancelDislike() {
+      this.dislike = false
+      this.dislikeCnt --
     },
   },
 }
