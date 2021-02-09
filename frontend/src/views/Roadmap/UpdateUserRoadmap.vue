@@ -154,6 +154,7 @@ export default {
     this.readRoadmap();
     // 수정로그 가져오기
     this.readRoadmapLog();
+    // props 데이터 확인 후 없으면 메인페이지로 보내기
   },
   watch: {
   },
@@ -162,6 +163,11 @@ export default {
   methods: {
     // read 요청보내기
     readRoadmap() {
+      if (this.rmid === undefined) {
+        console.log('확인')
+        this.$router.push({ name: 'read_user_roadmap' })
+        return;
+      }
       if(this.rmid == 0){
         this.roadmapData = { "class": "go.GraphLinksModel",
         "linkFromPortIdProperty": "fromPort",
@@ -171,18 +177,18 @@ export default {
         "linkDataArray": [
       ]}
       }else{
-      axios.get(`${this.$store.getters.getServer}/roadmap/get/${this.rmid}`)
-        .then((res) => {
-          if(res.data.msg == 'success'){
-          this.roadmapData = JSON.parse(res.data['roadmaps'].tmp);
-          this.roadmapname = res.data['roadmaps'].name;
-          }else{
-            alert("데이터 로드에 실패했습니다.")
-          }
-        }).catch((e) =>{
-          alert("axios 오류", "readRoadmap")
-        });
-      }
+        axios.get(`${this.$store.getters.getServer}/roadmap/get/${this.rmid}`)
+          .then((res) => {
+            if(res.data.msg == 'success'){
+            this.roadmapData = JSON.parse(res.data['roadmaps'].tmp);
+            this.roadmapname = res.data['roadmaps'].name;
+            }else{
+              alert("데이터 로드에 실패했습니다.")
+            }
+          }).catch((e) =>{
+            alert("axios 오류 1")
+          });
+        }
     },
 
     // 로드맵 로그 가져오는 함수(mounted에서 rmorder를 불러온뒤 실행)
@@ -197,7 +203,7 @@ export default {
             alert("데이터 로드에 실패했습니다.")
           }
         }).catch((e) =>{
-          alert("axios 오류")
+          alert("axios 오류 2")
         });
       }
     },
@@ -221,7 +227,7 @@ export default {
           }
         })
         .catch(e => {
-          alert("axios 오류");
+          alert("axios 오류 3");
         });
     },
     createRoadmap() {
@@ -240,7 +246,7 @@ export default {
           alert("생성에 실패했습니다.")
         }
         }).catch((e) =>{
-          alert('axios 오류')
+          alert('axios 오류 4')
         });
     },
     checkCur(e) {
@@ -259,7 +265,7 @@ export default {
         })
         .catch(e => {
           console.log(e);
-          alert("axios 오류");
+          alert("axios 오류 5");
         });
     },
   }
