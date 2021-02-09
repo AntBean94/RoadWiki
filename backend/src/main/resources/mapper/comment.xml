@@ -18,8 +18,8 @@
 	
 	<insert id="insert" parameterType="Comment">
 		insert 
-		into comment(pid, uid, type, content)
-		values(#{pid}, #{uid}, #{type}, #{content})
+		into comment(pid, uid, content)
+		values(#{pid}, #{uid}, #{content})
 	</insert>
 	
 	<update id="update" parameterType="Comment">
