@@ -11,8 +11,8 @@
 		resultType="Curriculumtext">
 		select *
 		from smalldata
-		where mdid = #{mdid} and bdid =
-		#{bdid}
+		where mdid = #{mdid} 
+		and bdid = #{bdid}
 	</select>
 
 	<select id="selectMiddleText" parameterType="int"
