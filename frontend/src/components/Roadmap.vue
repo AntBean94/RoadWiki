@@ -505,7 +505,6 @@ export default {
     checkCur(e) {
       // 차후에 DB에 요청을 보낸다음 DB정보로 반영
       this.headertext = curriculumData.text;
-      console.log(curriculumData.startdate);
       if(curriculumData.category)
         this.dates = curriculumData.startdate + " to " + curriculumData.enddate;
       this.memotext = curriculumData.memo;

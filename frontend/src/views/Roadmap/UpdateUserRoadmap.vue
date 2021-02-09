@@ -163,6 +163,7 @@ export default {
   methods: {
     // read 요청보내기
     readRoadmap() {
+      // 페이지 초기화시 rmid여부 확인해서 바탕화면으로 redirect
       if (this.rmid === undefined) {
         console.log('확인')
         this.$router.push({ name: 'read_user_roadmap' })

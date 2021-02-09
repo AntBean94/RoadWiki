@@ -17,10 +17,9 @@
 								<div class="field">
 									<label class="label">Title</label>
 									<div class="control">
-										<input v-model="showTitle" class="input disabled" type="text" :disabled="disabledBtn"/>
+										<input v-model="showTitle" class="input"  type="text" disabled/>
 									</div>
 								</div>
-
 								<div class="field">
 									<label class="label">Start date</label>
 									<div class="control">
@@ -51,8 +50,6 @@
 								:enable-drag-drop="true"
 								:disable-past="disablePast"
 								:disable-future="disableFuture"
-								:show-times="showTimes"
-								:date-classes="myDateClasses"
 								:class="themeClasses"
 								:period-changed-callback="periodChanged"
 								:current-period-label="useTodayIcons ? 'icons' : ''"
@@ -110,7 +107,7 @@ export default {
 			// calendar 
 			itemId : "", 
 			showTitle: "",
-			
+			showDate: this.today(),
 			message: "",
 			startingDayOfWeek: 0,
 			disablePast: false,
@@ -118,46 +115,56 @@ export default {
 			displayPeriodUom: "month",
 			displayPeriodCount: 1,
 			displayWeekNumbers: false,
-			showTimes: true,
 			selectionStart: null,
 			selectionEnd: null,
+			// update관련 data
+			newItemSdid: "",
+			newItemMdid: "",
+			newItemBdid: "",
+			newItemKey: "",
+			newItemRmid: "",
 			newItemTitle: "",
 			newItemStartDate: "",
 			newItemEndDate: "",
 			useDefaultTheme: true,
 			useHolidayTheme: true,
 			useTodayIcons: false,
-			items: [
-				{
-					id: "1",
-					title: '적게 일하고 많이 벌자',
-					startDate: "2021-02-05",
-					
-				},
-				{
-					id: "2",
-					startDate: "2021-02-11",
-					endDate: "2021-02-15",
-					title: "집중 프론트기간",
-				},
-				
-			],
+			items: [],
 		}
 	},
-	created(){
+ 	created(){
 		// 사용자 커리큘럼 및 일정 로드해 오기 
 		const uid = String(this.$store.getters.getUid)
 
 		// 해당 유저에 대한 정보 백앤드에 전달
-		axios.post(`${this.$store.getters.getServer}/calendar/${uid}`)
-		  .then((res) => {
-			//   this.items = res.data[]
-			  console.log('154줄 통신성공')
-		  }).catch((e)=> {
-			  console.log(e)
-			  alert('axios 통신오류')
-		  })
-	},
+		axios.get(`${this.$store.getters.getServer}/calendar/get/${uid}`)
+				.then((res) => {
+					console.log(res);
+						res.data['calendars'].map(curr => {
+								let item = {}
+								item.key = curr.key;
+								item.rmid = curr.rmid;
+								item.startDate = curr.startdate;
+								item.endDate = curr.enddate;
+								item.title = curr.text;
+								item.sdid = curr.sdid;
+								item.mdid = curr.mdid;
+								item.bdid = curr.bdid;
+								
+								if (curr.category==='blue') {
+										item.classes = 'blue'
+								} else if (curr.category==='black') {
+										item.classes = 'orange'
+								} else {
+										item.classes = 'purple'
+								}
+								this.items.push(item)
+						})
+			}).catch((e)=> {
+					console.log(e)
+					alert('axios 통신오류')
+			})
+    },
 	computed: {
 		userLocale() {
 			return this.getDefaultBrowserLocale
@@ -192,7 +199,6 @@ export default {
 		
 		onClickDay(d) {
 			this.disabledBtn = true
-			
 			this.selectionStart = null
 			this.selectionEnd = null
 			this.newItemStartDate = this.isoYearMonthDay(d)
@@ -201,14 +207,16 @@ export default {
 		},
 		// 해당 item선택 
 		onClickItem(e) {
-			console.log(e)
 			this.disabledBtn = false
-			
-			this.itemId = e.id 
+			this.newItemKey = e.originalItem.key;
+			this.newItemRmid = e.originalItem.rmid;
+			this.newItemSdid = e.originalItem.sdid;
+			this.newItemBdid = e.originalItem.bdid; 
+			this.newItemMdid = e.originalItem.mdid;
 			this.newItemTitle = e.title
 			this.newItemStartDate = this.isoYearMonthDay(e.startDate)
 			this.newItemEndDate = this.isoYearMonthDay(e.endDate)
-
+			
 			this.showTitle = e.title
 			this.message = `일정: ${e.title}`
 		},
@@ -247,31 +255,39 @@ export default {
 		
 		//  스케쥴 수정버튼
 		clickUpdateItem() {
-			console.log(`수정된 시작날짜 : ${this.newItemStartDate} `)
-			console.log(`수정된 종료날짜 : ${this.newItemEndDate} `)
-			console.log(`해당일정의 id : ${this.itemId} `)
+			let updateUserData = {}
+			updateUserData.rmid = this.newItemRmid
+			updateUserData.key = this.newItemKey
+			updateUserData.startdate = this.newItemStartDate
+			updateUserData.enddate = this.newItemEndDate
+			updateUserData.sdid = this.newItemSdid
+			updateUserData.mdid = this.newItemMdid
+			updateUserData.bdid = this.newItemBdid
+			console.log('updateuserdata', updateUserData)
 			// 백엔드 서버 통신 (변경사항 전달)
-			axios.patch(`${this.$store.getters.getServer}/calendar/get/${itemId}`)
+			axios.put(`${this.$store.getters.getServer}/calendar/modify`, 
+				updateUserData
+			)
 			  .then((res) => {
-				  console.log(res)
-				  console.log("256줄 axios 수정 성공")
+					this.items.map(item => {
+						if (item.rmid == this.newItemRmid && item.key == this.newItemKey) {
+							item.startDate = this.newItemStartDate
+							item.endDate = this.newItemEndDate
+							return
+						}
+					})
 			  }).catch((e)=>{
-				  console.log("axios 오류")
+				  console.log(e);
 			  })
+			  console.log(this.items);
 			alert('일정을 수정했습니다.')
 		},
-
 		// 계획일정을 지우는 함수 
 		clickDeleteItem() {
-			console.log(`해당일정의 id : ${this.itemId} `)
-			// 해당 일정 삭제
-			axios.delete(`${this.$store.getters.getServer}/calendar/${itemId}`)
-			  .then((res) => {
-				  console.log("269 삭제 성공")
-			  }).catch((e) => {
-				  console.log("axios 통신 실패")
-			  })
-			alert('해당일정을 삭제했습니다.')
+			// 해당 일정 삭제''
+			this.newItemStartDate = ""
+			this.newItemEndDate = ""
+			this.clickUpdateItem();
 		},
 	},
 }
@@ -367,5 +383,8 @@ export default {
 .disabled{
 	background-color: #ccc9c9c2;
 }
-    
+.theme-default .cv-item.blue {
+	background-color: #ff009d;
+	border-color: #f31#ff009d
+}
 </style>
