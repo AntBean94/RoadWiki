@@ -44,16 +44,16 @@
 
     <b-container style="background: white; border-radius: 1rem;" class="py-4 mt-4">
       <b-row>
-        <h2 class="ml-4 mb-0">댓글(숫자)</h2>
+        <h2 class="ml-4 mb-0">댓글({{ comments.length }})</h2>
       </b-row>
       <hr class="my-2">
       <!-- 댓글 폼 필요 -->
       
-      <CommentForm :pid="pid"/>      
+      <CommentForm :pid="pid" @sendComment="getPostingInfo"/>      
       <hr class="my-2">
       <!-- <CommentList :comments="comments" :recomments="recomments"/>       -->
       <b-container v-for="(comment, idx) in comments" :key="idx">
-        <CommentList :comment="comment" :recomments="recomments"/>      
+        <CommentList :comment="comment" :recomments="recomments[idx]" @sendRecomment="getPostingInfo"/>      
       </b-container>
     </b-container>
   </div>
@@ -93,35 +93,35 @@ export default {
     }
   },
   mounted() {
-    axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
-    .then((res) => {
-      console.log(res.data)
-      this.name = res.data.name
-      this.classifier = res.data.posting.classifier
-      this.title = res.data.posting.title
-      this.content = res.data.posting.content
-      this.createDate = res.data.posting.createDate
-      this.modifyDate = res.data.posting.modifyDate
-      this.uid = res.data.posting.uid
-      this.likeCnt = res.data.posting.likeCnt
-      this.pid = res.data.posting.pid
-      this.comments = res.data.comments
-      this.recomments = res.data.recomments
-    })
-
-    .catch((err) => {
-      console.log(err)
-    })
-
-    .finally(() => {
-      if (this.uid === this.$store.getters.getUid) {
-        this.isWritter = true
-      } else {
-        this.isWritter = false
-      }
-    })
+    this.getPostingInfo()
+    if (this.uid === this.$store.getters.getUid) {
+      this.isWritter = true
+    } else {
+      this.isWritter = false
+    }
   },
   methods: {
+    getPostingInfo() {
+      axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
+      .then((res) => {
+        console.log(res.data)
+        this.name = res.data.name
+        this.classifier = res.data.posting.classifier
+        this.title = res.data.posting.title
+        this.content = res.data.posting.content
+        this.createDate = res.data.posting.createDate
+        this.modifyDate = res.data.posting.modifyDate
+        this.uid = res.data.posting.uid
+        this.likeCnt = res.data.posting.likeCnt
+        this.pid = res.data.posting.pid
+        this.comments = res.data.comments
+        this.recomments = res.data.recomments
+      })
+
+      .catch((err) => {
+        console.log(err)
+      })
+    },
     updateBoard() {
       const pid = this.$route.query.pid
       this.$router.push({name: 'update_board', query: { pid }})

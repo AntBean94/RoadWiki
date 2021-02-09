@@ -5,7 +5,7 @@
         class="form-control" 
         rows="3" 
         placeholder="댓글을 입력해주세요"
-        v-model="comment"
+        v-model="content"
       >
       </textarea>
       <b-row align-h="end">
@@ -20,7 +20,7 @@ export default {
   name: 'commentform',
   data() {
     return {
-      comment: '',
+      content: '',
     }
   },
   props: ['pid'],
@@ -29,13 +29,13 @@ export default {
       let posting = {
         'pid': this.pid,
         'uid': this.$store.getters.getUid,
-        'content': this.comment,
+        'content': this.content,
       }
-      console.log(this.pid, this.$store.getters.getUid, this.comment)
       axios
       .post(`${this.$store.getters.getServer}/freeboard/comment`, posting)
       .then((res) => {
-        alert('댓글이 작성되었습니다.')
+        this.$emit('sendComment')
+        this.content = ''
       })
       .catch((err) => {
         console.log(err)

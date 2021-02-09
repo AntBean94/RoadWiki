@@ -153,11 +153,19 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			for(Comment c : commentRepo.selectListPid(Integer.parseInt(pid))) 
 				comments.add(c);
 			result.put("comments", comments);
+			List<Recomment>[] recomments = new ArrayList[comments.size()];
+			for (int i = 0; i < recomments.length; i++) {
+				recomments[i] = new ArrayList<Recomment>();
+			}
+//			for(Comment c : comments) 
+//				for(Recomment rc : recommentRepo.selectListCid(c.getCid()))
+//					recomments.add(rc);
 			
-			List<Recomment> recomments = new ArrayList<>();
-			for(Comment c : comments) 
-				for(Recomment rc : recommentRepo.selectListCid(c.getCid()))
-					recomments.add(rc);
+			for (int i = 0; i < recomments.length; i++) {
+				for(Recomment rc : recommentRepo.selectListCid(comments.get(i).getCid())) {
+					recomments[i].add(rc);
+				}
+			}
 			result.put("recomments", recomments);
 
 			result.put("name", userRepo.getName(posting.getUid()));
@@ -226,7 +234,6 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	@Override
 	public Object registComment(Comment comment, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
-		System.out.println("commmmmmment"+comment);
 		try {
 //			if(commentRepo.select(comment.getUid() != uid) throw new RuntimeException("wrong user");
 			if(commentRepo.insert(comment) == 1) result.put("msg", "success");
@@ -269,6 +276,21 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		return result;
 	}
 
+	@Override
+	public Object registRecomment(Recomment recomment) throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
+		System.out.println("commmmmmment"+recomment);
+		try {
+			if(recommentRepo.insert(recomment) == 1) result.put("msg", "success");
+			else result.put("msg", "fail");
+		} catch(NumberFormatException e){
+			throw new RuntimeException("input data type error");
+		} catch(Exception e) {
+			throw e;
+		}
+		return result;
+	}
+	
 	@Override
 	public Object totalCount() throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();

@@ -33,8 +33,8 @@
         </b-col>
         <!-- 아이콘 가운데정렬 -->
         <b-col align-h="end" class="my-2" v-if="isRecommentWritter">
-          <i class="far fa-trash-alt fa-lg mr-3" style="color: tomato"></i>
-          <i class="far fa-edit fa-lg mr-3" style="color: Dodgerblue"></i>
+          <i class="far fa-trash-alt fa-lg mr-3" style="color: tomato" @click="deleteRecomment"></i>
+          <i class="far fa-edit fa-lg mr-3" style="color: Dodgerblue" @click="updateRecomment"></i>
         </b-col>
       </b-row> 
     <!-- </b-container> -->
@@ -62,6 +62,12 @@ export default {
     cancelLike() {
       this.like = false
       this.recomment.likeCnt --
+    },
+    deleteRecomment() {
+
+    },
+    updateRecomment() {
+      
     },
   },
   created() {

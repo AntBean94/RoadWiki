@@ -34,15 +34,15 @@
         <!-- 아이콘 가운데정렬 -->
         <!-- 현재 로그인 된 uid와 댓글 uid가 같은 경우 보여주기 -->
         <b-col align-h="end" class="my-2" v-if="isCommentWritter">
-          <i class="far fa-trash-alt fa-lg mr-3" style="color: tomato"></i>
-          <i class="far fa-edit fa-lg mr-3" style="color: Dodgerblue"></i>
+          <i class="far fa-trash-alt fa-lg mr-3" style="color: tomato" @click="deleteComment"></i>
+          <i class="far fa-edit fa-lg mr-3" style="color: Dodgerblue" @click="updateComment"></i>
         </b-col>
       </b-row>
       <b-container v-for="(recomment, idx) in recomments" :key="idx">
         <RecommentList :recomment="recomment"/>      
       </b-container>
       <!-- <RecommentList :recomments="recomments" v-if="recomments.length > 0" /> -->
-      <RecommentForm v-show="recomment"/> 
+      <RecommentForm v-show="recomment" :cid="comment.cid" @sendRecomment="sendRecomment"/> 
     <!-- </b-container> -->
   </div>
 </template>
@@ -100,6 +100,19 @@ export default {
     cancelLike() {
       this.like = false
       this.comment.likeCnt --
+    },
+    sendRecomment() {
+      this.$emit('sendRecomment')
+    },
+    deleteComment() {
+      axios.delete(`${this.$store.getters.getServer}/freeboard/comment/${this.comment.cid}`)
+      .then(() => {
+        alert('댓글이 삭제되었습니다.')
+        this.$emit('sendRecomment')
+      })
+    },
+    updateComment() {
+
     },
   },
 }

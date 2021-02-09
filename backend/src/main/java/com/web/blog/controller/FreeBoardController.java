@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.model.dto.Comment;
 import com.web.blog.model.dto.Posting;
+import com.web.blog.model.dto.Recomment;
 import com.web.blog.model.service.FreeBoardService;
 import com.web.blog.model.service.LoginService;
 
@@ -194,6 +195,25 @@ public class FreeBoardController {
 			Map<String, Object> result;
 			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) fBoardServ.deleteComment(cid, uid);
+			result.put("msg", SUCCESS);
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	@PostMapping("/recomment")
+	public Object registRecomment(@RequestBody Recomment recomment, HttpServletRequest request) {
+		try {
+			Map<String, Object> result;
+			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			recomment.setUid(uid);
+			result = (Map<String, Object>) fBoardServ.registRecomment(recomment);
+			
 			result.put("msg", SUCCESS);
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		} catch(Exception e) {
