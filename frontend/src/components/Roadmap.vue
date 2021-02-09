@@ -17,25 +17,27 @@
       <h3>{{ headertext }}</h3>
       <hr>
       <b-card-text>
-        <base-input label="시작날짜-종료날짜" @click="checkDate">
+        <base-input label="시작날짜-종료날짜">
         <flat-pickr 
           slot-scope="{focus, blur}"
           @on-open="focus"
           @on-close="blur"
           :config="{allowInput: true, mode: 'range',}"
           class="form-control datepickr"
-          v-model="dates.range"
+          v-model="dates"
+          :disabled="!roadmapMode"
         >
         </flat-pickr>
         </base-input>
       </b-card-text>
       <hr>
-      <span>커리큘럼 설명</span>
+      <span>{{ descript }}</span>
       <hr>
       <b-card-text>
         <b-form-input 
           v-model="memotext" 
           placeholder="Enter your memo" 
+          :readonly="!roadmapMode"
         ></b-form-input>
       </b-card-text>
     </b-card>
@@ -72,12 +74,10 @@ export default {
   },
   data() {
     return {  
-      ismounted: false,
       headertext: '',
-      dates :{
-        range : '2020-01-01 to 2020-01-01'
-      },
+      dates : '',
       memotext : '',
+      descript : '',
       // Get more form https://flatpickr.js.org/options/
       config: {
         wrap: true, // set wrap to true only when using 'input-group'
@@ -413,12 +413,28 @@ export default {
     this.getRecommendCur();
     // 팔레트 초기화
     curriculumData = -1;
+
   },
   watch: {
     // head 데이터 변경때 마다 실행(즉, 커리큘럼 클릭시 실행)
     headertext: function () {
       // 데이터 호출하는 함수
       this.getRecommendCur()
+    },
+    memotext: function() {
+      if(curriculumData != -1)
+        curriculumData.memo = this.memotext;
+    },
+    dates: function() {
+      if (curriculumData != -1) {
+        if (this.dates.length > 10) {
+          curriculumData.startdate = this.dates.slice(0, 10)
+          curriculumData.enddate = this.dates.slice(14, 24)
+        } else {
+          curriculumData.startdate = this.dates
+          curriculumData.enddate = this.dates
+        }
+      }
     },
     roadmapData: function (e) {
       myDiagram.model = go.Model.fromJson(e);    
@@ -489,11 +505,16 @@ export default {
     checkCur(e) {
       // 차후에 DB에 요청을 보낸다음 DB정보로 반영
       this.headertext = curriculumData.text;
+      console.log(curriculumData.startdate);
+      if(curriculumData.category)
+        this.dates = curriculumData.startdate + " to " + curriculumData.enddate;
+      this.memotext = curriculumData.memo;
+      this.descript = curriculumData.content;
     },
     getRecommendCur() {
       let color
       let url
-      if(curriculumData == -1){
+      if(curriculumData == -1 || !curriculumData.category){
         url = `${this.$store.getters.getServer}/curriculum/suggest`;
         color = "blue";
       }
@@ -528,8 +549,6 @@ export default {
     serveRoadmap() {
       return myDiagram.model.toJson();
     },
-    checkDate() {
-    }
   },
 }
 </script>
