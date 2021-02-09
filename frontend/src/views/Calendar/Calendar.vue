@@ -139,6 +139,7 @@ export default {
 					startDate: "2021-02-11",
 					endDate: "2021-02-15",
 					title: "집중 프론트기간",
+					
 				},
 				
 			],
@@ -263,7 +264,7 @@ export default {
 
 		// 계획일정을 지우는 함수 
 		clickDeleteItem() {
-			console.log(`해당일정의 id : ${this.itemId} `)
+			console.log(`해당일정의 id : ${this.itemId}`)
 			// 해당 일정 삭제
 			axios.delete(`${this.$store.getters.getServer}/calendar/${itemId}`)
 			  .then((res) => {
