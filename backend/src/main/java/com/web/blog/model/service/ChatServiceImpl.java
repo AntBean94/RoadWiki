@@ -1,60 +1,55 @@
 package com.web.blog.model.service;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.web.blog.model.dto.ChatRoom;
+import com.web.blog.model.repo.ChatRepo;
 
 @Service
 public class ChatServiceImpl implements ChatService{
-
-	private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
 	
 	@Autowired
-	ObjectMapper objectMapper;
+	ChatRepo chatRepo;
 	
-	private Map<String, ChatRoom> chatRooms;
+	private ChatRoom room;
 	
 	@PostConstruct
 	private void init() {
-		chatRooms = new LinkedHashMap<>();
+		room = this.createChatRoom("room");
 	}
 	
-	public List<ChatRoom> findAllRoom() {
-		return new ArrayList<>(chatRooms.values());
-	}
-	
-	public ChatRoom findRoomById(String roomid) {
-		return chatRooms.get(roomid);
-	}
-	
-	public ChatRoom createRoom(String name) {
-		String randomid = UUID.randomUUID().toString();
-		ChatRoom chatRoom = new ChatRoom(randomid, name);
-		chatRooms.put(randomid, chatRoom);
+	@Override
+	public ChatRoom createChatRoom(String name) {
+		ChatRoom chatRoom = new ChatRoom(UUID.randomUUID().toString(), name);
+		chatRepo.insertChatRoom(chatRoom);
 		return chatRoom;
 	}
 	
-	public <T> void sendMsg(WebSocketSession session, T msg) {
-		try {
-			session.sendMessage(new TextMessage(objectMapper.writeValueAsString(msg)));
-		} catch(IOException e) {
-			logger.error(e.getMessage());
-		}
+	@Override
+	public Map<String, Object> joinAnonymousChatRoom() {
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("chatRoom", room);
+		return result;
 	}
+	
+	@Override
+	public Map<String, Object> getChatRoom(String roomid) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("chatRoom", room);
+		return result;
+	}
+	
+//	@Override
+//	public ChatRoom[] getAllChatRoom() {
+//		return null;
+//	}
 	
 }

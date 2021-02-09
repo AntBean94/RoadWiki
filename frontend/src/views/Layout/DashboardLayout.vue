@@ -3,12 +3,11 @@
     <notifications></notifications>
     <side-bar v-if="isHeader">
       <template slot="links">
-
         <sidebar-item
           :link="{
             name: 'User Roadmap',
             path: '/read-user-roadmap',
-            icon: 'ni ni-pin-3 text-orange'
+            icon: 'ni ni-pin-3 text-orange',
           }"
         >
         </sidebar-item>
@@ -17,7 +16,7 @@
           :link="{
             name: 'Official Roadmap',
             path: '/official-roadmap',
-            icon: 'ni ni-tv-2 text-primary'
+            icon: 'ni ni-tv-2 text-primary',
           }"
         >
         </sidebar-item>
@@ -26,7 +25,7 @@
           :link="{
             name: 'Profile',
             path: '/profile',
-            icon: 'ni ni-single-02 text-yellow'
+            icon: 'ni ni-single-02 text-yellow',
           }"
         >
         </sidebar-item>
@@ -35,7 +34,7 @@
           :link="{
             name: 'Calendar',
             path: '/calendar',
-            icon: 'ni ni-calendar-grid-58'
+            icon: 'ni ni-calendar-grid-58',
           }"
         >
         </sidebar-item>
@@ -44,7 +43,7 @@
           :link="{
             name: 'Register',
             path: '/register',
-            icon: 'ni ni-circle-08 text-pink'
+            icon: 'ni ni-circle-08 text-pink',
           }"
           v-if="!getAccessToken"
         >
@@ -54,7 +53,7 @@
           :link="{
             name: 'Board',
             path: '/tmp_board',
-            icon: 'ni ni-bullet-list-67 text-red'
+            icon: 'ni ni-bullet-list-67 text-red',
           }"
         >
         </sidebar-item>
@@ -98,20 +97,18 @@
 
       <content-footer v-if="!$route.meta.hideFooter"></content-footer>
     </div>
-    <!-- <div id="testdiv">
-      <p>
-        div 영역입니다!!!
-      </p>
-    </div> -->
+    <div id="chatting">
+      <Chatting />
+    </div>
   </div>
 </template>
+
 <script>
 /* eslint-disable no-new */
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import LoginContent from "@/components/Login/LoginContent.vue";
 import LogoutContent from "@/components/Logout/LogoutContent.vue";
-
 
 function hasElement(className) {
   return document.getElementsByClassName(className).length > 0;
@@ -127,17 +124,18 @@ function initScrollbar(className) {
     }, 100);
   }
 }
-  // flatpickr
-  // import flatPickr from "vue-flatpickr-component";
-  // import "flatpickr/dist/flatpickr.css";
-  // import 'flatpickr/dist/themes/material_blue.css';
-  // import {Hindi} from 'flatpickr/dist/l10n/hi.js';
+// flatpickr
+// import flatPickr from "vue-flatpickr-component";
+// import "flatpickr/dist/flatpickr.css";
+// import 'flatpickr/dist/themes/material_blue.css';
+// import {Hindi} from 'flatpickr/dist/l10n/hi.js';
 
 import DashboardNavbar from "./DashboardNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
 import DashboardContent from "./Content.vue";
 import { FadeTransition } from "vue2-transitions";
 import { mapGetters } from "vuex";
+import Chatting from "@/components/Chatting/Chatting";
 
 export default {
   components: {
@@ -146,7 +144,8 @@ export default {
     DashboardContent,
     FadeTransition,
     LoginContent,
-    LogoutContent
+    LogoutContent,
+    Chatting,
   },
   created() {
     let url = this.$route.name;
@@ -155,7 +154,7 @@ export default {
 
   data() {
     return {
-      isHeader: true
+      isHeader: true,
     };
   },
   methods: {
@@ -169,11 +168,11 @@ export default {
     checkUrl(url) {
       let array = ["Roadmap", "update_user_roamdap"];
       let isHeader = true;
-      array.map(path => {
+      array.map((path) => {
         if (url === path) isHeader = false;
       });
       this.isHeader = isHeader;
-    }
+    },
   },
   logOut() {
     this.$store
@@ -191,14 +190,23 @@ export default {
   watch: {
     $route(to) {
       this.checkUrl(to.name);
-    }
+    },
   },
   computed: {
-    ...mapGetters(["getAccessToken"])
-  }
+    ...mapGetters(["getAccessToken"]),
+  },
 };
 </script>
 <style>
+#chatting {
+  position: absolute;
+  top: 30%;
+  right: 0;
+  width: 300px;
+  height: 500px;
+  background-color: red;
+  z-index: 1000;
+}
 /* #testdiv {
   position: fixed;
   right: 0;
