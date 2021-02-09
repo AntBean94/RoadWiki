@@ -15,14 +15,13 @@
       <editor
         ref="toastuiEditor"
         :options="editorOptions"
-        :initialValue="content"
         height="500px"
+        :initialValue="content"
         initialEditType="wysiwyg"
         previewStyle="vertical"
         class="mx-4"
         v-model="content"
         id="editor"
-        @load="onEditorLoad"
       />
     </div>
 
@@ -73,14 +72,15 @@ import { Editor } from '@toast-ui/vue-editor'
 
 export default {
   name: 'Editor',
-    components: {
-    'editor': Editor,
+  components: {
+  'editor': Editor,
   },
   data() {
     return {
-      content: '',
+      content: '## durl',
       editorOptions: {
         hideModeSwitch: false,
+        initialValue: this.content
       },
       tags: ['첫번째 태그', '두번째 태그', '세번째 태그', '네번째 태그'],
       tagInput: '',
@@ -116,9 +116,7 @@ export default {
         this.name = res.data.name
         this.classifier = res.data.posting.classifier
         this.title = res.data.posting.title
-        console.log(res.data.posting.content)
-        console.log(typeof(res.data.posting.content))
-        console.log(this.$refs.toastuiEditor)
+        this.content = res.data.posting.content
         this.createDate = res.data.posting.createDate
         this.modifyDate = res.data.posting.modifyDate
         this.uid = res.data.posting.uid
@@ -126,22 +124,37 @@ export default {
       })
     },
   },
-  created() {
+  moundted() {
     console.log('###################')
-    // axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
-    // .then((res) => {
-    //   console.log(res.data.posting)
-    //   this.name = res.data.name
-    //   this.classifier = res.data.posting.classifier
-    //   this.title = res.data.posting.title
-    //   this.content = res.data.posting.content
-    //   this.createDate = res.data.posting.createDate
-    //   this.modifyDate = res.data.posting.modifyDate
-    //   this.uid = res.data.posting.uid
-    //   this.likeCnt = res.data.posting.likeCnt
-    // })
+    axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
+    .then((res) => {
+      console.log(res.data.posting)
+      this.name = res.data.name
+      this.classifier = res.data.posting.classifier
+      this.title = res.data.posting.title
+      this.content = res.data.posting.content
+      console.log('content')
+      console.log(this.content)
+      this.createDate = res.data.posting.createDate
+      this.modifyDate = res.data.posting.modifyDate
+      this.uid = res.data.posting.uid
+      this.likeCnt = res.data.posting.likeCnt
+
+      this.$refs.toastuiEditor.initialValue = this.content
+      console.log('*************')
+      console.log(this.$refs.toastuiEditor)
+
+      // this.editor.setMarkdown('# HELLO WORLD');
+    })
   },
   mounted() {
+  },
+  watch: {
+    content() {
+      console.log('watch')
+      console.log(this.content)
+      this.content = res.data.posting.content
+    }
   },
 }
 </script>
