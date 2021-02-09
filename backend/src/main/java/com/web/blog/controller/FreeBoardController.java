@@ -160,7 +160,6 @@ public class FreeBoardController {
 			Map<String, Object> result;
 			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) fBoardServ.registComment(comment, uid);
-			
 			result.put("msg", SUCCESS);
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		} catch(Exception e) {
@@ -173,11 +172,11 @@ public class FreeBoardController {
 	}
 	
 	@PutMapping("/comment")
-	public Object editComment(@RequestBody Map<String, Object> map, HttpServletRequest request) {
+	public Object editComment(@RequestBody Comment comment, HttpServletRequest request) {
 		try {
 			Map<String, Object> result;
 			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
-			result = (Map<String, Object>) fBoardServ.editComment((Comment)map.get("posting"), uid);
+			result = (Map<String, Object>) fBoardServ.editComment(comment, uid);
 			result.put("msg", SUCCESS);
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		} catch(Exception e) {

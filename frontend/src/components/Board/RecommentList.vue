@@ -32,7 +32,7 @@
         <b-col cols="8">
         </b-col>
         <!-- 아이콘 가운데정렬 -->
-        <b-col align-h="end" class="my-2" v-if="isRecommentWritter">
+        <b-col align-h="end" class="my-2" v-if="isRecommentWriter">
           <i class="far fa-trash-alt fa-lg mr-3" style="color: tomato" @click="deleteRecomment"></i>
           <i class="far fa-edit fa-lg mr-3" style="color: Dodgerblue" @click="updateRecomment"></i>
         </b-col>
@@ -50,7 +50,7 @@ export default {
     return {
       like: false,
       nickname: '',
-      isRecommentWritter: false,
+      isRecommentWriter: false,
     }
   },
   props: ['recomment'],
@@ -67,7 +67,7 @@ export default {
 
     },
     updateRecomment() {
-      
+
     },
   },
   created() {
@@ -80,9 +80,9 @@ export default {
     })
 
     if (this.recomment.uid === this.$store.getters.getUid) {
-      this.isRecommentWritter = true
+      this.isRecommentWriter = true
     } else {
-      this.isRecommentWritter = false
+      this.isRecommentWriter = false
     }
   }
 }

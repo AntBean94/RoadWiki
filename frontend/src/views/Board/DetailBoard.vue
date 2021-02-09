@@ -29,7 +29,7 @@
           {{ content }}
         </p> -->
       </b-row>
-      <b-row align-h="end" class="my-2" v-if="isWritter">
+      <b-row align-h="end" class="my-2" v-if="isWriter">
         <!-- 게시물의 uid와 현재 uid가 동일 할 때 보여줄 내용 -->
         <i class="far fa-trash-alt fa-lg mr-3" style="color: tomato" @click="deleteBoard"></i>
         <i class="far fa-edit fa-lg mr-3" style="color: Dodgerblue" @click="updateBoard"></i>
@@ -87,18 +87,24 @@ export default {
       likeCnt: '',
       dislikeCnt: '',
       pid: '',
-      isWritter: false,
+      isWriter: false,
       comments: [],
       recomments: [],
     }
   },
+  created() {
+    axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
+    .then((res) => {
+      this.uid =  res.data.posting.uid
+      if (this.uid === this.$store.getters.getUid) {
+        this.isWriter = true
+      } else {
+        this.isWriter = false
+      }
+    })
+  },
   mounted() {
     this.getPostingInfo()
-    if (this.uid === this.$store.getters.getUid) {
-      this.isWritter = true
-    } else {
-      this.isWritter = false
-    }
   },
   methods: {
     getPostingInfo() {

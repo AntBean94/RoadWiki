@@ -25,7 +25,7 @@
 	
 	<update id="update" parameterType="Recomment">
 		update recomment
-		set content=#{content}, modifyDate=#{modifyDate}
+		set content=#{content}, modifyDate=now()
 		where rcid=#{rcid}
 	</update>
 	
