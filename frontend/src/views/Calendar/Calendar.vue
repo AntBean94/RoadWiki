@@ -132,7 +132,6 @@ export default {
 					id: "1",
 					title: '적게 일하고 많이 벌자',
 					startDate: "2021-02-05",
-					
 				},
 				{
 					id: "2",
@@ -140,7 +139,6 @@ export default {
 					endDate: "2021-02-15",
 					title: "집중 프론트기간",
 				},
-				
 			],
 		}
 	},
