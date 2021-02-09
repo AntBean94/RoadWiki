@@ -226,8 +226,9 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	@Override
 	public Object registComment(Comment comment, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
+		System.out.println("commmmmmment"+comment);
 		try {
-			if(commentRepo.select(comment.getCid()).getUid() != uid) throw new RuntimeException("wrong user");
+//			if(commentRepo.select(comment.getUid() != uid) throw new RuntimeException("wrong user");
 			if(commentRepo.insert(comment) == 1) result.put("msg", "success");
 			else result.put("msg", "fail");
 		} catch(NumberFormatException e){

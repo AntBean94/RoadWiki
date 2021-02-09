@@ -51,7 +51,10 @@
       
       <CommentForm :pid="pid"/>      
       <hr class="my-2">
-      <CommentList :comments="comments" :recomments="recomments"/>      
+      <!-- <CommentList :comments="comments" :recomments="recomments"/>       -->
+      <b-container v-for="(comment, idx) in comments" :key="idx">
+        <CommentList :comment="comment" :recomments="recomments"/>      
+      </b-container>
     </b-container>
   </div>
 </template>

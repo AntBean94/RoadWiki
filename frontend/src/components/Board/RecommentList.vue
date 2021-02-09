@@ -1,11 +1,11 @@
 <template>
   <div class="bg-secondary">
     <hr class="my-2">
-    <b-container v-for="(recomment, idx) in recomments" :key="idx">
-      {{ recomment }}
+    <!-- <b-container v-for="(recomment, idx) in recomments" :key="idx"> -->
+      <!-- {{ recomment }} -->
       <b-row>
         <b-col cols="8" align-self="center">
-          [img] 작성자 : 닉네임
+          [img] 작성자 : {{ this.nickname }}
         </b-col>
         <b-col>
           <h5>
@@ -32,12 +32,12 @@
         <b-col cols="8">
         </b-col>
         <!-- 아이콘 가운데정렬 -->
-        <b-col align-h="end" class="my-2">
+        <b-col align-h="end" class="my-2" v-if="isRecommentWritter">
           <i class="far fa-trash-alt fa-lg mr-3" style="color: tomato"></i>
           <i class="far fa-edit fa-lg mr-3" style="color: Dodgerblue"></i>
         </b-col>
       </b-row> 
-    </b-container>
+    <!-- </b-container> -->
   </div>
 </template>
 
@@ -49,17 +49,36 @@ export default {
   data() {
     return {
       like: false,
+      nickname: '',
+      isRecommentWritter: false,
     }
   },
-  props: ['recomments'],
+  props: ['recomment'],
   methods: {
     clickLike() {
       this.like = true
+      this.recomment.likeCnt ++
     },
     cancelLike() {
       this.like = false
+      this.recomment.likeCnt --
     },
   },
+  created() {
+    axios.get(`${this.$store.getters.getServer}/user/name/${this.recomment.uid}`)
+    .then((res) => {
+      this.nickname = res.data.name
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+
+    if (this.recomment.uid === this.$store.getters.getUid) {
+      this.isRecommentWritter = true
+    } else {
+      this.isRecommentWritter = false
+    }
+  }
 }
 </script>
 
