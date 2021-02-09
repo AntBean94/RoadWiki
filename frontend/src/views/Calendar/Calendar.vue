@@ -12,7 +12,10 @@
 
 					<div id="calendar">
 						<div class="calendar-controls">
-							<div v-if="message" class="notification is-success">{{ message }}</div>
+							<div v-if="message" class="notification is-success">
+								{{ message }}
+								{{ newItemMemo }}
+								</div>
 							<div class="box">
 								<div class="field">
 									<label class="label">Title</label>
@@ -126,6 +129,7 @@ export default {
 			newItemTitle: "",
 			newItemStartDate: "",
 			newItemEndDate: "",
+			newItemMemo: "",
 			useDefaultTheme: true,
 			useHolidayTheme: true,
 			useTodayIcons: false,
@@ -150,6 +154,7 @@ export default {
 								item.sdid = curr.sdid;
 								item.mdid = curr.mdid;
 								item.bdid = curr.bdid;
+								item.memo = curr.memo;
 								
 								if (curr.category==='blue') {
 										item.classes = 'blue'
@@ -203,6 +208,7 @@ export default {
 			this.selectionEnd = null
 			this.newItemStartDate = this.isoYearMonthDay(d)
 			this.newItemEndDate = this.isoYearMonthDay(d)
+			this.newItemMemo = ""
 			this.message = `날짜 : ${d.toLocaleDateString()}`
 		},
 		// 해당 item선택 
@@ -216,12 +222,11 @@ export default {
 			this.newItemTitle = e.title
 			this.newItemStartDate = this.isoYearMonthDay(e.startDate)
 			this.newItemEndDate = this.isoYearMonthDay(e.endDate)
-			
 			this.showTitle = e.title
 			this.message = `일정: ${e.title}`
+			this.newItemMemo = e.originalItem.memo;
 		},
 		setShowDate(d) {
-			this.message = `Changing calendar view to ${d.toLocaleDateString()}`
 			this.showDate = d
 		},
 		setSelection(dateRange) {
@@ -232,10 +237,8 @@ export default {
 			this.setSelection(dateRange)
 			this.newItemStartDate = this.isoYearMonthDay(this.selectionStart)
 			this.newItemEndDate = this.isoYearMonthDay(this.selectionEnd)
-			this.message = `You selected: ${this.selectionStart.toLocaleDateString()} -${this.selectionEnd.toLocaleDateString()}`
 		},
 		onDrop(item, date) {
-			this.message = `You dropped ${item.id} on ${date.toLocaleDateString()}`
 			// Determine the delta between the old start date and the date chosen,
 			// and apply that delta to both the start and end date to move the item.
 			const eLength = this.dayDiff(item.startDate, date)
@@ -250,7 +253,6 @@ export default {
 				title: this.newItemTitle,
 				id: "e" + Math.random().toString(36).substr(2, 10),
 			})
-			this.message = "You added a calendar item!"
 		},
 		
 		//  스케쥴 수정버튼
