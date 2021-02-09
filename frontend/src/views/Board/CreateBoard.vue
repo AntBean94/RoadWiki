@@ -92,6 +92,8 @@ export default {
       axios
       .post(`${this.$store.getters.getServer}/freeboard/posting`, 
       { 
+        'uid': this.$store.getters.getUid,
+        'classifier': '자유게시판',
         'title': this.title, 
         'content': content
       })
