@@ -3,28 +3,10 @@
     <notifications></notifications>
     <side-bar v-if="isHeader">
       <template slot="links">
-        <!-- <sidebar-item
-          :link="{
-            name: 'Dashboard',
-            path: '/dashboard',
-            icon: 'ni ni-tv-2 text-primary'
-          }"
-        >
-        </sidebar-item> -->
-
-        <!-- <sidebar-item
-          :link="{
-            name: 'Icons',
-            path: '/icons',
-            icon: 'ni ni-planet text-blue'
-          }"
-        >
-        </sidebar-item> -->
-
         <sidebar-item
           :link="{
             name: 'User Roadmap',
-            path: '/godiagram',
+            path: '/read-user-roadmap',
             icon: 'ni ni-pin-3 text-orange'
           }"
         >
@@ -33,7 +15,7 @@
         <sidebar-item
           :link="{
             name: 'Official Roadmap',
-            path: '/officialRoadmap',
+            path: '/official-roadmap',
             icon: 'ni ni-tv-2 text-primary'
           }"
         >
@@ -71,6 +53,15 @@
           :link="{
             name: 'Board',
             path: '/tmp_board',
+            icon: 'ni ni-bullet-list-67 text-red'
+          }"
+        >
+        </sidebar-item>
+
+        <sidebar-item
+          :link="{
+            name: 'Roadmap Share',
+            path: '/shareroadmap',
             icon: 'ni ni-bullet-list-67 text-red'
           }"
         >
@@ -115,20 +106,19 @@
 
       <content-footer v-if="!$route.meta.hideFooter"></content-footer>
     </div>
-    <!-- <div id="testdiv">
-      <p>
-        div 영역입니다!!!
-      </p>
-    </div> -->
+    <div>
+      <Chatting v-on:remove="removeChatting" v-if="chattingOn" />
+      <button id="chat" @click="createChatting" v-else>chatting</button>
+    </div>
   </div>
 </template>
+
 <script>
 /* eslint-disable no-new */
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import LoginContent from "@/components/Login/LoginContent.vue";
 import LogoutContent from "@/components/Logout/LogoutContent.vue";
-
 
 function hasElement(className) {
   return document.getElementsByClassName(className).length > 0;
@@ -144,17 +134,18 @@ function initScrollbar(className) {
     }, 100);
   }
 }
-  // flatpickr
-  // import flatPickr from "vue-flatpickr-component";
-  // import "flatpickr/dist/flatpickr.css";
-  // import 'flatpickr/dist/themes/material_blue.css';
-  // import {Hindi} from 'flatpickr/dist/l10n/hi.js';
+// flatpickr
+// import flatPickr from "vue-flatpickr-component";
+// import "flatpickr/dist/flatpickr.css";
+// import 'flatpickr/dist/themes/material_blue.css';
+// import {Hindi} from 'flatpickr/dist/l10n/hi.js';
 
 import DashboardNavbar from "./DashboardNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
 import DashboardContent from "./Content.vue";
 import { FadeTransition } from "vue2-transitions";
 import { mapGetters } from "vuex";
+import Chatting from "@/components/Chatting/Chatting";
 
 export default {
   components: {
@@ -163,7 +154,8 @@ export default {
     DashboardContent,
     FadeTransition,
     LoginContent,
-    LogoutContent
+    LogoutContent,
+    Chatting
   },
   created() {
     let url = this.$route.name;
@@ -172,7 +164,8 @@ export default {
 
   data() {
     return {
-      isHeader: true
+      isHeader: true,
+      chattingOn: true
     };
   },
   methods: {
@@ -184,13 +177,18 @@ export default {
     },
     // 특정 컴포넌트에서 nav바 제거
     checkUrl(url) {
-      let array = ["roadmap"];
-
+      let array = ["Roadmap", "update_user_roamdap"];
       let isHeader = true;
       array.map(path => {
         if (url === path) isHeader = false;
       });
       this.isHeader = isHeader;
+    },
+    removeChatting() {
+      this.chattingOn = false;
+    },
+    createChatting() {
+      this.chattingOn = true;
     }
   },
   logOut() {
@@ -217,6 +215,12 @@ export default {
 };
 </script>
 <style>
+#chat {
+  position: fixed;
+  right: 5px;
+  bottom: 5px;
+  background-color: red;
+}
 /* #testdiv {
   position: fixed;
   right: 0;

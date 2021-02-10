@@ -2,6 +2,7 @@ package com.web.blog.model.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,24 +29,24 @@ import com.web.blog.model.repo.UserRepo;
 
 @Service
 public class UserServiceImpl implements UserService {
-	
+
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
 	@Autowired
 	UserRepo userRepo;
-	
+
 	@Autowired
 	LoginService loginServ;
 
 	@Autowired
 	ServletContext servletContext;
-	
+
 	@Override
 	public Object getInfo(String email) {
 		try {
-			Map <String, Object> result = new HashMap<String, Object>();
+			Map<String, Object> result = new HashMap<String, Object>();
 			User tmp = userRepo.select(email);
-			if(tmp == null) {
+			if (tmp == null) {
 				result.put("msg", "fail");
 				return result;
 			}
@@ -64,28 +65,39 @@ public class UserServiceImpl implements UserService {
 
 	@Transactional
 	@Override
-	public Object join(User user) {
+	public Object join(User user) throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			Map<String, Object> result = new HashMap<String, Object>();
-			if(userRepo.insert(user) == 1) {
-				result.put("msg", "success");
+			if (userRepo.insert(user) == 1) {
 				int uid = userRepo.select(user.getEmail()).getUid();
 				System.out.println(user.getKeyword());
 				for (int i = 0; i < user.getKeyword().length; i++) {
 					Map<String, String> map = new HashMap<String, String>();
 					map.put("uid", Integer.toString(uid));
 					map.put("kwid", user.getKeyword()[i]);
-					map.put("priority", Integer.toString(i+1));
+					map.put("priority", Integer.toString(i + 1));
 					userRepo.insertkeyword(map);
 				}
-			}
-			else { 
+				result.put("msg", "success");
+			} else {
 				result.put("msg", "join fail");
 			}
-			return result;
+
 		} catch (Exception e) {
-			throw new RuntimeException("sql error");
+//			throw new RuntimeException("sql error");
+			logger.error("user join error");
+			throw e;
 		}
+		return result;
+	}
+	
+	@Override
+	public Object checkUser(String email) throws SQLException {
+		User user = userRepo.select(email);
+		if (user == null) {
+			logger.error("existent user");
+		}
+		return user;
 	}
 
 	@Transactional
@@ -93,9 +105,9 @@ public class UserServiceImpl implements UserService {
 	public Object modify(User user) {
 		try {
 			Map<String, Object> result = new HashMap<String, Object>();
-			if(userRepo.update(user) == 1) 
+			if (userRepo.update(user) == 1)
 				result.put("msg", "success");
-			else 
+			else
 				result.put("msg", "Non-existent user");
 			return result;
 		} catch (Exception e) {
@@ -108,9 +120,9 @@ public class UserServiceImpl implements UserService {
 	public Object withdraw(String email) {
 		try {
 			Map<String, Object> result = new HashMap<String, Object>();
-			if(userRepo.delete(email) == 1) 
+			if (userRepo.delete(email) == 1)
 				result.put("msg", "success");
-			else 
+			else
 				result.put("msg", "Non-existent user");
 			return result;
 		} catch (Exception e) {
@@ -140,14 +152,14 @@ public class UserServiceImpl implements UserService {
 			throw new RuntimeException("login error");
 		}
 	}
-	
+
 	@Override
 	public Object getName(String uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			String name = userRepo.getName(Integer.parseInt(uid));
 			result.put("name", name);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			throw e;
 		}
 		return result;
@@ -157,18 +169,19 @@ public class UserServiceImpl implements UserService {
 	public void upload(MultipartFile[] files, Model model, HttpSession session) throws Exception, IOException {
 		String realPath = servletContext.getRealPath("/upload");
 		String today = new SimpleDateFormat("yyMMdd").format(new Date());
-		//String saveFolder = realPath + File.separator + today;
+		// String saveFolder = realPath + File.separator + today;
 		String saveFolder = File.separator + today;
 		System.out.println(saveFolder);
 		File folder = new File(saveFolder);
-		if(!folder.exists())
+		if (!folder.exists())
 			folder.mkdirs();
 		List<FileInfoDto> fileInfos = new ArrayList<FileInfoDto>();
 		for (MultipartFile mfile : files) {
 			FileInfoDto fileInfoDto = new FileInfoDto();
 			String originalFileName = mfile.getOriginalFilename();
 			if (!originalFileName.isEmpty()) {
-				String saveFileName = UUID.randomUUID().toString() + originalFileName.substring(originalFileName.lastIndexOf('.'));
+				String saveFileName = UUID.randomUUID().toString()
+						+ originalFileName.substring(originalFileName.lastIndexOf('.'));
 				fileInfoDto.setSaveFolder(today);
 				fileInfoDto.setOriginFile(originalFileName);
 				fileInfoDto.setSaveFile(saveFileName);
@@ -177,6 +190,6 @@ public class UserServiceImpl implements UserService {
 			}
 			fileInfos.add(fileInfoDto);
 		}
-		
+
 	}
 }

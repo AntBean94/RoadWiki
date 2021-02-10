@@ -12,15 +12,17 @@
 
 					<div id="calendar">
 						<div class="calendar-controls">
-							<div v-if="message" class="notification is-success">{{ message }}</div>
+							<div v-if="message" class="notification is-success">
+								{{ message }}
+								{{ newItemMemo }}
+								</div>
 							<div class="box">
 								<div class="field">
 									<label class="label">Title</label>
 									<div class="control">
-										<input v-model="showTitle" class="input disabled" type="text" disabled/>
+										<input v-model="showTitle" class="input"  type="text" disabled/>
 									</div>
 								</div>
-
 								<div class="field">
 									<label class="label">Start date</label>
 									<div class="control">
@@ -35,8 +37,11 @@
 									</div>
 								</div>
 
-								<base-button class="my-3" @click="clickTestAddItem">
-									Add schedule
+								<base-button id="updateScheduleBtn" class="my-3" @click="clickUpdateItem" :disabled="disabledBtn">
+									Udpate schedule
+								</base-button>
+								<base-button id="deleteScheduleBtn" class="my-3 " @click="clickDeleteItem" :disabled="disabledBtn">
+									Delete schedule
 								</base-button>
 							</div>
 						</div>
@@ -48,8 +53,6 @@
 								:enable-drag-drop="true"
 								:disable-past="disablePast"
 								:disable-future="disableFuture"
-								:show-times="showTimes"
-								:date-classes="myDateClasses"
 								:class="themeClasses"
 								:period-changed-callback="periodChanged"
 								:current-period-label="useTodayIcons ? 'icons' : ''"
@@ -102,9 +105,12 @@ export default {
 	data() {
 		return {
 			username: '',
+			// 버튼 보여주기
+			disabledBtn: true,
 			// calendar 
-			showTitle: '',
-			showDate: this.thisMonth(1),
+			itemId : "", 
+			showTitle: "",
+			showDate: this.today(),
 			message: "",
 			startingDayOfWeek: 0,
 			disablePast: false,
@@ -112,91 +118,57 @@ export default {
 			displayPeriodUom: "month",
 			displayPeriodCount: 1,
 			displayWeekNumbers: false,
-			showTimes: true,
 			selectionStart: null,
 			selectionEnd: null,
+			// update관련 data
+			newItemSdid: "",
+			newItemMdid: "",
+			newItemBdid: "",
+			newItemKey: "",
+			newItemRmid: "",
 			newItemTitle: "",
 			newItemStartDate: "",
 			newItemEndDate: "",
+			newItemMemo: "",
 			useDefaultTheme: true,
 			useHolidayTheme: true,
 			useTodayIcons: false,
-			items: [
-				{
-					id: "e0",
-					startDate: "2018-01-05",
-				},
-				{
-					id: "e1",
-					startDate: this.thisMonth(15, 18, 30),
-					title: '너는 누구냐'
-				},
-				{
-					id: "e2",
-					startDate: this.thisMonth(15),
-					title: "Single-day item with a long title",
-				},
-				{
-					id: "e3",
-					startDate: this.thisMonth(7, 9, 25),
-					endDate: this.thisMonth(10, 16, 30),
-					title: "Multi-day item with a long title and times",
-				},
-				{
-					id: "e4",
-					startDate: this.thisMonth(20),
-					title: "My Birthday!",
-					classes: "birthday",
-					url: "https://en.wikipedia.org/wiki/Birthday",
-				},
-				{
-					id: "e5",
-					startDate: this.thisMonth(5),
-					endDate: this.thisMonth(12),
-					title: "Multi-day item",
-					classes: "purple",
-				},
-				{
-					id: "foo",
-					startDate: this.thisMonth(29),
-					title: "Same day 1",
-				},
-				{
-					id: "e6",
-					startDate: this.thisMonth(29),
-					title: "Same day 2",
-					classes: "orange",
-				},
-				{
-					id: "e7",
-					startDate: this.thisMonth(29),
-					title: "Same day 3",
-				},
-				{
-					id: "e8",
-					startDate: this.thisMonth(29),
-					title: "Same day 4",
-					classes: "orange",
-				},
-				{
-					id: "e9",
-					startDate: this.thisMonth(29),
-					title: "Same day 5",
-				},
-				{
-					id: "e10",
-					startDate: this.thisMonth(29),
-					title: "Same day 6",
-					classes: "orange",
-				},
-				{
-					id: "e11",
-					startDate: this.thisMonth(29),
-					title: "Same day 7",
-				},
-			],
+			items: [],
 		}
 	},
+ 	created(){
+		// 사용자 커리큘럼 및 일정 로드해 오기 
+		const uid = String(this.$store.getters.getUid)
+
+		// 해당 유저에 대한 정보 백앤드에 전달
+		axios.get(`${this.$store.getters.getServer}/calendar/get/${uid}`)
+				.then((res) => {
+						res.data['calendars'].map(curr => {
+								let item = {}
+								item.key = curr.key;
+								item.rmid = curr.rmid;
+								item.startDate = curr.startdate;
+								item.endDate = curr.enddate;
+								item.title = curr.text;
+								item.sdid = curr.sdid;
+								item.mdid = curr.mdid;
+								item.bdid = curr.bdid;
+								item.memo = curr.memo;
+								
+								if (curr.category==='blue') {
+										item.classes = 'blue'
+								} else if (curr.category==='black') {
+										item.classes = 'orange'
+								} else {
+										item.classes = 'purple'
+								}
+								this.items.push(item)
+						})
+			}).catch((e)=> {
+					console.log(e)
+					alert('axios 통신오류')
+			})
+    },
 	computed: {
 		userLocale() {
 			return this.getDefaultBrowserLocale
@@ -212,18 +184,7 @@ export default {
 				"holiday-us-official": this.useHolidayTheme,
 			}
 		},
-		myDateClasses() {
-			const o = {}
-			const theFirst = this.thisMonth(1)
-			const ides = [2, 4, 6, 9].includes(theFirst.getMonth()) ? 15 : 13
-			const idesDate = this.thisMonth(ides)
-			o[this.isoYearMonthDay(idesDate)] = "ides"
-			o[this.isoYearMonthDay(this.thisMonth(21))] = [
-				"do-you-remember",
-				"the-21st",
-			]
-			return o
-		},
+		
 	},
 	mounted() {
 		this.username = this.$store.getters.getName
@@ -239,23 +200,31 @@ export default {
 			//console.log(eventSource)
 			//console.log(range)
 		},
-		thisMonth(d, h, m) {
-			const t = new Date()
-			return new Date(t.getFullYear(), t.getMonth(), d, h || 0, m || 0)
-		},
 		onClickDay(d) {
+			this.disabledBtn = true
 			this.selectionStart = null
 			this.selectionEnd = null
+			this.newItemStartDate = this.isoYearMonthDay(d)
+			this.newItemEndDate = this.isoYearMonthDay(d)
+			this.newItemMemo = ""
 			this.message = `날짜 : ${d.toLocaleDateString()}`
 		},
+		// 해당 item선택 
 		onClickItem(e) {
+			this.disabledBtn = false
+			this.newItemKey = e.originalItem.key;
+			this.newItemRmid = e.originalItem.rmid;
+			this.newItemSdid = e.originalItem.sdid;
+			this.newItemBdid = e.originalItem.bdid; 
+			this.newItemMdid = e.originalItem.mdid;
+			this.newItemTitle = e.title
 			this.newItemStartDate = this.isoYearMonthDay(e.startDate)
 			this.newItemEndDate = this.isoYearMonthDay(e.endDate)
 			this.showTitle = e.title
 			this.message = `일정: ${e.title}`
+			this.newItemMemo = e.originalItem.memo;
 		},
 		setShowDate(d) {
-			this.message = `Changing calendar view to ${d.toLocaleDateString()}`
 			this.showDate = d
 		},
 		setSelection(dateRange) {
@@ -264,26 +233,59 @@ export default {
 		},
 		finishSelection(dateRange) {
 			this.setSelection(dateRange)
-			this.message = `You selected: ${this.selectionStart.toLocaleDateString()} -${this.selectionEnd.toLocaleDateString()}`
+			this.newItemStartDate = this.isoYearMonthDay(this.selectionStart)
+			this.newItemEndDate = this.isoYearMonthDay(this.selectionEnd)
 		},
 		onDrop(item, date) {
-			this.message = `You dropped ${item.id} on ${date.toLocaleDateString()}`
 			// Determine the delta between the old start date and the date chosen,
 			// and apply that delta to both the start and end date to move the item.
 			const eLength = this.dayDiff(item.startDate, date)
 			item.originalItem.startDate = this.addDays(item.startDate, eLength)
 			item.originalItem.endDate = this.addDays(item.endDate, eLength)
 		},
-		clickTestAddItem() {
-			console.log(this.newItemTitle)
+		// 스케쥴 생성버튼 
+		clickAddItem() {
 			this.items.push({
 				startDate: this.newItemStartDate,
 				endDate: this.newItemEndDate,
 				title: this.newItemTitle,
 				id: "e" + Math.random().toString(36).substr(2, 10),
 			})
-			alert('일정을 추가했습니다.')
-			// this.message = "You added a calendar item!"
+		},
+		
+		//  스케쥴 수정버튼
+		clickUpdateItem() {
+			let updateUserData = {}
+			updateUserData.rmid = this.newItemRmid
+			updateUserData.key = this.newItemKey
+			updateUserData.startdate = this.newItemStartDate
+			updateUserData.enddate = this.newItemEndDate
+			updateUserData.sdid = this.newItemSdid
+			updateUserData.mdid = this.newItemMdid
+			updateUserData.bdid = this.newItemBdid
+			// 백엔드 서버 통신 (변경사항 전달)
+			axios.put(`${this.$store.getters.getServer}/calendar/modify`, 
+				updateUserData
+			)
+			  .then((res) => {
+					this.items.map(item => {
+						if (item.rmid == this.newItemRmid && item.key == this.newItemKey) {
+							item.startDate = this.newItemStartDate
+							item.endDate = this.newItemEndDate
+							return
+						}
+					})
+			  }).catch((e)=>{
+				  console.log(e);
+			  })
+			alert('일정을 수정했습니다.')
+		},
+		// 계획일정을 지우는 함수 
+		clickDeleteItem() {
+			// 해당 일정 삭제''
+			this.newItemStartDate = ""
+			this.newItemEndDate = ""
+			this.clickUpdateItem();
 		},
 	},
 }
@@ -379,5 +381,8 @@ export default {
 .disabled{
 	background-color: #ccc9c9c2;
 }
-    
+.theme-default .cv-item.blue {
+	background-color: #ff009d;
+	border-color: #f31#ff009d
+}
 </style>
