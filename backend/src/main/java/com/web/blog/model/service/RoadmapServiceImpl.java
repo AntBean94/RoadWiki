@@ -72,7 +72,6 @@ public class RoadmapServiceImpl implements RoadmapService {
 			curriservice.create(rmid, nodeDataArray);
 			
 		} catch (Exception e) {
-			logger.error(e.getMessage());
 			logger.error("Service modify : Something wrong");
 		}
 		return result;

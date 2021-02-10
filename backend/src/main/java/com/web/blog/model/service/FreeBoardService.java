@@ -4,6 +4,8 @@ import java.util.Map;
 
 import com.web.blog.model.dto.Comment;
 import com.web.blog.model.dto.Posting;
+import com.web.blog.model.dto.PostingLikeUser;
+import com.web.blog.model.dto.Recomment;
 
 public interface FreeBoardService {
 	public Object getPostingListAll(String page_s, String classifier, String...tags) throws Exception;
@@ -17,6 +19,8 @@ public interface FreeBoardService {
 	public Object registComment(Comment comment, int uid) throws Exception;
 	public Object editComment(Comment comment, int uid) throws Exception;
 	public Object deleteComment(String cid, int uid) throws Exception;
+	public Object registRecomment(Recomment recomment) throws Exception;
+	public Object editRecomment(Recomment recomment) throws Exception;
+	public Object deleteRecomment(String rcid) throws Exception;
 	public Object totalCount() throws Exception;
-
 }

@@ -29,7 +29,7 @@
           {{ content }}
         </p> -->
       </b-row>
-      <b-row align-h="end" class="my-2" v-if="isWritter">
+      <b-row align-h="end" class="my-2" v-if="isWriter">
         <!-- 게시물의 uid와 현재 uid가 동일 할 때 보여줄 내용 -->
         <i class="far fa-trash-alt fa-lg mr-3" style="color: tomato" @click="deleteBoard"></i>
         <i class="far fa-edit fa-lg mr-3" style="color: Dodgerblue" @click="updateBoard"></i>
@@ -44,16 +44,15 @@
 
     <b-container style="background: white; border-radius: 1rem;" class="py-4 mt-4">
       <b-row>
-        <h2 class="ml-4 mb-0">댓글(숫자)</h2>
+        <h2 class="ml-4 mb-0">댓글({{ comments.length }})</h2>
       </b-row>
       <hr class="my-2">
       <!-- 댓글 폼 필요 -->
       
-      <CommentForm :pid="pid"/>      
-      <hr class="my-2">
+      <CommentForm :pid="pid" @sendComment="getPostingInfo"/>      
       <!-- <CommentList :comments="comments" :recomments="recomments"/>       -->
       <b-container v-for="(comment, idx) in comments" :key="idx">
-        <CommentList :comment="comment" :recomments="recomments"/>      
+        <CommentList :comment="comment" :recomments="recomments[idx]" @sendRecomment="getPostingInfo"/>      
       </b-container>
     </b-container>
   </div>
@@ -87,41 +86,56 @@ export default {
       likeCnt: '',
       dislikeCnt: '',
       pid: '',
-      isWritter: false,
+      isWriter: false,
       comments: [],
       recomments: [],
     }
   },
-  mounted() {
+  created() {
     axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
     .then((res) => {
-      console.log(res.data)
-      this.name = res.data.name
-      this.classifier = res.data.posting.classifier
-      this.title = res.data.posting.title
-      this.content = res.data.posting.content
-      this.createDate = res.data.posting.createDate
-      this.modifyDate = res.data.posting.modifyDate
-      this.uid = res.data.posting.uid
-      this.likeCnt = res.data.posting.likeCnt
-      this.pid = res.data.posting.pid
-      this.comments = res.data.comments
-      this.recomments = res.data.recomments
-    })
-
-    .catch((err) => {
-      console.log(err)
-    })
-
-    .finally(() => {
+      this.uid =  res.data.posting.uid
       if (this.uid === this.$store.getters.getUid) {
-        this.isWritter = true
+        this.isWriter = true
       } else {
-        this.isWritter = false
+        this.isWriter = false
+      }
+    })
+
+    axios.get(`${this.$store.getters.getServer}/freeboard/postinglike/${this.$route.query.pid}`)
+    .then((res) => {
+      console.log('여기는 라이크 정보')
+      console.log(res.data)
+      if (res.data.like !== null) {
+        this.like = true
       }
     })
   },
+  mounted() {
+    this.getPostingInfo()
+  },
   methods: {
+    getPostingInfo() {
+      axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
+      .then((res) => {
+        console.log(res.data)
+        this.name = res.data.name
+        this.classifier = res.data.posting.classifier
+        this.title = res.data.posting.title
+        this.content = res.data.posting.content
+        this.createDate = res.data.posting.createDate
+        this.modifyDate = res.data.posting.modifyDate
+        this.uid = res.data.posting.uid
+        this.likeCnt = res.data.posting.likeCnt
+        this.pid = res.data.posting.pid
+        this.comments = res.data.comments
+        this.recomments = res.data.recomments
+      })
+
+      .catch((err) => {
+        console.log(err)
+      })
+    },
     updateBoard() {
       const pid = this.$route.query.pid
       this.$router.push({name: 'update_board', query: { pid }})
@@ -134,6 +148,15 @@ export default {
       })
     },
     clickLike() {
+      const postingLikeUser = {
+        'pid': this.$route.query.pid,
+      }
+
+      axios.post(`${this.$store.getters.getServer}/freeboard/postinglike`, postingLikeUser)
+      .then((res) => {
+        console.log(res)
+      })
+
       if (this.dislike) {
         this.cancelDislike()
       }
@@ -141,6 +164,10 @@ export default {
       this.likeCnt ++
     },
     cancelLike() {
+      axios.delete(`${this.$store.getters.getServer}/freeboard/postinglikecancel/${this.$route.query.pid}`)
+      .then(() => {
+      })
+
       this.like = false
       this.likeCnt -- 
     },
