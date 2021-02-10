@@ -143,7 +143,6 @@ export default {
 		// 해당 유저에 대한 정보 백앤드에 전달
 		axios.get(`${this.$store.getters.getServer}/calendar/get/${uid}`)
 				.then((res) => {
-					console.log(res);
 						res.data['calendars'].map(curr => {
 								let item = {}
 								item.key = curr.key;
@@ -201,7 +200,6 @@ export default {
 			//console.log(eventSource)
 			//console.log(range)
 		},
-		
 		onClickDay(d) {
 			this.disabledBtn = true
 			this.selectionStart = null
@@ -265,7 +263,6 @@ export default {
 			updateUserData.sdid = this.newItemSdid
 			updateUserData.mdid = this.newItemMdid
 			updateUserData.bdid = this.newItemBdid
-			console.log('updateuserdata', updateUserData)
 			// 백엔드 서버 통신 (변경사항 전달)
 			axios.put(`${this.$store.getters.getServer}/calendar/modify`, 
 				updateUserData
@@ -281,7 +278,6 @@ export default {
 			  }).catch((e)=>{
 				  console.log(e);
 			  })
-			  console.log(this.items);
 			alert('일정을 수정했습니다.')
 		},
 		// 계획일정을 지우는 함수 

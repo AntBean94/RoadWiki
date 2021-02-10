@@ -15,14 +15,14 @@
       <editor
         ref="toastuiEditor"
         :options="editorOptions"
-        :initialValue="content"
         height="500px"
+        :initialValue="content2"
         initialEditType="wysiwyg"
         previewStyle="vertical"
         class="mx-4"
-        v-model="content"
+        v-model="content2"
+        @load = "editorLoading"
         id="editor"
-        @load="onEditorLoad"
       />
     </div>
 
@@ -69,16 +69,25 @@
 import '@toast-ui/editor/dist/toastui-editor.css'
 import 'codemirror/lib/codemirror.css'
 import { Editor } from '@toast-ui/vue-editor'
-// import Editor from ‘tui-editor’;
+import store from '@/store'
+
+let updatecontent = '';
+// local 이 아니라 this.$store.getters.getServer 73이아니라 파람으로 받아온거$route.param
+// axios.get(`http://localhost:8085/freeboard/posting/73`)
+axios.get(`${store.getters.getServer}/freeboard/posting/74`)
+  .then((res) => {
+    updatecontent = res.data.posting.content;
+})
 
 export default {
   name: 'Editor',
-    components: {
-    'editor': Editor,
+  components: {
+  'editor': Editor,
   },
   data() {
     return {
-      content: '',
+      content : '',
+      content2: updatecontent,
       editorOptions: {
         hideModeSwitch: false,
       },
@@ -89,9 +98,7 @@ export default {
   },
   methods: {
     datachange() {
-
       const content = this.$refs.toastuiEditor.invoke("getMarkdown");
-      // console.log(typeof(content))
       axios
       .post(`${this.$store.getters.getServer}/freeboard/posting`, 
       { 
@@ -109,39 +116,46 @@ export default {
     delTag(idx) {
       this.tags.splice(idx, 1);
     },
-    onEditorLoad() {
+    editorLoading() {
       axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
       .then((res) => {
-        console.log(res.data.posting)
-        this.name = res.data.name
-        this.classifier = res.data.posting.classifier
-        this.title = res.data.posting.title
-        console.log(res.data.posting.content)
-        console.log(typeof(res.data.posting.content))
-        console.log(this.$refs.toastuiEditor)
-        this.createDate = res.data.posting.createDate
-        this.modifyDate = res.data.posting.modifyDate
-        this.uid = res.data.posting.uid
-        this.likeCnt = res.data.posting.likeCnt
+        // console.log('하이')
+        // console.log(res.data)
+        updatecontent = res.data.posting.content;
+        this.content2 = updatecontent;
+        // console.log('여기는 content2')
+        // console.log(this.content2)
+        // console.log('여기는 updatecontent')
+        // console.log(this.content2)
+      })
+      .finally(() => {
+        // console.log('hi')
+        // console.log(updatecontent);
+        this.content2 = updatecontent;
       })
     },
+    // onEditorLoad() {
+    //   axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
+    //   .then((res) => {
+    //     console.log(res.data.posting)
+    //     this.name = res.data.name
+    //     this.classifier = res.data.posting.classifier
+    //     this.title = res.data.posting.title
+    //     this.content = res.data.posting.content
+    //     this.createDate = res.data.posting.createDate
+    //     this.modifyDate = res.data.posting.modifyDate
+    //     this.uid = res.data.posting.uid
+    //     this.likeCnt = res.data.posting.likeCnt
+    //   })
+    // },
   },
   created() {
-    console.log('###################')
-    // axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
-    // .then((res) => {
-    //   console.log(res.data.posting)
-    //   this.name = res.data.name
-    //   this.classifier = res.data.posting.classifier
-    //   this.title = res.data.posting.title
-    //   this.content = res.data.posting.content
-    //   this.createDate = res.data.posting.createDate
-    //   this.modifyDate = res.data.posting.modifyDate
-    //   this.uid = res.data.posting.uid
-    //   this.likeCnt = res.data.posting.likeCnt
-    // })
-  },
-  mounted() {
+    axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
+    .then((res) => {
+      updatecontent = res.data.posting.content
+      this.title = res.data.posting.title
+    })
+    // console.log(updatecontent)
   },
 }
 </script>

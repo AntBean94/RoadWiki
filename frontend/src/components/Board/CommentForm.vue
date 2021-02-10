@@ -1,9 +1,15 @@
 <template>
   <div>
     <base-input>
-      <textarea class="form-control" rows="3" placeholder="댓글을 입력해주세요"></textarea>
+      <textarea 
+        class="form-control" 
+        rows="3" 
+        placeholder="댓글을 입력해주세요"
+        v-model="comment"
+      >
+      </textarea>
       <b-row align-h="end">
-        <b-button variant="default" class="mt-2 mr-3">댓글 작성</b-button>
+        <b-button variant="default" class="mt-2 mr-3" @click="sendComment">댓글 작성</b-button>
       </b-row>
     </base-input>
   </div>
@@ -11,7 +17,31 @@
 
 <script>
 export default {
-
+  name: 'commentform',
+  data() {
+    return {
+      comment: '',
+    }
+  },
+  props: ['pid'],
+  methods: {
+    sendComment() {
+      let posting = {
+        'pid': this.pid,
+        'uid': this.$store.getters.getUid,
+        'content': this.comment,
+      }
+      console.log(this.pid, this.$store.getters.getUid, this.comment)
+      axios
+      .post(`${this.$store.getters.getServer}/freeboard/comment`, posting)
+      .then((res) => {
+        alert('댓글이 작성되었습니다.')
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+  },
 }
 </script>
 

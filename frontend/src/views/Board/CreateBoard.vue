@@ -97,7 +97,9 @@ export default {
         'title': this.title, 
         'content': content
       })
-      .then(() => {})
+      .then((res) => {
+        this.$router.push('/tmp_board')
+      })
       // this.editorText = content
       // this.$refs.toastuiViewer.editor.markdownValue = content
     },
