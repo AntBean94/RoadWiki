@@ -58,6 +58,15 @@
           }"
         >
         </sidebar-item>
+
+        <sidebar-item
+          :link="{
+            name: 'Roadmap Share',
+            path: '/shareroadmap',
+            icon: 'ni ni-bullet-list-67 text-red'
+          }"
+        >
+        </sidebar-item>
       </template>
 
       <template slot="links-after">
