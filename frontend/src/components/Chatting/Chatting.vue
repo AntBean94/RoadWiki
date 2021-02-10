@@ -89,6 +89,7 @@ export default {
                 message: jsonBody.msg
               };
               this.messages.push(m);
+              this.msg = "";
               var container = this.$el.querySelector("#content");
               setTimeout(function() {
                 container.scrollTop = container.scrollHeight;
