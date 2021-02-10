@@ -1,49 +1,62 @@
 <template>
-  <div>
-    <!-- <b-container v-for="(comment, idx) in comments" :key="idx"> -->
-      <!-- 이번 댓글은 {{ comment }} -->
-      <b-row>
-        <b-col cols="8" align-self="center">
-          <!-- 닉네임 정보 가져오기 -->
-          [img] 작성자 : {{ nickname }}
-        </b-col>
-        <b-col>
-          <h5>
-            {{ comment.createDate }}
-          </h5>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols="8">
-          <p class="px-3">
-            {{ comment.content }}
-          </p>
-        </b-col>
-        <b-col align-h="end" class="my-2">
-          <i class="far fa-thumbs-up fa-2x ml-3" v-if="!like" @click="clickLike"><span class="h3 ml-1">{{ comment.likeCnt }}</span></i>
-          <i class="fas fa-thumbs-up fa-2x ml-3" v-if="like" @click="cancelLike"><span class="h3 ml-1">{{ comment.likeCnt }}</span></i>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols="8" class="mb-2">
-          <b-button size="sm" @click="makeRecomment">
-            <i class="fas fa-reply"></i>
-            답글
-          </b-button>
-        </b-col>
-        <!-- 아이콘 가운데정렬 -->
-        <!-- 현재 로그인 된 uid와 댓글 uid가 같은 경우 보여주기 -->
-        <b-col align-h="end" class="my-2" v-if="isCommentWritter">
-          <i class="far fa-trash-alt fa-lg mr-3" style="color: tomato"></i>
-          <i class="far fa-edit fa-lg mr-3" style="color: Dodgerblue"></i>
-        </b-col>
-      </b-row>
-      <b-container v-for="(recomment, idx) in recomments" :key="idx">
-        <RecommentList :recomment="recomment"/>      
-      </b-container>
-      <!-- <RecommentList :recomments="recomments" v-if="recomments.length > 0" /> -->
-      <RecommentForm v-show="recomment"/> 
-    <!-- </b-container> -->
+  <div class="p-2">
+    <hr class="my-2">
+    <b-row>
+      <b-col cols="8" align-self="center">
+        [img] 작성자 : {{ nickname }}
+      </b-col>
+      <b-col v-if="!isUpdate">
+        <h5>
+          {{ comment.createDate }}
+        </h5>
+        <h5 v-if="comment.modifyDate !== null">
+          {{ comment.modifyDate }}
+        </h5>
+      </b-col>
+    </b-row>
+    <b-row v-if="!isUpdate">
+      <b-col cols="8">
+        <p class="px-3">
+          {{ comment.content }}
+        </p>
+      </b-col>
+      <b-col align-h="end" class="my-2">
+        <i class="far fa-thumbs-up fa-2x ml-3" v-if="!like" @click="clickLike"><span class="h3 ml-1">{{ comment.likeCnt }}</span></i>
+        <i class="fas fa-thumbs-up fa-2x ml-3" v-if="like" @click="cancelLike"><span class="h3 ml-1">{{ comment.likeCnt }}</span></i>
+      </b-col>
+    </b-row>
+    <b-row v-if="isUpdate">
+      <base-input class="mx-3">
+        <textarea 
+          class="form-control mt-2" 
+          rows="3" 
+          v-model="comment.content"
+          autofocus
+          cols="200"
+        >
+        </textarea>
+        <b-row align-h="end">
+          <b-button variant="default" class="mt-2 mr-3" @click="sendComment">수정 완료</b-button>
+        </b-row>
+      </base-input>
+    </b-row>
+    <b-row v-if="!isUpdate">
+      <b-col cols="8" class="mb-2">
+        <b-button size="sm" @click="makeRecomment">
+          <i class="fas fa-reply"></i>
+          답글
+        </b-button>
+      </b-col>
+      <!-- 아이콘 가운데정렬 -->
+      <b-col align-h="end" class="my-2" v-if="isCommentWriter">
+        <i class="far fa-trash-alt fa-lg mr-3" style="color: tomato" @click="deleteComment"></i>
+        <i class="far fa-edit fa-lg mr-3" style="color: Dodgerblue" @click="updateComment"></i>
+      </b-col>
+    </b-row>
+    <b-container v-for="(recomment, idx) in recomments" :key="idx">
+      <RecommentList :recomment="recomment" @sendRecomment="sendRecomment"/>      
+    </b-container>
+    <RecommentForm v-show="recomment" :cid="comment.cid" @sendRecomment="sendRecomment"/> 
   </div>
 </template>
 
@@ -64,7 +77,8 @@ export default {
       uid: '',
       nickname: '',
       likeCnt: '',
-      isCommentWritter: false,
+      isCommentWriter: false,
+      isUpdate: false,
     }
   },
   props: ['comment', 'recomments'],
@@ -78,9 +92,9 @@ export default {
     })
 
     if (this.comment.uid === this.$store.getters.getUid) {
-      this.isCommentWritter = true
+      this.isCommentWriter = true
     } else {
-      this.isCommentWritter = false
+      this.isCommentWriter = false
     }
   },
   methods: {
@@ -100,6 +114,31 @@ export default {
     cancelLike() {
       this.like = false
       this.comment.likeCnt --
+    },
+    sendRecomment() {
+      this.$emit('sendRecomment')
+    },
+    deleteComment() {
+      axios.delete(`${this.$store.getters.getServer}/freeboard/comment/${this.comment.cid}`)
+      .then(() => {
+        alert('댓글이 삭제되었습니다.')
+        this.$emit('sendRecomment')
+      })
+    },
+    sendComment() {
+      let comment = {
+        'cid': this.comment.cid,
+        'content': this.comment.content,
+      }
+      axios.put(`${this.$store.getters.getServer}/freeboard/comment`, comment)
+      .then(() => {
+        alert('수정되었습니다.')
+        this.$emit('sendRecomment')
+        this.isUpdate = false
+      })
+    },
+    updateComment() {
+      this.isUpdate = true
     },
   },
 }
