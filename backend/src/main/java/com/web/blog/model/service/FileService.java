@@ -9,5 +9,5 @@ public interface FileService {
 	public byte[] showImg(String uid, HttpServletRequest request) throws Exception;
 	public Object uploadbgImg(MultipartFile file, HttpServletRequest request, int uid) throws Exception;
 	public byte[] showbgImg(String uid, HttpServletRequest request) throws Exception;
-	; 	
+	
 }

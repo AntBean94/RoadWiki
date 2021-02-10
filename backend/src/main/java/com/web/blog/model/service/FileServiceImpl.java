@@ -75,6 +75,7 @@ public class FileServiceImpl implements FileService {
 					file.delete();
 				} else { // 0 이면 파일 이름 반환해서 이미지 파일 출력
 					str = file.getName();
+					//System.out.println(file.getName());
 				}
 //				if (!file.getName().equals(".DS_Store")) {
 //					System.out.println("파일 : " + file.getName());
@@ -93,7 +94,7 @@ public class FileServiceImpl implements FileService {
 	public byte[] showImg(String uid, HttpServletRequest request) throws Exception {
 		String filename = "";
 		try {
-			filename = fileSearch("./target/classes/statics/upload/" + uid, 0);
+			filename = fileSearch("../frontend/public/statics/upload/" + uid, 0);
 		} catch (Exception e) {
 			logger.error("no search folder");
 		}
