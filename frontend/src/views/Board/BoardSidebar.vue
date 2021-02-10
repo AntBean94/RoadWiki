@@ -11,7 +11,7 @@
       >
       <div class="px-3 py-2">
         <b-col cols="7">
-          <detail v-bind:pid="selPid" />
+          <detail :pid="selPid" />
         </b-col>
       </div>
     </div>

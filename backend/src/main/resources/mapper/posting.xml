@@ -13,7 +13,7 @@
  	<select id="selectListAll" parameterType="Map" resultType="Posting">
 		select * 
 		from posting
-		where classifier=#{classifier}
+		<!-- where classifier=#{classifier} -->
 		order by pid DESC limit #{page}, #{cnt}
 	</select>
 	
@@ -67,9 +67,12 @@
 	</select>
 	
 	<insert id="insert" parameterType="Posting">
-		insert 
-		into posting(pid, classifier, tag, title, uid, content, image)
-		values(#{pid}, #{classifier}, #{tag}, #{title}, #{uid}, #{content}, #{image})
+<!-- 	insert 
+		into posting(classifier, tag, title, uid, content, image)
+		values(#{classifier}, #{tag}, #{title}, #{uid}, #{content}, #{image}) -->
+		insert
+		into posting(classifier, uid, content, title)
+		values(#{classifier}, #{uid}, #{content}, #{title})
 	</insert>
 	
 	<update id="update" parameterType="Posting">
@@ -83,5 +86,10 @@
 		from posting 
 		where pid=#{pid}
 	</delete>
+	
+	<select id="totalCount" resultType="Integer">
+		select count(*)
+		from posting
+	</select>
 
 </mapper>
