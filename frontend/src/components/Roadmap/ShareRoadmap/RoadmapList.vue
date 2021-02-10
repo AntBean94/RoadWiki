@@ -1,8 +1,8 @@
 <template>
 <div>
-  <div style="display:block">
+  <div style="display: block">
     <div v-for="(rm, idx) in rmlist" :key="idx">
-      <RoadmapListItem id="rmli" :rm="rm"/>
+      <RoadmapListItem id="rmli" :roadmap="rm" />
     </div>
   </div>
 </div>
@@ -15,10 +15,6 @@ export default {
   components: {
     RoadmapListItem
   },
-  data() {
-    return {
-    }
-  },
   created() {
     console.log(this.rmlist);
   },
@@ -30,8 +26,8 @@ export default {
   float:left;
   display: inline-block;
   width: 250px;
-  height:400px;
-  margin:25px;
-  overflow:hidden;
+  height: 400px;
+  margin: 25px;
+  overflow: hidden;
 }
 </style>

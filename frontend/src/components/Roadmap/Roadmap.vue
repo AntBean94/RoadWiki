@@ -65,6 +65,9 @@ let curriculumData = -1;
 // 커리큘럼 클릭시 요청을통해 받아온 데이터를 여기에 저장하면 됨
 let recommendCurData = [
   // 실제 프로젝트 default data 최초 클릭할 정보가 필요
+  {category: 'black', },
+  {category: 'green', },
+  {category: 'blue', },
 ]   
 
 export default {
@@ -91,7 +94,6 @@ export default {
   },
   components: {
     dropdown: dropdown,
-    Overview,
   },
   created() {
 
