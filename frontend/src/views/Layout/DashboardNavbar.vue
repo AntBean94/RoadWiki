@@ -57,9 +57,10 @@
         <a href="#" class="nav-link pr-0" @click.prevent slot="title-container">
           <b-media no-body class="align-items-center">
             <span class="avatar avatar-sm rounded-circle">
-              <img
+              <b-img
                 alt="Image placeholder"
-                :src="`${this.$store.getters.getServer}/user/image/${this.uid}`"
+                :src="profileUrl"
+                v-model="profileUrl"
               />
             </span>
             <b-media-body class="ml-2 d-none d-lg-block">
@@ -123,6 +124,10 @@ export default {
     this.uid = this.$store.getters.getUid;
     let url = this.$route.name;
     this.checkUrl(url);
+
+    axios.get(`${this.$store.getters.getServer}/user/image`).then(res => {
+      this.profileUrl = res.data.path;
+    });
   },
   data() {
     return {
@@ -131,7 +136,8 @@ export default {
       searchModalVisible: false,
       searchQuery: "",
       isHeader: true,
-      uid: ""
+      uid: "",
+      profileUrl: ""
     };
   },
   computed: {
@@ -164,13 +170,15 @@ export default {
       this.isHeader = isHeader;
     },
     logOut() {
-      this.$store.dispatch("LOGOUT").then(() => {
-        this.$router.push('/')
-      })
-      .catch(() => {
-        alert('로그아웃에 실패했습니다.')
-      })
-    },
+      this.$store
+        .dispatch("LOGOUT")
+        .then(() => {
+          this.$router.push("/");
+        })
+        .catch(() => {
+          alert("로그아웃에 실패했습니다.");
+        });
+    }
   }
 };
 </script>
