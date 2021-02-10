@@ -48,6 +48,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		try {
 			int cnt = PAGESIZE[0];
 			int page = (Integer.parseInt(page_s) - 1) * cnt;
+
 			if (tags.length == 0) {
 				result.put("postings", postingRepo.selectListAll(page, cnt, classifier));
 			} else {
