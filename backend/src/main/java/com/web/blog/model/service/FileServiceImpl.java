@@ -11,6 +11,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +21,8 @@ import io.jsonwebtoken.lang.Assert;
 
 @Service
 public class FileServiceImpl implements FileService {
+	
+	private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
 	
 	@Override
 	public Object uploadImg(MultipartFile file, HttpServletRequest request, int uid) throws Exception {
@@ -87,12 +91,11 @@ public class FileServiceImpl implements FileService {
 
 	@Override
 	public byte[] showImg(String uid, HttpServletRequest request) throws Exception {
-		System.out.println("image uid : " + uid);
 		String filename = "";
 		try {
 			filename = fileSearch("./target/classes/statics/upload/" + uid, 0);
 		} catch (Exception e) {
-			System.out.println("no folder");
+			logger.error("no search folder");
 		}
 		InputStream in = null;
 		try {

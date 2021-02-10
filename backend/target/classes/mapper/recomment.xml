@@ -18,8 +18,8 @@
 	
 	<insert id="insert" parameterType="Recomment">
 		insert 
-		into recomment(cid, uid, type, content)
-		values(#{cid}, #{uid}, #{type}, #{content})
+		into recomment(cid, uid, content)
+		values(#{cid}, #{uid}, #{content})
 	</insert>
 	
 	<update id="update" parameterType="Recomment">

@@ -1,5 +1,6 @@
 package com.web.blog.model.service;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,10 +23,10 @@ import com.web.blog.model.repo.RecommentRepo;
 import com.web.blog.model.repo.UserRepo;
 
 @Service
-public class FreeBoardServiceImpl implements FreeBoardService{
-	
+public class FreeBoardServiceImpl implements FreeBoardService {
+
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
-	
+
 	@Autowired
 	PostingRepo postingRepo;
 	
@@ -41,19 +42,20 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 	final static String[] TAG = new String[] {"tag"};
 	final static int[] PAGESIZE = new int[]{10};
 	
+	@Override
 	public Object getPostingListAll(String page_s, String classifier, String...tags) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			int cnt = PAGESIZE[0];
-			int page = 1 + (Integer.parseInt(page_s) - 1) * cnt;
-			if(tags.length == 0) {
+			int page = (Integer.parseInt(page_s) - 1) * cnt;
+			if (tags.length == 0) {
 				result.put("postings", postingRepo.selectListAll(page, cnt, classifier));
 			} else {
 				result.put("postings", postingRepo.selectListAllTag(page, cnt, classifier, tags[0]));
 			}
 			Posting[] Postings = (Posting[]) result.get("postings");
 			String[] names = new String[Postings.length];
-			for(int i = 0; i < Postings.length; i++) 
+			for (int i = 0; i < Postings.length; i++)
 				names[i] = userRepo.getName(Postings[i].getUid());
 			result.put("names", names);
 			result.put("msg", "success");
@@ -65,19 +67,20 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 		return result;
 	}
 	
+	@Override
 	public Object getPostingListByName(String page_s, String classifier, String word, String...tags) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			int cnt = PAGESIZE[0];
 			int page = 1 + (Integer.parseInt(page_s) - 1) * cnt;
-			if(tags.length == 0) {
+			if (tags.length == 0) {
 				result.put("postings", postingRepo.selectListName(page, cnt, classifier, word));
 			} else {
 				result.put("postings", postingRepo.selectListNameTag(page, cnt, classifier, word, tags[0]));
 			}
 			Posting[] Postings = (Posting[]) result.get("postings");
 			String[] names = new String[Postings.length];
-			for(int i = 0; i < Postings.length; i++) 
+			for (int i = 0; i < Postings.length; i++)
 				names[i] = userRepo.getName(Postings[i].getUid());
 			result.put("names", names);
 			result.put("msg", "success");
@@ -89,19 +92,20 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 		return result;
 	}
 	
+	@Override
 	public Object getPostingListByTitle(String page_s, String classifier, String word, String...tags) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			int cnt = PAGESIZE[0];
 			int page = 1 + (Integer.parseInt(page_s) - 1) * cnt;
-			if(tags.length == 0) {
+			if (tags.length == 0) {
 				result.put("postings", postingRepo.selectListTitle(page, cnt, classifier, word));
 			} else {
 				result.put("postings", postingRepo.selectListTitleTag(page, cnt, classifier, word, tags[0]));
 			}
 			Posting[] Postings = (Posting[]) result.get("postings");
 			String[] names = new String[Postings.length];
-			for(int i = 0; i < Postings.length; i++) 
+			for (int i = 0; i < Postings.length; i++)
 				names[i] = userRepo.getName(Postings[i].getUid());
 			result.put("names", names);
 			result.put("msg", "success");
@@ -113,19 +117,20 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 		return result;
 	}
 	
+	@Override
 	public Object getPostingListByContent(String page_s, String classifier, String word, String...tags) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			int cnt = PAGESIZE[0];
 			int page = 1 + (Integer.parseInt(page_s) - 1) * cnt;
-			if(tags.length == 0) {
+			if (tags.length == 0) {
 				result.put("postings", postingRepo.selectListContent(page, cnt, classifier, word));
 			} else {
 				result.put("postings", postingRepo.selectListContentTag(page, cnt, classifier, word, tags[0]));
 			}
 			Posting[] Postings = (Posting[]) result.get("postings");
 			String[] names = new String[Postings.length];
-			for(int i = 0; i < Postings.length; i++) 
+			for (int i = 0; i < Postings.length; i++)
 				names[i] = userRepo.getName(Postings[i].getUid());
 			result.put("names", names);
 		} catch(NumberFormatException e){
@@ -136,6 +141,7 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 		return result;
 	}
 	
+	@Override
 	public Object getPosting(String pid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -163,24 +169,34 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 		return result;
 	}
 	
-	public Object registPosting(Posting posting, String uid) throws Exception {
+	@Override
+	public Object registPosting(Posting posting, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			if(postingRepo.select(posting.getPid()).getUid() != Integer.parseInt(uid)) throw new RuntimeException("wrong user");
+			System.out.println(uid);
+			System.out.println(posting);
+			if(posting.getUid() != uid) throw new RuntimeException("wrong user");
+			System.out.println("177");
 			if(postingRepo.insert(posting) == 1) result.put("msg", "success");
 			else result.put("msg", "fail");
+			System.out.println("179");
 		} catch(NumberFormatException e){
+			System.out.println("182");
 			throw new RuntimeException("input data type error");
 		} catch(Exception e) {
+			e.printStackTrace();
+			
 			throw e;
 		}
+		System.out.println("188");
 		return result;
 	}
 	
-	public Object editPosting(Posting posting, String uid) throws Exception {
+	@Override
+	public Object editPosting(Posting posting, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			if(postingRepo.select(posting.getPid()).getUid() != Integer.parseInt(uid)) throw new RuntimeException("wrong user");
+			if(postingRepo.select(posting.getPid()).getUid() != uid) throw new RuntimeException("wrong user");
 			if(postingRepo.update(posting) == 1) result.put("msg", "success");
 			else result.put("msg", "fail");
 		} catch(NumberFormatException e){
@@ -191,11 +207,12 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 		return result;
 	}
 	
-	public Object deletePosting(String pid_s, String uid) throws Exception {
+	@Override
+	public Object deletePosting(String pid_s, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			int pid = Integer.parseInt(pid_s);
-			if(postingRepo.select(pid).getUid() != Integer.parseInt(uid)) throw new RuntimeException("wrong user");
+			if(postingRepo.select(pid).getUid() != uid) throw new RuntimeException("wrong user");
 			if(postingRepo.delete(pid) == 1) result.put("msg", "success");
 			else result.put("msg", "fail");
 		} catch(NumberFormatException e){
@@ -206,10 +223,12 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 		return result;
 	}
 	
-	public Object registComment(Comment comment, String uid) throws Exception {
+	@Override
+	public Object registComment(Comment comment, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
+		System.out.println("commmmmmment"+comment);
 		try {
-			if(commentRepo.select(comment.getCid()).getUid() != Integer.parseInt(uid)) throw new RuntimeException("wrong user");
+//			if(commentRepo.select(comment.getUid() != uid) throw new RuntimeException("wrong user");
 			if(commentRepo.insert(comment) == 1) result.put("msg", "success");
 			else result.put("msg", "fail");
 		} catch(NumberFormatException e){
@@ -220,10 +239,11 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 		return result;
 	}
 	
-	public Object editComment(Comment comment, String uid) throws Exception {
+	@Override
+	public Object editComment(Comment comment, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			if(commentRepo.select(comment.getCid()).getUid() != Integer.parseInt(uid)) throw new RuntimeException("wrong user");
+			if(commentRepo.select(comment.getCid()).getUid() != uid) throw new RuntimeException("wrong user");
 			if(commentRepo.update(comment) == 1) result.put("msg", "success");
 			else result.put("msg", "fail");
 		} catch(NumberFormatException e){
@@ -234,10 +254,11 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 		return result;
 	}
 	
-	public Object deleteComment(String cid, String uid) throws Exception {
+	@Override
+	public Object deleteComment(String cid, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			if(commentRepo.select(Integer.parseInt(cid)).getUid() != Integer.parseInt(uid)) throw new RuntimeException("wrong user");
+			if(commentRepo.select(Integer.parseInt(cid)).getUid() != uid) throw new RuntimeException("wrong user");
 			if(commentRepo.delete(Integer.parseInt(cid)) == 1) result.put("msg", "success");
 			else result.put("msg", "fail");
 		} catch(NumberFormatException e){
@@ -247,5 +268,19 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 		}
 		return result;
 	}
-	
+
+	@Override
+	public Object totalCount() throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			int total = postingRepo.totalCount();
+			result.put("total", total);
+			result.put("msg", "success");
+		} catch (SQLException e) {
+			logger.error("sql error");
+			result.put("msg", "fail");
+		}
+		return result;
+	}
+
 }

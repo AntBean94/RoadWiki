@@ -12,7 +12,7 @@ public class Curriculum {
 	private String content;
 	private String startdate;
 	private String enddate;
-	private String categori;
+	private String category;
 	public int getKey() {
 		return key;
 	}
@@ -79,14 +79,14 @@ public class Curriculum {
 	public void setEnddate(String enddate) {
 		this.enddate = enddate;
 	}
-	public String getCategori() {
-		return categori;
+	public String getCategory() {
+		return category;
 	}
-	public void setCategori(String categori) {
-		this.categori = categori;
+	public void setCategory(String category) {
+		this.category = category;
 	}
 	public Curriculum(int key, int rmid, int sdid, int mdid, int bdid, String loc, String memo, String text,
-			String content, String startdate, String enddate, String categori) {
+			String content, String startdate, String enddate, String category) {
 		super();
 		this.key = key;
 		this.rmid = rmid;
@@ -99,7 +99,7 @@ public class Curriculum {
 		this.content = content;
 		this.startdate = startdate;
 		this.enddate = enddate;
-		this.categori = categori;
+		this.category = category;
 	}
 	public Curriculum() {
 		super();
@@ -108,7 +108,7 @@ public class Curriculum {
 	public String toString() {
 		return "Curriculum [key=" + key + ", rmid=" + rmid + ", sdid=" + sdid + ", mdid=" + mdid + ", bdid=" + bdid
 				+ ", loc=" + loc + ", memo=" + memo + ", text=" + text + ", content=" + content + ", startdate="
-				+ startdate + ", enddate=" + enddate + ", categori=" + categori + "]";
+				+ startdate + ", enddate=" + enddate + ", category=" + category + "]";
 	}
 	
 }
