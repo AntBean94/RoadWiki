@@ -132,9 +132,11 @@ export default {
       else adr + `/${this.word}`;
       adr += `/${this.currentPage}`;
       if (this.tag != "") adr += `${this.tag}`;
+      console.log(adr)
       axios
         .get(adr)
         .then(response => {
+          console.log(response)
           this.postings = response.data.postings;
           this.names = response.data.names;
           for (let i = 0; i < this.postings.length; i++) {
@@ -145,7 +147,8 @@ export default {
           }
         })
         .catch((err) => {
-          alert('문제가 생겼습니다')
+          console.log(err)
+          alert('문제가 생겼습니다 섬세한 문구')
         });
     },
     openDetail(row) {

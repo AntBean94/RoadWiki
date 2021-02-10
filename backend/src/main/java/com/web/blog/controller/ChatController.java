@@ -1,43 +1,26 @@
 package com.web.blog.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.boot.json.GsonJsonParser;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.stereotype.Controller;
 
-import com.web.blog.model.dto.ChatRoom;
-import com.web.blog.model.service.ChatService;
+import com.google.gson.Gson;
+import com.web.blog.model.dto.ChatMsg;
 
-@RestController
-@RequestMapping("/chat")
+@Controller
 public class ChatController {
 	
 	@Autowired
-	ChatService chatServ;
+	SimpMessageSendingOperations messagingTemplate;
 	
-	@PostMapping
-	public Object createRoom(@RequestParam String name) {
-		Map<String, ChatRoom> result = new HashMap<>();
-		ChatRoom chatRoom = null;
-		try {
-			chatRoom = chatServ.createRoom(name);
-		} catch(Exception e) {
-			e.printStackTrace();
+	@MessageMapping("/chat/message")
+	public void message(ChatMsg message) {
+		if(ChatMsg.MsgType.JOIN.equals(message.getType())) {
+			message.setMsg(message.getSender() + "님이 입장하셨습니다.");
+			message.setSender("[공지]");
 		}
-		System.out.println(chatRoom);
-		result.put("chatRoom", chatRoom);
-		return chatRoom;
+		messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomid(), message);
 	}
-	
-	@GetMapping
-	public List<ChatRoom> findAllRoom() {
-		return chatServ.findAllRoom();
-	}
-	
 }
