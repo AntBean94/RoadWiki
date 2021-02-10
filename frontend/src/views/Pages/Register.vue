@@ -41,7 +41,8 @@
                               placeholder="닉네임"
                               name="닉네임"
                               :rules="{required: true}"
-                              v-model="name">
+                              v-model="name"
+                              @blur="canUseNickName">
                   </base-input>
 
                   <div class="row">
@@ -64,9 +65,9 @@
                                   disabled
                                   >
                       </base-input>
-                      <!-- 만약 기존에 계정이 존재하는 이메일이라면 this email is already taken 보여주기 -->
                     </div>
                     <div class="col-3 pl-0">
+                      <!-- 만약 기존에 계정이 존재하는 이메일이라면 this email is already taken 보여주기 -->
                       <b-button v-if="!confirmEmail" @click="emailNumSend" class="mr-0 ml-0">인증하기</b-button>
                       <ModalEmailValidation :isEmailModal="isEmailModal" :userEmail="email" @close="closeModal"/>
                       <!-- <ModalEmailValidation/> -->
@@ -109,22 +110,8 @@
                         >
                           {{ option.word }}
                         </b-form-checkbox>
-                        <!-- <b-form-checkbox-group
-                          id="checkbox-group-1"
-                          v-model="selected"
-                          :options="options"
-                          :aria-describedby="ariaDescribedby"
-                          name="flavour-1"
-                        >
-                        </b-form-checkbox-group> -->
-
                       </b-container>
                     </b-form-group>
-                    <!-- <b-container>
-                      <div>1순위 <strong v-if="selected.length > 0">{{ options[selected[0]-1].text }}</strong></div>
-                      <div>2순위 <strong v-if="selected.length > 1">{{ options[selected[1]-1].text }}</strong></div>
-                      <div>3순위 <strong v-if="selected.length > 2">{{ options[selected[2]-1].text }}</strong></div>
-                    </b-container> -->
                   </div>
                   <hr class="my-4">
                   <b-row class=" my-4">
@@ -203,6 +190,10 @@
       })
     },
     methods: {
+      // 닉네임 입력창에서 포커싱이 사라지는 순간 -> 닉네임 사용가능한지 확인 (이미 있는 닉네임인지)
+      canUseNickName() {
+
+      },
       onSubmit() {
         // this will be called only after form is valid. You can do an api call here to register users
       },
@@ -218,18 +209,25 @@
       },
       emailNumSend() {
         // 이미 존재하는 이메일인 경우, 존재하는 이메일 경고창 -> 이메일 인증 막기
-        axios.get(`${this.$store.getters.getServer}/email/${this.email}`)
+        axios.get(`${this.$store.getters.getServer}/user/canjoin/${this.email}`)
         .then((res) => {
-          console.log(res.data.msg)
           if (res.data.msg === "success") {
-            this.isEmailModal = true
-            this.$store.dispatch('SETCODE', res.data['code']);
-            this.$store.dispatch('SETEMAIL', res.data['email']);
+            axios.get(`${this.$store.getters.getServer}/email/${this.email}`)
+            .then((res) => {
+              console.log(res.data.msg)
+              if (res.data.msg === "success") {
+                this.isEmailModal = true
+                this.$store.dispatch('SETCODE', res.data['code']);
+                this.$store.dispatch('SETEMAIL', res.data['email']);
+              } else {
+                alert('인증번호 메일 발송에 실패했습니다. 다시 시도해주세요.')
+                this.isEmailModal = false
+              }
+            })
           } else {
-            alert('인증번호 메일 발송에 실패했습니다. 다시 시도해주세요.')
-            this.isEmailModal = false
+            alert('이미 존재하는 이메일입니다. 다른 이메일 주소를 입력해주세요.')
           }
-        });
+        })
       },
       signUp() {
         // 인풋이 다 안채워지면 회원가입 버튼이 비활성화되게 로직 추가
@@ -239,10 +237,17 @@
           password: this.password,
           keyword: this.selected,
         }
-        if (this.confirmEmail && this.selected.length >= 3) {
+        if (this.confirmEmail && 
+            this.selected.length >= 3 && 
+            this.password.length >= 8 && 
+            this.password === this.rePassword && 
+            this.agree === true) {
           axios.post(`${this.$store.getters.getServer}/user/join`, user)
-          .then(() => {
-            console.log('잘 가나요오오오오오오오오오오')
+          .then((res) => {
+            console.log('##############################')
+            console.log(res.data)
+            console.log('##############################')
+            // console.log('잘 가나요오오오오오오오오오오')
             const userinfo = {
               email: this.email,
               password: this.password,
@@ -256,7 +261,23 @@
         } else {
           if (!this.confirmEmail) {
             alert('이메일 인증이 완료되지 않았습니다.')
-          } else {alert('관심 개발 분야가 선택되지 않았습니다.')}
+          } else {
+            if (this.password.length < 8) {
+              alert('비밀번호는 8자리 이상으로 입력해주세요.')
+            } else {
+              if (this.password !== this.rePassword) {
+                alert('비밀번호를 다시 확인해주세요')
+              } else {
+                if (this.selected.length < 3) {
+                  alert('관심 개발 분야 3개 이상 체크해주세요.')
+                } else {
+                  if (!this.agree) {
+                    alert('약관 동의해주세요')
+                  }
+                }
+              }
+            }
+          }
         }
       },
     },

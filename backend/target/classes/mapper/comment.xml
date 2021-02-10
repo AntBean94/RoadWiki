@@ -14,17 +14,18 @@
 		select * 
 		from comment
 		where pid=#{pid}
+		order by cid desc
 	</select> 
 	
 	<insert id="insert" parameterType="Comment">
 		insert 
-		into comment(parentid, uid, type, content)
-		values(#{pid}, #{uid}, #{type}, #{content})
+		into comment(pid, uid, content)
+		values(#{pid}, #{uid}, #{content})
 	</insert>
 	
 	<update id="update" parameterType="Comment">
 		update comment
-		set content=#{content}, modifyDate=#{content}
+		set content=#{content}, modifyDate=now()
 		where cid=#{cid}
 	</update>
 	

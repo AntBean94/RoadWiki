@@ -35,8 +35,9 @@ public class RoadmapController {
 
 	@Autowired
 	LoginServiceImpl loginServ;
-
-	// 1
+	
+	
+	
 	@GetMapping("/list/{uid}")
 	public Object listRoadmap(@PathVariable String uid,HttpServletRequest request) {
 		logger.trace("listRoadmap start");

@@ -17,4 +17,5 @@ public interface RoadmapRepo {
 	public Roadmap selectOtherRoadmap(int rmid);
 	public Roadmap[] selectRoadmapListByRmorder(int rmorder,int uid);
 	public int delete(int rmorder, int uid);
+	public int selectlastRmidByUid(int uid);
 }
