@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p-3">
     <base-input>
       <textarea 
         class="form-control" 

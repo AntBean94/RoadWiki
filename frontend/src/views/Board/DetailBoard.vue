@@ -50,7 +50,6 @@
       <!-- 댓글 폼 필요 -->
       
       <CommentForm :pid="pid" @sendComment="getPostingInfo"/>      
-      <hr class="my-2">
       <!-- <CommentList :comments="comments" :recomments="recomments"/>       -->
       <b-container v-for="(comment, idx) in comments" :key="idx">
         <CommentList :comment="comment" :recomments="recomments[idx]" @sendRecomment="getPostingInfo"/>      

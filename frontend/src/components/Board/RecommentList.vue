@@ -1,23 +1,20 @@
 <template>
-  <div class="bg-secondary">
+  <div class="bg-secondary px-4 pb-3 pt-2">
     <hr class="my-2">
-    <!-- <b-container v-for="(recomment, idx) in recomments" :key="idx"> -->
-      <!-- {{ recomment }} -->
       <b-row>
         <b-col cols="8" align-self="center">
           [img] 작성자 : {{ this.nickname }}
         </b-col>
-        <b-col>
+        <b-col v-if="!isUpdate">
           <h5>
             {{ recomment.createDate }}
           </h5>
-          <h5>
+          <h5 v-if="recomment.modifyDate !== null">
             {{ recomment.modifyDate }}
-            0000년 00월 00일 00:00
           </h5>
         </b-col>
       </b-row>
-      <b-row>
+      <b-row v-if="!isUpdate">
         <b-col cols="8">
           <p class="px-3">
             {{ recomment.content }}
@@ -28,7 +25,22 @@
           <i class="fas fa-thumbs-up fa-2x ml-3" v-if="like" @click="cancelLike"><span class="h3 ml-1">{{ recomment.likeCnt }}</span></i>
         </b-col>
       </b-row>
-      <b-row>
+      <b-row v-if="isUpdate">
+        <base-input class="mx-3">
+          <textarea 
+            class="form-control mt-2" 
+            rows="3" 
+            v-model="recomment.content"
+            autofocus
+            cols="200"
+          >
+          </textarea>
+          <b-row align-h="end">
+            <b-button variant="default" class="mt-2 mr-3" @click="sendRecomment">수정 완료</b-button>
+          </b-row>
+        </base-input>
+      </b-row>
+      <b-row v-if="!isUpdate">
         <b-col cols="8">
         </b-col>
         <!-- 아이콘 가운데정렬 -->
@@ -37,7 +49,6 @@
           <i class="far fa-edit fa-lg mr-3" style="color: Dodgerblue" @click="updateRecomment"></i>
         </b-col>
       </b-row> 
-    <!-- </b-container> -->
   </div>
 </template>
 
@@ -51,6 +62,7 @@ export default {
       like: false,
       nickname: '',
       isRecommentWriter: false,
+      isUpdate: false,
     }
   },
   props: ['recomment'],
@@ -64,10 +76,25 @@ export default {
       this.recomment.likeCnt --
     },
     deleteRecomment() {
-
+      axios.delete(`${this.$store.getters.getServer}/freeboard/recomment/${this.recomment.rcid}`)
+      .then(() => {
+        this.$emit('sendRecomment')
+      })
+    },
+    sendRecomment() {
+      let recomment = {
+        'rcid': this.recomment.rcid,
+        'content': this.recomment.content,
+      }
+      axios.put(`${this.$store.getters.getServer}/freeboard/recomment`, recomment)
+      .then(() => {
+        alert('수정되었습니다.')
+        this.$emit('sendRecomment')
+        this.isUpdate = false
+      })
     },
     updateRecomment() {
-
+      this.isUpdate = true
     },
   },
   created() {

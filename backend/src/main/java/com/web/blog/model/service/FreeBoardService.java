@@ -19,6 +19,8 @@ public interface FreeBoardService {
 	public Object editComment(Comment comment, int uid) throws Exception;
 	public Object deleteComment(String cid, int uid) throws Exception;
 	public Object registRecomment(Recomment recomment) throws Exception;
+	public Object editRecomment(Recomment recomment) throws Exception;
+	public Object deleteRecomment(String rcid) throws Exception;
 	public Object totalCount() throws Exception;
 
 }

@@ -316,6 +316,40 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		}
 		return result;
 	}
+	
+	@Override
+	public Object editRecomment(Recomment recomment) throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			if (recommentRepo.update(recomment) == 1)
+				result.put("msg", "success");
+			else
+				result.put("msg", "fail");
+		} catch (NumberFormatException e) {
+			throw new RuntimeException("input data type error");
+		} catch (Exception e) {
+			throw e;
+		}
+		return result;
+	}
+	
+	@Override
+	public Object deleteRecomment(String rcid) throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+//			if (recommentRepo.select(Integer.parseInt(rcid)).getUid() != uid)
+//				throw new RuntimeException("wrong user");
+			if (recommentRepo.delete(Integer.parseInt(rcid)) == 1)
+				result.put("msg", "success");
+			else
+				result.put("msg", "fail");
+		} catch (NumberFormatException e) {
+			throw new RuntimeException("input data type error");
+		} catch (Exception e) {
+			throw e;
+		}
+		return result;
+	}
 
 	@Override
 	public Object totalCount() throws Exception {

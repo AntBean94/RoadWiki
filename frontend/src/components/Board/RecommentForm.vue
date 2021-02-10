@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <!-- <hr class="mb-2 mt-0"> -->
+  <div class="bg-secondary p-4 mx-3">
+    <hr class="my-2">
     <base-input>
       <textarea 
         class="form-control mt-2" 

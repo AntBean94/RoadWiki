@@ -1,12 +1,16 @@
 <template>
-  <div>
+  <div class="p-2">
+    <hr class="my-2">
     <b-row>
       <b-col cols="8" align-self="center">
         [img] 작성자 : {{ nickname }}
       </b-col>
-      <b-col>
+      <b-col v-if="!isUpdate">
         <h5>
           {{ comment.createDate }}
+        </h5>
+        <h5 v-if="comment.modifyDate !== null">
+          {{ comment.modifyDate }}
         </h5>
       </b-col>
     </b-row>
@@ -22,9 +26,9 @@
       </b-col>
     </b-row>
     <b-row v-if="isUpdate">
-      <base-input>
+      <base-input class="mx-3">
         <textarea 
-          class="form-control" 
+          class="form-control mt-2" 
           rows="3" 
           v-model="comment.content"
           autofocus
@@ -50,7 +54,7 @@
       </b-col>
     </b-row>
     <b-container v-for="(recomment, idx) in recomments" :key="idx">
-      <RecommentList :recomment="recomment"/>      
+      <RecommentList :recomment="recomment" @sendRecomment="sendRecomment"/>      
     </b-container>
     <RecommentForm v-show="recomment" :cid="comment.cid" @sendRecomment="sendRecomment"/> 
   </div>

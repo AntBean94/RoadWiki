@@ -212,7 +212,41 @@ public class FreeBoardController {
 			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			recomment.setUid(uid);
 			result = (Map<String, Object>) fBoardServ.registRecomment(recomment);
-			
+			result.put("msg", SUCCESS);
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	@PutMapping("/recomment")
+	public Object editRecomment(@RequestBody Recomment recomment, HttpServletRequest request) {
+		try {
+			Map<String, Object> result;
+			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			recomment.setUid(uid);
+			result = (Map<String, Object>) fBoardServ.editRecomment(recomment);
+			result.put("msg", SUCCESS);
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	@DeleteMapping("/recomment/{rcid}")
+	public Object deleteRecomment(@PathVariable String rcid, HttpServletRequest request) {
+		try {
+			Map<String, Object> result;
+			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			result = (Map<String, Object>) fBoardServ.deleteRecomment(rcid);
 			result.put("msg", SUCCESS);
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		} catch(Exception e) {
