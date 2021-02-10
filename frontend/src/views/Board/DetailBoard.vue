@@ -101,6 +101,15 @@ export default {
         this.isWriter = false
       }
     })
+
+    axios.get(`${this.$store.getters.getServer}/freeboard/postinglike/${this.$route.query.pid}`)
+    .then((res) => {
+      console.log('여기는 라이크 정보')
+      console.log(res.data)
+      if (res.data.like !== null) {
+        this.like = true
+      }
+    })
   },
   mounted() {
     this.getPostingInfo()
@@ -139,6 +148,15 @@ export default {
       })
     },
     clickLike() {
+      const postingLikeUser = {
+        'pid': this.$route.query.pid,
+      }
+
+      axios.post(`${this.$store.getters.getServer}/freeboard/postinglike`, postingLikeUser)
+      .then((res) => {
+        console.log(res)
+      })
+
       if (this.dislike) {
         this.cancelDislike()
       }
@@ -146,6 +164,10 @@ export default {
       this.likeCnt ++
     },
     cancelLike() {
+      axios.delete(`${this.$store.getters.getServer}/freeboard/postinglikecancel/${this.$route.query.pid}`)
+      .then(() => {
+      })
+
       this.like = false
       this.likeCnt -- 
     },

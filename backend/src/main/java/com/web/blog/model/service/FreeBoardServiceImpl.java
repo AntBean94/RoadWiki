@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.web.blog.model.dto.Comment;
 import com.web.blog.model.dto.Posting;
+import com.web.blog.model.dto.PostingLikeUser;
 import com.web.blog.model.dto.Recomment;
 import com.web.blog.model.repo.CommentRepo;
+import com.web.blog.model.repo.PostingLikeUserRepo;
 import com.web.blog.model.repo.PostingRepo;
 import com.web.blog.model.repo.RecommentRepo;
 import com.web.blog.model.repo.UserRepo;
@@ -49,7 +51,10 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			int cnt = PAGESIZE[0];
 			int page = (Integer.parseInt(page_s) - 1) * cnt;
 			if (tags.length == 0) {
-				result.put("postings", postingRepo.selectListAll(page, cnt, classifier));
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("page", page);
+				map.put("cnt", cnt);
+				result.put("postings", postingRepo.selectListAll(map));
 			} else {
 				result.put("postings", postingRepo.selectListAllTag(page, cnt, classifier, tags[0]));
 			}
@@ -184,25 +189,19 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	public Object registPosting(Posting posting, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			System.out.println(uid);
-			System.out.println(posting);
 			if (posting.getUid() != uid)
 				throw new RuntimeException("wrong user");
-			System.out.println("177");
 			if (postingRepo.insert(posting) == 1)
 				result.put("msg", "success");
 			else
 				result.put("msg", "fail");
-			System.out.println("179");
 		} catch (NumberFormatException e) {
-			System.out.println("182");
 			throw new RuntimeException("input data type error");
 		} catch (Exception e) {
 			e.printStackTrace();
 
 			throw e;
 		}
-		System.out.println("188");
 		return result;
 	}
 
@@ -264,11 +263,8 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	public Object editComment(Comment comment, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			System.out.println("댓글" + comment);
-			System.out.println(comment.getCid());
 //			if(commentRepo.select(comment.getCid()).getUid() != uid) throw new RuntimeException("wrong user");
 			if (commentRepo.update(comment) == 1) {
-				System.out.println("들어오나요");
 				result.put("msg", "success");
 			}
 
@@ -303,7 +299,6 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	@Override
 	public Object registRecomment(Recomment recomment) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
-		System.out.println("commmmmmment" + recomment);
 		try {
 			if (recommentRepo.insert(recomment) == 1)
 				result.put("msg", "success");
