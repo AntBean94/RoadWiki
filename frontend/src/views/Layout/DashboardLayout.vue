@@ -7,7 +7,7 @@
           :link="{
             name: 'User Roadmap',
             path: '/read-user-roadmap',
-            icon: 'ni ni-pin-3 text-orange',
+            icon: 'ni ni-pin-3 text-orange'
           }"
         >
         </sidebar-item>
@@ -16,7 +16,7 @@
           :link="{
             name: 'Official Roadmap',
             path: '/official-roadmap',
-            icon: 'ni ni-tv-2 text-primary',
+            icon: 'ni ni-tv-2 text-primary'
           }"
         >
         </sidebar-item>
@@ -25,7 +25,7 @@
           :link="{
             name: 'Profile',
             path: '/profile',
-            icon: 'ni ni-single-02 text-yellow',
+            icon: 'ni ni-single-02 text-yellow'
           }"
         >
         </sidebar-item>
@@ -34,7 +34,7 @@
           :link="{
             name: 'Calendar',
             path: '/calendar',
-            icon: 'ni ni-calendar-grid-58',
+            icon: 'ni ni-calendar-grid-58'
           }"
         >
         </sidebar-item>
@@ -43,7 +43,7 @@
           :link="{
             name: 'Register',
             path: '/register',
-            icon: 'ni ni-circle-08 text-pink',
+            icon: 'ni ni-circle-08 text-pink'
           }"
           v-if="!getAccessToken"
         >
@@ -53,7 +53,7 @@
           :link="{
             name: 'Board',
             path: '/tmp_board',
-            icon: 'ni ni-bullet-list-67 text-red',
+            icon: 'ni ni-bullet-list-67 text-red'
           }"
         >
         </sidebar-item>
@@ -97,8 +97,9 @@
 
       <content-footer v-if="!$route.meta.hideFooter"></content-footer>
     </div>
-    <div id="chatting">
-      <Chatting />
+    <div>
+      <Chatting v-on:remove="removeChatting" v-if="chattingOn" />
+      <button id="chat" @click="createChatting" v-else>chatting</button>
     </div>
   </div>
 </template>
@@ -145,7 +146,7 @@ export default {
     FadeTransition,
     LoginContent,
     LogoutContent,
-    Chatting,
+    Chatting
   },
   created() {
     let url = this.$route.name;
@@ -155,6 +156,7 @@ export default {
   data() {
     return {
       isHeader: true,
+      chattingOn: true
     };
   },
   methods: {
@@ -168,11 +170,17 @@ export default {
     checkUrl(url) {
       let array = ["Roadmap", "update_user_roamdap"];
       let isHeader = true;
-      array.map((path) => {
+      array.map(path => {
         if (url === path) isHeader = false;
       });
       this.isHeader = isHeader;
     },
+    removeChatting() {
+      this.chattingOn = false;
+    },
+    createChatting() {
+      this.chattingOn = true;
+    }
   },
   logOut() {
     this.$store
@@ -190,22 +198,19 @@ export default {
   watch: {
     $route(to) {
       this.checkUrl(to.name);
-    },
+    }
   },
   computed: {
-    ...mapGetters(["getAccessToken"]),
-  },
+    ...mapGetters(["getAccessToken"])
+  }
 };
 </script>
 <style>
-#chatting {
-  position: absolute;
-  top: 30%;
-  right: 0;
-  width: 300px;
-  height: 500px;
+#chat {
+  position: fixed;
+  right: 5px;
+  bottom: 5px;
   background-color: red;
-  z-index: 1000;
 }
 /* #testdiv {
   position: fixed;

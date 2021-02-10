@@ -1,23 +1,34 @@
 <template>
-  <div>
-    <header></header>
-    <div style="height:450px">
-      <p>채팅방</p>
-      <ul>
-        <li v-for="(message, idx) in messages" v-bind:key="idx">
-          {{ message.sender }} >> {{ message.message }}
-        </li>
-      </ul>
+  <div id="chatting">
+    <header style="height:10%">
+      <p style="display:inline-block">채팅방</p>
+      <button @click="removeChat" style="display:inline-block; float : right">
+        X
+      </button>
+    </header>
+    <div
+      style="height:80%; border:black 1px solid; overflow: scroll;"
+      id="content"
+    >
+      <!-- <ul style="margin:0px"> -->
+      <li
+        v-for="(message, idx) in messages"
+        v-bind:key="idx"
+        style="margin:0px; font-size:14px"
+      >
+        {{ message.sender }} >> {{ message.message }}
+      </li>
+      <!-- </ul> -->
     </div>
-    <footer>
-      <input type="text" v-model="sender" style="width:70px" />
+    <footer style="height:10%">
+      <input type="text" v-model="sender" style="width:20%" />
       <input
         type="text"
         v-model="message"
         v-on:keypress.enter="sendMsg"
-        style="width:170px"
+        style="width:60%"
       />
-      <button type="button" @click="sendMsg">전송</button>
+      <button type="button" @click="sendMsg" style="width:20%">전송</button>
     </footer>
   </div>
 </template>
@@ -33,12 +44,7 @@ export default {
     return {
       sender: "익명",
       message: "",
-      messages: [
-        {
-          sender: "시작",
-          message: "메시지"
-        }
-      ]
+      messages: []
     };
   },
   created() {
@@ -58,99 +64,74 @@ export default {
         });
     },
     sendMsg: function() {
-      console.log("Send msg : ", sessionStorage.getItem("roomid"));
       var msg = {
         type: "TALK",
         roomid: sessionStorage.getItem("roomid"),
         sender: this.sender,
-        message: this.message
+        msg: this.message
       };
       this.stompClient.send("/pub/chat/message", JSON.stringify(msg), {});
     },
     connect: function() {
+      var reconnect = 0;
       let socket = new SockJS(SERVER_URL + "/ws");
       this.stompClient = Stomp.over(socket);
       this.stompClient.connect(
         {},
         frame => {
-          console.log(
-            "구독 : /sub/chat/room/" + sessionStorage.getItem("roomid")
-          );
           this.stompClient.subscribe(
             "/sub/chat/room/" + sessionStorage.getItem("roomid"),
             res => {
-              console.log("구독성공");
-              console.log(response);
-              let jsonBody = JSON.parse(res.data);
-              console.log(jsonBody);
+              let jsonBody = JSON.parse(res.body);
               let m = {
-                type: "JOIN",
-                roomid: sessionStorage.getItem("roomid"),
-                sender: this.sender,
-                message: this.message
+                type: jsonBody.type,
+                sender: jsonBody.sender,
+                message: jsonBody.msg
               };
-              this.messages.push(jsonBody);
+              this.messages.push(m);
+              var container = this.$el.querySelector("#content");
+              setTimeout(function() {
+                container.scrollTop = container.scrollHeight;
+              }, 1);
             }
           );
+          var msg = {
+            type: "JOIN",
+            roomid: sessionStorage.getItem("roomid"),
+            sender: this.sender,
+            msg: this.message
+          };
+          this.stompClient.send("/pub/chat/message", JSON.stringify(msg), {});
         },
         error => {
-          console.log(error);
+          if (reconnect++ <= 5) {
+            setTimeout(function() {
+              console.log("connection reconnect");
+              let sock = new SockJS(SERVER_URL + "/ws");
+              this.stompClient = Stomp.over(function() {
+                return sock;
+              });
+              connect();
+            }, 10 * 1000);
+          }
         }
       );
+    },
+    removeChat: function() {
+      this.$emit("remove");
     }
-
-    // connect: function() {
-    //   console.log("------------- connect 시작 ----------");
-    //   let sock = new SockJS(SERVER_URL + "/ws");
-    //   this.stompClient = Stomp.over(function() {
-    //     return sock;
-    //   });
-    //   var msg = {
-    //     type: "JOIN",
-    //     roomid: sessionStorage.getItem("roomid"),
-    //     sender: this.sender,
-    //     message: this.message
-    //   };
-    //   this.stompClient.connect(
-    //     {},
-    //     frame => {
-    //       console.log("-------------구독 출력-----------");
-    //       console.log(msg);
-    //       console.log(sessionStorage.getItem("roomid"));
-    //       this.stompClient.subscribe(
-    //         "/sub/chat/room/" + sessionStorage.getItem("roomid"),
-    //         result => {
-    //           sessionStorage.getItem("roomid");
-    //           console.log(result);
-    //           var recv = JSON.parse(result.body);
-    //           this.recvMsg(recv);
-    //           console.log("메시지 body = ", recv);
-    //           this.stompClient.send(
-    //             "/pub/chat/message",
-    //             {},
-    //             JSON.stringify(msg)
-    //           );
-    //         },
-    //         error => {
-    //           console.log("fail", err);
-    //         }
-    //       );
-    //     },
-    //     function(error) {
-    //       if (reconnect++ <= 5) {
-    //         setTimeout(function() {
-    //           console.log("connection reconnect");
-    //           let sock = new SockJS(SERVER_URL + "/ws");
-    //           this.stompClient = Stomp.over(function() {
-    //             return sock;
-    //           });
-    //           connect();
-    //         }, 10 * 1000);
-    //       }
-    //     }
-    // );
-    // }
   }
 };
 </script>
-<style></style>
+<style>
+#chatting {
+  position: fixed;
+  bottom: 5px;
+  right: 5px;
+  width: 300px;
+  height: 500px;
+  background-color: whitesmoke;
+  border: 1px black solid;
+  z-index: 1000;
+}
+</style>

@@ -41,7 +41,7 @@ public class ChatRoomController {
 		Map<String, Object> result = null;
 		try {
 			result = chatServ.joinAnonymousChatRoom();
-			System.out.println("anonymousRoomId : " + ((ChatRoom)result.get("chatRoom")).getRoomid());
+			logger.trace("anonymousRoomId : " + ((ChatRoom)result.get("chatRoom")).getRoomid());
 			result.put("msg", SUCCESS);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -58,7 +58,6 @@ public class ChatRoomController {
 	@GetMapping("/room/{roomid}")
 	@ResponseBody
 	public Object joinRoom(@PathVariable String roomid) {
-		System.out.println("----------------- chat room in ----------------------");
 		logger.trace("join chat room");
 		Map<String, Object> result = null;
 		try {			

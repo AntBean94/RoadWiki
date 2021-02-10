@@ -1,8 +1,5 @@
 package com.web.blog.model.dto;
 
-import java.util.UUID;
-
-
 public class ChatRoom {
 	private String roomid;
 	private String name;
