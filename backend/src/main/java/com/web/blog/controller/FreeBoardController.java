@@ -25,6 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.model.dto.Comment;
 import com.web.blog.model.dto.Posting;
+import com.web.blog.model.dto.PostingLikeUser;
+import com.web.blog.model.dto.Recomment;
+import com.web.blog.model.service.BoardLikeService;
 import com.web.blog.model.service.FreeBoardService;
 import com.web.blog.model.service.LoginService;
 
@@ -43,6 +46,9 @@ public class FreeBoardController {
 	@Autowired
 	LoginService loginServ;
 	
+	@Autowired
+	BoardLikeService boardlikeService;
+	
 	@GetMapping(value = {
 			"/list/{classifier}/{selector}/{word}/{page}",
 			"/list/{classifier}/{selector}/{word}/{page}/{tag}",
@@ -53,7 +59,6 @@ public class FreeBoardController {
 			@PathVariable String page,
 			@PathVariable(required = false) String tag) {
 		logger.trace("getList");
-//		System.out.println(classifier + " " + selector + " " + word + " " + page);
 		try {
 			Map<String, Object> result;
 			if(word == " ") word = "";
@@ -92,6 +97,55 @@ public class FreeBoardController {
 			Map<String, Object> result;
 			result = (Map<String, Object>) fBoardServ.getPosting(pid);
 			result.put("msg", SUCCESS);
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	@GetMapping("/postinglike/{pid}")
+	public Object getPostingLike(@PathVariable int pid, HttpServletRequest request) {
+		try {
+			Map<String, Object> result;
+			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			result = (Map<String, Object>) boardlikeService.getPostingLikeUser(new PostingLikeUser(uid, pid));
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	@PostMapping("/postinglike")
+	public Object getPostingLike(@RequestBody PostingLikeUser postingLikeUser, HttpServletRequest request) {
+		try {
+			Map<String, Object> result;
+			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			postingLikeUser.setUid(uid);
+			result = (Map<String, Object>) boardlikeService.registPostingLike(postingLikeUser);
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	@DeleteMapping("/postinglikecancel/{pid}")
+	public Object getPostingLikeCancel(@PathVariable int pid, HttpServletRequest request) {
+		try {
+			Map<String, Object> result;
+			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			result = (Map<String, Object>) boardlikeService.deletePostingLike(new PostingLikeUser(uid, pid));
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
@@ -159,7 +213,6 @@ public class FreeBoardController {
 			Map<String, Object> result;
 			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) fBoardServ.registComment(comment, uid);
-			
 			result.put("msg", SUCCESS);
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		} catch(Exception e) {
@@ -172,11 +225,11 @@ public class FreeBoardController {
 	}
 	
 	@PutMapping("/comment")
-	public Object editComment(@RequestBody Map<String, Object> map, HttpServletRequest request) {
+	public Object editComment(@RequestBody Comment comment, HttpServletRequest request) {
 		try {
 			Map<String, Object> result;
 			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
-			result = (Map<String, Object>) fBoardServ.editComment((Comment)map.get("posting"), uid);
+			result = (Map<String, Object>) fBoardServ.editComment(comment, uid);
 			result.put("msg", SUCCESS);
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		} catch(Exception e) {
@@ -205,6 +258,59 @@ public class FreeBoardController {
 		}
 	}
 	
+	@PostMapping("/recomment")
+	public Object registRecomment(@RequestBody Recomment recomment, HttpServletRequest request) {
+		try {
+			Map<String, Object> result;
+			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			recomment.setUid(uid);
+			result = (Map<String, Object>) fBoardServ.registRecomment(recomment);
+			result.put("msg", SUCCESS);
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	@PutMapping("/recomment")
+	public Object editRecomment(@RequestBody Recomment recomment, HttpServletRequest request) {
+		try {
+			Map<String, Object> result;
+			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			recomment.setUid(uid);
+			result = (Map<String, Object>) fBoardServ.editRecomment(recomment);
+			result.put("msg", SUCCESS);
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	@DeleteMapping("/recomment/{rcid}")
+	public Object deleteRecomment(@PathVariable String rcid, HttpServletRequest request) {
+		try {
+			Map<String, Object> result;
+			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			result = (Map<String, Object>) fBoardServ.deleteRecomment(rcid);
+			result.put("msg", SUCCESS);
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.NO_CONTENT);
+		}
+	}
+	
 	@GetMapping("/totalCount")
 	public Object totalCount() {
 		try {
@@ -220,5 +326,4 @@ public class FreeBoardController {
 			}}, HttpStatus.NO_CONTENT);
 		}
 	}
-
 }

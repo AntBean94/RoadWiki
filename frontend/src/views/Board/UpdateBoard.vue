@@ -74,8 +74,13 @@ import store from '@/store'
 let updatecontent = '';
 // local 이 아니라 this.$store.getters.getServer 73이아니라 파람으로 받아온거$route.param
 // axios.get(`http://localhost:8085/freeboard/posting/73`)
+console.log('77')
+console.log(store.getters.getServer)
 axios.get(`${store.getters.getServer}/freeboard/posting/74`)
   .then((res) => {
+    console.log('81')
+    console.log(res.data)
+    console.log(store.getters.getServer)
     updatecontent = res.data.posting.content;
 })
 
