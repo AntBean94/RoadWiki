@@ -2,7 +2,7 @@ package com.web.blog.model.dto;
 
 public class ChatMsg {
 	public enum MsgType {
-		ENTER, CHAT
+		TALK, JOIN
 	}
 	private MsgType type;
 	private String roomid;
