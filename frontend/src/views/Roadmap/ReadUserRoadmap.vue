@@ -47,7 +47,7 @@
   </div>
 </template>
 <script>
-import Roadmap from '@/components/Roadmap'
+import Roadmap from '@/components/Roadmap/Roadmap.vue'
 import UpdateUserRoadmap from '@/views/Roadmap/UpdateUserRoadmap'
 import router from '@/routes/router'
 import { Carousel, Slide } from 'vue-carousel';
