@@ -16,7 +16,12 @@
             작성자 : {{ name }}
           </h3>
           <h5>
-            {{ createDate }} / 0000년 00월 00일 00:00 수정됨
+            <span>
+              {{ createDate }} 
+            </span>
+            <span v-if="modifyDate">
+              / {{ modifyDate }}
+            </span>
           </h5>
         </b-col>
       </b-row>

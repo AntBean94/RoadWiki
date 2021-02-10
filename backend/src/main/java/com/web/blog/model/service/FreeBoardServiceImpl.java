@@ -209,6 +209,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	public Object editPosting(Posting posting, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
+			
 			if (postingRepo.select(posting.getPid()).getUid() != uid)
 				throw new RuntimeException("wrong user");
 			if (postingRepo.update(posting) == 1)
