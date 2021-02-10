@@ -16,22 +16,19 @@ export default {
   components: {
     Overview,
   },
-  props: {
-    rmid: "",
-  },
+  props: ["roadmap"],
   data() {
     return {
-      roadmapData: Object,
+      roadmapData: "",
     }
   },
   methods: {
     getRoadmapData() {
       // rmid활용하여 로드맵 데이터 불러오기
-      axios.get(`${this.$store.getters.getServer}/roadmap/get/${this.rmid}`)
+      axios.get(`${this.$store.getters.getServer}/roadmap/get/${this.roadmap.rmid}`)
         .then((res) => {
           if(res.data.msg == 'success'){
             this.roadmapData = JSON.parse(res.data['roadmaps'].tmp);
-            // this.load: ismounted 사용여부 확인 후 지울 것
           }else{
             console.log(res);
             alert("데이터 로드에 실패했습니다.");
@@ -41,11 +38,10 @@ export default {
           alert("axios 오류")
         });
     },
-    linkGen(pageNum) {
-      return pageNum === 1 ? '?' : `?page=${pageNum}`
-    },
   },
-
+  created(){
+    console.log("in roadmap item", this.roadmap);
+  }
 }
 </script>
 

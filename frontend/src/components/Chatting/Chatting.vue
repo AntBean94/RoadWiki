@@ -91,6 +91,7 @@ export default {
               this.messages.push(m);
               this.message = "";
               var container = this.$el.querySelector("#content");
+              this.msg = "";
               setTimeout(function() {
                 container.scrollTop = container.scrollHeight;
               }, 1);
