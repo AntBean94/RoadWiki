@@ -27,16 +27,15 @@ public class FileServiceImpl implements FileService {
 	@Override
 	public Object uploadImg(MultipartFile file, HttpServletRequest request, int uid) throws Exception {
 		// 파일이 존재하면 삭제
+		String filename ="";
 		try {
-			String filename = fileSearch("./target/classes/statics/upload/" + uid, 1);
-			Thread.sleep(1500);// 삭제가 쓰레드형태로 같이 진행되는거같아서 임시로 슬립
-			filename = fileSearch("./target/classes/statics/upload/" + uid, 1);
+			filename = fileSearch("../frontend/public/statics/upload/" + uid, 1);
 		} catch (Exception e) {
 			System.out.println("no folder");
 		}
 		Thread.sleep(1500);// 삭제가 쓰레드형태로 같이 진행되는거같아서 임시로 슬립
 		// parent directory를 찾는다.
-		Path directory = Paths.get(".\\target\\classes\\statics\\upload\\" + uid + "\\").toAbsolutePath().normalize();
+		Path directory = Paths.get("..\\frontend\\public\\statics\\upload\\" + uid + "\\").toAbsolutePath().normalize();
 
 		// directory 해당 경로까지 디렉토리를 모두 만든다.
 		Files.createDirectories(directory);
@@ -57,8 +56,9 @@ public class FileServiceImpl implements FileService {
 
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("msg", "sucess");
-		result.put("path", targetPath);
-		System.out.println(targetPath);
+		filename = fileSearch("../frontend/public/statics/upload/" + uid, 0);
+		result.put("path", "/statics/upload/" + uid + "/" + filename);
+		Thread.sleep(2000);
 		return result;
 	}
 
@@ -89,7 +89,22 @@ public class FileServiceImpl implements FileService {
 		}
 		return str;
 	}
-
+	@Override
+	public Object showImage(int uid, HttpServletRequest request) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			String filename = fileSearch("../frontend/public/statics/upload/" + uid, 0);
+			System.out.println(filename);
+			map.put("path", "/statics/upload/" + uid + "/" +filename);
+			if(filename.length() == 0)
+				map.put("path", "/statics/default.png");
+		}catch (Exception e) {
+			System.out.println("no search folder");
+			map.put("path", "../frontend/public/statics/default.png");
+		}
+		return map;
+	}
+	
 	@Override
 	public byte[] showImg(String uid, HttpServletRequest request) throws Exception {
 		String filename = "";
@@ -185,4 +200,7 @@ public class FileServiceImpl implements FileService {
 		}
 		return IOUtils.toByteArray(in);
 	}
+
+
+	
 }
