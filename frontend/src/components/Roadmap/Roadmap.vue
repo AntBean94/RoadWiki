@@ -44,6 +44,7 @@
     <!-- 커리큘럼 데이터 출력 카드/end -->
   </div>
   <!--goJs/end-->
+  
 </template>
 
 <script>
@@ -89,7 +90,8 @@ export default {
     }
   },
   components: {
-    dropdown: dropdown
+    dropdown: dropdown,
+    Overview,
   },
   created() {
 
