@@ -89,6 +89,7 @@ export default {
                 message: jsonBody.msg
               };
               this.messages.push(m);
+              this.message = "";
               var container = this.$el.querySelector("#content");
               this.msg = "";
               setTimeout(function() {

@@ -1,42 +1,44 @@
 <template>
   <!--goJS/start-->
-  <div style="width: 100%; display: flex; justify-content: space-between; z-index:1;">
+  <div
+    style="width: 100%; display: flex; justify-content: space-between; z-index:1;"
+  >
     <div
       v-show="roadmapMode"
       ref="myPaletteDiv"
       style="width: 150px; margin-right: 2px; background-color: #F9F8F3;"
     ></div>
-    <div ref="myDiagramDiv" style="flex-grow: 1; height: 750px; background-color: #F9F8F3;" @click="checkCur">
-    </div>
-      <!-- 커리큘럼 데이터 출력 카드/start -->
-    <b-card
-      title="Curriculum Information"
-      style="width: 252px;"
-    >
-    <hr>
+    <div
+      ref="myDiagramDiv"
+      style="flex-grow: 1; height: 750px; background-color: #F9F8F3;"
+      @click="checkCur"
+    ></div>
+    <!-- 커리큘럼 데이터 출력 카드/start -->
+    <b-card title="Curriculum Information" style="width: 252px;">
+      <hr />
       <h3>{{ headertext }}</h3>
-      <hr>
+      <hr />
       <b-card-text>
         <base-input label="시작날짜-종료날짜">
-        <flat-pickr 
-          slot-scope="{focus, blur}"
-          @on-open="focus"
-          @on-close="blur"
-          :config="{allowInput: true, mode: 'range',}"
-          class="form-control datepickr"
-          v-model="dates"
-          :disabled="!roadmapMode"
-        >
-        </flat-pickr>
+          <flat-pickr
+            slot-scope="{ focus, blur }"
+            @on-open="focus"
+            @on-close="blur"
+            :config="{ allowInput: true, mode: 'range' }"
+            class="form-control datepickr"
+            v-model="dates"
+            :disabled="!roadmapMode"
+          >
+          </flat-pickr>
         </base-input>
       </b-card-text>
-      <hr>
+      <hr />
       <span>{{ descript }}</span>
-      <hr>
+      <hr />
       <b-card-text>
-        <b-form-input 
-          v-model="memotext" 
-          placeholder="Enter your memo" 
+        <b-form-input
+          v-model="memotext"
+          placeholder="Enter your memo"
           :readonly="!roadmapMode"
         ></b-form-input>
       </b-card-text>
@@ -44,13 +46,12 @@
     <!-- 커리큘럼 데이터 출력 카드/end -->
   </div>
   <!--goJs/end-->
-  
 </template>
 
 <script>
 // flatPickr - Hindi: 날짜 설정 부속기능
-import {Hindi} from 'flatpickr/dist/l10n/hi.js';
-import dropdown from 'vue-dropdowns';
+import { Hindi } from "flatpickr/dist/l10n/hi.js";
+import dropdown from "vue-dropdowns";
 
 // src\views\Roadmap\RoadMap.vue
 // Roadmap 폴더 명 변경을 위한 주석
@@ -65,43 +66,38 @@ let curriculumData = -1;
 // 커리큘럼 클릭시 요청을통해 받아온 데이터를 여기에 저장하면 됨
 let recommendCurData = [
   // 실제 프로젝트 default data 최초 클릭할 정보가 필요
-  {category: 'black', },
-  {category: 'green', },
-  {category: 'blue', },
-]   
+];
 
 export default {
-  name: 'Roadmap',
+  name: "Roadmap",
   props: {
     roadmapMode: Number,
-    roadmapData: Object,
+    roadmapData: Object
   },
   data() {
-    return {  
-      headertext: '',
-      dates : '',
-      memotext : '',
-      descript : '',
+    return {
+      headertext: "",
+      dates: "",
+      memotext: "",
+      descript: "",
       // Get more form https://flatpickr.js.org/options/
       config: {
         wrap: true, // set wrap to true only when using 'input-group'
-        altFormat: 'M j, Y',
+        altFormat: "M j, Y",
         altInput: true,
-        dateFormat: 'Y-m-d',
-        locale: Hindi, // locale for this instance only          
-      },
-    }
+        dateFormat: "Y-m-d",
+        locale: Hindi // locale for this instance only
+      }
+    };
   },
   components: {
-    dropdown: dropdown,
+    dropdown: dropdown
   },
-  created() {
-
-  },
+  created() {},
   mounted() {
     myDiagram = $(go.Diagram, this.$refs.myDiagramDiv, {
       initialContentAlignment: go.Spot.Center,
-      "undoManager.isEnabled": true  
+      "undoManager.isEnabled": true
     });
 
     // 페이지에 변화가 있을 때 title 및 save 버튼 활성화
@@ -111,7 +107,7 @@ export default {
       // var button = document.getElementById("SaveButton");
       // console.log('?',button) => 아무것도 안찍힘
       // if (button) button.disabled = !myDiagram.isModified;
-      // var idx = document.title.indexOf("*"); 
+      // var idx = document.title.indexOf("*");
       // console.log('?',document.title) => 페이지 전체 제목이 출력 index.html 제목(roadwiki)
       // if (myDiagram.isModified) {
       //   if (idx < 0) document.title += "*";
@@ -122,11 +118,19 @@ export default {
 
     // GUI 시작
     // 대분류 커리큘럼 모델
-    myDiagram.nodeTemplateMap.add("blue", // the default category
-      $(go.Node, "Table", this.nodeStyle(),
+    myDiagram.nodeTemplateMap.add(
+      "blue", // the default category
+      $(
+        go.Node,
+        "Table",
+        this.nodeStyle(),
         // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
-        $(go.Panel, "Auto",
-          $(go.Shape, "RoundedRectangle",
+        $(
+          go.Panel,
+          "Auto",
+          $(
+            go.Shape,
+            "RoundedRectangle",
             {
               fill: "rgb(255, 255 ,255)",
               stroke: "rgb(15, 76, 129)",
@@ -157,11 +161,19 @@ export default {
     );
 
     // 중분류 커리큘럼 모델
-    myDiagram.nodeTemplateMap.add("black", // the default category
-      $(go.Node, "Table", this.nodeStyle(),
+    myDiagram.nodeTemplateMap.add(
+      "black", // the default category
+      $(
+        go.Node,
+        "Table",
+        this.nodeStyle(),
         // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
-        $(go.Panel, "Auto",
-          $(go.Shape, "RoundedRectangle",
+        $(
+          go.Panel,
+          "Auto",
+          $(
+            go.Shape,
+            "RoundedRectangle",
             {
               fill: "rgb(255, 255, 255)",
               stroke: "rgb(132, 137, 140)",
@@ -192,11 +204,19 @@ export default {
     );
 
     // 소분류 커리큘럼 모델
-    myDiagram.nodeTemplateMap.add("green", // the default category
-      $(go.Node, "Table", this.nodeStyle(),
+    myDiagram.nodeTemplateMap.add(
+      "green", // the default category
+      $(
+        go.Node,
+        "Table",
+        this.nodeStyle(),
         // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
-        $(go.Panel, "Auto",
-          $(go.Shape, "RoundedRectangle",
+        $(
+          go.Panel,
+          "Auto",
+          $(
+            go.Shape,
+            "RoundedRectangle",
             {
               fill: "rgb(255, 255, 255)",
               stroke: "#307363",
@@ -227,9 +247,15 @@ export default {
     );
 
     // 시작 모델
-    myDiagram.nodeTemplateMap.add("Start",
-      $(go.Node, "Table", this.nodeStyle(),
-        $(go.Panel, "Spot",
+    myDiagram.nodeTemplateMap.add(
+      "Start",
+      $(
+        go.Node,
+        "Table",
+        this.nodeStyle(),
+        $(
+          go.Panel,
+          "Spot",
           $(go.Shape, "Circle", {
             desiredSize: new go.Size(70, 70),
             fill: "#ffffff",
@@ -246,9 +272,15 @@ export default {
     );
 
     // 종료 모델
-    myDiagram.nodeTemplateMap.add("End",
-      $(go.Node, "Table", this.nodeStyle(),
-        $(go.Panel, "Spot",
+    myDiagram.nodeTemplateMap.add(
+      "End",
+      $(
+        go.Node,
+        "Table",
+        this.nodeStyle(),
+        $(
+          go.Panel,
+          "Spot",
           $(go.Shape, "Circle", {
             desiredSize: new go.Size(60, 60),
             fill: "#ffffff",
@@ -367,41 +399,41 @@ export default {
     // 추천 로직 1 단계
     myDiagram.addDiagramListener("ObjectSingleClicked", function(e) {
       curriculumData = e.subject.part.data;
-      
     });
 
     myDiagram.addDiagramListener("BackgroundSingleClicked", function(e) {
-      curriculumData = -1
+      curriculumData = -1;
     });
 
-    myDiagram.addDiagramListener("ObjectDoubleClicked", function(e){
-    });
-    
+    myDiagram.addDiagramListener("ObjectDoubleClicked", function(e) {});
 
     // 팔레트 설정 관련 코드
     // 노드모델에 변경사항이 있다면 반드시 여기서 확인 해주셔야 합니다.
-    myPalette = 
-      $(go.Palette, this.$refs.myPaletteDiv, // must name or refer to the DIV HTML element
-        {
-          // Instead of the default animation, use a custom fade-down
-          "animationManager.initialAnimationStyle": go.AnimationManager.None,
-          InitialAnimationStarting: this.animateFadeDown, // Instead, animate with this function
-          nodeTemplateMap: myDiagram.nodeTemplateMap, // share the templates used by myDiagram
-          //######################################################### 추천 커리 백엔드 연동부 핵심코드!
-          // 추천 컴포넌트를 띄우려면 여기에 데이터를 가져와서 랜더링
-          model: new go.GraphLinksModel(
-            // 추천 커리큘럼 전역변수로 저장되어있음
-            recommendCurData
-          )
-        }
-      );
+    myPalette = $(
+      go.Palette,
+      this.$refs.myPaletteDiv, // must name or refer to the DIV HTML element
+      {
+        // Instead of the default animation, use a custom fade-down
+        "animationManager.initialAnimationStyle": go.AnimationManager.None,
+        InitialAnimationStarting: this.animateFadeDown, // Instead, animate with this function
+        nodeTemplateMap: myDiagram.nodeTemplateMap, // share the templates used by myDiagram
+        //######################################################### 추천 커리 백엔드 연동부 핵심코드!
+        // 추천 컴포넌트를 띄우려면 여기에 데이터를 가져와서 랜더링
+        model: new go.GraphLinksModel(
+          // 추천 커리큘럼 전역변수로 저장되어있음
+          recommendCurData
+        )
+      }
+    );
 
     // 링크연결시 화살표가 직교하는 모양으로 보일 수 있도록 하는 설정
-    myDiagram.toolManager.linkingTool.temporaryLink.routing = go.Link.Orthogonal;
-    myDiagram.toolManager.relinkingTool.temporaryLink.routing = go.Link.Orthogonal;
+    myDiagram.toolManager.linkingTool.temporaryLink.routing =
+      go.Link.Orthogonal;
+    myDiagram.toolManager.relinkingTool.temporaryLink.routing =
+      go.Link.Orthogonal;
 
     // mode에 따라 분류 -----------------------------------------------------------------|
-    // 수정 없이 읽기 
+    // 수정 없이 읽기
     if (this.roadmapMode) {
       myDiagram.isReadOnly = false;
     } else {
@@ -417,35 +449,32 @@ export default {
     this.getRecommendCur();
     // 팔레트 초기화
     curriculumData = -1;
-
   },
   watch: {
     // head 데이터 변경때 마다 실행(즉, 커리큘럼 클릭시 실행)
-    headertext: function () {
+    headertext: function() {
       // 데이터 호출하는 함수
-      this.getRecommendCur()
+      this.getRecommendCur();
     },
     memotext: function() {
-      if(curriculumData != -1)
-        curriculumData.memo = this.memotext;
+      if (curriculumData != -1) curriculumData.memo = this.memotext;
     },
     dates: function() {
       if (curriculumData != -1) {
         if (this.dates.length > 10) {
-          curriculumData.startdate = this.dates.slice(0, 10)
-          curriculumData.enddate = this.dates.slice(14, 24)
+          curriculumData.startdate = this.dates.slice(0, 10);
+          curriculumData.enddate = this.dates.slice(14, 24);
         } else {
-          curriculumData.startdate = this.dates
-          curriculumData.enddate = this.dates
+          curriculumData.startdate = this.dates;
+          curriculumData.enddate = this.dates;
         }
       }
     },
-    roadmapData: function (e) {
-      myDiagram.model = go.Model.fromJson(e);    
+    roadmapData: function(e) {
+      myDiagram.model = go.Model.fromJson(e);
     }
   },
-  computed: {
-  },
+  computed: {},
   methods: {
     // 다이어그램 모델관련 함수
     nodeStyle() {
@@ -454,7 +483,9 @@ export default {
         // converted by the Point.parse static method.
         // If the Node.location is changed, it updates the "loc" property of the node data,
         // converting back using the Point.stringify static method.
-        new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+        new go.Binding("location", "loc", go.Point.parse).makeTwoWay(
+          go.Point.stringify
+        ),
         {
           // the Node.location is at the center of each node
           locationSpot: go.Spot.Center
@@ -462,31 +493,33 @@ export default {
       ];
     },
     makePort(name, align, spot, output, input) {
-      var horizontal = align.equals(go.Spot.Top) || align.equals(go.Spot.Bottom);
+      var horizontal =
+        align.equals(go.Spot.Top) || align.equals(go.Spot.Bottom);
       // the port is basically just a transparent rectangle that stretches along the side of the node,
       // and becomes colored when the mouse passes over it
-      return $(go.Shape,
-        {
-          fill: "transparent",  // changed to a color in the mouseEnter event handler
-          strokeWidth: 0,  // no stroke
-          width: horizontal ? NaN : 8,  // if not stretching horizontally, just 8 wide
-          height: !horizontal ? NaN : 8,  // if not stretching vertically, just 8 tall
-          alignment: align,  // align the port on the main Shape
-          stretch: (horizontal ? go.GraphObject.Horizontal : go.GraphObject.Vertical),
-          portId: name,  // declare this object to be a "port"
-          fromSpot: spot,  // declare where links may connect at this port
-          fromLinkable: output,  // declare whether the user may draw links from here
-          toSpot: spot,  // declare where links may connect at this port
-          toLinkable: input,  // declare whether the user may draw links to here
-          cursor: "pointer",
-      })
+      return $(go.Shape, {
+        fill: "transparent", // changed to a color in the mouseEnter event handler
+        strokeWidth: 0, // no stroke
+        width: horizontal ? NaN : 8, // if not stretching horizontally, just 8 wide
+        height: !horizontal ? NaN : 8, // if not stretching vertically, just 8 tall
+        alignment: align, // align the port on the main Shape
+        stretch: horizontal
+          ? go.GraphObject.Horizontal
+          : go.GraphObject.Vertical,
+        portId: name, // declare this object to be a "port"
+        fromSpot: spot, // declare where links may connect at this port
+        fromLinkable: output, // declare whether the user may draw links from here
+        toSpot: spot, // declare where links may connect at this port
+        toLinkable: input, // declare whether the user may draw links to here
+        cursor: "pointer"
+      });
     },
     // 글씨체, 스타일 수정 필요(프론트 집중기간)
     textStyle() {
       return {
         font: "bold 11pt Lato, Helvetica, Arial, sans-serif",
         stroke: "#000000"
-      }
+      };
     },
     // 링크라벨 함수(필요없으면 삭제가능)
     showLinkLabel(e) {
@@ -494,68 +527,68 @@ export default {
       if (label !== null)
         label.visible = e.subject.fromNode.data.category === "Conditional";
     },
-    // 로드될때 위에서 아래로 올라오는 애니메이션 
+    // 로드될때 위에서 아래로 올라오는 애니메이션
     animateFadeDown(e) {
-      var diagram = e.diagram; 
+      var diagram = e.diagram;
       var animation = new go.Animation();
       animation.isViewportUnconstrained = true; // So Diagram positioning rules let the animation start off-screen
       animation.easing = go.Animation.EaseOutExpo;
       animation.duration = 900;
       // Fade "down", in other words, fade in from above
-      animation.add(diagram, 'position', diagram.position.copy().offset(0, 200), diagram.position);
-      animation.add(diagram, 'opacity', 0, 1);
+      animation.add(
+        diagram,
+        "position",
+        diagram.position.copy().offset(0, 200),
+        diagram.position
+      );
+      animation.add(diagram, "opacity", 0, 1);
       animation.start();
     },
     checkCur(e) {
       // 차후에 DB에 요청을 보낸다음 DB정보로 반영
       this.headertext = curriculumData.text;
-      if(curriculumData.category)
+      if (curriculumData.category)
         this.dates = curriculumData.startdate + " to " + curriculumData.enddate;
       this.memotext = curriculumData.memo;
       this.descript = curriculumData.content;
     },
     getRecommendCur() {
-      let color
-      let url
-      if(curriculumData == -1 || !curriculumData.category){
+      let color;
+      let url;
+      if (curriculumData == -1 || !curriculumData.category) {
         url = `${this.$store.getters.getServer}/curriculum/suggest`;
         color = "blue";
-      }
-      else if(curriculumData.mdid != 0) {
+      } else if (curriculumData.mdid != 0) {
         url = `${this.$store.getters.getServer}/curriculum/suggest/${curriculumData.bdid}/${curriculumData.mdid}`;
         color = "green";
-      }else if(curriculumData.bdid != 0){
+      } else if (curriculumData.bdid != 0) {
         url = `${this.$store.getters.getServer}/curriculum/suggest/${curriculumData.bdid}`;
         color = "black";
-
       }
-        axios.get(url)
-        .then((res) => {
-          
-          for( var i = 0 ; i < res.data['suggest'].length ; i++){
-            res.data['suggest'][i].category = color;
-            res.data['suggest'][i].startdate = "";
-            res.data['suggest'][i].enddate = "";
-            res.data['suggest'][i].memo = "";
-            }
-          recommendCurData = res.data['suggest']       
-          myPalette.model.nodeDataArray = recommendCurData   
+      axios
+        .get(url)
+        .then(res => {
+          for (var i = 0; i < res.data["suggest"].length; i++) {
+            res.data["suggest"][i].category = color;
+            res.data["suggest"][i].startdate = "";
+            res.data["suggest"][i].enddate = "";
+            res.data["suggest"][i].memo = "";
+          }
+          recommendCurData = res.data["suggest"];
+          myPalette.model.nodeDataArray = recommendCurData;
         })
-        .catch((e) => {
-          console.error(e)
-        })
-
+        .catch(e => {
+          console.error(e);
+        });
     },
     readRoadmap() {
       myDiagram.model = go.Model.fromJson(this.roadmapData);
     },
     serveRoadmap() {
       return myDiagram.model.toJson();
-    },
-  },
-}
+    }
+  }
+};
 </script>
 
-<style>
-
-</style>
+<style></style>
