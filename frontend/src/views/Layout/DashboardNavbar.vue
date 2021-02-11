@@ -37,12 +37,20 @@
       >
         <b-form-group class="mb-0">
           <b-input-group class="input-group-alternative input-group-merge">
-            <b-form-input placeholder="Search" type="text"> </b-form-input>
+            <b-form-input 
+              placeholder="Search" 
+              type="text"
+              v-model="searchQuery"
+              @keydown.enter="clickSearch"
+            > 
+            </b-form-input>
 
             <div class="input-group-append">
-              <span class="input-group-text"
-                ><i class="fas fa-search"></i
-              ></span>
+              <span class="input-group-text" 
+                @click="clickSearch"
+              >
+                <i class="fas fa-search"></i>
+              </span>
             </div>
           </b-input-group>
         </b-form-group>
@@ -75,7 +83,7 @@
           <b-dropdown-header class="noti-title">
             <h6 class="text-overflow m-0">Welcome!</h6>
           </b-dropdown-header>
-          <b-dropdown-item href="/#/profile">
+          <b-dropdown-item @click="myProfile">
             <i class="ni ni-single-02"></i>
             <span>My profile</span>
           </b-dropdown-item>
@@ -131,7 +139,7 @@ export default {
       searchModalVisible: false,
       searchQuery: "",
       isHeader: true,
-      uid: ""
+      uid: "",
     };
   },
   computed: {
@@ -163,6 +171,9 @@ export default {
       });
       this.isHeader = isHeader;
     },
+    myProfile() {
+      this.$router.push({name: 'profile', params: {youruid: undefined}})
+    },
     logOut() {
       this.$store.dispatch("LOGOUT").then(() => {
         this.$router.push('/')
@@ -170,6 +181,10 @@ export default {
       .catch(() => {
         alert('로그아웃에 실패했습니다.')
       })
+    },
+    clickSearch() {
+      console.log('잘되나용' + this.searchQuery)
+      this.$router.push({name: 'searchlist', query: {searchKeyword: `${this.searchQuery}`}})
     },
   }
 };

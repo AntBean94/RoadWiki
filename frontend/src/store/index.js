@@ -20,6 +20,7 @@ export default new Vuex.Store({
       createDate: "",
     },
     code: "",
+    search: "",
   },
   getters: {
     getServer(state) { 
@@ -45,7 +46,10 @@ export default new Vuex.Store({
     },
     getUser(state) { 
       return state.user;
-    }
+    },
+    getSearch(state) {
+      return state.search;
+    },
   },
   mutations: {
     LOADUSERTOKEN(state) {
@@ -79,6 +83,9 @@ export default new Vuex.Store({
     SETCODE(state, payload) { 
       state.code = payload;
     },
+    SETSEARCH(state, payload) {
+      state.search = payload;
+    }
   },
   actions: {
     LOGIN(context, user) {
@@ -109,6 +116,9 @@ export default new Vuex.Store({
     },
     SETEMAIL(context, email) {
       context.commit("SETEMAIL", email);
+    },
+    SETSEARCH(context, search) {
+      context.commit("SETSEARCH", search);
     },
   },
   modules: {}

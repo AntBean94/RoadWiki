@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div style="display:block">
+  <div class="display:block">
     <div v-for="(rm, idx) in rmlist" :key="idx">
       <RoadmapListItem id="rmli" :rm="rm"/>
     </div>

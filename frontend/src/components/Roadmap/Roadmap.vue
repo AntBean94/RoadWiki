@@ -91,7 +91,7 @@ export default {
   },
   components: {
     dropdown: dropdown,
-    Overview,
+    // Overview,
   },
   created() {
 

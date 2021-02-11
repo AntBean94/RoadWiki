@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-      list:[],
+      list:[1, 2, 3],
     }
   },
   methods: {
@@ -44,7 +44,7 @@ export default {
     }
   },
   created(){
-    getSharedRoadmap
+    // this.getSharedRoadmap()
   }
 }
 </script>

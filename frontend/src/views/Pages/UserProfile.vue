@@ -33,7 +33,9 @@
                 </b-link>
               </div>
               <br>
-              <router-link :to="{ name : 'profile-update' }" class="btn btn-primary">수정하기</router-link>
+              <!-- v-if 해서 uid랑 해당 계정의 id가 같을 때만 수정하기 버튼 활성화 -->
+              <router-link :to="{ name : 'profile-update' }" class="btn btn-primary" v-if="!isSearch">수정하기</router-link>
+              <b-button v-if="isSearch">팔로잉하기</b-button>
             </b-col>
           </b-row>
         </b-container>
@@ -164,6 +166,7 @@ import UserCard from "./UserProfile/UserCard.vue";
       // EditProfileForm,
       UserCard,
     },
+    props: ['youruid'],
     data() {
       return{
         nickname: '',
@@ -180,20 +183,33 @@ import UserCard from "./UserProfile/UserCard.vue";
         email: '',
         roadmaps: ['첫 번째 로드맵', '두 번째 로드맵', '세 번째 로드맵'],
         uid: "",
+        isSearch: true,
       }
     },
     created() {
       this.uid = this.$store.getters.getUid;
-
-      axios.get(`${this.$store.getters.getServer}/user/info`)
+      let profileuid;
+      if (this.$route.params.youruid === undefined) {
+        profileuid = this.uid
+      } else {
+        profileuid = this.$route.params.youruid
+      }
+      axios.get(`${this.$store.getters.getServer}/user/info/${profileuid}`)
       .then((res) => {
         console.log(res.data)
+        console.log(typeof(res.data.isEqual))
+        if (res.data.isEqual) {
+          this.isSearch = false
+        } else {
+          this.isSearch = true
+        }
         this.nickname = res.data.name
         this.email = res.data.email
         this.keywords = res.data.keywords
         this.keywordtexts = res.data.keywordtexts
       })
-      .catch(() => {
+      .catch((err) => {
+        alert(this.$route.params.youruid)
         alert("로그인이 필요한 서비스입니다.");
         this.$store.dispatch("LOGOUT").then(() => {
           this.$router.replace("/");
