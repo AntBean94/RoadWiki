@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.web.blog.model.dto.Roadmap;
 import com.web.blog.model.dto.RoadmapShare;
 import com.web.blog.model.repo.RoadmapShareRepo;
+import com.web.blog.model.repo.UserRepo;
 
 @Service
 public class RoadmapshareServiceImpl implements RoadmapshareService {
@@ -23,59 +24,72 @@ public class RoadmapshareServiceImpl implements RoadmapshareService {
 	RoadmapShareRepo roadmapshareRepo;
 	
 	@Autowired
+	UserRepo userrepo;
+	
+	@Autowired
 	RoadmapService roadmapService;
 	
 	@Override
-	public Object selectRoadmapdataList(List<Integer> rmidlist) {
+	public Object selectRoadmapdataList(List<Integer> rmidlist) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		List<Roadmap> roadmaplist = new ArrayList<Roadmap>();
 		try {
-			for(int rmid : rmidlist) 
+			for(int rmid : rmidlist) {
 				roadmaplist.add((Roadmap)roadmapService.getRoadmap("0", Integer.toString(rmid)));
-				
+			}
 			result.put("roadmapdatalist", roadmaplist);
 			
 		} catch (Exception e) {
 			logger.error("Service selectByUserName : Something wrong");
+			throw e;
 		}
 		return result;
 	}
 
 	@Override
-	public Object selectAll() {
+	public Object selectAll() throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
+			RoadmapShare[] share = roadmapshareRepo.selectAll();
+			String[] name = new String[share.length];
+			
+			for(int i = 0 ; i < name.length ; i++)
+				name[i] = userrepo.getName(share[i].getUid());
 			result.put("roadmapshares", roadmapshareRepo.selectAll());
-		} catch (Exception e) {
+			result.put("username", name);
+		} catch (Exception e) { 
 			logger.error("Service selectAll : Something wrong");
+			throw e;
 		}
 		return result;
 	}
 
 	@Override
-	public Object selectByUserName(String name) {
+	public Object selectByUserName(String name) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			result.put("roadmapshares", roadmapshareRepo.selectByUserName(name));
 		} catch (Exception e) {
 			logger.error("Service selectByUserName : Something wrong");
+			throw e;
 		}
 		return result;
 	}
 
 	@Override
-	public Object selectByTitle(String title) {
+	public Object selectByTitle(String title) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			result.put("roadmapshares", roadmapshareRepo.selectByTitle(title));
 		} catch (Exception e) {
 			logger.error("Service selectByTitle : Something wrong");
+			throw e;
 		}
 		return result;
 	}
 
 	@Override
-	public Object insert(RoadmapShare roadmapshare,int nowuid) {
+	public Object insert(RoadmapShare roadmapshare,int nowuid) throws Exception {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -85,12 +99,13 @@ public class RoadmapshareServiceImpl implements RoadmapshareService {
 				throw new RuntimeException("query wrong");
 		} catch (Exception e) {
 			logger.error("Service insert : Something wrong");
+			throw e;
 		}
 		return result;
 	}
 
 	@Override
-	public Object delete(int nowuid, int pid) {
+	public Object delete(int nowuid, int pid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			if(roadmapshareRepo.delete(nowuid,pid) != 1)
@@ -102,7 +117,7 @@ public class RoadmapshareServiceImpl implements RoadmapshareService {
 	}
 
 	@Override
-	public Object selectlike(int uid, int pid) {
+	public Object selectlike(int uid, int pid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			if(roadmapshareRepo.selectlike(uid, pid) == 0)
@@ -117,7 +132,7 @@ public class RoadmapshareServiceImpl implements RoadmapshareService {
 
 	@Override
 	@Transactional
-	public Object like(int nowuid, int uid, int pid) {
+	public Object like(int nowuid, int uid, int pid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			if(nowuid != uid)
@@ -135,7 +150,7 @@ public class RoadmapshareServiceImpl implements RoadmapshareService {
 
 	@Override
 	@Transactional
-	public Object dislike(int nowuid, int uid, int pid) {
+	public Object dislike(int nowuid, int uid, int pid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			if(nowuid != uid)

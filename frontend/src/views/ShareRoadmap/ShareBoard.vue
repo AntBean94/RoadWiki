@@ -5,7 +5,8 @@
     <div>
       <b-pagination-nav :link-gen="linkGen" :number-of-pages="10" use-router></b-pagination-nav>
       <b-button variant="primary" class="mt-2" @click="createBoard">새 글 작성</b-button>
-      <RoadmapList :rmlist="list" />
+      
+      <RoadmapList v-if="shareList" :rmlist="shareList" :unlist="usernamelist" />
     </div>
     <!-- <b-container>
       <b-row align-h="end">
@@ -18,37 +19,42 @@
 <script>
 import RoadmapList from '@/components/Roadmap/ShareRoadmap/RoadmapList.vue'
 export default {
+    
+  created(){
+    this.getSharedRoadmap()
+  },
   components: {
     RoadmapList,
   },
   data() {
     return {
-      list:[1, 2, 3, 4, 5, 6],
+      shareList: 0,
+      usernamelist: 0,
     }
   },
   methods: {
     createBoard() {
       // props로 일반글 작성인지 로드맵 공유인지 구분 => createboard에서 조건에따라 나눔
-      this.$router.push({ name: 'create_board' })
+      this.$router.push({ name: 'create_board' , params: { createMode: 1 }})
     },
     getSharedRoadmap() {
       axios
         .get(`${this.$store.getters.getServer}/roadmapshare/get`)
         .then(response => {
-          console.log(response.data)
-          this.list = response.data.roadmapshares;
+          this.shareList = response.data.roadmapshares;
+          this.usernamelist = response.data.username;
+          console.log(this.shareList);
+          console.log(this.usernamelist);
         })
-        .catch(result => {
-          console.log(response.data)
+        .catch(e => {
+          console.log(e);
         });
     },
     linkGen(pageNum) {
       return pageNum === 1 ? '?' : `?page=${pageNum}`
     },
   },
-  created(){
-    // this.getSharedRoadmap()
-  }
+
 }
 </script>
 
