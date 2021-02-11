@@ -14,6 +14,12 @@
 		where email=#{email}
 	</select>
 	
+	<select id="selectUid" parameterType="int" resultType="User">
+		select * 
+		from user 
+		where uid=#{uid}
+	</select>
+	
 	<select id="selectkeyword" parameterType="int" resultType="int">
 		select kwid
 		from keyword

@@ -47,7 +47,7 @@
 import ReadUserRoadMap from '@/views/Roadmap/ReadUserRoadmap'
 // import 
 import router from '@/routes/router'
-import Roadmap from '@/components/Roadmap.vue'
+import Roadmap from '@/components/Roadmap/Roadmap.vue'
 export default {
   router,
   name: '',

@@ -37,12 +37,20 @@
       >
         <b-form-group class="mb-0">
           <b-input-group class="input-group-alternative input-group-merge">
-            <b-form-input placeholder="Search" type="text"> </b-form-input>
+            <b-form-input 
+              placeholder="Search" 
+              type="text"
+              v-model="searchQuery"
+              @keydown.enter="clickSearch"
+            > 
+            </b-form-input>
 
             <div class="input-group-append">
-              <span class="input-group-text"
-                ><i class="fas fa-search"></i
-              ></span>
+              <span class="input-group-text" 
+                @click="clickSearch"
+              >
+                <i class="fas fa-search"></i>
+              </span>
             </div>
           </b-input-group>
         </b-form-group>
@@ -57,9 +65,10 @@
         <a href="#" class="nav-link pr-0" @click.prevent slot="title-container">
           <b-media no-body class="align-items-center">
             <span class="avatar avatar-sm rounded-circle">
-              <img
+              <b-img
                 alt="Image placeholder"
-                :src="`${this.$store.getters.getServer}/user/image/${this.uid}`"
+                :src="profileUrl"
+                v-model="profileUrl"
               />
             </span>
             <b-media-body class="ml-2 d-none d-lg-block">
@@ -75,7 +84,7 @@
           <b-dropdown-header class="noti-title">
             <h6 class="text-overflow m-0">Welcome!</h6>
           </b-dropdown-header>
-          <b-dropdown-item href="/#/profile">
+          <b-dropdown-item @click="myProfile">
             <i class="ni ni-single-02"></i>
             <span>My profile</span>
           </b-dropdown-item>
@@ -123,6 +132,10 @@ export default {
     this.uid = this.$store.getters.getUid;
     let url = this.$route.name;
     this.checkUrl(url);
+
+    axios.get(`${this.$store.getters.getServer}/user/image`).then(res => {
+      this.profileUrl = res.data.path;
+    });
   },
   data() {
     return {
@@ -131,7 +144,8 @@ export default {
       searchModalVisible: false,
       searchQuery: "",
       isHeader: true,
-      uid: ""
+      uid: "",
+      profileUrl: ""
     };
   },
   computed: {
@@ -163,6 +177,9 @@ export default {
       });
       this.isHeader = isHeader;
     },
+    myProfile() {
+      this.$router.push({name: 'profile', params: {youruid: undefined}})
+    },
     logOut() {
       this.$store.dispatch("LOGOUT").then(() => {
         this.$router.push('/')
@@ -170,6 +187,9 @@ export default {
       .catch(() => {
         alert('로그아웃에 실패했습니다.')
       })
+    },
+    clickSearch() {
+      this.$router.push({name: 'searchlist', query: {searchKeyword: `${this.searchQuery}`}})
     },
   }
 };

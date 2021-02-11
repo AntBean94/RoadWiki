@@ -71,7 +71,6 @@ public class CalendarController {
 		HttpStatus status = HttpStatus.OK;
 
 		try {
-			System.out.println(curriculum);
 			logger.info("Curriculum : " + curriculum.toString());
 			result = (Map<String, Object>) calendarservice.updateInfo(curriculum);
 			result.put("msg", SUCCESS);

@@ -58,7 +58,8 @@ const routes = [
       {
         path: '/create-board',
         name: 'create_board',
-        component: () => import('../views/Board/CreateBoard.vue')
+        component: () => import('../views/Board/CreateBoard.vue'),
+        props: true
       },
       {
         path: '/detail-board',
@@ -100,7 +101,16 @@ const routes = [
         component: () => import('../views/Calendar/Calendar.vue'),
         props: true
       },
-
+      {
+        path: '/shareroadmap',
+        name: 'shareroadmap',
+        component: () => import('../views/ShareRoadmap/ShareBoard.vue'),
+      },
+      {
+        path: '/searchlist',
+        name: 'searchlist',
+        component: () => import('../views/Search/SearchList.vue'),
+      },
     ]
   },
   {

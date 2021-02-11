@@ -50,6 +50,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		try {
 			int cnt = PAGESIZE[0];
 			int page = (Integer.parseInt(page_s) - 1) * cnt;
+
 			if (tags.length == 0) {
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("page", page);
@@ -209,6 +210,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	public Object editPosting(Posting posting, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
+			
 			if (postingRepo.select(posting.getPid()).getUid() != uid)
 				throw new RuntimeException("wrong user");
 			if (postingRepo.update(posting) == 1)

@@ -120,7 +120,7 @@
 
 <script>
 import dropdown from 'vue-dropdowns';
-import Roadmap from '@/components/Roadmap'     
+import Roadmap from '@/components/Roadmap/Roadmap.vue'     
 
 export default {
   name: "",

@@ -54,10 +54,10 @@ public class UserController {
 
 	@Autowired
 	UserService userServ;
-	
+
 	@Autowired
 	FileService fileService;
-	
+
 	@Autowired
 	LoginServiceImpl loginServ;
 
@@ -81,13 +81,14 @@ public class UserController {
 		}
 	}
 
-	@GetMapping("/info")
-	public Object getInfo(HttpServletRequest request) {
+	@GetMapping("/info/{uid}")
+	public Object getInfo(@PathVariable int uid, HttpServletRequest request) {
 		logger.trace("getInfo");
 		try {
-			String email = (String) loginServ.getData(request.getHeader("auth-token")).get("email");
-			logger.info(email);
-			Map<String, Object> result = (Map<String, Object>) userServ.getInfo(email);
+//			String email = (String) loginServ.getData(request.getHeader("auth-token")).get("email");
+			int loginUid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			logger.info(Integer.toString(loginUid));
+			Map<String, Object> result = (Map<String, Object>) userServ.getInfo(uid, loginUid);
 			result.put("msg", SUCCESS);
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		} catch (Exception e) {
@@ -118,7 +119,7 @@ public class UserController {
 			}, HttpStatus.NO_CONTENT);
 		}
 	}
-	
+
 	@GetMapping("/canjoin/{email}")
 	public Object canJoin(@PathVariable String email) throws SQLException {
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -174,32 +175,37 @@ public class UserController {
 	public Object getImg(@RequestPart(value = "file", required = true) MultipartFile file, HttpServletRequest request)
 			throws Exception {
 		int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
-		//System.out.println("uploaduid : " + uid);
+		// System.out.println("uploaduid : " + uid);
 		Map<String, Object> result = (Map<String, Object>) fileService.uploadImg(file, request, uid);
 		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/image/{uid}")
-	public @ResponseBody byte[] getImage(@PathVariable String uid, HttpServletRequest request) throws Exception {
-		//System.out.println("image uid : " + uid);
-		return fileService.showImg(uid, request);
+	@GetMapping(value = "/image")
+	public Object getImage(HttpServletRequest request) throws Exception {
+		int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+		Map<String, Object> result = (Map<String, Object>) fileService.showImage(uid, request);
+		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 	}
-	
+//	@GetMapping(value = "/image/{uid}")
+//	public @ResponseBody byte[] getImage(@PathVariable String uid, HttpServletRequest request) throws Exception {
+//		//System.out.println("image uid : " + uid);
+//		return fileService.showImg(uid, request);
+//	}
+
 	@PostMapping("/bgpic")
 	public Object getbgImg(@RequestPart(value = "file", required = true) MultipartFile file, HttpServletRequest request)
 			throws Exception {
 		int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
-		//System.out.println("uploaduid : " + uid);
+		// System.out.println("uploaduid : " + uid);
 		Map<String, Object> result = (Map<String, Object>) fileService.uploadbgImg(file, request, uid);
 		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/bgimage/{uid}")
 	public @ResponseBody byte[] getbgImage(@PathVariable String uid, HttpServletRequest request) throws Exception {
-		//System.out.println("image uid : " + uid);
+		// System.out.println("image uid : " + uid);
 		return fileService.showbgImg(uid, request);
 	}
-	
 
 	@GetMapping("/name/{uid}")
 	public Object getName(@PathVariable String uid) {
