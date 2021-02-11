@@ -65,9 +65,10 @@
         <a href="#" class="nav-link pr-0" @click.prevent slot="title-container">
           <b-media no-body class="align-items-center">
             <span class="avatar avatar-sm rounded-circle">
-              <img
+              <b-img
                 alt="Image placeholder"
-                :src="`${this.$store.getters.getServer}/user/image/${this.uid}`"
+                :src="profileUrl"
+                v-model="profileUrl"
               />
             </span>
             <b-media-body class="ml-2 d-none d-lg-block">
@@ -131,6 +132,10 @@ export default {
     this.uid = this.$store.getters.getUid;
     let url = this.$route.name;
     this.checkUrl(url);
+
+    axios.get(`${this.$store.getters.getServer}/user/image`).then(res => {
+      this.profileUrl = res.data.path;
+    });
   },
   data() {
     return {
@@ -140,6 +145,7 @@ export default {
       searchQuery: "",
       isHeader: true,
       uid: "",
+      profileUrl: ""
     };
   },
   computed: {
@@ -183,7 +189,6 @@ export default {
       })
     },
     clickSearch() {
-      console.log('잘되나용' + this.searchQuery)
       this.$router.push({name: 'searchlist', query: {searchKeyword: `${this.searchQuery}`}})
     },
   }

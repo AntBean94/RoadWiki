@@ -5,7 +5,7 @@
     <div>
       <b-pagination-nav :link-gen="linkGen" :number-of-pages="10" use-router></b-pagination-nav>
       <b-button variant="primary" class="mt-2" @click="createBoard">새 글 작성</b-button>
-      <RoadmapList v-bind:rmlist="list" />
+      <RoadmapList :rmlist="list" />
     </div>
     <!-- <b-container>
       <b-row align-h="end">
@@ -23,7 +23,11 @@ export default {
   },
   data() {
     return {
+<<<<<<< HEAD
       list:[1, 2, 3],
+=======
+      list:[1, 2, 3, 4, 5, 6],
+>>>>>>> 8fc5c884229b5bb64ca2c43e8ed80bdffc83bfe5
     }
   },
   methods: {
@@ -41,7 +45,10 @@ export default {
         .catch(result => {
           console.log(response.data)
         });
-    }
+    },
+    linkGen(pageNum) {
+      return pageNum === 1 ? '?' : `?page=${pageNum}`
+    },
   },
   created(){
     // this.getSharedRoadmap()
