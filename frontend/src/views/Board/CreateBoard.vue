@@ -13,9 +13,9 @@
 
     <!--부트스트랩 드롭다운-->
     <div v-if="createMode">
-      <b-dropdown id="dropdown-1" text="공유할 로드맵을 선택하세요." class="m-md-2">
+      <b-dropdown id="dropdown-1" :text="selectedRoadmapName" class="m-md-2">
         <b-dropdown-item 
-          @click="selectRoadmapToShare(item.rmid)"
+          @click="selectRoadmapToShare(item.rmid, item.name)"
           v-for="(item, index) in userRoadmapList" 
           :key="index">{{ item.name }} | {{ item.createDate }}
         </b-dropdown-item>
@@ -112,6 +112,7 @@ export default {
       userRoadmapList: [],
       roadmapData: "",
       rmid: "",
+      selectedRoadmapName: "선택해 로드맵!",
     };
   },
   mounted() {
@@ -165,7 +166,7 @@ export default {
       this.tags.splice(idx, 1);
     },
 
-    selectRoadmapToShare(rmid) {
+    selectRoadmapToShare(rmid, name) {
       // 1. 로드맵 데이터 호출
       axios.get(`${this.$store.getters.getServer}/roadmap/get/${rmid}`)
       .then((res) => {
@@ -184,20 +185,29 @@ export default {
       // 3. title 호출
       const title = this.title
       this.rmid = rmid
+
+      // 4. item.name => this.에 보관
+      this.selectedRoadmapName = name
     },
     createRoadmapToShare() {
-      axios.post(`${this.$store.getters.getServer}/roadmapshare/insert`, {
-        rmid: this.rmid,
-        uid: this.$store.getters.getUid,
-        title : this.title,
-      })
-      .then(res => {
-        console.log(res)
-      })
-      .catch(err => {
-        console.error(err)
-      })
-      this.$router.push({ name: 'shareroadmap' })
+      if (this.rmid && this.title) {
+        axios.post(`${this.$store.getters.getServer}/roadmapshare/insert`, {
+          rmid: this.rmid,
+          uid: this.$store.getters.getUid,
+          title : this.title,
+        })
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.error(err)
+        })
+        this.$router.push({ name: 'shareroadmap' })
+      } else if (!this.title) {
+        alert("글의 제목을 입력해주세요.")
+      } else if (!this.rmid) {
+        alert("공유할 로드맵을 선택해주세요.")
+      }
     },
   },
   // watch: {

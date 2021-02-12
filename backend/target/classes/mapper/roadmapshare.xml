@@ -7,20 +7,22 @@
 	<select id="selectAll" resultType="RoadmapShare">
 		select *
 		from roadmapshare
+		order by createDate desc
 	</select>
 
 	<select id="selectByUserName" parameterType="String"
 		resultType="RoadmapShare">
 		select * from roadmapshare
 		where uid in
-		(select uid from user where name like '%'+#{name}+'%')
+		(select uid from user where name like concat('%',#{name},'%'))
+		order by createDate desc
 	</select>
 
 	<select id="selectByTitle" parameterType="String"
-		resultType="Roadmap">
+		resultType="RoadmapShare">
 		select * from roadmapshare
-		where title like '%' + #{title} +
-		'%'
+		where title like concat('%',#{title},'%')
+		order by createDate desc
 	</select>
 
 
@@ -37,12 +39,12 @@
 	<update id="updatelike" parameterType="map">
 		update roadmapshare set
 		likecnt = likecnt+1
-		where uid = #{uid} and pid = #{pid}
+		where pid = #{pid}
 	</update>
 	<update id="updatedislike" parameterType="map">
 		update roadmapshare set
 		likecnt = likecnt-1
-		where uid = #{uid} and pid = #{pid}
+		where pid = #{pid}
 	</update>
 
 	<insert id="insertlike" parameterType="map">

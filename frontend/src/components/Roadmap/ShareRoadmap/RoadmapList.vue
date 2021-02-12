@@ -19,8 +19,6 @@ export default {
     RoadmapListItem
   },
   created() {
-    console.log(this.rmlist);
-    console.log(this.unlist);
   },
 }
 </script>
