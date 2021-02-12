@@ -13,7 +13,7 @@ import com.web.blog.model.dto.User;
 
 public interface UserService {
 	
-	public Object getInfo(String email);
+	public Object getInfo(int uid, int loginuser);
 	public Object join(User user) throws Exception;
 	public Object checkUser(String email) throws SQLException;
 	public Object modify(User user);

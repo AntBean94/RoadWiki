@@ -42,10 +42,10 @@ public class UserServiceImpl implements UserService {
 	ServletContext servletContext;
 
 	@Override
-	public Object getInfo(String email) {
+	public Object getInfo(int uid, int loginuser) {
 		try {
 			Map<String, Object> result = new HashMap<String, Object>();
-			User tmp = userRepo.select(email);
+			User tmp = userRepo.selectUid(uid);
 			if (tmp == null) {
 				result.put("msg", "fail");
 				return result;
@@ -57,6 +57,11 @@ public class UserServiceImpl implements UserService {
 			result.put("msg", "success");
 			result.put("keywords", userRepo.selectkeyword(tmp.getUid()));
 			result.put("keywordtexts", userRepo.selectkeywordtext(tmp.getUid()));
+			if (uid == loginuser) {
+				result.put("isEqual", true);
+			} else {
+				result.put("isEqual", false);
+			}
 			return result;
 		} catch (Exception e) {
 			throw new RuntimeException("sql error");
