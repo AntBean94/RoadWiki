@@ -74,11 +74,9 @@ import store from '@/store'
 let updatecontent = '';
 // local 이 아니라 this.$store.getters.getServer 73이아니라 파람으로 받아온거$route.param
 // axios.get(`http://localhost:8085/freeboard/posting/73`)
-console.log('77')
 console.log(store.getters.getServer)
-axios.get(`${store.getters.getServer}/freeboard/posting/74`)
+axios.get(`${store.getters.getServer}/freeboard/posting/5`)
   .then((res) => {
-    console.log('81')
     console.log(res.data)
     console.log(store.getters.getServer)
     updatecontent = res.data.posting.content;
@@ -99,18 +97,24 @@ export default {
       tags: ['첫번째 태그', '두번째 태그', '세번째 태그', '네번째 태그'],
       tagInput: '',
       title: '',
+      pid: '',
     };
   },
   methods: {
     datachange() {
+      alert(`${this.pid}번째 글을 수정하셨습니다ㅏ.`)
       const content = this.$refs.toastuiEditor.invoke("getMarkdown");
       axios
-      .post(`${this.$store.getters.getServer}/freeboard/posting`, 
+      .put(`${this.$store.getters.getServer}/freeboard/posting`, 
       { 
         'title': this.title, 
         'content': content
       })
-      .then(() => {})
+      .then(() => {
+        alert(`수정이 완료되었습니다. ${this.pid}`)
+        console.log(this.pid)
+        this.$router.push({name: 'detail_board', query: { pid: this.pid }})
+      })
     },
     tagEnter() {
       if (this.tagInput) {
@@ -157,8 +161,12 @@ export default {
   created() {
     axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
     .then((res) => {
+      console.log(res.data.posting)
       updatecontent = res.data.posting.content
       this.title = res.data.posting.title
+      this.pid = res.data.posting.pid
+      console.log('************')
+      console.log(this.pid)
     })
     // console.log(updatecontent)
   },

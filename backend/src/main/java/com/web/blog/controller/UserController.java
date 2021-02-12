@@ -81,13 +81,14 @@ public class UserController {
 		}
 	}
 
-	@GetMapping("/info")
-	public Object getInfo(HttpServletRequest request) {
+	@GetMapping("/info/{uid}")
+	public Object getInfo(@PathVariable int uid, HttpServletRequest request) {
 		logger.trace("getInfo");
 		try {
-			String email = (String) loginServ.getData(request.getHeader("auth-token")).get("email");
-			logger.info(email);
-			Map<String, Object> result = (Map<String, Object>) userServ.getInfo(email);
+//			String email = (String) loginServ.getData(request.getHeader("auth-token")).get("email");
+			int loginUid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			logger.info(Integer.toString(loginUid));
+			Map<String, Object> result = (Map<String, Object>) userServ.getInfo(uid, loginUid);
 			result.put("msg", SUCCESS);
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		} catch (Exception e) {
