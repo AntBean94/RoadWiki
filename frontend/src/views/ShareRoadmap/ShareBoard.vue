@@ -23,11 +23,7 @@ export default {
   },
   data() {
     return {
-<<<<<<< HEAD
       list:[1, 2, 3],
-=======
-      list:[1, 2, 3, 4, 5, 6],
->>>>>>> 8fc5c884229b5bb64ca2c43e8ed80bdffc83bfe5
     }
   },
   methods: {
