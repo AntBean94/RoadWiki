@@ -109,8 +109,6 @@ export default {
 
     axios.get(`${this.$store.getters.getServer}/freeboard/postinglike/${this.$route.query.pid}`)
     .then((res) => {
-      console.log('여기는 라이크 정보')
-      console.log(res.data)
       if (res.data.like !== null) {
         this.like = true
       }
@@ -123,7 +121,6 @@ export default {
     getPostingInfo() {
       axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
       .then((res) => {
-        console.log(res.data)
         this.name = res.data.name
         this.classifier = res.data.posting.classifier
         this.title = res.data.posting.title
@@ -138,7 +135,6 @@ export default {
       })
 
       .catch((err) => {
-        console.log(err)
       })
     },
     updateBoard() {
@@ -159,7 +155,6 @@ export default {
 
       axios.post(`${this.$store.getters.getServer}/freeboard/postinglike`, postingLikeUser)
       .then((res) => {
-        console.log(res)
       })
 
       if (this.dislike) {
