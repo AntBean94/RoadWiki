@@ -73,6 +73,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 			
 		} catch (Exception e) {
 			logger.error("Service modify : Something wrong");
+			throw e;
 		}
 		return result;
 	}
@@ -92,6 +93,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 
 		} catch (Exception e) {
 			logger.error("Service deleteRoadmap : Something wrong");
+			throw e;
 		}
 		return result;
 	}
@@ -110,6 +112,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 
 		} catch (Exception e) {
 			logger.error("Service getRoadmapListByUid : Something wrong");
+			throw e;
 		}
 		return result;
 	}
@@ -128,6 +131,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 			result.put("roadmaps", roadmaprepo.selectRoadmapListByRmorder(rmordernum, uidnum));
 		} catch (Exception e) {
 			logger.error("Service getRoadmapListByRmorder : Something wrong");
+			throw e;
 		}
 		
 		return result;
@@ -159,6 +163,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 			result.put("roadmaps", roadmap);
 		} catch (Exception e) {
 			logger.error("Service getRoadmap : Something wrong");
+			throw e;
 		}
 		return result;
 	}
@@ -170,6 +175,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 			result.put("roadmaps", roadmaprepo.selectOfficialListRoadmap());
 		} catch (Exception e) {
 			logger.error("Service getRoadmapListByUid : Something wrong");
+			throw e;
 		}
 		return result;
 	}

@@ -191,6 +191,7 @@ public class CurriculumServiceImpl implements CurriculumService {
 			}
 		} catch (Exception e) {
 			logger.error("Service getCurriculumByrmid : Something wrong");
+			throw e;
 		}
 		return nodeDataArray;
 	}

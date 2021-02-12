@@ -55,7 +55,7 @@ public class RoadmapshareServiceImpl implements RoadmapshareService {
 			
 			for(int i = 0 ; i < name.length ; i++)
 				name[i] = userrepo.getName(share[i].getUid());
-			result.put("roadmapshares", roadmapshareRepo.selectAll());
+			result.put("roadmapshares", share);
 			result.put("username", name);
 		} catch (Exception e) { 
 			logger.error("Service selectAll : Something wrong");
@@ -65,10 +65,17 @@ public class RoadmapshareServiceImpl implements RoadmapshareService {
 	}
 
 	@Override
-	public Object selectByUserName(String name) throws Exception {
+	public Object selectByUserName(String uname) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			result.put("roadmapshares", roadmapshareRepo.selectByUserName(name));
+			
+			RoadmapShare[] share = roadmapshareRepo.selectByUserName(uname);
+			String[] name = new String[share.length];
+			
+			for(int i = 0 ; i < name.length ; i++)
+				name[i] = userrepo.getName(share[i].getUid());
+			result.put("roadmapshares", share);
+			result.put("username", name);
 		} catch (Exception e) {
 			logger.error("Service selectByUserName : Something wrong");
 			throw e;
@@ -80,9 +87,17 @@ public class RoadmapshareServiceImpl implements RoadmapshareService {
 	public Object selectByTitle(String title) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			result.put("roadmapshares", roadmapshareRepo.selectByTitle(title));
+			RoadmapShare[] share = roadmapshareRepo.selectByTitle(title);
+			String[] name = new String[share.length];
+			
+			for(int i = 0 ; i < name.length ; i++)
+				name[i] = userrepo.getName(share[i].getUid());
+			result.put("roadmapshares", share);
+			result.put("username", name);
 		} catch (Exception e) {
+			
 			logger.error("Service selectByTitle : Something wrong");
+			e.printStackTrace();
 			throw e;
 		}
 		return result;
@@ -112,6 +127,7 @@ public class RoadmapshareServiceImpl implements RoadmapshareService {
 				throw new RuntimeException("not your roadmap");
 		} catch (Exception e) {
 			logger.error("Service delete : Something wrong");
+			throw e;
 		}
 		return result;
 	}
@@ -126,6 +142,7 @@ public class RoadmapshareServiceImpl implements RoadmapshareService {
 				result.put("islike", true);
 		} catch (Exception e) {
 			logger.error("Service selectlike : Something wrong");
+			throw e;
 		}
 		return result;
 	}
@@ -135,6 +152,7 @@ public class RoadmapshareServiceImpl implements RoadmapshareService {
 	public Object like(int nowuid, int uid, int pid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
+			System.out.println(uid + " " + pid);
 			if(nowuid != uid)
 				throw new RuntimeException("wrong user");
 			if(roadmapshareRepo.updatelike(uid, pid) != 1)
@@ -143,7 +161,9 @@ public class RoadmapshareServiceImpl implements RoadmapshareService {
 				throw new RuntimeException("wrong query");
 			
 		} catch (Exception e) {
+			
 			logger.error("Service like : Something wrong");
+			throw e;
 		}
 		return result;
 	}
@@ -162,6 +182,7 @@ public class RoadmapshareServiceImpl implements RoadmapshareService {
 			
 		} catch (Exception e) {
 			logger.error("Service like : Something wrong");
+			throw e;
 		}
 		return result;
 	}
