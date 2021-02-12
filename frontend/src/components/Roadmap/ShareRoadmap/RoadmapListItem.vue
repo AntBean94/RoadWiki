@@ -1,14 +1,15 @@
 <template>
   <div @click="goDetail">
-    <b-card :title="roadmap.title">
-    <Overview v-if="roadmapData" :roadmapData="roadmapData" id="overview" />
-      <b-card-text>
+    <b-card :title="roadmap.title" class="mb-1 btn p-0">
+    <hr class="mt-1 mb-3">
+    <Overview v-if="roadmapData" :roadmapData="roadmapData" id="overview"/>
+      <b-card-text class="mb-0 pb-0">
         {{ username }}
+        <small class="text-muted">좋아요 : {{ roadmap.likecnt }}</small>
       </b-card-text>
       <template #footer>
         <small class="text-muted">{{ roadmap.createDate }}</small>
         <br>
-        <small class="text-muted">좋아요 : {{ roadmap.likecnt }}</small>
       </template>
     </b-card>
 </div>
@@ -53,7 +54,13 @@ export default {
 
 <style>
 #overview {
-  width: 150px;
+  width: 200px;
   height: 150px;
+}
+#roadmapcard {
+ background-color: white;
+}
+#roadmapcard :hover {
+  box-shadow: 5px 5px 5px;
 }
 </style>

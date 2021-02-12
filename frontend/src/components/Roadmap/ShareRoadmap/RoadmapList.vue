@@ -1,11 +1,13 @@
 <template>
-<div>
-  <div style="display: block">
-    <div v-for="(rm, idx) in rmlist" :key="idx">
-      <RoadmapListItem  id="rmli" :roadmap="rm" :username="unlist[idx]" />
-    </div>
+  <div class ="d-flex justify-content-center">
+      <RoadmapListItem 
+        v-for="(rm, idx) in rmlist" 
+        :key="idx" 
+        id="rmli" 
+        :roadmap="rm" 
+        :username="unlist[idx]" 
+      />
   </div>
-</div>
 </template>
 
 <script>
@@ -18,18 +20,18 @@ export default {
   components: {
     RoadmapListItem
   },
+  beforeMount(){
+  },
   created() {
   },
 }
 </script>
 
 <style>
-#rmli{
-  float:left;
-  display: inline-block;
+#rmli {
   width: 250px;
   height: 400px;
-  margin: 25px;
-  overflow: overflow;
+  margin: 25px; 
+  overflow: hidden;
 }
 </style>

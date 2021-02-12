@@ -30,7 +30,6 @@
         v-b-modal.modal-1
         type="button"
         class="btn ml-4"
-        title=""
         data-original-title="Copy to clipboard"
       >
         <div>
@@ -138,6 +137,9 @@ export default {
     CUMode: {
       type: Number
     },
+    isOfficial: {
+      type: Number
+    }
   },
   data() {
     return {
@@ -181,8 +183,10 @@ export default {
         axios.get(`${this.$store.getters.getServer}/roadmap/get/${this.rmid}`)
           .then((res) => {
             if(res.data.msg == 'success'){
-            this.roadmapData = JSON.parse(res.data['roadmaps'].tmp);
-            this.roadmapname = res.data['roadmaps'].name;
+              this.roadmapData = JSON.parse(res.data['roadmaps'].tmp);
+              if (this.isOfficial) {
+                this.roadmapname = res.data['roadmaps'].name;
+              }
             }else{
               alert("데이터 로드에 실패했습니다.")
             }

@@ -102,7 +102,7 @@ export default {
         });
     },
     goToCreate() {
-      this.$router.push({ name : 'update_user_roamdap', params: { rmid: this.rmid, CUMode: 0 }})
+      this.$router.push({ name : 'update_user_roamdap', params: { rmid: this.rmid, CUMode: 0, isOfficial: 1 }})
     },
   },
 }
