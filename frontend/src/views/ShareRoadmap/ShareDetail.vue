@@ -43,6 +43,7 @@
       <b-row>
         <i class="far fa-thumbs-up fa-2x ml-3" v-if="!like" @click="clickLike"><span class="h3 ml-1">좋아요{{likeCnt}}</span></i>
         <i class="fas fa-thumbs-up fa-2x ml-3" v-if="like" @click="cancelLike"><span class="h3 ml-1">좋아요{{likeCnt}}</span></i>
+        <button class="btn" style="background-color: rgb(256, 256, 256);" @click="goToCreate">내보내기</button>
       </b-row>
     </b-container>
 
@@ -159,6 +160,9 @@ export default {
 
       this.like = false
       this.likeCnt -- 
+    },
+    goToCreate() {
+      this.$router.push({ name : 'update_user_roamdap', params: { rmid: this.rmid, CUMode: 0 }})
     },
   },
 }
