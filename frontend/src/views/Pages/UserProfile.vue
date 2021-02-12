@@ -38,7 +38,8 @@
               <br>
               <!-- v-if 해서 uid랑 해당 계정의 id가 같을 때만 수정하기 버튼 활성화 -->
               <router-link :to="{ name : 'profile-update' }" class="btn btn-primary" v-if="!isSearch">수정하기</router-link>
-              <b-button v-if="isSearch">팔로잉하기</b-button>
+              <b-button variant = "primary" v-show="(isSearch && !isFollow)" @click="sendFollowing">팔로우 하기</b-button>
+              <b-button variant = "danger" v-show="(isSearch && isFollow)" @click="sendUnfollowing">팔로우 취소</b-button>
             </b-col>
           </b-row>
         </b-container>
@@ -69,11 +70,11 @@
                 class="card-profile-stats d-flex justify-content-center mt-md-5"
               >
                 <div>
-                  <span class="heading">22</span>
+                  <span class="heading">{{ followerlist.length }}</span>
                   <span class="description">follower</span>
                 </div>
                 <div>
-                  <span class="heading">10</span>
+                  <span class="heading">{{ followinglist.length }}</span>
                   <span class="description">following</span>
                 </div>
                 <div>
@@ -198,8 +199,8 @@ import UserCard from "./UserProfile/UserCard.vue";
         profileImg: '',
         backImg: '',
         keywordtexts: [],
-        follower: '',
-        following: '',
+        followerlist: [],
+        followinglist: [],
         boards: '',
         comments: '',
         major: '기계공학',
@@ -207,7 +208,9 @@ import UserCard from "./UserProfile/UserCard.vue";
         roadmaps: ['첫 번째 로드맵', '두 번째 로드맵', '세 번째 로드맵'],
         uid: "",
         isSearch: true,
-        profileUrl: ''
+        profileUrl: '',
+        profileUid: 0,
+        isFollow: false,
       }
     },
     created() {
@@ -217,16 +220,14 @@ import UserCard from "./UserProfile/UserCard.vue";
         this.profileUrl = res.data.path;
       });
 
-      let profileuid;
       if (this.$route.params.youruid === undefined) {
-        profileuid = this.uid
+        this.profileuid = this.uid
       } else {
-        profileuid = this.$route.params.youruid
+        this.profileuid = this.$route.params.youruid
       }
-      axios.get(`${this.$store.getters.getServer}/user/info/${profileuid}`)
+
+      axios.get(`${this.$store.getters.getServer}/user/info/${this.profileuid}`)
       .then((res) => {
-        console.log(res.data)
-        console.log(typeof(res.data.isEqual))
         if (res.data.isEqual) {
           this.isSearch = false
         } else {
@@ -244,8 +245,24 @@ import UserCard from "./UserProfile/UserCard.vue";
           this.$router.replace("/");
         });
       });
+
+      this.getFollowList()
   },
   methods: {
+    getFollowList() {
+      axios.get(`${this.$store.getters.getServer}/follow/list/${this.profileuid}`)
+      .then((res) => {
+        console.log('follow 관련 정보')
+        console.log(res.data)
+        this.followerlist = res.data.followers
+        this.followinglist = res.data.followings
+        if (res.data.isFollow) {
+          this.isFollow = true
+        } else {
+          this.isFollow = false
+        }
+      })
+    },
     withDrawal() {
       axios
         .delete(`${this.$store.getters.getServer}/user/withdraw`)
@@ -256,7 +273,28 @@ import UserCard from "./UserProfile/UserCard.vue";
         .catch(() => {
           alert("오류가 발생했습니다. 다시 시도해주세요.");
         });
-    }
+    },
+    sendFollowing() {
+      let follow = {
+        'touid': `${this.profileuid}`
+      }
+      axios.post(`${this.$store.getters.getServer}/follow/userfollow`, follow)
+      .then((res) => {
+        if (res.data.msg === 'success') {
+          this.isFollow = true
+        }
+        this.getFollowList()
+      })
+    },
+    sendUnfollowing() {
+      axios.delete(`${this.$store.getters.getServer}/follow/userunfollow/${this.profileuid}`)
+      .then((res) => {
+        if (res.data.msg === 'success') {
+          this.isFollow = false
+        }
+        this.getFollowList()
+      })
+    },
   }
 };
 </script>
