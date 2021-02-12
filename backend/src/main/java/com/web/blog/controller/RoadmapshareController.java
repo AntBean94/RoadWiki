@@ -1,6 +1,5 @@
 package com.web.blog.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.web.blog.model.dto.Roadmap;
 import com.web.blog.model.dto.RoadmapShare;
 import com.web.blog.model.service.LoginServiceImpl;
 import com.web.blog.model.service.RoadmapService;

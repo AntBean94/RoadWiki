@@ -43,8 +43,6 @@ export default {
         .then(response => {
           this.shareList = response.data.roadmapshares;
           this.usernamelist = response.data.username;
-          console.log(this.shareList);
-          console.log(this.usernamelist);
         })
         .catch(e => {
           console.log(e);
