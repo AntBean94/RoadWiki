@@ -106,6 +106,11 @@ const routes = [
         name: 'shareroadmap',
         component: () => import('../views/ShareRoadmap/ShareBoard.vue'),
       },
+      {
+        path: '/searchlist',
+        name: 'searchlist',
+        component: () => import('../views/Search/SearchList.vue'),
+      },
     ]
   },
   {

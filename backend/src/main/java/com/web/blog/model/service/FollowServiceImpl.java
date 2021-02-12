@@ -1,0 +1,68 @@
+package com.web.blog.model.service;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.web.blog.model.dto.Follow;
+import com.web.blog.model.repo.FollowRepo;
+
+@Service
+public class FollowServiceImpl implements FollowService {
+	
+	private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
+	
+	@Autowired
+	FollowRepo followRepo;
+
+	@Override
+	public Object getInfo(int fromuid, int touid) throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			int[] followerList = followRepo.selectFollowers(touid);
+			for (int i = 0; i < followerList.length; i++) {
+				if (followerList[i] == fromuid) {
+					result.put("isFollow", true);
+					break;
+				} else {
+					result.put("isFollow", false);
+				}
+			}
+			result.put("followers", followerList);
+			result.put("followings", followRepo.selectFollowings(touid));
+		} catch (Exception e) {
+			throw e;
+		}
+		return result;
+	}
+
+	@Override
+	public Object userFollow(Follow follow) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			followRepo.insert(follow);
+			result.put("msg", "success");
+		} catch (Exception e) {
+			result.put("msg", "fail");
+		}
+		return result;
+	}
+
+	@Override
+	public Object userUnfollow(Follow follow) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			followRepo.delete(follow);
+			result.put("msg", "success");
+		} catch (Exception e) {
+			result.put("msg", "fail");
+		}
+		return result;
+	}
+	
+	
+}
