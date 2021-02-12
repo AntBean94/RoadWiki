@@ -165,7 +165,7 @@ export default {
   data() {
     return {
       isHeader: true,
-      chattingOn: true
+      chattingOn: false
     };
   },
   methods: {
