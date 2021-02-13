@@ -4,32 +4,13 @@
     </base-header>
 
     <b-container style="background: white; border-radius: 1rem;" class="py-4 mt-4">
-      <base-input>
-        <textarea 
-          class="form-control mt-2" 
-          rows="2" 
-          placeholder="댓글을 입력해주세요"
-          v-model="content"
-        >
-        </textarea>
-        <b-row align-h="end">
-          <b-button 
-            variant="default" 
-            class="mt-2 mr-3" 
-            @click="sendWord"
-            size="sm"
-          >
-            등록
-          </b-button>
-        </b-row>
-      </base-input>
       <h1>
         "{{ $route.query.searchKeyword }}"검색 결과 페이지입니다.
       </h1>
       <hr class="my-2">
       <h2>유저</h2>
       <ul v-for="(user, idx) in userlist" :key="idx">
-        <router-link :to="{name: 'profile', params: {youruid: `${user.uid}`}}">
+        <router-link :to="{name: 'profile', query: {profileId: `${user.uid}`}}">
           {{user.name}}
         </router-link>
       </ul>

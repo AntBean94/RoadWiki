@@ -1,12 +1,15 @@
 <template>
   <div>
     <div v-if="isview" ref="myDiagramDiv"></div>
-    <div ref="myOverviewDiv">
-    </div>
+    
+    <div ref="myOverviewDiv" id="overviewdiv"></div>
   </div>
 </template>
 
 <script>
+let go = window.go;
+let $ = go.GraphObject.make;
+let myDiagram
 export default {
   name: "Overview",
   props: {
@@ -14,17 +17,21 @@ export default {
   },
   data() {
     return {
-      isview: 0,
+      // diagram 숨기기위한 변수
+      isview: 1,
     }
   },
   mounted() {
     // 로드맵 선언
     let go = window.go;
     let $ = go.GraphObject.make;
-    let myDiagram = 
+    myDiagram = 
       $(go.Diagram, this.$refs.myDiagramDiv, {
         initialContentAlignment: go.Spot.Center,
-        "undoManager.isEnabled": true  
+        "undoManager.isEnabled": true,
+        isReadOnly: true,
+        allowSelect: false,
+        
       });
 
     // 로드맵 모델 설정
@@ -37,7 +44,8 @@ export default {
               stroke: "rgb(15, 76, 129)",
               strokeWidth: 3,
               strokeJoin: "round",
-              strokeCap: "square"
+              strokeCap: "square",
+              
             },
             new go.Binding("figure", "figure")
           ),
@@ -195,17 +203,6 @@ export default {
         relinkableTo: true,
         reshapable: true,
         resegmentable: true,
-
-        // mode에 따라 바뀌어야 하는 부분--------------------------------------------------------|
-        // 마우스 오버시 이펙트 효과 부여
-        mouseEnter: function(e, link) {
-          link.findObject("HIGHLIGHT").stroke = "rgba(255, 255, 255, 1)";
-        },
-        mouseLeave: function(e, link) {
-          link.findObject("HIGHLIGHT").stroke = "transparent";
-        },
-        //----------------------------------------------------------------------------------------|
-        selectionAdorned: false
       },
       new go.Binding("points").makeTwoWay(),
       $(
@@ -259,26 +256,84 @@ export default {
           },
           new go.Binding("text").makeTwoWay()
         )
+  
       )
     );
 
     // 링크연결시 화살표가 직교하는 모양으로 보일 수 있도록 하는 설정
     myDiagram.toolManager.linkingTool.temporaryLink.routing = go.Link.Orthogonal;
     myDiagram.toolManager.relinkingTool.temporaryLink.routing = go.Link.Orthogonal;
+    
 
     myDiagram.model = go.Model.fromJson(this.roadmapData);
-
+    myDiagram.hasVerticalScrollbar = false;
+    myDiagram.hasHorizontalScrollbar = false;
     let myOverview = 
       $(go.Overview, this.$refs.myOverviewDiv,
-        { observed: myDiagram }
+        { observed: myDiagram,
+          contentAlignment: go.Spot.Center,
+          drawsTemporaryLayers: false,
+          "box.visible" : false,
+        }
       );
-      console.log('hi')
   },
   methods: {
+    nodeStyle() {
+      return [
+        // The Node.location comes from the "loc" property of the node data,
+        // converted by the Point.parse static method.
+        // If the Node.location is changed, it updates the "loc" property of the node data,
+        // converting back using the Point.stringify static method.
+        new go.Binding("location", "loc", go.Point.parse).makeTwoWay(
+          go.Point.stringify
+        ),
+        {
+          // the Node.location is at the center of each node
+          locationSpot: go.Spot.Center
+        }
+      ];
+    },
+    makePort(name, align, spot, output, input) {
+      var horizontal =
+        align.equals(go.Spot.Top) || align.equals(go.Spot.Bottom);
+      // the port is basically just a transparent rectangle that stretches along the side of the node,
+      // and becomes colored when the mouse passes over it
+      return $(go.Shape, {
+        fill: "transparent", // changed to a color in the mouseEnter event handler
+        strokeWidth: 0, // no stroke
+        width: horizontal ? NaN : 8, // if not stretching horizontally, just 8 wide
+        height: !horizontal ? NaN : 8, // if not stretching vertically, just 8 tall
+        alignment: align, // align the port on the main Shape
+        stretch: horizontal
+          ? go.GraphObject.Horizontal
+          : go.GraphObject.Vertical,
+        portId: name, // declare this object to be a "port"
+        fromSpot: spot, // declare where links may connect at this port
+        fromLinkable: output, // declare whether the user may draw links from here
+        toSpot: spot, // declare where links may connect at this port
+        toLinkable: input, // declare whether the user may draw links to here
+        cursor: "pointer"
+      });
+    },
+    // 글씨체, 스타일 수정 필요(프론트 집중기간)
+    textStyle() {
+      return {
+        font: "bold 11pt Lato, Helvetica, Arial, sans-serif",
+        stroke: "#000000"
+      };
+    },
   }
 }
 </script>
 
 <style>
-
+#overviewdiv {
+  width: 200px;
+  height: 150px;
+}
+#overviewdiv canvas {
+  width: 200px;
+  height: 150px;
+  outline: none;
+}
 </style>

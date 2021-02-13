@@ -2,7 +2,7 @@
 <div>
   <div style="display: block">
     <div v-for="(rm, idx) in rmlist" :key="idx">
-      <RoadmapListItem id="rmli" :roadmap="rm" />
+      <RoadmapListItem  id="rmli" :roadmap="rm" :username="unlist[idx]" />
     </div>
   </div>
 </div>
@@ -11,12 +11,14 @@
 <script>
 import RoadmapListItem from '@/components/Roadmap/ShareRoadmap/RoadmapListItem'
 export default {
-  props: ["rmlist"],
+  props: {
+      rmlist: Array,
+      unlist: Array,
+    },
   components: {
     RoadmapListItem
   },
   created() {
-    console.log(this.rmlist);
   },
 }
 </script>
@@ -28,6 +30,6 @@ export default {
   width: 250px;
   height: 400px;
   margin: 25px;
-  overflow: hidden;
+  overflow: overflow;
 }
 </style>

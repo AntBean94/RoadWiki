@@ -17,19 +17,19 @@ export default new Vuex.Store({
       uid: "",
       email: "",
       name: "",
-      createDate: "",
+      createDate: ""
     },
     code: "",
-    search: "",
+    pid: ""
   },
   getters: {
-    getServer(state) { 
+    getServer(state) {
       return state.server;
     },
     getAccessToken(state) {
       return state.accessToken;
     },
-    getUid(state) { 
+    getUid(state) {
       return state.user.uid;
     },
     getEmail(state) {
@@ -41,21 +41,21 @@ export default new Vuex.Store({
     getCreateDate(state) {
       return state.user.createDate;
     },
-    getCode(state) { 
+    getCode(state) {
       return state.code;
     },
-    getUser(state) { 
+    getUser(state) {
       return state.user;
     },
-    getSearch(state) {
-      return state.search;
-    },
+    getPid(state) {
+      return state.pid;
+    }
   },
   mutations: {
     LOADUSERTOKEN(state) {
       console.log("set token");
-      state.accessToken = sessionStorage.getItem('auth-token');
-      state.user = JSON.parse(sessionStorage.getItem('user'));
+      state.accessToken = sessionStorage.getItem("auth-token");
+      state.user = JSON.parse(sessionStorage.getItem("user"));
       console.log("load : " + state.user);
       axios.defaults.headers.common["auth-token"] = state.accessToken;
     },
@@ -73,31 +73,36 @@ export default new Vuex.Store({
       state.user.name = "";
       state.user.createDate = "";
     },
-    SETINFO(state, payload) { 
+    SETINFO(state, payload) {
       state.user.name = payload["name"];
       state.user.email = payload["email"];
     },
-    SETEMAIL(state, payload) { 
+    SETEMAIL(state, payload) {
       state.user.email = payload;
     },
-    SETCODE(state, payload) { 
+    SETCODE(state, payload) {
       state.code = payload;
     },
-    SETSEARCH(state, payload) {
-      state.search = payload;
+    SETPID(state, payload) {
+      state.pid = payload;
     }
   },
   actions: {
     LOGIN(context, user) {
       return axios
         .post(`${SERVER_URL}/user/login`, user)
-        .then((response) => {
-          console.log(response.data)
+        .then(response => {
+          console.log(response.data);
           context.commit("LOGIN", response.data);
-          if(`${response.data["authorizationToken"]}` == "undefined") reject();
-          axios.defaults.headers.common["auth-token"] = `${response.data["authorizationToken"]}`;
-          sessionStorage.setItem('auth-token', `${response.data["authorizationToken"]}`)
-          sessionStorage.setItem('user', JSON.stringify(this.getters.getUser));
+          if (`${response.data["authorizationToken"]}` == "undefined") reject();
+          axios.defaults.headers.common[
+            "auth-token"
+          ] = `${response.data["authorizationToken"]}`;
+          sessionStorage.setItem(
+            "auth-token",
+            `${response.data["authorizationToken"]}`
+          );
+          sessionStorage.setItem("user", JSON.stringify(this.getters.getUser));
         })
         .catch(() => {
           reject();
@@ -106,20 +111,20 @@ export default new Vuex.Store({
     LOGOUT(context) {
       context.commit("LOGOUT");
       axios.defaults.headers.common["auth-token"] = null;
-      sessionStorage.removeItem('auth-token');
+      sessionStorage.removeItem("auth-token");
     },
     SETINFO(context, user) {
       context.commit("SETINFO", user);
     },
-    SETCODE(context, code) { 
+    SETCODE(context, code) {
       context.commit("SETCODE", code);
     },
     SETEMAIL(context, email) {
       context.commit("SETEMAIL", email);
     },
-    SETSEARCH(context, search) {
-      context.commit("SETSEARCH", search);
-    },
+    SETPID(context, pid) {
+      context.commit("SETPID", pid);
+    }
   },
   modules: {}
 });

@@ -122,7 +122,7 @@ export default {
       tag: "",
       postings: [],
       names: [],
-      totalPageNum: "",
+      totalPageNum: ""
     };
   },
   methods: {
@@ -132,11 +132,10 @@ export default {
       else adr + `/${this.word}`;
       adr += `/${this.currentPage}`;
       if (this.tag != "") adr += `${this.tag}`;
-      console.log(adr)
+
       axios
         .get(adr)
         .then(response => {
-          console.log(response)
           this.postings = response.data.postings;
           this.names = response.data.names;
           for (let i = 0; i < this.postings.length; i++) {
@@ -146,21 +145,25 @@ export default {
             this.postings[i].name = this.names[i];
           }
         })
-        .catch((err) => {
-          console.log(err)
-          alert('문제가 생겼습니다 섬세한 문구')
+        .catch(err => {
+          console.log(err);
+          alert("문제가 생겼습니다 섬세한 문구");
         });
     },
     openDetail(row) {
-      const pid = row.pid
-      this.$router.push({name: 'detail_board', query: { pid }})
+      const pid = row.pid;
+      //console.log(pid);
+      this.$store.dispatch("SETPID", pid);
+      //console.log(this.$store.getters.getPid);
+      this.$router.push({ name: "detail_board", query: { pid } });
     },
     getTotalNum() {
-      axios.get(`${this.$store.getters.getServer}/freeboard/totalCount`)
-      .then((res) => {
-        this.totalPageNum = res.data.total;
-      })
-    },
+      axios
+        .get(`${this.$store.getters.getServer}/freeboard/totalCount`)
+        .then(res => {
+          this.totalPageNum = res.data.total;
+        });
+    }
   },
   created() {
     this.getList();
@@ -169,7 +172,7 @@ export default {
   watch: {
     currentPage() {
       this.getList();
-    },
-  },
+    }
+  }
 };
 </script>

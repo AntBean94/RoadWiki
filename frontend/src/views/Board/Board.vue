@@ -64,14 +64,14 @@ export default {
       console.log(this.isSelected);
     },
     createBoard() {
-      this.$router.push({name: 'create_board'})
+      this.$router.push({name: 'create_board' , params: { createMode: 0 }})
     },
     // detailBoard() {
     //   this.$router.push({name: 'detail_board', query: { pid: pid }})
     // },
   },
   created() {
-    console.log(this.$store.getters.getUid);
+    // console.log(this.$store.getters.getUid);
   }
 };
 </script>
