@@ -625,7 +625,6 @@ export default {
             start.text = "시작"
             res.data["suggest"].push(start)
           }
-          console.log(res.data["suggest"])
           recommendCurData = res.data["suggest"];
           myPalette.model.nodeDataArray = recommendCurData;
         })

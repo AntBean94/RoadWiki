@@ -12,7 +12,7 @@
 
 					<div id="calendar">
 						<div class="calendar-controls">
-							<div v-if="message" class="notification is-success">
+							<div class="notification is-success">
 								{{ message }}
 								{{ newItemMemo }}
 								</div>
@@ -159,8 +159,10 @@ export default {
 										item.classes = 'blue'
 								} else if (curr.category==='black') {
 										item.classes = 'orange'
-								} else {
+								} else if (curr.category === 'green'){
 										item.classes = 'purple'
+								} else{
+									item.classes = 'yellow'
 								}
 								this.items.push(item)
 						})
@@ -346,10 +348,10 @@ export default {
 	content: "\1F30D\1F32C\1F525";
 }
 .notification.is-success {
-    background-color: rgb(51, 132, 238);
+    background-color: lemonchiffon;
     border-radius: 6px;
     box-shadow: 0 2px 3px rgb(10 10 10 / 10%), 0 0 0 1px rgb(10 10 10 / 10%);
-    color: #ffffff;
+    color: #443600;
     display: block;
 	padding: 1.25rem;
 	margin-bottom: 20%;
@@ -381,8 +383,12 @@ export default {
 .disabled{
 	background-color: #ccc9c9c2;
 }
+.theme-default .cv-item.yellow {
+	background-color: lemonchiffon;
+	border-color: lemonchiffon;
+}
 .theme-default .cv-item.blue {
-	background-color: #ff009d;
-	border-color: #f31#ff009d
+	background-color: paleturquoise;
+	border-color: paleturquoise
 }
 </style>

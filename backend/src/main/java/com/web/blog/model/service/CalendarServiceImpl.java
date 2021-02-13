@@ -40,6 +40,7 @@ public class CalendarServiceImpl implements CalendarService {
 
 		} catch (Exception e) {
 			logger.error("Service getCalendarInfo : Something wrong");
+			throw e;
 		}
 		return result;
 	}
@@ -59,6 +60,7 @@ public class CalendarServiceImpl implements CalendarService {
 
 		} catch (Exception e) {
 			logger.error("Service getCalendarInfo : Something wrong");
+			throw e;
 		}
 		return result;
 	}

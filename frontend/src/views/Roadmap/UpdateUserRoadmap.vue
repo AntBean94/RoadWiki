@@ -3,7 +3,7 @@
     <base-header class="pb-2 pt-2 pt-md-2 bg-gradient-default">
       <!-- Card stats -->
       <a
-        :href="goToBack"
+        @click="goToBack"
         class="btn"
         style="background-color: rgb(242, 214, 174);"
         >돌아가기</a
@@ -141,13 +141,9 @@ export default {
     CUMode: {
       type: Number
     },
-    isOfficial: {
-      type: Number
-    }
   },
   data() {
     return {
-      goToBack: "#/read-user-roadmap",
       roadmapData: {},
       roadmapname: "",
       logData: [],
@@ -189,7 +185,7 @@ export default {
           .then((res) => {
             if(res.data.msg == 'success'){
               this.roadmapData = JSON.parse(res.data['roadmaps'].tmp);
-              if (this.isOfficial) {
+              if (res.data['roadmaps'].uid < 0 || res.data['roadmaps'].uid == this.$store.getters.getUid) {
                 this.roadmapname = res.data['roadmaps'].name;
               }
             }else{
@@ -217,7 +213,6 @@ export default {
         });
       }
     },
-
     // update 요청보내기
     updateRoadmap() {
       const childRoadmapData = this.$refs.roadmap.serveRoadmap()
@@ -263,7 +258,6 @@ export default {
       // 차후에 DB에 요청을 보낸다음 DB정보로 반영
       this.headertext = curriculumName;
     },
-
     previewRoadmap(clickrmid) {
         axios.get(`${this.$store.getters.getServer}/roadmap/get/${clickrmid}`)
         .then((res) => {
@@ -278,6 +272,9 @@ export default {
           alert("axios 오류 5");
         });
     },
+    goToBack() {
+      this.$router.push({ name: "read_user_roadmap" })
+    }
   }
 };
 </script>
