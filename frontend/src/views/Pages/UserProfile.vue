@@ -35,12 +35,11 @@
                   {{ address }}
                 </b-link>
               </div>
-              <br />
-              <router-link
-                :to="{ name: 'profile-update' }"
-                class="btn btn-primary"
-                >수정하기</router-link
-              >
+              <br>
+              <!-- v-if 해서 uid랑 해당 계정의 id가 같을 때만 수정하기 버튼 활성화 -->
+              <router-link :to="{ name : 'profile-update' }" class="btn btn-primary" v-if="!isSearch">수정하기</router-link>
+              <b-button variant = "primary" v-show="(isSearch && !isFollow)" @click="sendFollowing">팔로우 하기</b-button>
+              <b-button variant = "danger" v-show="(isSearch && isFollow)" @click="sendUnfollowing">팔로우 취소</b-button>
             </b-col>
           </b-row>
         </b-container>
@@ -71,11 +70,11 @@
                 class="card-profile-stats d-flex justify-content-center mt-md-5"
               >
                 <div>
-                  <span class="heading">22</span>
+                  <span class="heading">{{ followerlist.length }}</span>
                   <span class="description">follower</span>
                 </div>
                 <div>
-                  <span class="heading">10</span>
+                  <span class="heading">{{ followinglist.length }}</span>
                   <span class="description">following</span>
                 </div>
                 <div>
@@ -186,54 +185,84 @@
 // import EditProfileForm from './UserProfile/EditProfileForm.vue';
 import UserCard from "./UserProfile/UserCard.vue";
 
-export default {
-  components: {
-    // EditProfileForm,
-    UserCard
-  },
-  data() {
-    return {
-      nickname: "",
-      introduction:
-        "술잔을 들자하니 천하가 내발아래 있고 6팀 친구들 또한 옆에 있으니 염라대왕 두렵지 않구나",
-      address: "https://github.com/",
-      profileImg: "",
-      backImg: "",
-      keywordtexts: [],
-      follower: "",
-      following: "",
-      boards: "",
-      comments: "",
-      major: "기계공학",
-      email: "",
-      roadmaps: ["첫 번째 로드맵", "두 번째 로드맵", "세 번째 로드맵"],
-      uid: ""
-    };
-  },
-  created() {
-    this.uid = this.$store.getters.getUid;
+  export default {
+    components: {
+      // EditProfileForm,
+      UserCard,
+    },
+    props: ['youruid'],
+    data() {
+      return{
+        nickname: '',
+        introduction: '술잔을 들자하니 천하가 내발아래 있고 6팀 친구들 또한 옆에 있으니 염라대왕 두렵지 않구나',
+        address: 'https://github.com/',
+        profileImg: '',
+        backImg: '',
+        keywordtexts: [],
+        followerlist: [],
+        followinglist: [],
+        boards: '',
+        comments: '',
+        major: '기계공학',
+        email: '',
+        roadmaps: ['첫 번째 로드맵', '두 번째 로드맵', '세 번째 로드맵'],
+        uid: "",
+        isSearch: true,
+        profileUrl: '',
+        profileUid: 0,
+        isFollow: false,
+      }
+    },
+    created() {
+      this.uid = this.$store.getters.getUid;
 
-    axios.get(`${this.$store.getters.getServer}/user/image`).then(res => {
-      this.profileUrl = res.data.path;
-    });
+      axios.get(`${this.$store.getters.getServer}/user/image`).then(res => {
+        this.profileUrl = res.data.path;
+      });
 
-    axios
-      .get(`${this.$store.getters.getServer}/user/info`)
-      .then(res => {
-        console.log(res.data);
-        this.nickname = res.data.name;
-        this.email = res.data.email;
-        this.keywords = res.data.keywords;
-        this.keywordtexts = res.data.keywordtexts;
+      if (this.$route.params.youruid === undefined) {
+        this.profileuid = this.uid
+      } else {
+        this.profileuid = this.$route.params.youruid
+      }
+
+      axios.get(`${this.$store.getters.getServer}/user/info/${this.profileuid}`)
+      .then((res) => {
+        if (res.data.isEqual) {
+          this.isSearch = false
+        } else {
+          this.isSearch = true
+        }
+        this.nickname = res.data.name
+        this.email = res.data.email
+        this.keywords = res.data.keywords
+        this.keywordtexts = res.data.keywordtexts
       })
-      .catch(() => {
+      .catch((err) => {
+        alert(this.$route.params.youruid)
         alert("로그인이 필요한 서비스입니다.");
         this.$store.dispatch("LOGOUT").then(() => {
           this.$router.replace("/");
         });
       });
+
+      this.getFollowList()
   },
   methods: {
+    getFollowList() {
+      axios.get(`${this.$store.getters.getServer}/follow/list/${this.profileuid}`)
+      .then((res) => {
+        console.log('follow 관련 정보')
+        console.log(res.data)
+        this.followerlist = res.data.followers
+        this.followinglist = res.data.followings
+        if (res.data.isFollow) {
+          this.isFollow = true
+        } else {
+          this.isFollow = false
+        }
+      })
+    },
     withDrawal() {
       axios
         .delete(`${this.$store.getters.getServer}/user/withdraw`)
@@ -244,7 +273,28 @@ export default {
         .catch(() => {
           alert("오류가 발생했습니다. 다시 시도해주세요.");
         });
-    }
+    },
+    sendFollowing() {
+      let follow = {
+        'touid': `${this.profileuid}`
+      }
+      axios.post(`${this.$store.getters.getServer}/follow/userfollow`, follow)
+      .then((res) => {
+        if (res.data.msg === 'success') {
+          this.isFollow = true
+        }
+        this.getFollowList()
+      })
+    },
+    sendUnfollowing() {
+      axios.delete(`${this.$store.getters.getServer}/follow/userunfollow/${this.profileuid}`)
+      .then((res) => {
+        if (res.data.msg === 'success') {
+          this.isFollow = false
+        }
+        this.getFollowList()
+      })
+    },
   }
 };
 </script>

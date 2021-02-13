@@ -106,6 +106,7 @@ const routes = [
         name: 'shareroadmap',
         component: () => import('../views/ShareRoadmap/ShareBoard.vue'),
       },
+
       // chatting 
       {
         path: '/chatting-main',
@@ -117,6 +118,18 @@ const routes = [
       name: 'chatting',
       props: true,
       component: () => import('../views/Chatting/Chatting.vue'),
+      },
+      {
+
+        path: '/sharedetail',
+        name: 'sharedetail',
+        component: () => import('../views/ShareRoadmap/ShareDetail.vue'),
+      },
+      {
+        path: '/searchlist',
+        name: 'searchlist',
+        component: () => import('../views/Search/SearchList.vue'),
+
       },
     ]
   },
