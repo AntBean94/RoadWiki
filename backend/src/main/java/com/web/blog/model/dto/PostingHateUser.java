@@ -1,12 +1,12 @@
 package com.web.blog.model.dto;
 
-public class PostingLikeUser {
+public class PostingHateUser {
 	private int uid;
 	private int pid;
 	
-	public PostingLikeUser() {}
+	public PostingHateUser() {}
 
-	public PostingLikeUser(int uid, int pid) {
+	public PostingHateUser(int uid, int pid) {
 		super();
 		this.uid = uid;
 		this.pid = pid;
@@ -30,7 +30,7 @@ public class PostingLikeUser {
 
 	@Override
 	public String toString() {
-		return "PostingLikeUser [uid=" + uid + ", pid=" + pid + "]";
+		return "PostingHateUser [uid=" + uid + ", pid=" + pid + "]";
 	}
 	
 	

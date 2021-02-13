@@ -11,6 +11,12 @@
 		and uid=#{uid}
 	</select>
 	
+	<select id="totallike" parameterType="int" resultType="int">
+		select count(*)
+		from postinglikeuser
+		where pid=#{pid}
+	</select>
+	
 	<insert id="insert" parameterType="PostingLikeUser">
 		insert
 		into postinglikeuser(pid, uid)
@@ -24,4 +30,29 @@
 		and uid=#{uid}
 	</delete>
 	
+	<select id="selectHate" parameterType="PostingHateUser" resultType="PostingHateUser">
+		select * 
+		from postinghateuser
+		where pid=#{pid}
+		and uid=#{uid}
+	</select>
+	
+	<select id="totalhate" parameterType="int" resultType="int">
+		select count(*)
+		from postinghateuser
+		where pid=#{pid}
+	</select>
+	
+	<insert id="insertHate" parameterType="PostingHateUser">
+		insert
+		into postinghateuser(pid, uid)
+		values(#{pid}, #{uid})
+	</insert>
+
+	<delete id="deleteHate" parameterType="PostingHateUser">
+		delete 
+		from postinghateuser
+		where pid=#{pid}
+		and uid=#{uid}
+	</delete>
 </mapper>

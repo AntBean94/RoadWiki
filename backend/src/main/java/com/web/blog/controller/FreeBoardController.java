@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.model.dto.Comment;
 import com.web.blog.model.dto.Posting;
+import com.web.blog.model.dto.PostingHateUser;
 import com.web.blog.model.dto.PostingLikeUser;
 import com.web.blog.model.dto.Recomment;
 import com.web.blog.model.service.BoardLikeService;
@@ -97,55 +98,6 @@ public class FreeBoardController {
 			Map<String, Object> result;
 			result = (Map<String, Object>) fBoardServ.getPosting(pid);
 			result.put("msg", SUCCESS);
-			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
-		} catch(Exception e) {
-			logger.error(e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
-				put("errorMsg", e.getMessage());
-				put("msg", FAIL);
-			}}, HttpStatus.NO_CONTENT);
-		}
-	}
-	
-	@GetMapping("/postinglike/{pid}")
-	public Object getPostingLike(@PathVariable int pid, HttpServletRequest request) {
-		try {
-			Map<String, Object> result;
-			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
-			result = (Map<String, Object>) boardlikeService.getPostingLikeUser(new PostingLikeUser(uid, pid));
-			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
-		} catch(Exception e) {
-			logger.error(e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
-				put("errorMsg", e.getMessage());
-				put("msg", FAIL);
-			}}, HttpStatus.NO_CONTENT);
-		}
-	}
-	
-	@PostMapping("/postinglike")
-	public Object getPostingLike(@RequestBody PostingLikeUser postingLikeUser, HttpServletRequest request) {
-		try {
-			Map<String, Object> result;
-			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
-			postingLikeUser.setUid(uid);
-			result = (Map<String, Object>) boardlikeService.registPostingLike(postingLikeUser);
-			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
-		} catch(Exception e) {
-			logger.error(e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
-				put("errorMsg", e.getMessage());
-				put("msg", FAIL);
-			}}, HttpStatus.NO_CONTENT);
-		}
-	}
-	
-	@DeleteMapping("/postinglikecancel/{pid}")
-	public Object getPostingLikeCancel(@PathVariable int pid, HttpServletRequest request) {
-		try {
-			Map<String, Object> result;
-			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
-			result = (Map<String, Object>) boardlikeService.deletePostingLike(new PostingLikeUser(uid, pid));
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
@@ -317,6 +269,105 @@ public class FreeBoardController {
 			Map<String, Object> result;
 			result = (Map<String, Object>) fBoardServ.totalCount();
 			result.put("msg", SUCCESS);
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	// Posting Like
+	@GetMapping("/postinglike/{pid}")
+	public Object getPostingLike(@PathVariable int pid, HttpServletRequest request) {
+		try {
+			Map<String, Object> result;
+			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			result = (Map<String, Object>) boardlikeService.getPostingLikeUser(new PostingLikeUser(uid, pid));
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	@PostMapping("/postinglike")
+	public Object getPostingLike(@RequestBody PostingLikeUser postingLikeUser, HttpServletRequest request) {
+		try {
+			Map<String, Object> result;
+			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			postingLikeUser.setUid(uid);
+			result = (Map<String, Object>) boardlikeService.registPostingLike(postingLikeUser);
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	@DeleteMapping("/postinglikecancel/{pid}")
+	public Object getPostingLikeCancel(@PathVariable int pid, HttpServletRequest request) {
+		try {
+			Map<String, Object> result;
+			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			result = (Map<String, Object>) boardlikeService.deletePostingLike(new PostingLikeUser(uid, pid));
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	@GetMapping("/postinghate/{pid}")
+	public Object getPostingHate(@PathVariable int pid, HttpServletRequest request) {
+		try {
+			Map<String, Object> result;
+			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			result = (Map<String, Object>) boardlikeService.getPostingHateUser(new PostingHateUser(uid, pid));
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	@PostMapping("/postinghate")
+	public Object getPostingHate(@RequestBody PostingHateUser postingHateUser, HttpServletRequest request) {
+		try {
+			Map<String, Object> result;
+			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			postingHateUser.setUid(uid);
+			result = (Map<String, Object>) boardlikeService.registPostingHate(postingHateUser);
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	@DeleteMapping("/postinghatecancel/{pid}")
+	public Object getPostingHateCancel(@PathVariable int pid, HttpServletRequest request) {
+		try {
+			Map<String, Object> result;
+			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			result = (Map<String, Object>) boardlikeService.deletePostingHate(new PostingHateUser(uid, pid));
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		} catch(Exception e) {
 			logger.error(e.getMessage());

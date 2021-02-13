@@ -10,6 +10,18 @@
         where pid=#{pid}
     </select>
     
+    <select id="selectPid" resultType="Posting">
+    	select *
+    	from posting
+    	order by pid desc;
+    </select>
+    
+    <select id="selectTags" parameterType="int" resultType="String">
+    	select tagname
+    	from postingtag
+    	where pid=#{pid}
+    </select>
+    
      <select id="selectListAll" parameterType="Map" resultType="Posting">
         select * 
         from posting
@@ -20,7 +32,7 @@
      <select id="selectListAllTag" parameterType="Map" resultType="Posting">
         select * 
         from posting
-        where classifier=#{classifier} AND tag=#{tag}
+        <!-- where classifier=#{classifier} AND tag=#{tag} -->
         order by pid DESC limit #{page}, #{cnt}
     </select>
     
@@ -34,7 +46,7 @@
     <select id="selectListNameTag" parameterType="Map" resultType="Posting">
         select * 
         from posting
-        where classifier=#{classifier} AND name=#{word} AND tag=#{tag}
+        <!-- where classifier=#{classifier} AND name=#{word} AND tag=#{tag}  -->
         order by pid DESC limit #{page}, #{cnt}
     </select>
     
@@ -48,21 +60,21 @@
     <select id="selectListTitleTag" parameterType="Map" resultType="Posting">
         select * 
         from posting
-        where classifier=#{classifier} AND title=concat("%", #{word}, "%") AND tag=#{tag}
+        <!-- where classifier=#{classifier} AND title=concat("%", #{word}, "%") AND tag=#{tag} -->
         order by pid DESC limit #{page}, #{cnt}
     </select>
     
     <select id="selectListContent" parameterType="Map" resultType="Posting">
         select * 
         from posting
-        where classifier=#{classifier} AND content=concat("%", #{word}, "%") AND tag=#{tag}
+        <!-- where classifier=#{classifier} AND content=concat("%", #{word}, "%") AND tag=#{tag}  -->
         order by pid DESC limit #{page}, #{cnt}
     </select>
     
     <select id="selectListContentTag" parameterType="Map" resultType="Posting">
         select * 
         from posting
-        where classifier=#{classifier} AND content=concat("%", #{word}, "%") AND tag=#{tag}
+        <!-- where classifier=#{classifier} AND content=concat("%", #{word}, "%") AND tag=#{tag} -->
         order by pid DESC limit #{page}, #{cnt}
     </select>
     
@@ -74,10 +86,14 @@
         into posting(classifier, uid, content, title)
         values(#{classifier}, #{uid}, #{content}, #{title})
     </insert>
+    <insert id="insertTag">
+    	insert into postingtag
+    	values(#{pid}, #{tagid}, #{tagname})
+    </insert>
     
     <update id="update" parameterType="Posting">
         update posting
-        set tag=#{tag}, title=#{title}, content=#{content}, modifyDate=#{modifyDate}, image=#{image}
+        set  title=#{title}, content=#{content}, modifyDate=#{modifyDate}, image=#{image} <!-- tag=#{tag}, -->
         where pid=#{pid}
     </update>
     
