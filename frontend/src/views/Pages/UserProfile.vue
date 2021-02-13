@@ -182,12 +182,10 @@
   </div>
 </template>
 <script>
-// import EditProfileForm from './UserProfile/EditProfileForm.vue';
 import UserCard from "./UserProfile/UserCard.vue";
 
   export default {
     components: {
-      // EditProfileForm,
       UserCard,
     },
     props: ['youruid'],
@@ -214,17 +212,19 @@ import UserCard from "./UserProfile/UserCard.vue";
       }
     },
     created() {
+      // 현재 로그인 된 계정
       this.uid = this.$store.getters.getUid;
 
+      // 해당 계정의 프로필 사진 가져오는 걸로 해야함
       axios.get(`${this.$store.getters.getServer}/user/image`).then(res => {
         this.profileUrl = res.data.path;
       });
 
-      if (this.$route.params.youruid === undefined) {
+      // params로 uid를 받아오지 못했다면 (자기 프로필이니까)
+      if (this.$route.query.profileId === undefined) {
         this.profileuid = this.uid
-        console.log('22222222222222222222222225')
       } else {
-        this.profileuid = this.$route.params.youruid
+        this.profileuid = this.$route.query.profileId
       }
 
       axios.get(`${this.$store.getters.getServer}/user/info/${this.profileuid}`)
@@ -240,8 +240,6 @@ import UserCard from "./UserProfile/UserCard.vue";
         this.keywordtexts = res.data.keywordtexts
       })
       .catch((err) => {
-        console.log('444444444444444')
-        alert(this.$route.params.youruid)
         alert("로그인이 필요한 서비스입니다.");
         this.$store.dispatch("LOGOUT").then(() => {
           this.$router.replace("/");
@@ -262,17 +260,6 @@ import UserCard from "./UserProfile/UserCard.vue";
           this.isFollow = false
         }
       })
-    },
-    withDrawal() {
-      axios
-        .delete(`${this.$store.getters.getServer}/user/withdraw`)
-        .then(() => {
-          alert("회원 탈퇴가 완료되었습니다.");
-          this.$router.replace("/");
-        })
-        .catch(() => {
-          alert("오류가 발생했습니다. 다시 시도해주세요.");
-        });
     },
     sendFollowing() {
       let follow = {

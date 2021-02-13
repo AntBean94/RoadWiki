@@ -29,7 +29,7 @@
       <hr class="my-2">
       <h2>유저</h2>
       <ul v-for="(user, idx) in userlist" :key="idx">
-        <router-link :to="{name: 'profile', params: {youruid: `${user.uid}`}}">
+        <router-link :to="{name: 'profile', query: {profileId: `${user.uid}`}}">
           {{user.name}}
         </router-link>
       </ul>
