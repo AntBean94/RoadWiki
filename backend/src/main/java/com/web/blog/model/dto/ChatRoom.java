@@ -3,10 +3,12 @@ package com.web.blog.model.dto;
 public class ChatRoom {
 	private String roomid;
 	private String name;
+	private int type;
 	
-	public ChatRoom(String roomid, String name) {
+	public ChatRoom(String roomid, String name, int type) {
 		this.roomid = roomid;
 		this.name = name;
+		this.type = type;
 	}
 
 	public String getRoomid() {
@@ -25,11 +27,16 @@ public class ChatRoom {
 		this.name = name;
 	}
 
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
 	@Override
 	public String toString() {
-		return "ChatRoom [roomid=" + roomid + ", name=" + name + "]";
+		return "ChatRoom [roomid=" + roomid + ", name=" + name + ", type=" + type + "]";
 	}
-	
-	
-	
 }

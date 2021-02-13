@@ -5,7 +5,9 @@
     <b-container>
       <b-row align-h="end">
         <!-- <b-button variant="primary" class="mt-2" @click="detailBoard">detail board</b-button> -->
-        <b-button variant="primary" class="mt-2" @click="createBoard">새 글 작성</b-button>
+        <b-button variant="primary" class="mt-2" @click="createBoard"
+          >새 글 작성</b-button
+        >
       </b-row>
     </b-container>
 
@@ -13,11 +15,7 @@
 
     <!-- <dark-table></dark-table> -->
 
-    <board-sidebar
-      @goBack="clickOff"
-      :selPid="selPid"
-      v-if="isSelected"
-    />
+    <board-sidebar @goBack="clickOff" :selPid="selPid" v-if="isSelected" />
   </div>
 </template>
 <script>
@@ -56,12 +54,9 @@ export default {
     clickOn(pid) {
       this.isSelected = true;
       this.selPid = pid;
-      console.log(pid);
-      console.log(this.isSelected);
     },
     clickOff() {
       this.isSelected = false;
-      console.log(this.isSelected);
     },
     createBoard() {
       this.$router.push({name: 'create_board' })
@@ -71,7 +66,7 @@ export default {
     // },
   },
   created() {
-    console.log(this.$store.getters.getUid);
+    // console.log(this.$store.getters.getUid);
   }
 };
 </script>

@@ -156,19 +156,20 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			Posting posting = postingRepo.select(Integer.parseInt(pid));
 			if (posting == null)
 				throw new RuntimeException("cannot fine posting");
+			// 태그 삽입
+			String[] tags = postingRepo.selectTags(Integer.parseInt(pid));
+			posting.setTags(tags);
 			result.put("posting", posting);
 
 			List<Comment> comments = new ArrayList<>();
 			for (Comment c : commentRepo.selectListPid(Integer.parseInt(pid)))
 				comments.add(c);
 			result.put("comments", comments);
+			
 			List<Recomment>[] recomments = new ArrayList[comments.size()];
 			for (int i = 0; i < recomments.length; i++) {
 				recomments[i] = new ArrayList<Recomment>();
 			}
-//			for(Comment c : comments) 
-//				for(Recomment rc : recommentRepo.selectListCid(c.getCid()))
-//					recomments.add(rc);
 
 			for (int i = 0; i < recomments.length; i++) {
 				for (Recomment rc : recommentRepo.selectListCid(comments.get(i).getCid())) {
@@ -176,8 +177,9 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 				}
 			}
 			result.put("recomments", recomments);
-
 			result.put("name", userRepo.getName(posting.getUid()));
+			
+
 		} catch (NumberFormatException e) {
 			throw new RuntimeException("input data type error");
 		} catch (Exception e) {
@@ -192,10 +194,22 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		try {
 			if (posting.getUid() != uid)
 				throw new RuntimeException("wrong user");
+			
 			if (postingRepo.insert(posting) == 1)
 				result.put("msg", "success");
 			else
 				result.put("msg", "fail");
+			
+			String[] tags = posting.getTags();
+			int pid = postingRepo.selectPid()[0].getPid();
+			// tag 삽입
+			for (int i = 0; i < tags.length; i++) {
+				Map<String, Object> postingTagMap = new HashMap<String, Object>();
+				postingTagMap.put("pid", pid);
+				postingTagMap.put("tagid", i + 1);
+				postingTagMap.put("tagname", tags[i]);
+				postingRepo.insertTag(postingTagMap);
+			}
 		} catch (NumberFormatException e) {
 			throw new RuntimeException("input data type error");
 		} catch (Exception e) {

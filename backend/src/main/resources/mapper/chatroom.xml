@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+	<mapper namespace="com.web.blog.model.repo.ChatRoomRepo">
+
+	<select id="select" parameterType="String" resultType="ChatRoom">
+		select * 
+		from chatroom 
+		where roomid=#{roomid}
+	</select>
+	
+	<select id="selectByTypeName" parameterType="ChatRoom" resultType="ChatRoom">
+		select * 
+		from chatroom 
+		where type = #{type} AND name like concat("%", #{name}, "%")
+	</select>
+
+ 	<select id="selectAll" resultType="ChatRoom">
+		select * 
+		from chatroom
+	</select> 
+	
+	<insert id="insert" parameterType="ChatRoom">
+		insert 
+		into chatroom(roomid, name, type)
+		values(#{roomid}, #{name}, #{type})
+	</insert>
+	
+	<update id="update" parameterType="ChatRoom">
+		update chatroom
+		set name=#{name}
+		where roomid=#{roomid}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		delete 
+		from chatroom 
+		where roomid=#{roomid}
+	</delete>
+
+</mapper>

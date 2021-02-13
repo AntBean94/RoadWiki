@@ -31,7 +31,7 @@ public class FileServiceImpl implements FileService {
 		try {
 			filename = fileSearch("../frontend/public/statics/upload/" + uid, 1);
 		} catch (Exception e) {
-			System.out.println("no folder");
+			logger.error("no folder");
 		}
 		Thread.sleep(1500);// 삭제가 쓰레드형태로 같이 진행되는거같아서 임시로 슬립
 		// parent directory를 찾는다.
@@ -70,7 +70,7 @@ public class FileServiceImpl implements FileService {
 			File file = fileList[i];
 
 			if (file.isFile()) {
-				System.out.println(type == 1 ? "삭제 : " : "조회 : " + file.getName());
+				logger.info(type == 1 ? "삭제 : " : "조회 : " + file.getName());
 				if (type == 1) { // 1 이면 기존파일이 있으면 삭제 이후 업로드
 					file.delete();
 				} else { // 0 이면 파일 이름 반환해서 이미지 파일 출력
@@ -94,12 +94,12 @@ public class FileServiceImpl implements FileService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			String filename = fileSearch("../frontend/public/statics/upload/" + uid, 0);
-			System.out.println(filename);
+			logger.info("filename : " + filename);
 			map.put("path", "/statics/upload/" + uid + "/" +filename);
 			if(filename.length() == 0)
 				map.put("path", "/statics/default.png");
 		}catch (Exception e) {
-			System.out.println("no search folder");
+			logger.error("no search folder");
 			map.put("path", "../frontend/public/statics/default.png");
 		}
 		return map;
