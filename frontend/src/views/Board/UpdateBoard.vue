@@ -61,6 +61,7 @@ import "@toast-ui/editor/dist/toastui-editor.css";
 import "codemirror/lib/codemirror.css";
 import { Editor } from "@toast-ui/vue-editor";
 import store from "@/store";
+import routes from '@/routes/routes';
 
 let updatecontent = "";
 let updatetitle = '';
@@ -68,6 +69,7 @@ let updatetitle = '';
 // local 이 아니라 this.$store.getters.getServer 73이아니라 파람으로 받아온거$route.param
 // axios.get(`http://localhost:8085/freeboard/posting/73`)
 
+// console.log(routes.query.pid)
 axios
   .get(`${store.getters.getServer}/freeboard/posting/${store.getters.getPid}`)
   .then(res => {

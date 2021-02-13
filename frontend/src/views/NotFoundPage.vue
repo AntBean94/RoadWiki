@@ -5,12 +5,12 @@
     <div class="header py-7 py-lg-8 pt-lg-9">
       <b-container>
         <b-row align-h="center">
-          <h1 style="color: white">미쳤습니까 휴먼</h1>
+          <h1 class="text-light">미쳤습니까 휴먼</h1>
         </b-row>
         <b-row align-h="center">
-          <h1 style="color: white">돌아가세욧</h1>
+          <h2 class="text-light">돌아가세욧</h2>
         </b-row>
-        <b-row align-h="center">
+        <b-row align-h="center" class="mb-3">
           <router-link to="/dashboard">ㅌㅌ</router-link>
         </b-row>
         <b-row align-h="center">
