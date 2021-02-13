@@ -88,7 +88,7 @@ public class CurriculumController {
 
 	@GetMapping("/search/{text}")
 	public Object search(@PathVariable String text) {
-		logger.trace("suggest start");
+		logger.info("search start");
 		Map<String, Object> result = new HashMap<>();
 		HttpStatus status = null;
 		try {
