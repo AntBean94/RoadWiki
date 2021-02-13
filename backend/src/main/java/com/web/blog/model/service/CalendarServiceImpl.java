@@ -34,6 +34,7 @@ public class CalendarServiceImpl implements CalendarService {
 			list.addAll(calendarRepo.selectBigByUid(uidnum));
 			list.addAll(calendarRepo.selectMiddleByUid(uidnum));
 			list.addAll(calendarRepo.selectSmallByUid(uidnum));
+			list.addAll(calendarRepo.selectCusByUid(uidnum));
 			result.put("calendars", list);
 			
 
@@ -53,7 +54,8 @@ public class CalendarServiceImpl implements CalendarService {
 				calendarRepo.updateMiddle(curriculum);
 			else if(curriculum.getBdid() != 0) 
 				calendarRepo.updateBig(curriculum);
-			
+			else
+				calendarRepo.updateCus(curriculum);
 
 		} catch (Exception e) {
 			logger.error("Service getCalendarInfo : Something wrong");

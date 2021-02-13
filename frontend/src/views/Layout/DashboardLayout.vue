@@ -61,7 +61,7 @@
         <sidebar-item
           :link="{
             name: 'Roadmap Share',
-            path: '/shareroadmap',
+            path: '/shareboard',
             icon: 'ni ni-bullet-list-67 text-red'
           }"
         >

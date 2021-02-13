@@ -105,8 +105,8 @@ const routes = [
         props: true
       },
       {
-        path: '/shareroadmap',
-        name: 'shareroadmap',
+        path: '/shareboard',
+        name: 'shareboard',
         component: () => import('../views/ShareRoadmap/ShareBoard.vue'),
       },
 
@@ -133,6 +133,12 @@ const routes = [
         name: 'searchlist',
         component: () => import('../views/Search/SearchList.vue'),
 
+      },
+      {
+        path: '/createshareboard',
+        name: 'create_share_board',
+        component: () => import('../views/ShareRoadmap/CreateShareBoard.vue'),
+        props: true,
       },
     ]
   },

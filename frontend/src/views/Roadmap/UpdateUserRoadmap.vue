@@ -1,6 +1,6 @@
 <template>
   <div>
-    <base-header class="pb-5 pb-2 pt-2 pt-md-2 bg-gradient-default">
+    <base-header class="pb-2 pt-2 pt-md-2 bg-gradient-default">
       <!-- Card stats -->
       <a
         :href="goToBack"
@@ -30,7 +30,6 @@
         v-b-modal.modal-1
         type="button"
         class="btn ml-4"
-        title=""
         data-original-title="Copy to clipboard"
       >
         <div>
@@ -102,14 +101,18 @@
         </li>
       </b-modal>
       <!-- 사용법 modal / end -->
+
+      <br>
+      <b-form-input v-model="inputText" placeholder="커리큘럼 검색하기" id="curSearch"></b-form-input>
     </base-header>
+
 
     <b-container fluid class="mt-1">
       <b-row>
         <b-col>
           <b-card no-body class="border-0">
             <div style="width: 100%;">
-              <Roadmap :roadmapMode=roadmapMode :roadmapData=roadmapData @create-roadmap=createRoadmap ref="roadmap"/>
+              <Roadmap :roadmapMode=roadmapMode :roadmapData=roadmapData :inputText=inputText @create-roadmap=createRoadmap ref="roadmap"/>
             </div>
           </b-card>
         </b-col>
@@ -138,6 +141,9 @@ export default {
     CUMode: {
       type: Number
     },
+    isOfficial: {
+      type: Number
+    }
   },
   data() {
     return {
@@ -146,6 +152,7 @@ export default {
       roadmapname: "",
       logData: [],
       roadmapMode: 1,
+      inputText: "",
     };
   },
   created(){
@@ -181,8 +188,10 @@ export default {
         axios.get(`${this.$store.getters.getServer}/roadmap/get/${this.rmid}`)
           .then((res) => {
             if(res.data.msg == 'success'){
-            this.roadmapData = JSON.parse(res.data['roadmaps'].tmp);
-            this.roadmapname = res.data['roadmaps'].name;
+              this.roadmapData = JSON.parse(res.data['roadmaps'].tmp);
+              if (this.isOfficial) {
+                this.roadmapname = res.data['roadmaps'].name;
+              }
             }else{
               alert("데이터 로드에 실패했습니다.")
             }
@@ -273,4 +282,11 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+#header {
+  padding-bottom: 4px; 
+}
+#curSearch {
+  width: 150px;
+}
+</style>

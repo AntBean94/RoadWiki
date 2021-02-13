@@ -3,12 +3,9 @@
     <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-default">
     </base-header>
     <div>
-      <b-pagination-nav
-        :link-gen="linkGen"
-        :number-of-pages="10"
-        use-router
-      ></b-pagination-nav>
-      <b-button variant="primary" class="mt-2" @click="createBoard">새 글 작성</b-button>
+      <b-button variant="primary" class="mt-2" @click="createBoard"
+        >새 글 작성</b-button
+      >
 
       <b-dropdown id="dropdown-1" :text="category" class="m-md-2">
         <b-dropdown-item
@@ -18,20 +15,29 @@
           >{{ item }}</b-dropdown-item
         >
       </b-dropdown>
-      <b-form-input v-model="inputtext" placeholder="검색어를 입력해주세요."></b-form-input>
+      <b-form-input
+        v-model="inputtext"
+        placeholder="검색어를 입력해주세요."
+      ></b-form-input>
       <b-button @click="searchSharedRoadmap">검색하기</b-button>
 
       <RoadmapList
+        class="row"
+        id="roadmaplist"
         v-if="shareList"
-        :rmlist="shareList"
+        :rmlist="viewShareList"
         :unlist="usernameList"
       />
     </div>
-    <!-- <b-container>
-      <b-row align-h="end">
-        <b-button variant="primary" class="mt-2" @click="detailBoard">detail board</b-button>
-      </b-row>
-    </b-container> -->
+
+    <b-pagination
+      v-model="currentPage"
+      :per-page="10"
+      :total-rows="totalPageNum"
+      aria-controls="mhtable"
+      align="center"
+    ></b-pagination>
+
   </div>
 </template>
 
@@ -50,30 +56,36 @@ export default {
       usernameList: [],
       searchCategory: ["title", "name"],
       category: "title",
-      inputtext: ""
+      inputtext: "",
+      currentPage : 1,
+      totalPageNum: 3,
     };
+  },
+  computed: {
+    viewShareList: function () {
+      return this.shareList.slice((this.currentPage-1) * 10, (this.currentPage-1) * 10 + 10 )
+    }
   },
   methods: {
     createBoard() {
-      // props로 일반글 작성인지 로드맵 공유인지 구분 => createboard에서 조건에따라 나눔
-      this.$router.push({ name: "create_board", params: { createMode: 1 } });
+      this.$router.push({ name: "create_share_board" });
     },
     getSharedRoadmap() {
       axios
         .get(`${this.$store.getters.getServer}/roadmapshare/get`)
         .then(response => {
+          console.log(response)
           this.shareList = response.data.roadmapshares;
           this.usernameList = response.data.username;
+          this.totalPageNum = response.data.roadmapshares.length
+          this.currentPage = 1
         })
         .catch(e => {
           console.log(e);
         });
     },
-    linkGen(pageNum) {
-      return pageNum === 1 ? "?" : `?page=${pageNum}`;
-    },
     searchSharedRoadmap() {
-      console.log(this.category, this.inputtext)
+      console.log(this.category, this.inputtext);
       axios
         .get(
           `${this.$store.getters.getServer}/roadmapshare/get/${this.category}/${this.inputtext}`
@@ -82,6 +94,8 @@ export default {
           console.log(response);
           this.shareList = response.data.roadmapshares;
           this.usernameList = response.data.username;
+          this.totalPageNum = response.data.roadmapshares.length
+          this.currentPage = 1
         })
         .catch(e => {
           console.log(e);
@@ -94,4 +108,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+#roadmaplist {
+  display: block;
+}
+</style>

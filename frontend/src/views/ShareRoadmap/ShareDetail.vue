@@ -43,6 +43,7 @@
       <b-row>
         <i class="far fa-thumbs-up fa-2x ml-3" v-if="!like" @click="clickLike"><span class="h3 ml-1">좋아요{{likeCnt}}</span></i>
         <i class="fas fa-thumbs-up fa-2x ml-3" v-if="like" @click="cancelLike"><span class="h3 ml-1">좋아요{{likeCnt}}</span></i>
+        <button class="btn" style="background-color: rgb(256, 256, 256);" @click="goToCreate">내보내기</button>
       </b-row>
     </b-container>
 
@@ -79,34 +80,40 @@ export default {
     
   },
   mounted() {
-    this.getPostingInfo()
-    this.previewRoadmap()
-    this.likecheck()
+    if (this.$route.params.roadmap) {
+      this.getPostingInfo()
+      this.previewRoadmap()
+      this.likecheck()
+    } else {
+      this.$router.push({ name: 'shareboard' })
+      return
+    }
   },
   methods: {
     getPostingInfo() {
       this.roadmap = this.$route.params.roadmap
-        this.name = this.$route.params.uname
-        this.title = this.roadmap.title
-        this.createDate = this.roadmap.createDate
-        this.uid = this.roadmap.uid
-        this.likeCnt = this.roadmap.likecnt
-        this.pid = this.roadmap.pid
-        this.rmid = this.roadmap.rmid
+      this.name = this.$route.params.uname
+      this.title = this.roadmap.title
+      this.createDate = this.roadmap.createDate
+      this.uid = this.roadmap.uid
+      this.likeCnt = this.roadmap.likecnt
+      this.pid = this.roadmap.pid
+      this.rmid = this.roadmap.rmid
     },
     previewRoadmap() {
-        axios.get(`${this.$store.getters.getServer}/roadmap/get/${this.rmid}`)
-        .then((res) => {
-          if(res.data.msg == 'success'){
-          this.roadmapData = JSON.parse(res.data['roadmaps'].tmp);
-          }else{
-            console.log(res);
-            alert("데이터 로드에 실패했습니다.");
-          }
-        }).catch((e) =>{
-          console.log(e)
-          alert("axios 오류")
-        });
+      console.log('실행되냐?', this.rmid)
+      axios.get(`${this.$store.getters.getServer}/roadmap/get/${this.rmid}`)
+      .then((res) => {
+        if(res.data.msg == 'success'){
+        this.roadmapData = JSON.parse(res.data['roadmaps'].tmp);
+        }else{
+          console.log(res);
+          alert("데이터 로드에 실패했습니다.");
+        }
+      }).catch((e) =>{
+        console.log(e)
+        alert("axios 오류")
+      });
     },
     likecheck(){
         axios.get(`${this.$store.getters.getServer}/roadmapshare/islike/${this.pid}`)
@@ -159,6 +166,9 @@ export default {
 
       this.like = false
       this.likeCnt -- 
+    },
+    goToCreate() {
+      this.$router.push({ name : 'update_user_roamdap', params: { rmid: this.rmid, CUMode: 0 }})
     },
   },
 }

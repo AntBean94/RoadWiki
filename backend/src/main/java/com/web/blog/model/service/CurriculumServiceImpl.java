@@ -32,13 +32,13 @@ public class CurriculumServiceImpl implements CurriculumService {
 			if (Integer.parseInt(uid) > 0)
 				throw new RuntimeException("Access denied");
 
-			if (curriculumtext.getSdid() != 0)
+			if (curriculumtext.getMdid() != 0)
 				if (curriculumrepo.insertSmallText(curriculumtext) != 1)
 					throw new RuntimeException("Query wrong");
-				else if (curriculumtext.getMdid() != 0)
+				else if (curriculumtext.getBdid() != 0)
 					if (curriculumrepo.insertMiddleText(curriculumtext) != 1)
 						throw new RuntimeException("Query wrong");
-					else if (curriculumtext.getBdid() != 0)
+					else
 						if (curriculumrepo.insertBigText(curriculumtext) != 1)
 							throw new RuntimeException("Query wrong");
 		} catch (Exception e) {
@@ -74,7 +74,7 @@ public class CurriculumServiceImpl implements CurriculumService {
 	}
 
 	@Override
-	public Object getSuggest() {
+	public Object getSuggest() { //big
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			result.put("suggest", curriculumrepo.selectBigText());
@@ -85,7 +85,7 @@ public class CurriculumServiceImpl implements CurriculumService {
 		return result;
 	}
 	@Override
-	public Object getSuggestBybdid(String bdid) {
+	public Object getSuggestBybdid(String bdid) { //middle
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			int bdidnum = Integer.parseInt(bdid);
@@ -98,12 +98,28 @@ public class CurriculumServiceImpl implements CurriculumService {
 		return result;
 	}
 	@Override
-	public Object getSuggestBybdidmdid(String bdid, String mdid) {
+	public Object getSuggestBybdidmdid(String bdid, String mdid) { //small
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			int bdidnum = Integer.parseInt(bdid);
 			int mdidnum = Integer.parseInt(mdid);
 			result.put("suggest", curriculumrepo.selectSmallText(bdidnum,mdidnum));
+		} catch (Exception e) {
+			logger.error("Service getSuggestBybdid : Something wrong");
+			throw e;
+		}
+		return result;
+	}
+	
+	@Override
+	public Object getSuggestBySearch(String text) { //search
+		Map<String, Object> result = new HashMap<String, Object>();
+		List<Curriculumtext> currilist = new ArrayList<Curriculumtext>();
+		try {
+			currilist.addAll(curriculumrepo.searchBigText(text));
+			currilist.addAll(curriculumrepo.searchMiddleText(text));
+			currilist.addAll(curriculumrepo.searchSmallText(text));
+			result.put("suggest", currilist);
 		} catch (Exception e) {
 			logger.error("Service getSuggestBybdid : Something wrong");
 			throw e;
@@ -120,6 +136,8 @@ public class CurriculumServiceImpl implements CurriculumService {
 		List<Curriculum> small = new ArrayList<Curriculum>();
 		List<Curriculum> middle = new ArrayList<Curriculum>();
 		List<Curriculum> big = new ArrayList<Curriculum>();
+		List<Curriculum> cus = new ArrayList<Curriculum>();
+		
 		
 		try {
 			for (int i = 0; i < nodeDataArray.size(); i++) {
@@ -145,7 +163,7 @@ public class CurriculumServiceImpl implements CurriculumService {
 				else if (curr.getBdid() != 0)
 					big.add(curr);
 				else
-					throw new RuntimeException("curriculum has no id");
+					cus.add(curr);
 			}
 			if (small.size() != 0)
 				if (curriculumrepo.insertSmall(small) == 0)
@@ -156,9 +174,11 @@ public class CurriculumServiceImpl implements CurriculumService {
 			if (big.size() != 0)
 				if (curriculumrepo.insertBig(big) == 0)
 					throw new RuntimeException("big Query wrong");
+			if(cus.size() != 0)
+				if(curriculumrepo.insertCus(cus) == 0)
+					throw new RuntimeException("cus Query wrong");
 		} catch (Exception e) {
 			logger.error("Curri Service create : Something wrong");
-			
 			throw e;
 		}
 	}
@@ -173,6 +193,8 @@ public class CurriculumServiceImpl implements CurriculumService {
 			Curriculumlist.addAll(curriculumrepo.selectSmallByRmid(rmid));
 			Curriculumlist.addAll(curriculumrepo.selectMiddleByRmid(rmid));
 			Curriculumlist.addAll(curriculumrepo.selectBigByRmid(rmid));
+			Curriculumlist.addAll(curriculumrepo.selectCusByRmid(rmid));
+			
 			for(Curriculum curri : Curriculumlist) {
 				JsonObject obj = new JsonObject();
 				obj.addProperty("category", curri.getCategory());
