@@ -13,7 +13,7 @@
 		bigdata.bdid = big.bdid
 		where rmid in (select rmid from
 		roadmap
-		where uid =${uid} and createDate in (select max(createDate)
+		where uid =#{uid} and createDate in (select max(createDate)
 		from roadmap
 		group by uid, rmorder)) and startdate != ""
 
@@ -26,7 +26,7 @@
 		middledata on middledata.mdid = middle.mdid
 		where rmid
 		in (select rmid from roadmap
-		where uid =${uid} and createDate in
+		where uid =#{uid} and createDate in
 		(select max(createDate) from roadmap
 		group by uid, rmorder)) and
 		startdate != ""
@@ -35,58 +35,61 @@
 
 	<select id="selectSmallByUid" parameterType="int"
 		resultType="Curriculum">
-		select 
+		select
 		small.*,smalldata.text,smalldata.content from small
 		left join
 		smalldata on smalldata.sdid = small.sdid
-		where rmid in (select
+		where rmid
+		in (select
 		rmid from roadmap
-		where uid =${uid} and createDate in (select
+		where uid =#{uid} and createDate in (select
 		max(createDate) from roadmap
 		group by uid, rmorder)) and startdate !=
 		""
 
 	</select>
-		<select id="selectSmallByUid" parameterType="int"
+	<select id="selectCusByUid" parameterType="int"
 		resultType="Curriculum">
-		select 
+		select
 		* from customcurri
 		where rmid in (select
 		rmid from roadmap
-		where uid =${uid} and createDate in (select
+		where uid =
+		#{uid} and createDate in (select
 		max(createDate) from roadmap
-		group by uid, rmorder)) and startdate !=
+		group by
+		uid, rmorder)) and startdate !=
 		""
 	</select>
 
 	<update id="updateBig" parameterType="Curriculum">
-		update big set 
-		startdate = #{startdate}, 
-		enddate = #{enddate} 
+		update big set
+		startdate = #{startdate},
+		enddate = #{enddate}
 		where rmid = #{rmid} and big.key = #{key}
 	</update>
 
 	<update id="updateMiddle" parameterType="Curriculum">
-		update middle set 
-		startdate = #{startdate}, 
-		enddate = #{enddate} 
-		where 
+		update middle set
+		startdate = #{startdate},
+		enddate = #{enddate}
+		where
 		rmid = #{rmid} and middle.key = #{key}
 	</update>
 
 	<update id="updateSmall" parameterType="Curriculum">
-		update small set 
-		startdate = #{startdate}, 
-		enddate = #{enddate} 
-		where 
+		update small set
+		startdate = #{startdate},
+		enddate = #{enddate}
+		where
 		rmid = #{rmid} and small.key = #{key}
 	</update>
-	
+
 	<update id="updateCus" parameterType="Curriculum">
-		update customcurri set 
-		startdate = #{startdate}, 
-		enddate = #{enddate} 
-		where 
+		update customcurri set
+		startdate = #{startdate},
+		enddate = #{enddate}
+		where
 		rmid = #{rmid} and small.key = #{key}
 	</update>
 </mapper>
