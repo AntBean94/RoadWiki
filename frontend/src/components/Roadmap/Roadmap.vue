@@ -629,7 +629,6 @@ export default {
           recommendCurData = res.data["suggest"];
           myPalette.model.nodeDataArray = recommendCurData;
         })
-        // 하이하이 ^_^ @@@@@@@@@@!!!!!!!!!!!!!!!!!
         .catch(e => {
           console.error(e);
         });
