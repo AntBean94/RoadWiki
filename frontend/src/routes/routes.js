@@ -48,6 +48,7 @@ const routes = [
       {
         path: '/detail-contents',
         name: 'Detail Content',
+        props: true,
         component: () => import(/* webpackChunkName: "demo" */ '../components/Board/DetailContent.vue')
       },
       {
@@ -68,9 +69,11 @@ const routes = [
         component: () => import('../views/Board/DetailBoard.vue')
       },
       {
-        path: '/update-board',
+        path: '/update-board/:pid',
         name: 'update_board',
-        props: true,
+        props: route => ({
+          pid: Number(route.params.pid)
+        }),
         component: () => import('../views/Board/UpdateBoard.vue')
       },
       {

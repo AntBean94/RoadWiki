@@ -139,7 +139,7 @@ export default {
     },
     updateBoard() {
       const pid = this.$route.query.pid
-      this.$router.push({name: 'update_board', query: { pid }})
+      this.$router.push({name: 'update_board', params: { pid }})
     },
     deleteBoard() {
       axios.delete(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)

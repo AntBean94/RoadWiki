@@ -71,7 +71,7 @@ export default {
     // },
   },
   created() {
-    console.log(this.$store.getters.getUid);
+    // console.log(this.$store.getters.getUid);
   }
 };
 </script>

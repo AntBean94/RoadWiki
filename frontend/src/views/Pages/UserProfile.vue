@@ -222,6 +222,7 @@ import UserCard from "./UserProfile/UserCard.vue";
 
       if (this.$route.params.youruid === undefined) {
         this.profileuid = this.uid
+        console.log('22222222222222222222222225')
       } else {
         this.profileuid = this.$route.params.youruid
       }
@@ -239,6 +240,7 @@ import UserCard from "./UserProfile/UserCard.vue";
         this.keywordtexts = res.data.keywordtexts
       })
       .catch((err) => {
+        console.log('444444444444444')
         alert(this.$route.params.youruid)
         alert("로그인이 필요한 서비스입니다.");
         this.$store.dispatch("LOGOUT").then(() => {
@@ -252,8 +254,6 @@ import UserCard from "./UserProfile/UserCard.vue";
     getFollowList() {
       axios.get(`${this.$store.getters.getServer}/follow/list/${this.profileuid}`)
       .then((res) => {
-        console.log('follow 관련 정보')
-        console.log(res.data)
         this.followerlist = res.data.followers
         this.followinglist = res.data.followings
         if (res.data.isFollow) {

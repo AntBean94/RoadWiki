@@ -1,11 +1,11 @@
 <template>
-  <div class='d-flex flex-column'>
+  <div class="d-flex flex-column">
     <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-default">
     </base-header>
 
     <div class="p-4 bg-secondary">
-      <b-input 
-        placeholder="제목" 
+      <b-input
+        placeholder="제목"
         class="form-control-alternative"
         v-model="title"
       />
@@ -21,7 +21,7 @@
         previewStyle="vertical"
         class="mx-4"
         v-model="content2"
-        @load = "editorLoading"
+        @load="editorLoading"
         id="editor"
       />
     </div>
@@ -29,16 +29,12 @@
     <b-container class="mt-3">
       <b-row class="mx-2">
         <div
-          class="ml-1 mt-2 mr-1 bg-warning rounded-pill py-1 px-2" 
+          class="ml-1 mt-2 mr-1 bg-warning rounded-pill py-1 px-2"
           v-for="(tag, idx) in tags"
           :key="idx"
         >
           <span class="h5"># {{ tag }}</span>
-          <span 
-            class="ml-2 h5" 
-            style="color:black"
-            @click="delTag(idx)"
-          >
+          <span class="ml-2 h5" style="color:black" @click="delTag(idx)">
             <i class="fas fa-times"></i>
           </span>
         </div>
@@ -46,103 +42,96 @@
     </b-container>
 
     <div class="p-4 bg-secondary">
-      <b-input 
-        placeholder="태그를 추가해주세요" 
-        class="form-control-alternative" 
+      <b-input
+        placeholder="태그를 추가해주세요"
+        class="form-control-alternative"
         @keydown.enter="tagEnter"
         @blur="tagEnter"
         v-model="tagInput"
       />
     </div>
 
-    <b-button
-      @click="datachange"
-      class="mt-3 mx-4"
-      variant="default"
-    >
+    <b-button @click="datachange" class="mt-3 mx-4" variant="default">
       저장
     </b-button>
   </div>
 </template>
 
 <script>
-import '@toast-ui/editor/dist/toastui-editor.css'
-import 'codemirror/lib/codemirror.css'
-import { Editor } from '@toast-ui/vue-editor'
-import store from '@/store'
+import "@toast-ui/editor/dist/toastui-editor.css";
+import "codemirror/lib/codemirror.css";
+import { Editor } from "@toast-ui/vue-editor";
+import store from "@/store";
 
-let updatecontent = '';
+let updatecontent = "";
 // local 이 아니라 this.$store.getters.getServer 73이아니라 파람으로 받아온거$route.param
 // axios.get(`http://localhost:8085/freeboard/posting/73`)
-console.log(store.getters.getServer)
-axios.get(`${store.getters.getServer}/freeboard/posting/5`)
-  .then((res) => {
-    console.log(res.data)
-    console.log(store.getters.getServer)
+
+console.log(store.getters.getPid);
+axios
+  .get(`${store.getters.getServer}/freeboard/posting/${store.getters.getPid}`)
+  .then(res => {
+    console.log(res.data);
     updatecontent = res.data.posting.content;
-})
+  });
 
 export default {
-  name: 'Editor',
+  name: "Editor",
   components: {
-  'editor': Editor,
+    editor: Editor
   },
   data() {
     return {
-      content : '',
+      content: "",
       content2: updatecontent,
       editorOptions: {
-        hideModeSwitch: false,
+        hideModeSwitch: false
       },
-      tags: ['첫번째 태그', '두번째 태그', '세번째 태그', '네번째 태그'],
-      tagInput: '',
-      title: '',
-      pid: '',
+      tags: ["첫번째 태그", "두번째 태그", "세번째 태그", "네번째 태그"],
+      tagInput: "",
+      title: ""
     };
   },
   methods: {
     datachange() {
-      alert(`${this.pid}번째 글을 수정하셨습니다ㅏ.`)
       const content = this.$refs.toastuiEditor.invoke("getMarkdown");
       axios
-      .put(`${this.$store.getters.getServer}/freeboard/posting`, 
-      { 
-        'title': this.title, 
-        'content': content
-      })
-      .then(() => {
-        alert(`수정이 완료되었습니다. ${this.pid}`)
-        console.log(this.pid)
-        this.$router.push({name: 'detail_board', query: { pid: this.pid }})
-      })
+        .post(`${this.$store.getters.getServer}/freeboard/posting`, {
+          title: this.title,
+          content: content
+        })
+        .then(() => {});
     },
     tagEnter() {
       if (this.tagInput) {
-        this.tags.push(this.tagInput)
-        this.tagInput = ''
+        this.tags.push(this.tagInput);
+        this.tagInput = "";
       }
     },
     delTag(idx) {
       this.tags.splice(idx, 1);
     },
     editorLoading() {
-      axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
-      .then((res) => {
-        // console.log('하이')
-        // console.log(res.data)
-        updatecontent = res.data.posting.content;
-        this.content2 = updatecontent;
-        // console.log('여기는 content2')
-        // console.log(this.content2)
-        // console.log('여기는 updatecontent')
-        // console.log(this.content2)
-      })
-      .finally(() => {
-        // console.log('hi')
-        // console.log(updatecontent);
-        this.content2 = updatecontent;
-      })
-    },
+      axios
+        .get(
+          `${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`
+        )
+        .then(res => {
+          // console.log('하이')
+          // console.log(res.data)
+          updatecontent = res.data.posting.content;
+          this.content2 = updatecontent;
+          // console.log('여기는 content2')
+          // console.log(this.content2)
+          // console.log('여기는 updatecontent')
+          // console.log(this.content2)
+        })
+        .finally(() => {
+          // console.log('hi')
+          // console.log(updatecontent);
+          this.content2 = updatecontent;
+        });
+    }
     // onEditorLoad() {
     //   axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
     //   .then((res) => {
@@ -159,20 +148,20 @@ export default {
     // },
   },
   created() {
-    axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
-    .then((res) => {
-      console.log(res.data.posting)
-      updatecontent = res.data.posting.content
-      this.title = res.data.posting.title
-      this.pid = res.data.posting.pid
-      console.log('************')
-      console.log(this.pid)
-    })
+    console.log(
+      `${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`
+    );
+    axios
+      .get(
+        `${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`
+      )
+      .then(res => {
+        updatecontent = res.data.posting.content;
+        this.title = res.data.posting.title;
+      });
     // console.log(updatecontent)
-  },
-}
+  }
+};
 </script>
 
-<style>
-
-</style>
+<style></style>
