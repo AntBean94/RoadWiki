@@ -178,7 +178,7 @@ export default {
       this.isHeader = isHeader;
     },
     myProfile() {
-      this.$router.push({name: 'profile', params: {youruid: undefined}})
+      this.$router.push({name: 'profile', query: {profileId: undefined}})
     },
     logOut() {
       this.$store.dispatch("LOGOUT").then(() => {

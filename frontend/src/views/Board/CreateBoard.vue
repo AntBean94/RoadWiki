@@ -26,13 +26,13 @@
     <div v-if="!createMode">
       <editor
         ref="toastuiEditor"
-        :initialValue="initialText"
         :options="editorOptions"
         height="500px"
         initialEditType="wysiwyg"
         previewStyle="vertical"
         class="mx-4"
         v-model="editorText"
+        placeholder="내용을 입력해주세요"
       />
     </div>
 
@@ -56,7 +56,7 @@
         placeholder="태그를 추가해주세요"
         class="form-control-alternative"
         @keydown.enter="tagEnter"
-        @blur="tagEnter"
+        @blur="tagEnterBlur"
         v-model="tagInput"
       />
     </div>
@@ -97,7 +97,6 @@ export default {
   },
   data() {
     return {
-      initialText: "내용을 입력해주세요",
       editorOptions: {
         hideModeSwitch: false
       },
@@ -153,9 +152,28 @@ export default {
       // this.$refs.toastuiViewer.editor.markdownValue = content
     },
     tagEnter() {
-      if (this.tagInput) {
-        this.tags.push(this.tagInput);
-        this.tagInput = "";
+      console.log('엔터 찍힘')
+      if (this.tags.length < 5) {
+        if (this.tagInput) {
+          this.tags.push(this.tagInput)
+          this.tagInput = ''
+        }
+      } else {
+        alert('태그는 최대 5개까지 가능합니다.')
+        this.tagInput = ''
+      }
+    },
+    tagEnterBlur() {
+      if (this.tagInput.length > 0) {
+        if (this.tags.length < 5) {
+          if (this.tagInput) {
+            this.tags.push(this.tagInput)
+            this.tagInput = ''
+          }
+        } else {
+          alert('태그는 최대 5개까지 가능합니다.')
+          this.tagInput = ''
+        }
       }
     },
     delTag(idx) {

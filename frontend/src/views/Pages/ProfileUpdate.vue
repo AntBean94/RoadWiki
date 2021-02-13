@@ -288,7 +288,7 @@ export default {
     });
 
     axios
-      .get(`${this.$store.getters.getServer}/user/info`)
+      .get(`${this.$store.getters.getServer}/user/info/${this.uid}`)
       .then(res => {
         this.nickname = res.data.name;
         this.email = res.data.email;
