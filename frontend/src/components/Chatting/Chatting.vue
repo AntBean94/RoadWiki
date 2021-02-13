@@ -48,6 +48,7 @@ export default {
     };
   },
   created() {
+    console.log("make chatting");
     this.getRoom();
   },
   methods: {

@@ -33,7 +33,7 @@ public class ChatServiceImpl implements ChatService{
 	@Override
 	public Map<String, Object> joinAnonymousChatRoom() {
 		Map<String, Object> result = new HashMap<String, Object>();
-		if(chatRoomRepo != null) {
+		if(anonymousRoom != null) {
 			result.put("chatRoom", anonymousRoom);
 		}
 		else {
