@@ -12,6 +12,10 @@
 </template>
 
 <script>
+import store from "@/store";
+
+const SERVER_URL = store.getters.getServer;
+
 export default {
     name: "Chatting",
     props: {
@@ -24,6 +28,7 @@ export default {
         }
     },
     created(){
+        this.getRooms()
     },
     methods: {
         ClickchattingRoom(chatInfo) {
@@ -34,6 +39,7 @@ export default {
          axios
         .get(SERVER_URL + "/chat/open")
         .then(response => {
+          console.log(response)
           this.chattingList = response.data.chatRooms;
           
         })

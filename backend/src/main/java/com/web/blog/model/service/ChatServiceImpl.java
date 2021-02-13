@@ -38,7 +38,7 @@ public class ChatServiceImpl implements ChatService{
 		}
 		else {
 			try {
-				ChatRoom chatRoom = chatRoomRepo.selectByTypeName(new ChatRoom("", "anonymousRoom", 0));
+				ChatRoom chatRoom = chatRoomRepo.selectByTypeName(new ChatRoom("", "anonymousRoom", 0))[0];
 				if(chatRoom == null) {
 					chatRoom = new ChatRoom(UUID.randomUUID().toString(), "anonymousRoom", 0);
 					chatRoomRepo.insert(chatRoom);
@@ -61,7 +61,10 @@ public class ChatServiceImpl implements ChatService{
 	@Override
 	public Map<String, Object> getOpenRoom(String name) {
 		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("chatRooms", chatRoomRepo.selectByTypeName(new ChatRoom("", "name", 1)));
+		for(ChatRoom cr:chatRoomRepo.selectByTypeName(new ChatRoom("", name, 1))){
+			System.out.println(cr);
+		}
+		result.put("chatRooms", chatRoomRepo.selectByTypeName(new ChatRoom("", name, 1)));
 		return result;
 	}
 	

@@ -22,7 +22,7 @@
         <!-- </ul> -->
         </div>
         <footer style="height:10%">
-        <input id="userName"type="text" v-model="sender" style="width:20%" readonly/>
+        <input id="userName" type="text" v-model="sender" style="width:20%" readonly/>
         <input
             type="text"
             v-model="message"
@@ -48,7 +48,7 @@ export default {
 
     },
     props: {
-        roomid: Number,
+        roomid: String,
         name: String, 
     },
     data() {
@@ -61,7 +61,7 @@ export default {
     },
     created(){
         this.sender = this.$store.getters.getName
-        sessionStorage.setItem("roomid", response.data.chatRoom.roomid);
+        sessionStorage.setItem("roomid", this.roomid);
         this.connect();
 
     },
