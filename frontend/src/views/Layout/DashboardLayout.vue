@@ -66,6 +66,15 @@
           }"
         >
         </sidebar-item>
+
+        <sidebar-item
+          :link="{
+            name: 'Chatting',
+            path: '/chatting-main',
+            icon: 'ni ni-chat-33 text-red'
+          }"
+        >
+        </sidebar-item>
       </template>
 
       <template slot="links-after">
