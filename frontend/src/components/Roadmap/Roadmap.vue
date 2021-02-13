@@ -9,11 +9,6 @@
       style="width: 150px; margin-right: 2px; background-color: #F9F8F3;"
     ></div>
     <div
-      v-show="roadmapMode"
-      ref="searchPaletteDiv"
-      style="width: 150px; margin-right: 2px; background-color: #F9F8F3;"
-    ></div>
-    <div
       ref="myDiagramDiv"
       style="flex-grow: 1; height: 750px; background-color: #F9F8F3;"
       @click="checkCur"
@@ -65,7 +60,6 @@ let go = window.go;
 let $ = go.GraphObject.make;
 let myDiagram;
 let myPalette;
-let searchPalette;
 // node 속성(card에 띄우기위한) 체크위한 전역변수(여기서만 사용)
 let curriculumData = -1;
 
@@ -73,15 +67,13 @@ let curriculumData = -1;
 let recommendCurData = [
   // 실제 프로젝트 default data 최초 클릭할 정보가 필요
 ];
-let searchCurData = [
-
-];
 
 export default {
   name: "Roadmap",
   props: {
     roadmapMode: Number,
-    roadmapData: Object
+    roadmapData: Object,
+    inputText: String,
   },
   data() {
     return {
@@ -96,7 +88,18 @@ export default {
         altInput: true,
         dateFormat: "Y-m-d",
         locale: Hindi // locale for this instance only
-      }
+      },
+      curData: {
+        category : "",
+        startdate : "",
+        enddate : "",
+        memo : "",
+        bdid : 0,
+        mdid : 0,
+        sdid : 0,
+        text : "",
+        content : ""
+      },
     };
   },
   components: {
@@ -280,28 +283,46 @@ export default {
       )
     );
 
-    // 종료 모델
+    // custom 모델
     myDiagram.nodeTemplateMap.add(
-      "End",
+      "Custom",
       $(
         go.Node,
         "Table",
         this.nodeStyle(),
+        // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
         $(
           go.Panel,
-          "Spot",
-          $(go.Shape, "Circle", {
-            desiredSize: new go.Size(60, 60),
-            fill: "#ffffff",
-            stroke: "#8D2040",
-            strokeWidth: 3.5
-          }),
-          $(go.TextBlock, "End", this.textStyle(), new go.Binding("text"))
+          "Auto",
+          $(
+            go.Shape,
+            "RoundedRectangle",
+            {
+              fill: "rgb(255, 255, 255)",
+              stroke: "rgb(234, 218, 79)",
+              strokeWidth: 2.5,
+              strokeJoin: "round",
+              strokeCap: "square"
+            },
+            new go.Binding("figure", "figure")
+          ),
+          $(
+            go.TextBlock,
+            this.textStyle(),
+            {
+              margin: 8,
+              maxSize: new go.Size(160, NaN),
+              wrap: go.TextBlock.WrapFit,
+              editable: true
+            },
+            new go.Binding("text").makeTwoWay()
+          )
         ),
-        // three named ports, one on each side except the bottom, all input only:
-        this.makePort("T", go.Spot.Top, go.Spot.Top, false, true),
-        this.makePort("L", go.Spot.Left, go.Spot.Left, false, true),
-        this.makePort("R", go.Spot.Right, go.Spot.Right, false, true)
+        // four named ports, one on each side: node의 가지 옵션
+        this.makePort("T", go.Spot.Top, go.Spot.TopSide, false, true),
+        this.makePort("L", go.Spot.Left, go.Spot.LeftSide, true, true),
+        this.makePort("R", go.Spot.Right, go.Spot.RightSide, true, true),
+        this.makePort("B", go.Spot.Bottom, go.Spot.BottomSide, true, false)
       )
     );
 
@@ -434,23 +455,6 @@ export default {
         )
       }
     );
-    searchPalette = $(
-      go.Palette,
-      this.$refs.searchPaletteDiv, // must name or refer to the DIV HTML element
-      {
-        // Instead of the default animation, use a custom fade-down
-        "animationManager.initialAnimationStyle": go.AnimationManager.None,
-        InitialAnimationStarting: this.animateFadeDown, // Instead, animate with this function
-        nodeTemplateMap: myDiagram.nodeTemplateMap, // share the templates used by myDiagram
-        //######################################################### 추천 커리 백엔드 연동부 핵심코드!
-        // 추천 컴포넌트를 띄우려면 여기에 데이터를 가져와서 랜더링
-        model: new go.GraphLinksModel(
-          // 추천 커리큘럼 전역변수로 저장되어있음
-          searchCurData
-        )
-      }
-    );
-
 
     // 링크연결시 화살표가 직교하는 모양으로 보일 수 있도록 하는 설정
     myDiagram.toolManager.linkingTool.temporaryLink.routing =
@@ -480,6 +484,9 @@ export default {
     // head 데이터 변경때 마다 실행(즉, 커리큘럼 클릭시 실행)
     headertext: function() {
       // 데이터 호출하는 함수
+      if (curriculumData.bdid==0 && curriculumData.mdid==0 && curriculumData.sdid==0) {
+        return
+      }
       this.getRecommendCur();
     },
     memotext: function() {
@@ -498,7 +505,14 @@ export default {
     },
     roadmapData: function(e) {
       myDiagram.model = go.Model.fromJson(e);
-    }
+    },
+    inputText: function() {
+      // 검색메서드 실행
+      if(this.inputText !="")
+        this.getSearchCur();
+      else
+        this.getRecommendCur();
+    },
   },
   computed: {},
   methods: {
@@ -579,6 +593,7 @@ export default {
       this.descript = curriculumData.content;
     },
     getRecommendCur() {
+      const _ = require('lodash');
       let color;
       let url;
       if (curriculumData == -1 || !curriculumData.category) {
@@ -600,12 +615,48 @@ export default {
             res.data["suggest"][i].enddate = "";
             res.data["suggest"][i].memo = "";
           }
+          if(curriculumData == -1){
+            let custom = _.cloneDeep(this.curData)
+            custom.category = "Custom"
+            custom.text = "User Custom"
+            res.data["suggest"].push(custom)
+            let start = _.cloneDeep(this.curData)
+            start.category = "Start"
+            start.text = "시작"
+            res.data["suggest"].push(start)
+          }
+          console.log(res.data["suggest"])
           recommendCurData = res.data["suggest"];
           myPalette.model.nodeDataArray = recommendCurData;
         })
+        // 하이하이 ^_^ @@@@@@@@@@!!!!!!!!!!!!!!!!!
         .catch(e => {
           console.error(e);
         });
+    },
+    getSearchCur() {
+      let url = `${this.$store.getters.getServer}/curriculum/search/${this.inputText}`;
+      let color = '';
+      axios.get(url)
+      .then(res => {
+        for (var i = 0; i < res.data["suggest"].length; i++) {
+          if(res.data["suggest"][i].sdid != 0 )
+            color = "green";
+          else if(res.data["suggest"][i].mdid != 0)
+            color = "black";
+          else
+            color = "blue";
+          res.data["suggest"][i].category = color;
+          res.data["suggest"][i].startdate = "";
+          res.data["suggest"][i].enddate = "";
+          res.data["suggest"][i].memo = "";
+        }
+          recommendCurData = res.data["suggest"];
+          myPalette.model.nodeDataArray = recommendCurData;
+      })
+      .catch(err => {
+        console.error(err)
+      })
     },
     readRoadmap() {
       myDiagram.model = go.Model.fromJson(this.roadmapData);
