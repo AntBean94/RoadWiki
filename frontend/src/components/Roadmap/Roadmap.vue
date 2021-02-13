@@ -9,6 +9,11 @@
       style="width: 150px; margin-right: 2px; background-color: #F9F8F3;"
     ></div>
     <div
+      v-show="roadmapMode"
+      ref="searchPaletteDiv"
+      style="width: 150px; margin-right: 2px; background-color: #F9F8F3;"
+    ></div>
+    <div
       ref="myDiagramDiv"
       style="flex-grow: 1; height: 750px; background-color: #F9F8F3;"
       @click="checkCur"
@@ -60,12 +65,16 @@ let go = window.go;
 let $ = go.GraphObject.make;
 let myDiagram;
 let myPalette;
+let searchPalette;
 // node 속성(card에 띄우기위한) 체크위한 전역변수(여기서만 사용)
 let curriculumData = -1;
 
 // 커리큘럼 클릭시 요청을통해 받아온 데이터를 여기에 저장하면 됨
 let recommendCurData = [
   // 실제 프로젝트 default data 최초 클릭할 정보가 필요
+];
+let searchCurData = [
+
 ];
 
 export default {
@@ -425,6 +434,23 @@ export default {
         )
       }
     );
+    searchPalette = $(
+      go.Palette,
+      this.$refs.searchPaletteDiv, // must name or refer to the DIV HTML element
+      {
+        // Instead of the default animation, use a custom fade-down
+        "animationManager.initialAnimationStyle": go.AnimationManager.None,
+        InitialAnimationStarting: this.animateFadeDown, // Instead, animate with this function
+        nodeTemplateMap: myDiagram.nodeTemplateMap, // share the templates used by myDiagram
+        //######################################################### 추천 커리 백엔드 연동부 핵심코드!
+        // 추천 컴포넌트를 띄우려면 여기에 데이터를 가져와서 랜더링
+        model: new go.GraphLinksModel(
+          // 추천 커리큘럼 전역변수로 저장되어있음
+          searchCurData
+        )
+      }
+    );
+
 
     // 링크연결시 화살표가 직교하는 모양으로 보일 수 있도록 하는 설정
     myDiagram.toolManager.linkingTool.temporaryLink.routing =

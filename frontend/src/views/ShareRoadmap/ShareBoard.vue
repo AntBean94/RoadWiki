@@ -68,8 +68,7 @@ export default {
   },
   methods: {
     createBoard() {
-      // props로 일반글 작성인지 로드맵 공유인지 구분 => createboard에서 조건에따라 나눔
-      this.$router.push({ name: "create_board", params: { createMode: 1 } });
+      this.$router.push({ name: "create_share_board" });
     },
     getSharedRoadmap() {
       axios
