@@ -1,5 +1,6 @@
 package com.web.blog.model.service;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 import com.web.blog.model.dto.Comment;
