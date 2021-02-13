@@ -131,18 +131,10 @@ export default {
           `${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`
         )
         .then(res => {
-          // console.log('하이')
-          // console.log(res.data)
           updatecontent = res.data.posting.content;
           this.content2 = updatecontent;
-          // console.log('여기는 content2')
-          // console.log(this.content2)
-          // console.log('여기는 updatecontent')
-          // console.log(this.content2)
         })
         .finally(() => {
-          // console.log('hi')
-          // console.log(updatecontent);
           this.content2 = updatecontent;
         });
     }
@@ -162,16 +154,17 @@ export default {
     // },
   },
   created() {
-    // this.getOriginPosting()
-    // axios
-    //   .get(
-    //     `${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`
-    //   )
-    //   .then(res => {
-    //     this.content = res.data.posting.content;
-    //     updatecontent = res.data.posting.content;
-    //     this.title = res.data.posting.title;
-    //   });
+    console.log(
+      `${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`
+    );
+    axios
+      .get(
+        `${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`
+      )
+      .then(res => {
+        updatecontent = res.data.posting.content;
+        this.title = res.data.posting.title;
+      });
     // console.log(updatecontent)
   }
 };

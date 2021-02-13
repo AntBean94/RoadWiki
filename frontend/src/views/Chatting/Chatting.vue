@@ -1,37 +1,40 @@
 <template>
-  <div id="chatting">
-    <header style="height:10%">
-      <p style="display:inline-block">채팅방</p>
-      <button @click="removeChat" style="display:inline-block; float : right">
-        X
-      </button>
-    </header>
-    <div
-      style="height:80%; border:black 1px solid; overflow: scroll;"
-      id="content"
-    >
-      <!-- <ul style="margin:0px"> -->
-      <li
-        v-for="(message, idx) in messages"
-        v-bind:key="idx"
-        style="margin:0px; font-size:14px"
-      >
-        {{ message.sender }} >> {{ message.message }}
-      </li>
-      <!-- </ul> -->
-    </div>
-    <footer style="height:10%">
-      <input type="text" v-model="sender" style="width:20%" />
-      <input
-        type="text"
-        v-model="message"
-        v-on:keypress.enter="sendMsg"
-        style="width:60%"
-      />
-      <button type="button" @click="sendMsg" style="width:20%">전송</button>
-    </footer>
+  <div>
+      {{ roomid }}
+      <br>
+      
+      <div id="chatting">
+        <header style="height:10%">
+        <p style="display:inline-block">{{ name }} 채팅방에 오신것을 환영합니다.</p>
+        </header>
+        <div
+            style="height:80%; border:black 1px solid; overflow: scroll;"
+            id="content"
+        >
+        <!-- <ul style="margin:0px"> -->
+        <li
+            v-for="(message, idx) in messages"
+            v-bind:key="idx"
+            style="margin:0px; font-size:14px"
+        >
+            {{ message.sender }} >> {{ message.message }}
+        </li>
+        <!-- </ul> -->
+        </div>
+        <footer style="height:10%">
+        <input id="userName" type="text" v-model="sender" style="width:20%" readonly/>
+        <input
+            type="text"
+            v-model="message"
+            v-on:keypress.enter="sendMsg"
+            style="width:60%"
+        />
+        <button type="button" @click="sendMsg" style="width:20%">전송</button>
+        </footer>
+      </div>
   </div>
 </template>
+
 <script>
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
@@ -40,31 +43,37 @@ import store from "@/store";
 const SERVER_URL = store.getters.getServer;
 
 export default {
-  data() {
-    return {
-      sender: "익명",
-      message: "",
-      messages: [],
-      rooms: [],
-    };
-  },
-  created() {
-    console.log("make chatting");
-    this.getRoom();
-  },
-  methods: {
-    getRoom: function() {
-      axios
-        .get(SERVER_URL + "/chat/room")
-        .then(response => {
-          this.room = response.data.chatRoom;
-          sessionStorage.setItem("roomid", response.data.chatRoom.roomid);
-          this.connect();
-        })
-        .catch(response => {
-          console.log(response);
-        });
+    name: "Chatting",
+    components: {
+
     },
+    props: {
+        roomid: String,
+        name: String, 
+    },
+    data() {
+        return{
+            sender: '',
+            message: "",
+            messages: [],
+            
+        }
+    },
+    created(){
+        this.sender = this.$store.getters.getName
+        sessionStorage.setItem("roomid", this.roomid);
+        this.connect();
+
+    },
+    computed: {
+
+    },
+    mounted(){
+
+    },
+    methods: {
+        
+        
     sendMsg: function() {
       var msg = {
         type: "TALK",
@@ -122,21 +131,18 @@ export default {
         }
       );
     },
-    removeChat: function() {
-      this.$emit("remove");
-    }
   }
-};
+}
 </script>
-<style scoped>
-#chatting {
-  position: fixed;
-  bottom: 5px;
-  right: 5px;
-  width: 300px;
-  height: 500px;
+
+<style>
+#chatting{
+  width: 900px;
+  height: 600px;
   background-color: whitesmoke;
   border: 1px black solid;
-  z-index: 1000;
+}
+#userName{
+    background-color:rgb(204, 204, 204);
 }
 </style>

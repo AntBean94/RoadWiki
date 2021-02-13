@@ -14,54 +14,67 @@
           {{user.name}}
         </router-link>
       </ul>
-      <!-- <ul>여기가 검색 결과 나올 공간</ul>
-      <ul>여기가 검색 결과 나올 공간</ul>
-      <ul>여기가 검색 결과 나올 공간</ul> -->
-      <hr class="my-2">
+
+      <hr class="my-2" />
       <h2>게시글</h2>
       <ul v-for="(posting, index) in postinglist" :key="index">
-        {{posting.title}}
+        {{
+          posting.title
+        }}
       </ul>
-      <ul>여기가 검색 결과 나올 공간</ul>
-      <ul>여기가 검색 결과 나올 공간</ul>
-      <ul>여기가 검색 결과 나올 공간</ul>
+      <hr class="my-2" />
+      <h2>공유글</h2>
+      <ul v-for="(roadmapdata, index) in roadmapdatalist" :key="index">
+        {{
+          roadmapdata.title
+        }}
+      </ul>
     </b-container>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'searchlist',
+  name: "searchlist",
   data() {
     return {
-      content: '',
+      content: "",
       userlist: [],
       postinglist: [],
-    }
+      roadmapdatalist: []
+    };
   },
   methods: {
     sendWord() {
-      axios.get(`${this.$store.getters.getServer}/search/list/${this.content}`)
-      .then((res) => {
-        this.content = ''
-        console.log()
-        console.log(res.data)
-        this.userlist = res.data.user
-        this.postinglist = res.data.posting
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-    },
+      axios
+        .get(`${this.$store.getters.getServer}/search/list/${this.content}`)
+        .then(res => {
+          this.content = "";
+          this.userlist = res.data.user;
+          this.postinglist = res.data.posting;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+
+      axios
+        .get(
+          `${this.$store.getters.getServer}/roadmapshare/get/title/${this.content}`
+        )
+        .then(res => {
+          this.content = "";
+          this.roadmapdatalist = res.data.roadmapshares;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   },
   created() {
-    this.content = this.$route.query.searchKeyword
-    console.log(this.content)
-    this.sendWord()
-  },
-}
+    this.content = this.$route.query.searchKeyword;
+    this.sendWord();
+  }
+};
 </script>
 
-<style>
-
-</style>
+<style></style>
