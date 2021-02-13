@@ -16,11 +16,10 @@
         ref="toastuiEditor"
         :options="editorOptions"
         height="500px"
-        :initialValue="content2"
         initialEditType="wysiwyg"
         previewStyle="vertical"
         class="mx-4"
-        v-model="content2"
+        v-model="content"
         @load="editorLoading"
         id="editor"
       />
@@ -64,15 +63,19 @@ import { Editor } from "@toast-ui/vue-editor";
 import store from "@/store";
 
 let updatecontent = "";
+let updatetitle = '';
+
 // local 이 아니라 this.$store.getters.getServer 73이아니라 파람으로 받아온거$route.param
 // axios.get(`http://localhost:8085/freeboard/posting/73`)
 
-console.log(store.getters.getPid);
 axios
   .get(`${store.getters.getServer}/freeboard/posting/${store.getters.getPid}`)
   .then(res => {
+    console.log('여기가 script')
     console.log(res.data);
     updatecontent = res.data.posting.content;
+    console.log(updatecontent)
+    updatetitle = res.data.posting.title;
   });
 
 export default {
@@ -82,17 +85,26 @@ export default {
   },
   data() {
     return {
-      content: "",
-      content2: updatecontent,
+      content: updatecontent,
       editorOptions: {
         hideModeSwitch: false
       },
       tags: ["첫번째 태그", "두번째 태그", "세번째 태그", "네번째 태그"],
       tagInput: "",
-      title: ""
+      title: updatetitle,
     };
   },
   methods: {
+    getOriginPosting() {
+      axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
+      .then((res) => {
+        console.log('origin data')
+        console.log(res.data)
+        this.title = res.data.posting.title
+        console.log('여기는 title')
+        console.log(this.title)
+      })
+    },
     datachange() {
       const content = this.$refs.toastuiEditor.invoke("getMarkdown");
       axios
@@ -148,17 +160,16 @@ export default {
     // },
   },
   created() {
-    console.log(
-      `${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`
-    );
-    axios
-      .get(
-        `${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`
-      )
-      .then(res => {
-        updatecontent = res.data.posting.content;
-        this.title = res.data.posting.title;
-      });
+    // this.getOriginPosting()
+    // axios
+    //   .get(
+    //     `${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`
+    //   )
+    //   .then(res => {
+    //     this.content = res.data.posting.content;
+    //     updatecontent = res.data.posting.content;
+    //     this.title = res.data.posting.title;
+    //   });
     // console.log(updatecontent)
   }
 };
