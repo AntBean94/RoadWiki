@@ -74,7 +74,6 @@ export default {
       axios
         .get(`${this.$store.getters.getServer}/roadmapshare/get`)
         .then(response => {
-          console.log(response)
           this.shareList = response.data.roadmapshares;
           this.usernameList = response.data.username;
           this.totalPageNum = response.data.roadmapshares.length
@@ -85,13 +84,11 @@ export default {
         });
     },
     searchSharedRoadmap() {
-      console.log(this.category, this.inputtext);
       axios
         .get(
           `${this.$store.getters.getServer}/roadmapshare/get/${this.category}/${this.inputtext}`
         )
         .then(response => {
-          console.log(response);
           this.shareList = response.data.roadmapshares;
           this.usernameList = response.data.username;
           this.totalPageNum = response.data.roadmapshares.length

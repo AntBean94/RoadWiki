@@ -103,13 +103,11 @@ export default {
       this.rmorder = clickrmorder;
         axios.get(`${this.$store.getters.getServer}/roadmap/get/${clickrmid}`)
         .then((res) => {
-          console.log(res.data)
           if(res.data.msg == 'success'){
           this.roadmapData = JSON.parse(res.data['roadmaps'].tmp);
           // this.load: ismounted 사용여부 확인 후 지울 것
           this.load();
           }else{
-            console.log(res.data);
             alert("데이터 로드에 실패했습니다.");
           }
         }).catch((e) =>{

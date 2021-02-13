@@ -101,13 +101,11 @@ export default {
       this.rmid = this.roadmap.rmid
     },
     previewRoadmap() {
-      console.log('실행되냐?', this.rmid)
       axios.get(`${this.$store.getters.getServer}/roadmap/get/${this.rmid}`)
       .then((res) => {
         if(res.data.msg == 'success'){
         this.roadmapData = JSON.parse(res.data['roadmaps'].tmp);
         }else{
-          console.log(res);
           alert("데이터 로드에 실패했습니다.");
         }
       }).catch((e) =>{

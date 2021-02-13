@@ -5,6 +5,7 @@
 
     <div class="p-4 bg-secondary">
       <b-input
+        v-if="title"
         placeholder="제목"
         class="form-control-alternative"
         v-model="title"
@@ -13,14 +14,14 @@
 
     <div>
       <editor
+        v-if="content"
         ref="toastuiEditor"
         :options="editorOptions"
         height="500px"
         initialEditType="wysiwyg"
         previewStyle="vertical"
         class="mx-4"
-        v-model="content"
-        @load="editorLoading"
+        :initialValue="content"
         id="editor"
       />
     </div>
@@ -63,22 +64,10 @@ import { Editor } from "@toast-ui/vue-editor";
 import store from "@/store";
 import routes from '@/routes/routes';
 
-let updatecontent = "";
-let updatetitle = '';
-
 // local 이 아니라 this.$store.getters.getServer 73이아니라 파람으로 받아온거$route.param
 // axios.get(`http://localhost:8085/freeboard/posting/73`)
 
 // console.log(routes.query.pid)
-axios
-  .get(`${store.getters.getServer}/freeboard/posting/${store.getters.getPid}`)
-  .then(res => {
-    console.log('여기가 script')
-    console.log(res.data);
-    updatecontent = res.data.posting.content;
-    console.log(updatecontent)
-    updatetitle = res.data.posting.title;
-  });
 
 export default {
   name: "Editor",
@@ -87,13 +76,13 @@ export default {
   },
   data() {
     return {
-      content: updatecontent,
+      content: "",
       editorOptions: {
         hideModeSwitch: false
       },
       tags: ["첫번째 태그", "두번째 태그", "세번째 태그", "네번째 태그"],
       tagInput: "",
-      title: updatetitle,
+      title: "",
     };
   },
   methods: {
@@ -102,6 +91,7 @@ export default {
       .then((res) => {
         console.log('origin data')
         console.log(res.data)
+        this.content = res.data.posting.content
         this.title = res.data.posting.title
         console.log('여기는 title')
         console.log(this.title)
@@ -131,11 +121,9 @@ export default {
           `${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`
         )
         .then(res => {
-          updatecontent = res.data.posting.content;
-          this.content2 = updatecontent;
+          this.content = res.data.posting.content;
         })
         .finally(() => {
-          this.content2 = updatecontent;
         });
     }
     // onEditorLoad() {
@@ -153,21 +141,21 @@ export default {
     //   })
     // },
   },
+  watch: {
+    content: function() {
+      console.log("바뀌는중...")
+    }
+  },
   created() {
     console.log(
       `${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`
     );
-    axios
-      .get(
-        `${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`
-      )
-      .then(res => {
-        updatecontent = res.data.posting.content;
-        this.title = res.data.posting.title;
-      });
-    // console.log(updatecontent)
-  }
-};
+    this.getOriginPosting();
+    this.editorLoading();
+  },
+}
 </script>
 
-<style></style>
+<style>
+
+</style>

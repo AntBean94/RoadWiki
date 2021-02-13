@@ -183,7 +183,6 @@ export default {
           this.recomments = res.data.recomments;
           this.tags = res.data.tags;
         })
-
         .catch(err => {});
     },
     updateBoard() {
@@ -204,7 +203,6 @@ export default {
       const postingLikeUser = {
         pid: this.$route.query.pid
       };
-
       axios
         .post(
           `${this.$store.getters.getServer}/freeboard/postinglike`,
