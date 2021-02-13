@@ -15,6 +15,10 @@ public interface CurriculumRepo {
 	public Curriculumtext[] selectMiddleText(int bdid);
 	public Curriculumtext[] selectBigText();
 	
+	public List<Curriculumtext> searchSmallText(String text);
+	public List<Curriculumtext> searchMiddleText(String text);
+	public List<Curriculumtext> searchBigText(String text);
+	
 	public int insertSmallText(Curriculumtext curriculumtext);
 	public int insertMiddleText(Curriculumtext curriculumtext);
 	public int insertBigText(Curriculumtext curriculumtext);
@@ -26,9 +30,10 @@ public interface CurriculumRepo {
 	public List<Curriculum> selectSmallByRmid(int rmid);
 	public List<Curriculum> selectMiddleByRmid(int rmid);
 	public List<Curriculum> selectBigByRmid(int rmid);
+	public List<Curriculum> selectCusByRmid(int rmid);
 	
 	public int insertSmall(List<Curriculum> curriculumlist);
 	public int insertMiddle(List<Curriculum> curriculumlist);
 	public int insertBig(List<Curriculum> curriculumlist);
-	
+	public int insertCus(List<Curriculum> curriculumlist);
 }

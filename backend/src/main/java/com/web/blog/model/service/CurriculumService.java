@@ -14,4 +14,5 @@ public interface CurriculumService {
 	
 	public void create(int rmid,JsonArray nodeDataArray);
 	public JsonArray getCurriculumByrmid(int rmid);
+	public Object getSuggestBySearch(String text);
 }	
