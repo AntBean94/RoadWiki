@@ -8,5 +8,5 @@ public interface ChatService {
 	public Map<String, Object> createOpenRoom(String name);
 	public Map<String, Object> joinAnonymousChatRoom();
 	public Map<String, Object> getChatRoom(String roomid);
-	public Map<String, Object> getOpenRoom(String name, int type);
+	public Map<String, Object> getOpenRoom(String name);
 }

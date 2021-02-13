@@ -14,6 +14,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,13 +36,13 @@ public class ChatRoomController {
 	ChatService chatServ;
 	
 	
-	@GetMapping("/all")
+	@GetMapping("/open")
 	@ResponseBody
-	public Object getAllRoom() {
-		logger.trace("get all room");
+	public Object getAllRoom(@RequestBody String name) {
+		logger.trace("get open room");
 		Map<String, Object> result = null;
 		try {
-			result = chatServ.getOpenRoomAll();
+			result = chatServ.getOpenRoom("");
 			result.put("msg", SUCCESS);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
