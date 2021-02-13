@@ -90,7 +90,7 @@
 		startdate = #{startdate},
 		enddate = #{enddate}
 		where
-		rmid = #{rmid} and small.key = #{key}
+		rmid = #{rmid} and customcurri.key = #{key}
 	</update>
 </mapper>
 	
