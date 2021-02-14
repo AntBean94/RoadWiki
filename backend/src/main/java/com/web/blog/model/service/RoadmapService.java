@@ -4,11 +4,12 @@ import com.web.blog.model.dto.Roadmap;
 
 public interface RoadmapService {
 	
-	public Object create(String nowuid,Roadmap map) throws Exception;
-	public Object modify(String nowuid,Roadmap map);
-	public Object getRoadmapListByUid(String nowuid,String uid); // rmorder createdate가장나중
-	public Object getRoadmap(String nowuid,String rmid);
-	public Object getRoadmapListByRmorder(String nowuid, String uid,String rmorder); // 추가적인 요소 끄트 ?
-	public Object deleteRoadmap(String nowuid,String uid,String rmorder);
+	public Object create(int nowuid,Roadmap map) throws Exception;
+	public Object modify(int nowuid,Roadmap map);
+	public Object getRoadmapListByUid(int nowuid,int uid); // rmorder createdate가장나중
+	public Object getRoadmap(int nowuid,int rmid);
+	public Object getRoadmapListByRmorder(int nowuid, int uid,int rmorder); // 추가적인 요소 끄트 ?
+	public Object deleteRoadmap(int nowuid,int uid,int rmorder);
 	public Object getOfficialRoadmapList();
+	public Object getRoadmapComment(int rmid);
 }	

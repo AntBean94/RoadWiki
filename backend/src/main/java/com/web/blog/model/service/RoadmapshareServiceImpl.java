@@ -29,13 +29,27 @@ public class RoadmapshareServiceImpl implements RoadmapshareService {
 	@Autowired
 	RoadmapService roadmapService;
 	
+	
+	@Override
+	public Object isShared(int rmid) throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			boolean shared = roadmapshareRepo.isShared(rmid) == 0 ? false : true;
+			result.put("isShared", shared);
+		} catch (Exception e) {
+			logger.error("Service selectByUserName : Something wrong");
+			throw e;
+		}
+		return result;
+	}
+	
 	@Override
 	public Object selectRoadmapdataList(List<Integer> rmidlist) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		List<Roadmap> roadmaplist = new ArrayList<Roadmap>();
 		try {
 			for(int rmid : rmidlist) {
-				roadmaplist.add((Roadmap)roadmapService.getRoadmap("0", Integer.toString(rmid)));
+				roadmaplist.add((Roadmap)roadmapService.getRoadmap(0, rmid));
 			}
 			result.put("roadmapdatalist", roadmaplist);
 			

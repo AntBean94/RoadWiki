@@ -186,7 +186,7 @@ export default {
     },
     // 특정 컴포넌트에서 nav바 제거
     checkUrl(url) {
-      let array = ["Roadmap", "update_user_roamdap"];
+      let array = ["Roadmap", "update_user_roamdap", "roadback"];
       let isHeader = true;
       array.map(path => {
         if (url === path) isHeader = false;

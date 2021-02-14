@@ -63,6 +63,26 @@ public class RoadmapshareController {
 		
 	}
 	
+	@GetMapping("/isshared/{rmid}")
+	public Object isShared(@PathVariable int rmid) {
+		logger.trace("isShared start");
+		Map<String, Object> result = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		try {
+			result = (Map<String, Object>) roadmapshareservice.isShared(rmid);
+			result.put("msg", SUCCESS);
+		} catch (NumberFormatException e) {
+			logger.error("input data type error");
+			result.put("msg", FAIL);
+			result.put("errorMsg", e.getMessage());
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			result.put("msg", FAIL);
+			result.put("errorMsg", e.getMessage());
+		}
+		return new ResponseEntity<Map<String, Object>>(result, status);
+	}
+	
 	@GetMapping("/get")
 	public Object getAllShare() {
 		logger.trace("getAllShare start");
