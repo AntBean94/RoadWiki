@@ -6,6 +6,7 @@ public class Curriculum {
 	private int sdid;
 	private int mdid;
 	private int bdid;
+	private int uid;
 	private String loc;
 	private String memo;
 	private String text;
@@ -13,6 +14,13 @@ public class Curriculum {
 	private String startdate;
 	private String enddate;
 	private String category;
+	
+	public int getUid() {
+		return uid;
+	}
+	public void setUid(int uid) {
+		this.uid = uid;
+	}
 	public int getKey() {
 		return key;
 	}

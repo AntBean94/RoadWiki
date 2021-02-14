@@ -27,12 +27,11 @@ public class RoadmapServiceImpl implements RoadmapService {
 
 	@Override
 	@Transactional(isolation=Isolation.READ_UNCOMMITTED)
-	public Object create(String nowuid, Roadmap map) throws Exception {
+	public Object create(int nowuid, Roadmap map) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			int uidnum = map.getUid();
-			int nowuidnum = Integer.parseInt(nowuid);
-			if (nowuidnum != uidnum)
+			if (nowuid != uidnum)
 				throw new RuntimeException("wrong user");
 			
 			JsonObject jsonObject = new JsonParser().parse(map.getTmp()).getAsJsonObject();
@@ -42,7 +41,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 			
 			if (roadmaprepo.insert(map) != 1)
 				throw new RuntimeException("Query wrong");
-			int rmid = roadmaprepo.selectlastRmidByUid(nowuidnum);
+			int rmid = roadmaprepo.selectlastRmidByUid(nowuid);
 			curriservice.create(rmid, nodeDataArray);
 		} catch (Exception e) {
 			logger.error("Service create : Something wrong");
@@ -53,11 +52,10 @@ public class RoadmapServiceImpl implements RoadmapService {
 
 	@Override
 	@Transactional(isolation=Isolation.READ_UNCOMMITTED)
-	public Object modify(String nowuid, Roadmap map) {
+	public Object modify(int nowuid, Roadmap map) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			int nowuidnum = Integer.parseInt(nowuid);
-			if (nowuidnum != map.getUid())
+			if (nowuid != map.getUid())
 				throw new RuntimeException("wrong user");
 
 			JsonObject jsonObject = new JsonParser().parse(map.getTmp()).getAsJsonObject();
@@ -68,7 +66,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 			if (roadmaprepo.update(map) != 1)
 				throw new RuntimeException("Query wrong");
 			
-			int rmid = roadmaprepo.selectlastRmidByUid(nowuidnum);
+			int rmid = roadmaprepo.selectlastRmidByUid(nowuid);
 			curriservice.create(rmid, nodeDataArray);
 			
 		} catch (Exception e) {
@@ -79,16 +77,13 @@ public class RoadmapServiceImpl implements RoadmapService {
 	}
 
 	@Override
-	public Object deleteRoadmap(String nowuid, String uid, String rmorder) {
+	public Object deleteRoadmap(int nowuid, int uid, int rmorder) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			int nowuidnum = Integer.parseInt(nowuid);
-			int uidnum = Integer.parseInt(uid);
-			if (nowuidnum != uidnum)
+			if (nowuid != uid)
 				throw new RuntimeException("wrong user");
 
-			int rmordernum = Integer.parseInt(rmorder);
-			if (roadmaprepo.delete(rmordernum, uidnum) != 1)
+			if (roadmaprepo.delete(rmorder, uid) != 1)
 				throw new RuntimeException("Query wrong");
 
 		} catch (Exception e) {
@@ -99,16 +94,13 @@ public class RoadmapServiceImpl implements RoadmapService {
 	}
 
 	@Override
-	public Object getRoadmapListByUid(String nowuid, String uid) {
+	public Object getRoadmapListByUid(int nowuid, int uid) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			int uidnum = Integer.parseInt(uid);
-			int nowuidnum = Integer.parseInt(nowuid);
-
-			if (nowuidnum == uidnum)
-				result.put("roadmaps", roadmaprepo.selectMyRoadmapListByUid(uidnum));
+			if (nowuid == uid)
+				result.put("roadmaps", roadmaprepo.selectMyRoadmapListByUid(uid));
 			else
-				result.put("roadmaps", roadmaprepo.selectOtherRoadmapListByUid(uidnum));
+				result.put("roadmaps", roadmaprepo.selectOtherRoadmapListByUid(uid));
 
 		} catch (Exception e) {
 			logger.error("Service getRoadmapListByUid : Something wrong");
@@ -118,17 +110,14 @@ public class RoadmapServiceImpl implements RoadmapService {
 	}
 
 	@Override
-	public Object getRoadmapListByRmorder(String nowuid, String uid, String rmorder) {
+	public Object getRoadmapListByRmorder(int nowuid, int uid, int rmorder) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			int uidnum = Integer.parseInt(uid);
-			int nowuidnum = Integer.parseInt(nowuid);
-			int rmordernum = Integer.parseInt(rmorder);
 
-			if (uidnum != nowuidnum)
+			if (uid != nowuid)
 				throw new RuntimeException("wrong user");
 
-			result.put("roadmaps", roadmaprepo.selectRoadmapListByRmorder(rmordernum, uidnum));
+			result.put("roadmaps", roadmaprepo.selectRoadmapListByRmorder(rmorder, uid));
 		} catch (Exception e) {
 			logger.error("Service getRoadmapListByRmorder : Something wrong");
 			throw e;
@@ -138,31 +127,49 @@ public class RoadmapServiceImpl implements RoadmapService {
 	}
 
 	@Override
-	public Object getRoadmap(String nowuid, String rmid) {
+	public Object getRoadmap(int nowuid, int rmid) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			int rmidnum = Integer.parseInt(rmid);
-			int uidnum = roadmaprepo.selectUidByRmid(rmidnum);
-			int nowuidnum = 0;
+			int uidnum = roadmaprepo.selectUidByRmid(rmid);
 			if (uidnum < 0) {
-				nowuidnum = uidnum;
-			} else
-				nowuidnum = Integer.parseInt(nowuid);
+				nowuid = uidnum;
+			}
 			Roadmap roadmap = null;
-			if (nowuidnum == uidnum)
-				roadmap = roadmaprepo.selectMyRoadmap(rmidnum);
+			if (nowuid == uidnum)
+				roadmap = roadmaprepo.selectMyRoadmap(rmid);
 			else
-				roadmap = roadmaprepo.selectOtherRoadmap(rmidnum);
+				roadmap = roadmaprepo.selectOtherRoadmap(rmid);
 
 			if (roadmap == null)
 				new RuntimeException("access denied");
 			JsonObject jsonObject = new JsonParser().parse(roadmap.getTmp()).getAsJsonObject();
-			JsonArray nodeDataArray = curriservice.getCurriculumByrmid(rmidnum);
+			JsonArray nodeDataArray = curriservice.getCurriculumByrmid(rmid);
 			jsonObject.add("nodeDataArray", nodeDataArray);
 			roadmap.setTmp(jsonObject.toString());
 			result.put("roadmaps", roadmap);
 		} catch (Exception e) {
 			logger.error("Service getRoadmap : Something wrong");
+			throw e;
+		}
+		return result;
+	}
+	
+	@Override
+	public Object getRoadmapComment(int rmid) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			Roadmap roadmap = null;
+			roadmap = roadmaprepo.selectMyRoadmap(rmid);
+
+			if (roadmap == null)
+				new RuntimeException("access denied");
+			JsonObject jsonObject = new JsonParser().parse(roadmap.getTmp()).getAsJsonObject();
+			JsonArray nodeDataArray = curriservice.getCurriculumCommentByrmid(rmid);
+			jsonObject.add("nodeDataArray", nodeDataArray);
+			roadmap.setTmp(jsonObject.toString());
+			result.put("roadmaps", roadmap);
+		} catch (Exception e) {
+			logger.error("Service getRoadmapComment : Something wrong");
 			throw e;
 		}
 		return result;

@@ -127,6 +127,7 @@ const routes = [
         path: '/sharedetail',
         name: 'sharedetail',
         component: () => import('../views/ShareRoadmap/ShareDetail.vue'),
+        props: true,
       },
       {
         path: '/searchlist',
@@ -138,6 +139,12 @@ const routes = [
         path: '/createshareboard',
         name: 'create_share_board',
         component: () => import('../views/ShareRoadmap/CreateShareBoard.vue'),
+        props: true,
+      },
+      {
+        path: '/roadback',
+        name: 'roadback',
+        component: () => import('../views/ShareRoadmap/RoadBack.vue'),
         props: true,
       },
     ]
