@@ -10,6 +10,12 @@
 		where cid=#{cid}
 	</select>
 	
+	<select id="countComment" parameterType="Integer" resultType="Integer">
+		select count(cid) 
+		from comment 
+		where pid=#{pid}
+	</select>
+	
 	<select id="selectUserName" parameterType="Integer" resultType="String">
 		select name
 		from user
