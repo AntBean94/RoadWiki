@@ -10,6 +10,14 @@
 		where rcid=#{rcid}
 	</select>
 
+	<select id="selectUserName" parameterType="Integer" resultType="String">
+		select name
+		from user
+		where uid=(select uid 
+					from recomment
+					where rcid=#{rcid})
+	</select>
+
  	<select id="selectListCid" parameterType="Integer" resultType="Recomment">
 		select * 
 		from recomment

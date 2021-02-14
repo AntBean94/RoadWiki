@@ -9,6 +9,14 @@
 		from comment 
 		where cid=#{cid}
 	</select>
+	
+	<select id="selectUserName" parameterType="Integer" resultType="String">
+		select name
+		from user
+		where uid=(select uid 
+					from comment
+					where cid=#{cid})
+	</select>
 
  	<select id="selectListPid" parameterType="Integer" resultType="Comment">
 		select * 
