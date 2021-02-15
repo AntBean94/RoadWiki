@@ -9,13 +9,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.web.blog.model.dto.Curriculum;
 import com.web.blog.model.dto.Curriculumtext;
 import com.web.blog.model.repo.CurriculumRepo;
+import com.web.blog.model.repo.RoadcommentRepo;
+import com.web.blog.model.repo.RoadmapRepo;
 
 @Service
 public class CurriculumServiceImpl implements CurriculumService {
@@ -23,6 +24,9 @@ public class CurriculumServiceImpl implements CurriculumService {
 
 	@Autowired
 	CurriculumRepo curriculumrepo;
+	
+	@Autowired
+	RoadcommentRepo roadcommentrepo;
 
 	@Override
 	public Object insertText(String uid, Curriculumtext curriculumtext) {
@@ -194,6 +198,42 @@ public class CurriculumServiceImpl implements CurriculumService {
 			Curriculumlist.addAll(curriculumrepo.selectMiddleByRmid(rmid));
 			Curriculumlist.addAll(curriculumrepo.selectBigByRmid(rmid));
 			Curriculumlist.addAll(curriculumrepo.selectCusByRmid(rmid));
+			
+			for(Curriculum curri : Curriculumlist) {
+				JsonObject obj = new JsonObject();
+				obj.addProperty("category", curri.getCategory());
+				obj.addProperty("content", curri.getContent());
+				obj.addProperty("loc", curri.getLoc());
+				obj.addProperty("enddate", curri.getEnddate());
+				obj.addProperty("startdate", curri.getStartdate());
+				obj.addProperty("memo", curri.getMemo());
+				obj.addProperty("rmid", curri.getRmid());
+				obj.addProperty("key", curri.getKey());
+				obj.addProperty("text", curri.getText());
+				obj.addProperty("mdid", curri.getMdid());
+				obj.addProperty("bdid", curri.getBdid());
+				obj.addProperty("sdid", curri.getSdid());
+				nodeDataArray.add(obj);
+			}
+		} catch (Exception e) {
+			logger.error("Service getCurriculumByrmid : Something wrong");
+			throw e;
+		}
+		return nodeDataArray;
+	}
+	
+	@Override
+	public JsonArray getCurriculumCommentByrmid(int rmid) {
+		// small, middle, big 에서 rmid로 싹 긁어오고 json으로 만들어서 보내주기
+		JsonArray nodeDataArray = new JsonArray();
+		List<Curriculum> Curriculumlist = new ArrayList<Curriculum>();
+
+		try {
+			Curriculumlist.addAll(curriculumrepo.selectSmallByRmid(rmid));
+			Curriculumlist.addAll(curriculumrepo.selectMiddleByRmid(rmid));
+			Curriculumlist.addAll(curriculumrepo.selectBigByRmid(rmid));
+			Curriculumlist.addAll(curriculumrepo.selectCusByRmid(rmid));
+			Curriculumlist.addAll(roadcommentrepo.selectRoadComment(rmid));
 			
 			for(Curriculum curri : Curriculumlist) {
 				JsonObject obj = new JsonObject();
