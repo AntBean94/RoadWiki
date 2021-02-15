@@ -30,7 +30,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "demo" */ '../views/Icons.vue')
       },
       {
-        path: '/profile',
+        path: '/profile/',
         name: 'profile',
         component: () => import(/* webpackChunkName: "demo" */ '../views/Pages/UserProfile.vue')
       },
@@ -48,6 +48,7 @@ const routes = [
       {
         path: '/detail-contents',
         name: 'Detail Content',
+        props: true,
         component: () => import(/* webpackChunkName: "demo" */ '../components/Board/DetailContent.vue')
       },
       {
@@ -68,9 +69,8 @@ const routes = [
         component: () => import('../views/Board/DetailBoard.vue')
       },
       {
-        path: '/update-board',
+        path: '/update-board/',
         name: 'update_board',
-        props: true,
         component: () => import('../views/Board/UpdateBoard.vue')
       },
       {
@@ -102,9 +102,45 @@ const routes = [
         props: true
       },
       {
-        path: '/shareroadmap',
-        name: 'shareroadmap',
+        path: '/shareboard',
+        name: 'shareboard',
         component: () => import('../views/ShareRoadmap/ShareBoard.vue'),
+      },
+
+      // chatting 
+      {
+        path: '/chatting-main',
+        name: 'chatting_main',
+        component: () => import('../views/Chatting/ChattingMain.vue'),
+      },
+      {
+      path: '/chatting',
+      name: 'chatting',
+      props: true,
+      component: () => import('../views/Chatting/Chatting.vue'),
+      },
+      {
+        path: '/sharedetail',
+        name: 'sharedetail',
+        component: () => import('../views/ShareRoadmap/ShareDetail.vue'),
+        props: true,
+      },
+      {
+        path: '/searchlist',
+        name: 'searchlist',
+        component: () => import('../views/Search/SearchList.vue'),
+      },
+      {
+        path: '/createshareboard',
+        name: 'create_share_board',
+        component: () => import('../views/ShareRoadmap/CreateShareBoard.vue'),
+        props: true,
+      },
+      {
+        path: '/roadback',
+        name: 'roadback',
+        component: () => import('../views/ShareRoadmap/RoadBack.vue'),
+        props: true,
       },
     ]
   },

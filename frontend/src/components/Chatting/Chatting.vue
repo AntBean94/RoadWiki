@@ -44,10 +44,12 @@ export default {
     return {
       sender: "익명",
       message: "",
-      messages: []
+      messages: [],
+      rooms: []
     };
   },
   created() {
+    console.log("make chatting");
     this.getRoom();
   },
   methods: {
@@ -71,6 +73,7 @@ export default {
         msg: this.message
       };
       this.stompClient.send("/pub/chat/message", JSON.stringify(msg), {});
+      this.message = "";
     },
     connect: function() {
       var reconnect = 0;
@@ -89,9 +92,9 @@ export default {
                 message: jsonBody.msg
               };
               this.messages.push(m);
-              this.message = "";
+
               var container = this.$el.querySelector("#content");
-              this.msg = "";
+
               setTimeout(function() {
                 container.scrollTop = container.scrollHeight;
               }, 1);
@@ -125,7 +128,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 #chatting {
   position: fixed;
   bottom: 5px;

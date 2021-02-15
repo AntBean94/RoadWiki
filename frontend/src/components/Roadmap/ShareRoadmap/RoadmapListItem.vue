@@ -1,25 +1,30 @@
 <template>
-    <b-card title="Title" img-src="https://picsum.photos/300/300/?image=41" img-alt="Image" img-top>
-      <b-card-text >
-        This is a wider card with supporting text below as a natural lead-in to additional content.
-        This content is a little bit longer.
+  <div @click="goDetail">
+    <b-card :title="roadmap.title" class="mb-1 btn p-0">
+    <hr class="mt-1 mb-3">
+    <Overview v-if="roadmapData" :roadmapData="roadmapData" id="overview"/>
+      <b-card-text class="mb-0 pb-0">
+        {{ username }}
+        <small class="text-muted">좋아요 : {{ roadmap.likecnt }}</small>
       </b-card-text>
       <template #footer>
-        <small class="text-muted">Last updated 3 mins ago</small>
+        <small class="text-muted">{{ roadmap.createDate }}</small>
+        <br>
       </template>
     </b-card>
+</div>
 </template>
-
 <script>
 import Overview from '@/components/Roadmap/Overview.vue'
 export default {
   components: {
     Overview,
   },
-  props: ["roadmap"],
+  props: ["roadmap","username"],
   data() {
     return {
       roadmapData: "",
+      
     }
   },
   methods: {
@@ -30,7 +35,6 @@ export default {
           if(res.data.msg == 'success'){
             this.roadmapData = JSON.parse(res.data['roadmaps'].tmp);
           }else{
-            console.log(res);
             alert("데이터 로드에 실패했습니다.");
           }
         }).catch((e) =>{
@@ -38,13 +42,25 @@ export default {
           alert("axios 오류")
         });
     },
+  goDetail() {
+      this.$router.push({ name: 'sharedetail' , params: { roadmap: this.roadmap, username: this.username }})
+    },
   },
   created(){
-    console.log("in roadmap item", this.roadmap);
+    this.getRoadmapData();
   }
 }
 </script>
 
 <style>
-
+#overview {
+  width: 200px;
+  height: 150px;
+}
+#roadmapcard {
+ background-color: white;
+}
+#roadmapcard :hover {
+  box-shadow: 5px 5px 5px;
+}
 </style>
