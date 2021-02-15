@@ -12,7 +12,7 @@
         @click="goToMain"
         class="h1 mb-0 mr-2 text-black text-uppercase d-none d-lg-inline-block active router-link-active"
       >
-        ROADWIKI
+        <img src="/img/brand/logo_word.png" alt="roadwiki" width="200rem;">
       </a>
 
       <a

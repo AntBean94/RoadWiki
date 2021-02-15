@@ -1,21 +1,21 @@
 <template>
-  <div>
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-default">
+  <div class="source-han-serif-k-medium">
+    <base-header class="pt-md-5 pb-2 bg-baby-blue">
+      <b-container>
+        <b-container class="px-9 py-3">
+          <b-row class="py-5">
+            <h1 class="text-white">{{ title }}</h1>
+          </b-row>
+          <b-row>
+            <p class="text-white">{{ createDate }}</p>
+          </b-row>
+          <b-row v-if="modifyDate">
+            <p class="text-white">{{ modifyDate }}</p>
+          </b-row>
+        </b-container>
+      </b-container>
     </base-header>
 
-    <b-container class="bg-baby-blue">
-      <b-container class="px-9 py-3">
-        <b-row class="py-5">
-          <h1 class="text-white">{{ title }}</h1>
-        </b-row>
-        <b-row>
-          <p class="text-white">{{ createDate }}</p>
-        </b-row>
-        <b-row v-if="modifyDate">
-          <p class="text-white">{{ modifyDate }}</p>
-        </b-row>
-      </b-container>
-    </b-container>
     <b-container
       class="py-4 mt-4"
     >
