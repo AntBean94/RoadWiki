@@ -196,7 +196,7 @@ export default {
     },
     updateBoard() {
       const pid = this.$route.query.pid;
-      this.$router.push({ name: "update_board", query: { pid } });
+      this.$router.push({ name: "글 수정하기", query: { pid } });
     },
     deleteBoard() {
       axios

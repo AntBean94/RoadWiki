@@ -59,7 +59,7 @@ export default {
       this.isSelected = false;
     },
     createBoard() {
-      this.$router.push({name: 'create_board' })
+      this.$router.push({name: '글쓰기' })
     },
     // detailBoard() {
     //   this.$router.push({name: 'detail_board', query: { pid: pid }})
