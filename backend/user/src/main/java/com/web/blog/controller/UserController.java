@@ -119,6 +119,18 @@ public class UserController {
 			}, HttpStatus.NO_CONTENT);
 		}
 	}
+	
+	@GetMapping("/existname/{name}")
+	public Object isexistName(@PathVariable String name) throws SQLException {
+		Map<String, Object> result = new HashMap<String, Object>();
+		if (userServ.checkName(name) == null) {
+			result.put("msg", "success");
+		} else {
+			result.put("msg", "fail");
+		}
+		return result;
+	}
+	
 
 	@GetMapping("/canjoin/{email}")
 	public Object canJoin(@PathVariable String email) throws SQLException {

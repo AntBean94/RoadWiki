@@ -65,6 +65,12 @@
 		from user 
 		where uid=#{uid}
 	</select>
-
+	
+	<select id="canName" parameterType="String" resultType="User">
+		select * 
+		from user 
+		where name=#{name}
+	</select>
+	
 </mapper>
 	

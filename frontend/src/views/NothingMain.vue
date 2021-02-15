@@ -1,7 +1,7 @@
 <template>
   <div class="nothing-main">
     <b-navbar-brand to="/" class="mt-5 ml-5">
-      <img src="img/brand/logo_blue.png" width="250rem;">
+      <img src="img/brand/logo_blue.png" width="250rem;" />
     </b-navbar-brand>
     <!-- <base-nav
       :transparent="true"
@@ -22,29 +22,27 @@
           </div>
           <h1>with ROADWIKI</h1>
         </template>
-        <template #lead>
-        </template>
+        <template #lead> </template>
         <p>
-          Ask and it will be given to you
- seek and you will find
- knock and the door will be opened to you.
+          Ask and it will be given to you seek and you will find knock and the
+          door will be opened to you.
         </p>
-        <LoginContent class="mb-3"/>
+        <LoginContent class="mb-3" />
         계정이 없다면?
-        <b-link href="/#/register"><strong>가입하러 가기</strong></b-link>
+        <router-link to="/register">가입하러 가기</router-link>
       </b-jumbotron>
     </b-container>
   </div>
 </template>
 
 <script>
-import LoginContent from '@/components/Login/LoginContent.vue'
+import LoginContent from "@/components/Login/LoginContent.vue";
 
 export default {
   components: {
-    LoginContent,
-  },
-}
+    LoginContent
+  }
+};
 </script>
 
 <style>

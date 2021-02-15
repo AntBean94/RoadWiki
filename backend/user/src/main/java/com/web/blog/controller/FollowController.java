@@ -55,6 +55,41 @@ public class FollowController {
 		}
 	}
 	
+	@GetMapping("/followerlist/{uid}")
+	public Object getFollowList(@PathVariable int uid, HttpServletRequest request) {
+		try {
+			Map<String, Object> result = (Map<String, Object>) followService.getFollowerList(uid);
+			result.put("msg", SUCCESS);
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>() {
+				{
+					put("errorMsg", e.getMessage());
+					put("msg", FAIL);
+				}
+			}, HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	@GetMapping("/followinglist/{uid}")
+	public Object getFollowingList(@PathVariable int uid, HttpServletRequest request) {
+		try {
+			Map<String, Object> result = (Map<String, Object>) followService.getFollowingList(uid);
+			result.put("msg", SUCCESS);
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>() {
+				{
+					put("errorMsg", e.getMessage());
+					put("msg", FAIL);
+				}
+			}, HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	
 	@PostMapping("/userfollow")
 	public Object userFollow(@RequestBody Follow follow, HttpServletRequest request) {
 		try {

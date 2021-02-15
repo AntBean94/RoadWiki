@@ -97,6 +97,15 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
+	public Object checkName(String name) throws SQLException {
+		User user = userRepo.canName(name);
+		if (user == null) {
+			logger.error("existent user");
+		}
+		return user;
+	}
+	
+	@Override
 	public Object checkUser(String email) throws SQLException {
 		User user = userRepo.select(email);
 		if (user == null) {
@@ -197,4 +206,6 @@ public class UserServiceImpl implements UserService {
 		}
 
 	}
+
+	
 }
