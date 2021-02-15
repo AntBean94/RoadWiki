@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+	<mapper namespace="com.web.blog.model.repo.CommentRepo">
+
+	<select id="select" parameterType="Integer" resultType="Comment">
+		select * 
+		from comment 
+		where cid=#{cid}
+	</select>
+
+ 	<select id="selectListPid" parameterType="Integer" resultType="Comment">
+		select * 
+		from comment
+		where pid=#{pid}
+		order by cid desc
+	</select> 
+	
+	<insert id="insert" parameterType="Comment">
+		insert 
+		into comment(pid, uid, content)
+		values(#{pid}, #{uid}, #{content})
+	</insert>
+	
+	<update id="update" parameterType="Comment">
+		update comment
+		set content=#{content}, modifyDate=now()
+		where cid=#{cid}
+	</update>
+	
+	<delete id="delete" parameterType="Integer">
+		delete 
+		from comment 
+		where cid=#{cid}
+	</delete>
+
+</mapper>
