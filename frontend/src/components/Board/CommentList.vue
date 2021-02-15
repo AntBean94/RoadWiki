@@ -7,7 +7,6 @@
       </b-col>
       <b-col v-if="!isUpdate">
         <h5>
-          <!-- <time :datetime="YYYY-MM|comment.createDate"></time> -->
           {{ comment.createDate }}
         </h5>
         <!-- <h5 v-if="comment.modifyDate !== null">
