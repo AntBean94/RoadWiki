@@ -45,7 +45,7 @@ export default {
       sender: "익명",
       message: "",
       messages: [],
-      rooms: [],
+      rooms: []
     };
   },
   created() {
@@ -92,9 +92,9 @@ export default {
                 message: jsonBody.msg
               };
               this.messages.push(m);
-              
+
               var container = this.$el.querySelector("#content");
-              
+
               setTimeout(function() {
                 container.scrollTop = container.scrollHeight;
               }, 1);
