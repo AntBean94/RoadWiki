@@ -38,7 +38,10 @@
         <template v-slot="{ row }">
           <b-media no-body class="align-items-center">
             <b-media-body>
-              <span class="font-weight-600 name mb-0 text-sm" @click="clickName(row.uid)">
+              <span
+                class="font-weight-600 name mb-0 text-sm"
+                @click="clickName(row.uid)"
+              >
                 {{ row.name }}
               </span>
             </b-media-body>
@@ -112,6 +115,7 @@ export default {
       names: [],
       totalPageNum: "",
       commentCnts: [],
+      likeCnts: []
     };
   },
   methods: {
@@ -125,9 +129,6 @@ export default {
       axios
         .get(adr)
         .then(response => {
-          console.log('##################')
-          console.log(response.data)
-          console.log('##################')
           this.postings = response.data.postings;
           this.names = response.data.names;
           this.commentCnts = response.data.commentCnts;
@@ -157,12 +158,14 @@ export default {
         });
     },
     clickName(uid) {
-      console.log(uid)
-      this.$router.push({ name: "profile", query: {profileId: uid} })
+      console.log(uid);
+      this.$router.push({ name: "profile", query: { profileId: uid } });
     },
     getCommentNum() {
-      console.log(this.row.pid)
-      axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.row.pid}`)
+      console.log(this.row.pid);
+      axios.get(
+        `${this.$store.getters.getServer}/freeboard/posting/${this.row.pid}`
+      );
     }
   },
   created() {

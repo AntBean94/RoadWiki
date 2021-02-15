@@ -377,4 +377,49 @@ public class FreeBoardController {
 			}}, HttpStatus.NO_CONTENT);
 		}
 	}
+	
+	@GetMapping("/list/{uid}")
+	public Object getPostingListUid(@PathVariable int uid, HttpServletRequest request) {
+		try {
+			Map<String, Object> result;
+			result = (Map<String, Object>) fBoardServ.getPostingListUid(uid);
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	@GetMapping("/likelist/{uid}")
+	public Object getPostingLikeListUid(@PathVariable int uid, HttpServletRequest request) {
+		try {
+			Map<String, Object> result;
+			result = (Map<String, Object>) boardlikeService.getPostingLikeList(uid);
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	@GetMapping("/commentlist/{uid}")
+	public Object getPostingCommentListUid(@PathVariable int uid, HttpServletRequest request) {
+		try {
+			Map<String, Object> result;
+			result = (Map<String, Object>) fBoardServ.getPostingByCommentUid(uid);
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.NO_CONTENT);
+		}
+	}
 }
