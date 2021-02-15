@@ -1,13 +1,14 @@
 <template>
   <div>
-    <b-button @click="modalShow = !modalShow" variant="primary">로그인</b-button>
+    <b-button @click="modalShow = !modalShow" variant="classic-blue">로그인</b-button>
 
     <b-modal v-model="modalShow" hide-footer hide-header centered>
       <!-- <template #modal-title class="text-center mx-auto">
         <div class="h1">로그인</div>
       </template> -->
       <div class="h1 text-center display-3 mb-4">
-        <img src="/img/brand/logo_blue.png" alt="roadwiki" width="250rem;">
+        <!-- <img src="/img/brand/logo_blue.png" alt="roadwiki" width="250rem;"> -->
+        <img src="/img/brand/final_logo.png" alt="roadwiki" width="300rem;">
       </div>
       <base-input alternative
               class="mb-3"
@@ -34,7 +35,7 @@
         <a href="">로그인이 안되시나요?</a>
       </div>
       <div class="text-center">
-        <base-button block type="primary" native-type="submit" class="my-4" @click="signIn">로그인하기</base-button>
+        <base-button block type="peach-quartz" native-type="submit" class="my-4" @click="signIn">로그인하기</base-button>
       </div>
     </b-modal>
   </div>
