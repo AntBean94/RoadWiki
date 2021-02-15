@@ -22,12 +22,25 @@
     	where pid=#{pid}
     </select>
     
+    <select id="selectPostingLike" parameterType="int" resultType="int">
+    	select count(pid)
+    	from postinglikeuser
+    	where pid=#{pid}
+    </select>
+    
+    
      <select id="selectListAll" parameterType="Map" resultType="Posting">
         select * 
         from posting
         <!-- where classifier=#{classifier} -->
         order by pid DESC limit #{page}, #{cnt}
     </select>
+    
+   	<select id="selectListUid" parameterType="int" resultType="Posting">
+   		select *
+   		from posting
+   		where uid=#{uid}
+   	</select>
     
      <select id="selectListAllTag" parameterType="Map" resultType="Posting">
         select * 
