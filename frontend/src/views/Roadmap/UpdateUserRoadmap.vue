@@ -49,13 +49,7 @@
         </button>
       </div>
       <div v-else>
-        <button
-          class="btn"
-          @click="previewRoadmap"
-          style="background-color: rgb(181, 199, 211);"
-        >
-          로드맵 보기
-        </button>
+   
       </div>
 
       <b-form-input

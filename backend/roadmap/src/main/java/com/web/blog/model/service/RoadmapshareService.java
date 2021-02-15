@@ -18,5 +18,7 @@ public interface RoadmapshareService {
 	public Object selectlike(int uid,int pid) throws Exception;
 	public Object like(int nowuid,int uid,int pid) throws Exception;
 	public Object dislike(int nowuid,int uid,int pid) throws Exception;
+
+	public Object isShared(int rmid) throws Exception;
 	
 }	
