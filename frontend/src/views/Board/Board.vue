@@ -5,7 +5,7 @@
     <b-container>
       <b-row align-h="end">
         <!-- <b-button variant="primary" class="mt-2" @click="detailBoard">detail board</b-button> -->
-        <b-button variant="primary" class="mt-2" @click="createBoard"
+        <b-button variant="classic-blue" class="mt-2" @click="createBoard"
           >새 글 작성</b-button
         >
       </b-row>

@@ -8,7 +8,7 @@
       class="py-4 mt-4"
     >
       <b-row>
-        <h1 class="ml-3 mb-0">{{ title }}</h1>
+        <h1 class="ml-3 mb-0 bg-success">{{ title }}</h1>
       </b-row>
       <hr class="my-2" />
       <b-row>
