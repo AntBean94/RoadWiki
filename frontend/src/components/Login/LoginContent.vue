@@ -3,9 +3,9 @@
     <b-button @click="modalShow = !modalShow" variant="primary">로그인</b-button>
 
     <b-modal v-model="modalShow" hide-footer centered>
-      <template #modal-title class="text-center">
+      <!-- <template #modal-title class="text-center">
         <h1 class="ml-2">로그인</h1>
-      </template>
+      </template> -->
       <base-input alternative
               class="mb-3"
               name="Email"
@@ -26,8 +26,12 @@
                   @keydown.enter="signIn"
       >
       </base-input>
+      <div>
+        <!-- 근데 이거 왜 필요한거지 -->
+        <a href="">로그인이 안되시나요?</a>
+      </div>
       <div class="text-center">
-        <base-button type="primary" native-type="submit" class="my-4" @click="signIn">확인</base-button>
+        <base-button block type="primary" native-type="submit" class="my-4" @click="signIn">로그인하기</base-button>
       </div>
     </b-modal>
   </div>

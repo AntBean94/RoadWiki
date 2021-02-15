@@ -33,7 +33,7 @@ public class FollowServiceImpl implements FollowService {
 				}
 			}
 			result.put("followers", followerList);
-			result.put("followings", followRepo.selectFollowings(touid));
+			result.put("followings", followRepo.selectFollowings(fromuid));
 		} catch (Exception e) {
 			throw e;
 		}

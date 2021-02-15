@@ -37,11 +37,11 @@ public class FollowController {
 	@Autowired
 	LoginServiceImpl loginServ;
 
-	@GetMapping("/list/{uid}")
+	@GetMapping("/list/{touid}/{fromuid}")
 	public Object getInfo(@PathVariable int uid, HttpServletRequest request) {
 		try {
 			int nowUid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
-			Map<String, Object> result = (Map<String, Object>) followService.getInfo(nowUid, uid);
+			Map<String, Object> result = (Map<String, Object>) followService.getInfo(fromuid, touid, nowUid);
 			result.put("msg", SUCCESS);
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		} catch (Exception e) {
