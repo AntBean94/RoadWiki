@@ -27,7 +27,7 @@
           <b-media no-body class="align-items-center">
             <b-media-body>
               <span class="font-weight-600 name mb-0 text-sm">
-                {{ row.title }}
+                {{ row.title }}({{ row.commentCnt }})
               </span>
             </b-media-body>
           </b-media>
@@ -38,7 +38,7 @@
         <template v-slot="{ row }">
           <b-media no-body class="align-items-center">
             <b-media-body>
-              <span class="font-weight-600 name mb-0 text-sm">
+              <span class="font-weight-600 name mb-0 text-sm" @click="clickName(row.uid)">
                 {{ row.name }}
               </span>
             </b-media-body>
@@ -52,18 +52,6 @@
             <div>
               <span class="font-weight-600 name mb-0 text-sm">{{
                 row.likeCnt
-              }}</span>
-            </div>
-          </div>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="TAG" prop="tag" min-width="120px">
-        <template v-slot="{ row }">
-          <div class="d-flex align-items-center">
-            <div>
-              <span class="font-weight-600 name mb-0 text-sm">{{
-                row.tag
               }}</span>
             </div>
           </div>
@@ -122,7 +110,8 @@ export default {
       tag: "",
       postings: [],
       names: [],
-      totalPageNum: ""
+      totalPageNum: "",
+      commentCnts: [],
     };
   },
   methods: {
@@ -136,25 +125,28 @@ export default {
       axios
         .get(adr)
         .then(response => {
+          console.log('##################')
+          console.log(response.data)
+          console.log('##################')
           this.postings = response.data.postings;
           this.names = response.data.names;
+          this.commentCnts = response.data.commentCnts;
           for (let i = 0; i < this.postings.length; i++) {
             this.postings[i].createDate = this.$moment(
               this.postings[i].createDate
             ).format("MM/DD HH:mm");
             this.postings[i].name = this.names[i];
+            this.postings[i].commentCnt = this.commentCnts[i];
           }
         })
         .catch(err => {
           console.log(err);
-          alert("문제가 생겼습니다 섬세한 문구");
+          alert("문제가 생겼습니다");
         });
     },
     openDetail(row) {
       const pid = row.pid;
-      //console.log(pid);
       this.$store.dispatch("SETPID", pid);
-      //console.log(this.$store.getters.getPid);
       this.$router.push({ name: "detail_board", query: { pid } });
     },
     getTotalNum() {
@@ -163,6 +155,14 @@ export default {
         .then(res => {
           this.totalPageNum = res.data.total;
         });
+    },
+    clickName(uid) {
+      console.log(uid)
+      this.$router.push({ name: "profile", query: {profileId: uid} })
+    },
+    getCommentNum() {
+      console.log(this.row.pid)
+      axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.row.pid}`)
     }
   },
   created() {

@@ -178,7 +178,7 @@ export default {
       this.isHeader = isHeader;
     },
     myProfile() {
-      this.$router.push({name: 'profile', query: {profileId: undefined}})
+      this.$router.push({name: 'profile', query: {profileId: this.$store.getters.getUid}})
     },
     logOut() {
       this.$store.dispatch("LOGOUT").then(() => {
@@ -189,6 +189,7 @@ export default {
       })
     },
     clickSearch() {
+      console.log(this.searchQuery);
       this.$router.push({name: 'searchlist', query: {searchKeyword: `${this.searchQuery}`}})
     },
   }

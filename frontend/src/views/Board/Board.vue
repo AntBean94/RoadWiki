@@ -59,8 +59,8 @@ export default {
       this.isSelected = false;
     },
     createBoard() {
-      this.$router.push({ name: "create_board", params: { createMode: 0 } });
-    }
+      this.$router.push({name: 'create_board' })
+    },
     // detailBoard() {
     //   this.$router.push({name: 'detail_board', query: { pid: pid }})
     // },

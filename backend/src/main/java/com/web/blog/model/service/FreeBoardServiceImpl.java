@@ -61,9 +61,13 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			}
 			Posting[] Postings = (Posting[]) result.get("postings");
 			String[] names = new String[Postings.length];
-			for (int i = 0; i < Postings.length; i++)
+			int[] commentCnt = new int[Postings.length];
+			for (int i = 0; i < Postings.length; i++) {
 				names[i] = userRepo.getName(Postings[i].getUid());
+				commentCnt[i] = commentRepo.countComment(Postings[i].getPid());
+			}
 			result.put("names", names);
+			result.put("commentCnts", commentCnt);
 			result.put("msg", "success");
 		} catch (NumberFormatException e) {
 			throw new RuntimeException("input data type error");
@@ -86,9 +90,13 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			}
 			Posting[] Postings = (Posting[]) result.get("postings");
 			String[] names = new String[Postings.length];
-			for (int i = 0; i < Postings.length; i++)
+			int[] commentCnt = new int[Postings.length];
+			for (int i = 0; i < Postings.length; i++) {
 				names[i] = userRepo.getName(Postings[i].getUid());
+				commentCnt[i] = commentRepo.countComment(Postings[i].getPid());
+			}
 			result.put("names", names);
+			result.put("commentCnts", commentCnt);
 			result.put("msg", "success");
 		} catch (NumberFormatException e) {
 			throw new RuntimeException("input data type error");
@@ -112,9 +120,13 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			}
 			Posting[] Postings = (Posting[]) result.get("postings");
 			String[] names = new String[Postings.length];
-			for (int i = 0; i < Postings.length; i++)
+			int[] commentCnt = new int[Postings.length];
+			for (int i = 0; i < Postings.length; i++) {
 				names[i] = userRepo.getName(Postings[i].getUid());
+				commentCnt[i] = commentRepo.countComment(Postings[i].getPid());
+			}
 			result.put("names", names);
+			result.put("commentCnts", commentCnt);
 			result.put("msg", "success");
 		} catch (NumberFormatException e) {
 			throw new RuntimeException("input data type error");
@@ -138,9 +150,14 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			}
 			Posting[] Postings = (Posting[]) result.get("postings");
 			String[] names = new String[Postings.length];
-			for (int i = 0; i < Postings.length; i++)
+			int[] commentCnt = new int[Postings.length];
+			for (int i = 0; i < Postings.length; i++) {
 				names[i] = userRepo.getName(Postings[i].getUid());
+				commentCnt[i] = commentRepo.countComment(Postings[i].getPid());
+			}
 			result.put("names", names);
+			result.put("commentCnts", commentCnt);
+			result.put("msg", "success");
 		} catch (NumberFormatException e) {
 			throw new RuntimeException("input data type error");
 		} catch (Exception e) {
@@ -162,8 +179,11 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			result.put("posting", posting);
 
 			List<Comment> comments = new ArrayList<>();
-			for (Comment c : commentRepo.selectListPid(Integer.parseInt(pid)))
+			for (Comment c : commentRepo.selectListPid(Integer.parseInt(pid))) {
+				String name = commentRepo.selectUserName(c.getCid());
+				c.setUserName(name);
 				comments.add(c);
+			}
 			result.put("comments", comments);
 			
 			List<Recomment>[] recomments = new ArrayList[comments.size()];
@@ -173,6 +193,8 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
 			for (int i = 0; i < recomments.length; i++) {
 				for (Recomment rc : recommentRepo.selectListCid(comments.get(i).getCid())) {
+					String recommentName = recommentRepo.selectUserName(rc.getRcid());
+					rc.setUserName(recommentName);
 					recomments[i].add(rc);
 				}
 			}

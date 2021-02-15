@@ -86,6 +86,28 @@ public class CurriculumController {
 		return new ResponseEntity<Map<String, Object>>(result, status);
 	}
 
+	@GetMapping("/search/{text}")
+	public Object search(@PathVariable String text) {
+		logger.info("search start");
+		Map<String, Object> result = new HashMap<>();
+		HttpStatus status = null;
+		try {
+			result = (Map<String, Object>) Curriculumservice.getSuggestBySearch(text);
+			result.put("msg", SUCCESS);
+			status = HttpStatus.OK;
+		} catch (NumberFormatException e) {
+			logger.error("input data type error");
+			result.put("msg", FAIL);
+			result.put("errorMsg", e.getMessage());
+			status = HttpStatus.NO_CONTENT;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			result.put("msg", FAIL);
+			result.put("errorMsg", e.getMessage());
+			status = HttpStatus.NO_CONTENT;
+		} 
+		return result;
+	}
 	
 	@GetMapping("/suggest")
 	public Object suggest() {

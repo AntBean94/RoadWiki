@@ -1,9 +1,9 @@
 <template>
   <div>
-    <base-header class="pb-5 pb-2 pt-2 pt-md-2 bg-gradient-default">
+    <base-header class="pb-2 pt-2 pt-md-2 bg-gradient-default">
       <!-- Card stats -->
       <a
-        :href="goToBack"
+        @click="goToBack"
         class="btn"
         style="background-color: rgb(242, 214, 174);"
         >돌아가기</a
@@ -30,7 +30,6 @@
         v-b-modal.modal-1
         type="button"
         class="btn ml-4"
-        title=""
         data-original-title="Copy to clipboard"
       >
         <div>
@@ -102,14 +101,18 @@
         </li>
       </b-modal>
       <!-- 사용법 modal / end -->
+
+      <br>
+      <b-form-input v-model="inputText" placeholder="커리큘럼 검색하기" id="curSearch"></b-form-input>
     </base-header>
+
 
     <b-container fluid class="mt-1">
       <b-row>
         <b-col>
           <b-card no-body class="border-0">
             <div style="width: 100%;">
-              <Roadmap :roadmapMode=roadmapMode :roadmapData=roadmapData @create-roadmap=createRoadmap ref="roadmap"/>
+              <Roadmap :roadmapMode=roadmapMode :roadmapData=roadmapData :inputText=inputText @create-roadmap=createRoadmap ref="roadmap"/>
             </div>
           </b-card>
         </b-col>
@@ -141,11 +144,11 @@ export default {
   },
   data() {
     return {
-      goToBack: "#/read-user-roadmap",
       roadmapData: {},
       roadmapname: "",
       logData: [],
       roadmapMode: 1,
+      inputText: "",
     };
   },
   created(){
@@ -181,8 +184,10 @@ export default {
         axios.get(`${this.$store.getters.getServer}/roadmap/get/${this.rmid}`)
           .then((res) => {
             if(res.data.msg == 'success'){
-            this.roadmapData = JSON.parse(res.data['roadmaps'].tmp);
-            this.roadmapname = res.data['roadmaps'].name;
+              this.roadmapData = JSON.parse(res.data['roadmaps'].tmp);
+              if (res.data['roadmaps'].uid < 0 || res.data['roadmaps'].uid == this.$store.getters.getUid) {
+                this.roadmapname = res.data['roadmaps'].name;
+              }
             }else{
               alert("데이터 로드에 실패했습니다.")
             }
@@ -208,7 +213,6 @@ export default {
         });
       }
     },
-
     // update 요청보내기
     updateRoadmap() {
       const childRoadmapData = this.$refs.roadmap.serveRoadmap()
@@ -254,7 +258,6 @@ export default {
       // 차후에 DB에 요청을 보낸다음 DB정보로 반영
       this.headertext = curriculumName;
     },
-
     previewRoadmap(clickrmid) {
         axios.get(`${this.$store.getters.getServer}/roadmap/get/${clickrmid}`)
         .then((res) => {
@@ -269,8 +272,18 @@ export default {
           alert("axios 오류 5");
         });
     },
+    goToBack() {
+      this.$router.push({ name: "read_user_roadmap" })
+    }
   }
 };
 </script>
 
-<style></style>
+<style>
+#header {
+  padding-bottom: 4px; 
+}
+#curSearch {
+  width: 150px;
+}
+</style>

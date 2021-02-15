@@ -11,8 +11,9 @@
 		resultType="Curriculumtext">
 		select *
 		from smalldata
-		where mdid = #{mdid} 
-		and bdid = #{bdid}
+		where mdid = #{mdid}
+		and bdid =
+		#{bdid}
 	</select>
 
 	<select id="selectMiddleText" parameterType="int"
@@ -26,6 +27,31 @@
 		select *
 		from bigdata
 	</select>
+
+	<select id="searchSmallText" parameterType="String"
+		resultType="Curriculumtext">
+		select *
+		from smalldata
+		where text like
+		concat('%',#{text},'%')
+	</select>
+
+	<select id="searchMiddleText" parameterType="String"
+		resultType="Curriculumtext">
+		select *
+		from middledata
+		where text like
+		concat('%',#{text},'%')
+	</select>
+
+	<select id="searchBigText" parameterType="String"
+		resultType="Curriculumtext">
+		select *
+		from bigdata
+		where text like concat('%',#{text},'%')
+	</select>
+
+
 
 	<insert id="insertSmallText" parameterType="Curriculumtext">
 		insert into
@@ -87,6 +113,12 @@
 		join bigdata on
 		big.bdid = bigdata.bdid where rmid = #{rmid};
 	</select>
+	
+	<select id="selectCusByRmid" parameterType="int"
+		resultType="Curriculum">
+		select * from customcurri 
+		 where rmid = #{rmid};
+	</select>
 
 
 	<insert id="insertSmall" parameterType="List">
@@ -112,6 +144,16 @@
 			(#{curr.key},#{curr.rmid},#{curr.bdid},#{curr.loc},#{curr.memo},#{curr.startdate},#{curr.enddate},#{curr.category})
 		</foreach>
 	</insert>
+
+	<insert id="insertCus" parameterType="List">
+		insert into customcurri
+		values
+		<foreach collection="list" item="curr" separator=" , ">
+			(#{curr.key},#{curr.rmid},#{curr.loc},#{curr.memo},#{curr.startdate},#{curr.enddate},#{curr.category},#{curr.text},#{curr.content})
+		</foreach>
+	</insert>
+
+
 
 </mapper>
 	

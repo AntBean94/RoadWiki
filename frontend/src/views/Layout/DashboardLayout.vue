@@ -21,14 +21,14 @@
         >
         </sidebar-item>
 
-        <sidebar-item
+        <!-- <sidebar-item
           :link="{
             name: 'Profile',
             path: '/profile',
             icon: 'ni ni-single-02 text-yellow'
           }"
         >
-        </sidebar-item>
+        </sidebar-item> -->
 
         <sidebar-item
           :link="{
@@ -61,7 +61,7 @@
         <sidebar-item
           :link="{
             name: 'Roadmap Share',
-            path: '/shareroadmap',
+            path: '/shareboard',
             icon: 'ni ni-bullet-list-67 text-red'
           }"
         >

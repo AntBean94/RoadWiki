@@ -108,7 +108,6 @@ export default {
           // this.load: ismounted 사용여부 확인 후 지울 것
           this.load();
           }else{
-            console.log(res);
             alert("데이터 로드에 실패했습니다.");
           }
         }).catch((e) =>{

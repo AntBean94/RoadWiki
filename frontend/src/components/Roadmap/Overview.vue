@@ -1,8 +1,7 @@
 <template>
   <div>
-    <div v-if="isview" ref="myDiagramDiv"></div>
-    
-    <div ref="myOverviewDiv" id="overviewdiv"></div>
+    <div v-show="isview" ref="myDiagramDiv"></div>
+    <div ref="myOverviewDiv" id="overviewdiv" style="margin-right: 25px;"></div>
   </div>
 </template>
 
@@ -18,7 +17,7 @@ export default {
   data() {
     return {
       // diagram 숨기기위한 변수
-      isview: 1,
+      isview: 0,
     }
   },
   mounted() {
@@ -329,11 +328,11 @@ export default {
 <style>
 #overviewdiv {
   width: 200px;
-  height: 150px;
+  height: 125px;
 }
 #overviewdiv canvas {
   width: 200px;
-  height: 150px;
+  height: 125px;
   outline: none;
 }
 </style>
