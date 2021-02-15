@@ -170,7 +170,7 @@ export default {
       this.activeNotifications = false;
     },
     checkUrl(url) {
-      let array = ["roadmap", "update_user_roamdap"];
+      let array = ["roadmap", "update_user_roamdap", "roadback"];
       let isHeader = true;
       array.map(path => {
         if (url === path) isHeader = false;

@@ -9,7 +9,7 @@
 		from roadmapshare
 		order by createDate desc
 	</select>
-
+	
 	<select id="selectByUserName" parameterType="String"
 		resultType="RoadmapShare">
 		select * from roadmapshare
@@ -25,11 +25,15 @@
 		order by createDate desc
 	</select>
 
+	<select id ="isShared" parameterType ="int" resultType = "int">
+		select count(*) from roadmapshare
+		where rmid = #{rmid}
+	</select>
 
 	<insert id="insert" parameterType="RoadmapShare">
 		insert into
-		roadmapshare(rmid,uid,title)
-		values (#{rmid},#{uid},#{title})
+		roadmapshare(rmid,uid,title,useroadback)
+		values (#{rmid},#{uid},#{title},#{useroadback})
 	</insert>
 	<delete id="delete" parameterType="map">
 		delete from roadmapshare

@@ -113,11 +113,11 @@
 		join bigdata on
 		big.bdid = bigdata.bdid where rmid = #{rmid};
 	</select>
-	
+
 	<select id="selectCusByRmid" parameterType="int"
 		resultType="Curriculum">
-		select * from customcurri 
-		 where rmid = #{rmid};
+		select * from customcurri
+		where rmid = #{rmid};
 	</select>
 
 

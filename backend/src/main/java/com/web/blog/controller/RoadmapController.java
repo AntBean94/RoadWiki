@@ -38,7 +38,7 @@ public class RoadmapController {
 	
 	
 	@GetMapping("/list/{uid}")
-	public Object listRoadmap(@PathVariable String uid,HttpServletRequest request) {
+	public Object listRoadmap(@PathVariable int uid,HttpServletRequest request) {
 		logger.trace("listRoadmap start");
 		Map<String, Object> result = new HashMap<>();
 		HttpStatus status = null;
@@ -47,7 +47,7 @@ public class RoadmapController {
 			logger.info(request.getHeader("auth-token"));
 			logger.info("nowuid : " + loginServ.getData(request.getHeader("auth-token")).get("uid"));
 
-			String nowuid = Integer.toString((int) loginServ.getData(request.getHeader("auth-token")).get("uid"));
+			int nowuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) roadmapservice.getRoadmapListByUid( nowuid, uid);
 			result.put("msg", SUCCESS);
 			status = HttpStatus.OK;
@@ -89,14 +89,14 @@ public class RoadmapController {
 	}
 	
 	@GetMapping("/log/{uid}/{rmorder}")
-	public Object listLog(@PathVariable String uid,  @PathVariable String rmorder,
+	public Object listLog(@PathVariable int uid,  @PathVariable int rmorder,
 			HttpServletRequest request) {
 		logger.trace("listLog start");
 		Map<String, Object> result = new HashMap<>();
 		HttpStatus status = null;
 		try {
 			logger.info("uid : " + uid + " rmorder : " + rmorder);
-			String nowuid = Integer.toString((int) loginServ.getData(request.getHeader("auth-token")).get("uid"));
+			int nowuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) roadmapservice.getRoadmapListByRmorder(nowuid, uid, rmorder);
 			result.put("msg", SUCCESS);
 			status = HttpStatus.OK;
@@ -115,15 +115,39 @@ public class RoadmapController {
 	}
 
 	@GetMapping("/get/{rmid}")
-	public Object getRoadmap(@PathVariable String rmid, HttpServletRequest request) {
+	public Object getRoadmap(@PathVariable int rmid, HttpServletRequest request) {
 		logger.trace("getRoadmap start");
 		Map<String, Object> result = new HashMap<>();
 		HttpStatus status = null;
 		try {
 
 			logger.info("rmid : " + rmid);
-			String nowuid = Integer.toString((int) loginServ.getData(request.getHeader("auth-token")).get("uid"));
+			int nowuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) roadmapservice.getRoadmap(nowuid, rmid);
+			result.put("msg", SUCCESS);
+			status = HttpStatus.OK;
+		} catch (NumberFormatException e) {
+			logger.error("input data type error");
+			result.put("msg", FAIL);
+			result.put("errorMsg", e.getMessage());
+			status = HttpStatus.NO_CONTENT;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			result.put("msg", FAIL);
+			result.put("errorMsg", e.getMessage());
+			status = HttpStatus.NO_CONTENT;
+		}
+		return new ResponseEntity<Map<String, Object>>(result, status);
+	}
+	
+	@GetMapping("/get/comment/{rmid}")
+	public Object getRoadmapComment(@PathVariable int rmid, HttpServletRequest request) {
+		logger.trace("getRoadmapComment start");
+		Map<String, Object> result = new HashMap<>();
+		HttpStatus status = null;
+		try {
+			logger.info("rmid : " + rmid);
+			result = (Map<String, Object>) roadmapservice.getRoadmapComment(rmid);
 			result.put("msg", SUCCESS);
 			status = HttpStatus.OK;
 		} catch (NumberFormatException e) {
@@ -148,7 +172,7 @@ public class RoadmapController {
 
 		try {
 			logger.info("roadmap : " + roadmap.toString());
-			String nowuid = Integer.toString((int) loginServ.getData(request.getHeader("auth-token")).get("uid"));
+			int nowuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) roadmapservice.create(nowuid, roadmap);
 			result.put("msg", SUCCESS);
 			status = HttpStatus.OK;
@@ -174,7 +198,7 @@ public class RoadmapController {
 
 		try {
 			logger.info("roadmap : " + roadmap.toString());
-			String nowuid = Integer.toString((int) loginServ.getData(request.getHeader("auth-token")).get("uid"));
+			int nowuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) roadmapservice.modify(nowuid, roadmap);
 			result.put("msg", SUCCESS);
 			status = HttpStatus.OK;
@@ -193,14 +217,14 @@ public class RoadmapController {
 	}
 
 	@DeleteMapping("/delete/{uid}/{rmorder}")
-	public Object deleteRoadmap(@PathVariable String uid, @PathVariable String rmorder, HttpServletRequest request) {
+	public Object deleteRoadmap(@PathVariable int uid, @PathVariable int rmorder, HttpServletRequest request) {
 		logger.trace("deleteRoadmap start");
 		Map<String, Object> result = new HashMap<>();
 		HttpStatus status = null;
 
 		try {
 			logger.info("uid : " + uid + " rmorder : " + rmorder);
-			String nowuid = Integer.toString((int) loginServ.getData(request.getHeader("auth-token")).get("uid"));
+			int nowuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) roadmapservice.deleteRoadmap(nowuid, uid, rmorder);
 			result.put("msg", SUCCESS);
 			status = HttpStatus.OK;

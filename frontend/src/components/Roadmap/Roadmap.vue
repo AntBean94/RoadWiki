@@ -4,7 +4,7 @@
     style="width: 100%; display: flex; justify-content: space-between; z-index:1;"
   >
     <div
-      v-show="roadmapMode"
+      v-show="roadmapMode && !isroadback"
       ref="myPaletteDiv"
       style="width: 150px; margin-right: 2px; background-color: #F9F8F3;"
     ></div>
@@ -14,7 +14,11 @@
       @click="checkCur"
     ></div>
     <!-- 커리큘럼 데이터 출력 카드/start -->
-    <b-card title="Curriculum Information" style="width: 252px;">
+    <b-card
+      v-if="!isroadback"
+      title="Curriculum Information"
+      style="width: 252px;"
+    >
       <hr />
       <h3>{{ headertext }}</h3>
       <hr />
@@ -67,13 +71,16 @@ let curriculumData = -1;
 let recommendCurData = [
   // 실제 프로젝트 default data 최초 클릭할 정보가 필요
 ];
-
+let iseditable = true;
+let roadbacktimer = "";
 export default {
   name: "Roadmap",
   props: {
-    roadmapMode: Number,
-    roadmapData: Object,
+    roadmapMode: Number, //0 읽기 1 쓰기 2 로드백 모드
+    roadmapData: Object, // 변수 하나를 줘가지고 그러네
     inputText: String,
+    isroadback: Boolean,
+    rmid: Number
   },
   data() {
     return {
@@ -81,6 +88,7 @@ export default {
       dates: "",
       memotext: "",
       descript: "",
+
       // Get more form https://flatpickr.js.org/options/
       config: {
         wrap: true, // set wrap to true only when using 'input-group'
@@ -90,27 +98,52 @@ export default {
         locale: Hindi // locale for this instance only
       },
       curData: {
-        category : "",
-        startdate : "",
-        enddate : "",
-        memo : "",
-        bdid : 0,
-        mdid : 0,
-        sdid : 0,
-        text : "",
-        content : ""
-      },
+        category: "",
+        startdate: "",
+        enddate: "",
+        memo: "",
+        bdid: 0,
+        mdid: 0,
+        sdid: 0,
+        text: "",
+        content: ""
+      }
     };
   },
   components: {
     dropdown: dropdown
   },
-  created() {},
+  created() {
+    iseditable = !this.isroadback;
+  },
   mounted() {
-    myDiagram = $(go.Diagram, this.$refs.myDiagramDiv, {
-      initialContentAlignment: go.Spot.Center,
-      "undoManager.isEnabled": true
-    });
+    if (!iseditable) {
+      myDiagram = $(go.Diagram, this.$refs.myDiagramDiv, {
+        initialContentAlignment: go.Spot.Center,
+        initialAutoScale: go.Diagram.Uniform,
+        "undoManager.isEnabled": true,
+        "animationManager.isEnabled": false,
+        allowLink: false,
+        allowRelink: false,
+        allowReshape: false,
+        allowZoom: false,
+        allowVerticalScroll: false,
+        allowHorizontalScroll: false,
+        "clickCreatingTool.archetypeNodeData": {
+          text: "훈수용",
+          category: "comment"
+        },
+
+        positionComputation: function(diagram, pt) {
+          return new go.Point(Math.floor(pt.x), Math.floor(pt.y));
+        }
+      });
+    } else {
+      myDiagram = $(go.Diagram, this.$refs.myDiagramDiv, {
+        initialContentAlignment: go.Spot.Center,
+        "undoManager.isEnabled": true
+      });
+    }
 
     // 페이지에 변화가 있을 때 title 및 save 버튼 활성화
     // when the document is modified, add a "*" to the title and enable the "Save" button
@@ -313,7 +346,7 @@ export default {
               margin: 8,
               maxSize: new go.Size(160, NaN),
               wrap: go.TextBlock.WrapFit,
-              editable: true
+              editable: iseditable
             },
             new go.Binding("text").makeTwoWay()
           )
@@ -323,6 +356,56 @@ export default {
         this.makePort("L", go.Spot.Left, go.Spot.LeftSide, true, true),
         this.makePort("R", go.Spot.Right, go.Spot.RightSide, true, true),
         this.makePort("B", go.Spot.Bottom, go.Spot.BottomSide, true, false)
+      )
+    );
+
+    // comment 모델
+    myDiagram.nodeTemplateMap.add(
+      "comment",
+      $(
+        go.Node,
+        "Table",
+        new go.Binding("location", "loc", go.Point.parse).makeTwoWay(
+          go.Point.stringify
+        ),
+        {
+          // the Node.location is at the center of each node
+          locationSpot: go.Spot.Center,
+          movable: true
+        },
+        // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
+        $(
+          go.Panel,
+          "Auto",
+          $(
+            go.Shape,
+            "RoundedRectangle",
+            {
+              fill: "#F9F8F3",
+              stroke: "#F9F8F3",
+              strokeWidth: 0,
+              strokeJoin: "round",
+              strokeCap: "square"
+            },
+            new go.Binding("figure", "figure")
+          ),
+          $(
+            go.TextBlock,
+            this.textStyle(),
+            {
+              margin: 1,
+              maxSize: new go.Size(160, NaN),
+              wrap: go.TextBlock.WrapFit,
+              editable: true
+            },
+            new go.Binding("text").makeTwoWay()
+          )
+        ),
+        // four named ports, one on each side: node의 가지 옵션
+        this.makePort("T", go.Spot.Top, go.Spot.TopSide, false, false),
+        this.makePort("L", go.Spot.Left, go.Spot.LeftSide, false, false),
+        this.makePort("R", go.Spot.Right, go.Spot.RightSide, false, false),
+        this.makePort("B", go.Spot.Bottom, go.Spot.BottomSide, false, false)
       )
     );
 
@@ -358,7 +441,7 @@ export default {
         relinkableTo: true,
         reshapable: true,
         resegmentable: true,
-
+        isEnabled: iseditable,
         // mode에 따라 바뀌어야 하는 부분--------------------------------------------------------|
         // 마우스 오버시 이펙트 효과 부여
         mouseEnter: function(e, link) {
@@ -431,11 +514,25 @@ export default {
       curriculumData = e.subject.part.data;
     });
 
-    myDiagram.addDiagramListener("BackgroundSingleClicked", function(e) {
+    if (!iseditable) {
+      myDiagram.addDiagramListener("PartCreated", e => {
+        this.saveComment(e.subject.part.data);
+      });
+
+      myDiagram.addDiagramListener("SelectionMoved", e => {
+        e.subject.each(p => { this.updateComment(p.part.data); });
+      });
+      myDiagram.addDiagramListener("TextEdited", e => {
+        this.updateComment(e.subject.part.data);
+      });
+      myDiagram.addDiagramListener("SelectionDeleted", e => {
+        e.subject.each(p => { this.deleteComment(p.part.data); });
+      });
+    }
+
+    myDiagram.addDiagramListener("BackgroundSingleClicked", function() {
       curriculumData = -1;
     });
-
-    myDiagram.addDiagramListener("ObjectDoubleClicked", function(e) {});
 
     // 팔레트 설정 관련 코드
     // 노드모델에 변경사항이 있다면 반드시 여기서 확인 해주셔야 합니다.
@@ -470,22 +567,29 @@ export default {
       myDiagram.isReadOnly = true;
     }
     //-----------------------------------------------------------------------------------|
-
-    // 필요없음
-    this.readRoadmap();
+      this.readRoadmap();
     // // 수정로그 가져오기
     // update쪽으로 옮기기
     // this.readRoadmapLog();
     this.getRecommendCur();
     // 팔레트 초기화
     curriculumData = -1;
+
+    //로드백 타이머 시작
+    if (!iseditable) {
+      this.startRoadback();
+    }
   },
   watch: {
     // head 데이터 변경때 마다 실행(즉, 커리큘럼 클릭시 실행)
     headertext: function() {
       // 데이터 호출하는 함수
-      if (curriculumData.bdid==0 && curriculumData.mdid==0 && curriculumData.sdid==0) {
-        return
+      if (
+        curriculumData.bdid == 0 &&
+        curriculumData.mdid == 0 &&
+        curriculumData.sdid == 0
+      ) {
+        return;
       }
       this.getRecommendCur();
     },
@@ -508,11 +612,9 @@ export default {
     },
     inputText: function() {
       // 검색메서드 실행
-      if(this.inputText !="")
-        this.getSearchCur();
-      else
-        this.getRecommendCur();
-    },
+      if (this.inputText != "") this.getSearchCur();
+      else this.getRecommendCur();
+    }
   },
   computed: {},
   methods: {
@@ -528,7 +630,10 @@ export default {
         ),
         {
           // the Node.location is at the center of each node
-          locationSpot: go.Spot.Center
+          locationSpot: go.Spot.Center,
+          movable: iseditable,
+          deletable: iseditable,
+          selectable: iseditable
         }
       ];
     },
@@ -586,6 +691,7 @@ export default {
     },
     checkCur(e) {
       // 차후에 DB에 요청을 보낸다음 DB정보로 반영
+      if (curriculumData.category == "comment") return;
       this.headertext = curriculumData.text;
       if (curriculumData.category)
         this.dates = curriculumData.startdate + " to " + curriculumData.enddate;
@@ -593,7 +699,7 @@ export default {
       this.descript = curriculumData.content;
     },
     getRecommendCur() {
-      const _ = require('lodash');
+      const _ = require("lodash");
       let color;
       let url;
       if (curriculumData == -1 || !curriculumData.category) {
@@ -615,15 +721,15 @@ export default {
             res.data["suggest"][i].enddate = "";
             res.data["suggest"][i].memo = "";
           }
-          if(curriculumData == -1){
-            let custom = _.cloneDeep(this.curData)
-            custom.category = "Custom"
-            custom.text = "User Custom"
-            res.data["suggest"].push(custom)
-            let start = _.cloneDeep(this.curData)
-            start.category = "Start"
-            start.text = "시작"
-            res.data["suggest"].push(start)
+          if (curriculumData == -1) {
+            let custom = _.cloneDeep(this.curData);
+            custom.category = "Custom";
+            custom.text = "User Custom";
+            res.data["suggest"].push(custom);
+            let start = _.cloneDeep(this.curData);
+            start.category = "Start";
+            start.text = "시작";
+            res.data["suggest"].push(start);
           }
           recommendCurData = res.data["suggest"];
           myPalette.model.nodeDataArray = recommendCurData;
@@ -634,34 +740,85 @@ export default {
     },
     getSearchCur() {
       let url = `${this.$store.getters.getServer}/curriculum/search/${this.inputText}`;
-      let color = '';
-      axios.get(url)
-      .then(res => {
-        for (var i = 0; i < res.data["suggest"].length; i++) {
-          if(res.data["suggest"][i].sdid != 0 )
-            color = "green";
-          else if(res.data["suggest"][i].mdid != 0)
-            color = "black";
-          else
-            color = "blue";
-          res.data["suggest"][i].category = color;
-          res.data["suggest"][i].startdate = "";
-          res.data["suggest"][i].enddate = "";
-          res.data["suggest"][i].memo = "";
-        }
+      let color = "";
+      axios
+        .get(url)
+        .then(res => {
+          for (var i = 0; i < res.data["suggest"].length; i++) {
+            if (res.data["suggest"][i].sdid != 0) color = "green";
+            else if (res.data["suggest"][i].mdid != 0) color = "black";
+            else color = "blue";
+            res.data["suggest"][i].category = color;
+            res.data["suggest"][i].startdate = "";
+            res.data["suggest"][i].enddate = "";
+            res.data["suggest"][i].memo = "";
+          }
           recommendCurData = res.data["suggest"];
           myPalette.model.nodeDataArray = recommendCurData;
-      })
-      .catch(err => {
-        console.error(err)
-      })
+        })
+        .catch(err => {
+          console.error(err);
+        });
     },
     readRoadmap() {
       myDiagram.model = go.Model.fromJson(this.roadmapData);
     },
     serveRoadmap() {
       return myDiagram.model.toJson();
+    },
+    startRoadback() {
+      roadbacktimer = setInterval(() => {
+        if (
+          myDiagram.toolManager.textEditingTool.isActive ||
+          myDiagram.toolManager.draggingTool.Wc
+        ) {
+          return;
+        }
+        let url = `${this.$store.getters.getServer}/roadmap/get/comment/${this.rmid}`;
+        axios
+          .get(url)
+          .then(res => {
+            myDiagram.model = go.Model.fromJson(res.data["roadmaps"].tmp);
+          })
+          .catch(err => {
+            console.error(err);
+          });
+      }, 2000);
+    },
+    saveComment(data) {
+      data.rmid = this.rmid;
+      axios
+        .put(`${this.$store.getters.getServer}/roadcomment/insert`, data)
+        .then(res => {
+          if (res.data.msg != "success") alert("통신 오류");
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    },
+    updateComment(data) {
+      axios
+        .put(`${this.$store.getters.getServer}/roadcomment/update`, data)
+        .then(res => {
+          if (res.data.msg != "success") alert("통신 오류");
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    },
+    deleteComment(data){
+      axios
+        .post(`${this.$store.getters.getServer}/roadcomment/delete`, data)
+        .then(res => {
+          if (res.data.msg != "success") alert("통신 오류");
+        })
+        .catch(err => {
+          console.error(err);
+        });
     }
+  },
+  destroyed() {
+    clearInterval(roadbacktimer);
   }
 };
 </script>

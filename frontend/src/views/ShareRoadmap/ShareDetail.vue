@@ -7,13 +7,14 @@
     <b-container style="background: white; border-radius: 1rem;" class="py-4 mt-4">
       <b-row>
         <h1 class="ml-3 mb-0">{{ title }}</h1>
+        <button v-if="useRoadback" class="btn" style="background-color: rgb(256, 256, 256);" @click="goToRoadBack">로드백</button>
       </b-row>
       <hr class="my-2">
       <b-row>
         <b-col cols="1" class="pr-0 mb-2">? 무엇 img 들어갈 곳</b-col>
         <b-col>
           <h3>
-            작성자 : {{ name }}
+            작성자 : {{ username }}
           </h3>
           <h5>
             {{ createDate }}
@@ -57,6 +58,10 @@ import "@toast-ui/editor/dist/toastui-editor.css";
 
 export default {
   name: '',
+  props: {
+    roadmap: Object,
+    username: String,
+  },
   components: {
     Roadmap,
   },
@@ -64,7 +69,6 @@ export default {
     return {
       roadmapMode: 0,
       roadmapData: {}, 
-      name: '',
       title: '',
       createDate: '',
       uid: '',
@@ -72,15 +76,15 @@ export default {
       likeCnt: '',
       pid: '',
       isWriter: false,
-      roadmap: '',
       rmid: '',
+      useRoadback: "",
     }
   },
   created() {
     
   },
   mounted() {
-    if (this.$route.params.roadmap) {
+    if (this.roadmap) {
       this.getPostingInfo()
       this.previewRoadmap()
       this.likecheck()
@@ -91,14 +95,13 @@ export default {
   },
   methods: {
     getPostingInfo() {
-      this.roadmap = this.$route.params.roadmap
-      this.name = this.$route.params.uname
       this.title = this.roadmap.title
       this.createDate = this.roadmap.createDate
       this.uid = this.roadmap.uid
       this.likeCnt = this.roadmap.likecnt
       this.pid = this.roadmap.pid
       this.rmid = this.roadmap.rmid
+      this.useRoadback = this.roadmap.useroadback
     },
     previewRoadmap() {
       axios.get(`${this.$store.getters.getServer}/roadmap/get/${this.rmid}`)
@@ -143,7 +146,6 @@ export default {
           if(res.data.msg == 'success'){
             
           }else{
-            console.log(res)
             alert("데이터 로드에 실패했습니다.");
           }
       })
@@ -156,7 +158,6 @@ export default {
     cancelLike() {
       axios.put(`${this.$store.getters.getServer}/roadmapshare/dislike/${this.$store.getters.getUid}/${this.pid}`)
       .then((res) => {
-        console.log(res)
       }).catch((e) =>{
         console.log(e);
 
@@ -167,6 +168,9 @@ export default {
     },
     goToCreate() {
       this.$router.push({ name : 'update_user_roamdap', params: { rmid: this.rmid, CUMode: 0 }})
+    },
+    goToRoadBack() {
+      this.$router.push({ name : 'roadback' , params: { rmid: this.rmid }})
     },
   },
 }

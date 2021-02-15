@@ -9,6 +9,8 @@ import com.web.blog.model.dto.RoadmapShare;
 public interface RoadmapShareRepo {
 	public int insert(RoadmapShare share);
 	public int delete(int uid,int pid);
+
+	public int isShared(int rmid);
 	
 	public RoadmapShare[] selectAll();
 	public RoadmapShare[] selectByUserName(String name);
@@ -16,7 +18,6 @@ public interface RoadmapShareRepo {
 	
 	public int updatelike(int uid,int pid);
 	public int insertlike(int uid, int pid);
-	
 	
 	public int updatedislike(int uid, int pid);
 	public int deletelike(int uid,int pid);

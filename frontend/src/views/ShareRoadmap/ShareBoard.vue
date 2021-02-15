@@ -44,7 +44,7 @@
 <script>
 import RoadmapList from "@/components/Roadmap/ShareRoadmap/RoadmapList.vue";
 export default {
-  created() {
+  mounted() {
     this.getSharedRoadmap();
   },
   components: {
@@ -101,7 +101,7 @@ export default {
     selectCategory(item) {
       this.category = item;
     }
-  }
+  },
 };
 </script>
 
