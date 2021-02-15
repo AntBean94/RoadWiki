@@ -70,8 +70,15 @@
                 class="card-profile-stats d-flex justify-content-center mt-md-5"
               >
                 <div>
-                  <span class="heading">{{ followerlist.length }}</span>
+                  <b-button v-b-modal.modal-follower class="heading">{{ followerlist.length }}</b-button>
                   <span class="description">follower</span>
+                  <b-modal id="modal-follower">
+                    {{followerlist}}
+                    {{followinglist}}
+                    <div>follow1</div>
+                    <div>follow2</div>
+                    여기다가 follower 리스트를 보여주는 걸로 하자!
+                  </b-modal>
                 </div>
                 <div>
                   <span class="heading">{{ followinglist.length }}</span>
@@ -252,6 +259,7 @@ import UserCard from "./UserProfile/UserCard.vue";
     getFollowList() {
       axios.get(`${this.$store.getters.getServer}/follow/list/${this.profileuid}`)
       .then((res) => {
+        console.log(res.data)
         this.followerlist = res.data.followers
         this.followinglist = res.data.followings
         if (res.data.isFollow) {

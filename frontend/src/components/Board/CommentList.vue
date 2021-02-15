@@ -1,17 +1,18 @@
 <template>
   <div class="p-2">
-    <hr class="my-2">
+    <hr class="my-2" v-if="idx != 0">
     <b-row>
       <b-col cols="8" align-self="center">
         [img] 작성자 : {{ comment.userName }}
       </b-col>
       <b-col v-if="!isUpdate">
         <h5>
+          <!-- <time :datetime="YYYY-MM|comment.createDate"></time> -->
           {{ comment.createDate }}
         </h5>
-        <h5 v-if="comment.modifyDate !== null">
+        <!-- <h5 v-if="comment.modifyDate !== null">
           {{ comment.modifyDate }}
-        </h5>
+        </h5> -->
       </b-col>
     </b-row>
     <b-row v-if="!isUpdate">
@@ -21,8 +22,8 @@
         </p>
       </b-col>
       <b-col align-h="end" class="my-2">
-        <i class="far fa-thumbs-up fa-2x ml-3" v-if="!like" @click="clickLike"><span class="h3 ml-1">{{ comment.likeCnt }}</span></i>
-        <i class="fas fa-thumbs-up fa-2x ml-3" v-if="like" @click="cancelLike"><span class="h3 ml-1">{{ comment.likeCnt }}</span></i>
+        <i class="far fa-thumbs-up fa-2x ml-3 text-peach-quartz" v-if="!like" @click="clickLike"><span class="h3 ml-1">{{ comment.likeCnt }}</span></i>
+        <i class="fas fa-thumbs-up fa-2x ml-3 text-peach-quartz" v-if="like" @click="cancelLike"><span class="h3 ml-1">{{ comment.likeCnt }}</span></i>
       </b-col>
     </b-row>
     <b-row v-if="isUpdate">
@@ -36,13 +37,13 @@
         >
         </textarea>
         <b-row align-h="end">
-          <b-button variant="default" class="mt-2 mr-3" @click="sendComment">수정 완료</b-button>
+          <b-button variant="classic-blue" class="mt-2 mr-3" @click="sendComment">수정 완료</b-button>
         </b-row>
       </base-input>
     </b-row>
     <b-row v-if="!isUpdate">
       <b-col cols="8" class="mb-2">
-        <b-button size="sm" @click="makeRecomment">
+        <b-button variant="stucco" size="sm" @click="makeRecomment">
           <i class="fas fa-reply"></i>
           답글
         </b-button>
@@ -80,7 +81,7 @@ export default {
       isUpdate: false,
     }
   },
-  props: ['comment', 'recomments'],
+  props: ['comment', 'recomments', 'idx'],
   created() {
     axios.get(`${this.$store.getters.getServer}/user/name/${this.comment.uid}`)
     .then((res) => {

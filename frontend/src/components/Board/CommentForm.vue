@@ -1,5 +1,5 @@
 <template>
-  <div class="p-3">
+  <div class="">
     <base-input>
       <textarea 
         class="form-control" 
@@ -8,8 +8,8 @@
         v-model="content"
       >
       </textarea>
-      <b-row align-h="end">
-        <b-button variant="default" class="mt-2 mr-3" @click="sendComment">댓글 작성</b-button>
+      <b-row align-h="end" class="mt-1">
+        <b-button variant="provence" class="mt-2 mr-3" @click="sendComment">댓글 작성</b-button>
       </b-row>
     </base-input>
   </div>
@@ -31,15 +31,19 @@ export default {
         'uid': this.$store.getters.getUid,
         'content': this.content,
       }
-      axios
-      .post(`${this.$store.getters.getServer}/freeboard/comment`, posting)
-      .then((res) => {
-        this.$emit('sendComment')
-        this.content = ''
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+      if (posting.content.length > 0) {
+        axios
+        .post(`${this.$store.getters.getServer}/freeboard/comment`, posting)
+        .then((res) => {
+          this.$emit('sendComment')
+          this.content = ''
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      } else {
+        alert('댓글을 작성해주세요')
+      }
     },
   },
 }
