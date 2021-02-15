@@ -30,7 +30,7 @@ router.beforeEach((to, from, next) => {
       store.commit('LOADUSERTOKEN');
   if (to.name === 'main') {
     if (store.getters.getAccessToken !== null)
-    next({ name: 'read_user_roadmap' })
+    next({ name: '나의 로드맵' })
   }
   else if (to.name !== 'main' && to.name !== 'register' && to.name !== 'board') { 
     if (store.getters.getAccessToken === null) { 

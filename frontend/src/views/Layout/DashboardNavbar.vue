@@ -39,7 +39,6 @@
       </b-navbar-nav>
 
 
-
       <!-- 나누기 -->
       <b-navbar-nav class="align-items-center ml-auto ml-md-0">
 
@@ -71,6 +70,15 @@
             </h1>
           </div>
 
+          <div v-if="isHoverC">
+            <i @mouseover="checkHoverC" class="btn ni ni-bullet-list-67 text-black"></i>
+          </div>
+          <div v-else>
+            <h1 @mouseleave="checkHoverC" @click="goToChat" class="btn m-0 p-1">
+              Chat
+            </h1>
+          </div>
+
         </div>
 
 
@@ -97,7 +105,7 @@
                   <span class="input-group-text" 
                     @click="clickSearch"
                   >
-                    <i class="fas fa-search">이거 뭔데 안먹어</i>
+                    <i class="fas fa-search"></i>
                   </span>
                 </div>
               </b-input-group>
@@ -141,15 +149,15 @@
             </b-dropdown-header>
             <b-dropdown-item @click="myProfile">
               <i class="ni ni-single-02"></i>
-              <span>My profile</span>
+              <span>나의 프로필</span>
             </b-dropdown-item>
             <!-- <b-dropdown-item href="#!">
               <i class="ni ni-settings-gear-65"></i>
               <span>Settings</span>
             </b-dropdown-item> -->
-            <b-dropdown-item href="#!">
+            <b-dropdown-item @click="goToCalendar">
               <i class="ni ni-calendar-grid-58"></i>
-              <span>Activity</span>
+              <span>캘린더</span>
             </b-dropdown-item>
             <!-- <b-dropdown-item href="#!">
               <i class="ni ni-support-16"></i>
@@ -252,6 +260,7 @@ export default {
       isHoverO: true,
       isHoverB: true,
       isHoverS: true,
+      isHoverC: true,
       isSearch: true,
     };
   },
@@ -351,6 +360,13 @@ export default {
         this.isHoverS = true
       }
     },
+    checkHoverC() {
+      if (this.isHoverC) {
+        this.isHoverC = false
+      } else {
+        this.isHoverC = true
+      }    
+    },
     goToOfficial() {
       this.$router.push({ name: "공식 로드맵"})
     },
@@ -360,13 +376,19 @@ export default {
     goToShare() {
       this.$router.push({ name: "공유로드맵\'s"})
     },
+    goToCalendar() {
+      this.$router.push({ name: "캘린더" })
+    },
+    goToChat() {
+      this.$router.push({ name: "채팅" })
+    },
     activeSearch() {
       if (this.isSearch) {
         this.isSearch = false
       } else {
         this.isSearch = true
       }
-    }
+    },
   },
   watch: {
     $route(to) {
@@ -414,4 +436,9 @@ export default {
   overflow: hidden;
   background-color: darkred;
 } */
+@font-face {
+  font-family: "San Francisco";
+  font-weight: 400;
+  src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
+}
 </style>
