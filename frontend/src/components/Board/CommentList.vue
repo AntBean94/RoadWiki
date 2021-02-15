@@ -3,7 +3,7 @@
     <hr class="my-2">
     <b-row>
       <b-col cols="8" align-self="center">
-        [img] 작성자 : {{ nickname }}
+        [img] 작성자 : {{ comment.userName }}
       </b-col>
       <b-col v-if="!isUpdate">
         <h5>
@@ -48,7 +48,7 @@
         </b-button>
       </b-col>
       <!-- 아이콘 가운데정렬 -->
-      <b-col align-h="end" class="my-2" v-if="isCommentWriter">
+      <b-col align-h="end" class="my-2" v-if="comment.uid === $store.getters.getUid">
         <i class="far fa-trash-alt fa-lg mr-3" style="color: tomato" @click="deleteComment"></i>
         <i class="far fa-edit fa-lg mr-3" style="color: Dodgerblue" @click="updateComment"></i>
       </b-col>
@@ -77,7 +77,6 @@ export default {
       uid: '',
       nickname: '',
       likeCnt: '',
-      isCommentWriter: false,
       isUpdate: false,
     }
   },
@@ -90,12 +89,6 @@ export default {
     .catch((err) => {
       console.log(err)
     })
-
-    if (this.comment.uid === this.$store.getters.getUid) {
-      this.isCommentWriter = true
-    } else {
-      this.isCommentWriter = false
-    }
   },
   methods: {
     // 대댓글 작성 이후 recomment다시 false로 바꿔주기

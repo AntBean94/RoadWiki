@@ -69,11 +69,8 @@ const routes = [
         component: () => import('../views/Board/DetailBoard.vue')
       },
       {
-        path: '/update-board/:pid',
+        path: '/update-board/',
         name: 'update_board',
-        props: route => ({
-          pid: Number(route.params.pid)
-        }),
         component: () => import('../views/Board/UpdateBoard.vue')
       },
       {
@@ -123,7 +120,6 @@ const routes = [
       component: () => import('../views/Chatting/Chatting.vue'),
       },
       {
-
         path: '/sharedetail',
         name: 'sharedetail',
         component: () => import('../views/ShareRoadmap/ShareDetail.vue'),
@@ -132,7 +128,6 @@ const routes = [
         path: '/searchlist',
         name: 'searchlist',
         component: () => import('../views/Search/SearchList.vue'),
-
       },
       {
         path: '/createshareboard',

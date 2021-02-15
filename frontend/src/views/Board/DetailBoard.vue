@@ -32,7 +32,16 @@
           {{ content }}
         </p> -->
       </b-row>
-      <b-row align-h="end" class="my-2" v-if="isWriter">
+      <b-row class="mx-2">
+        <div
+          class="ml-1 mt-2 mr-1 bg-warning rounded-pill py-1 px-2"
+          v-for="(tag, idx) in tags"
+          :key="idx"
+        >
+          <span class="h5"># {{ tag }}</span>
+        </div>
+      </b-row>
+      <b-row align-h="end" class="my-2" v-if="isWritter">
         <!-- 게시물의 uid와 현재 uid가 동일 할 때 보여줄 내용 -->
         <i
           class="far fa-trash-alt fa-lg mr-3"
@@ -96,7 +105,6 @@ import CommentList from "@/components/Board/CommentList.vue";
 import "codemirror/lib/codemirror.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Viewer } from "@toast-ui/vue-editor";
-import { controllers } from "chart.js";
 
 export default {
   name: "",
@@ -120,7 +128,7 @@ export default {
       likeCnt: 0,
       dislikeCnt: 0,
       pid: "",
-      isWriter: false,
+      isWritter: false,
       comments: [],
       recomments: []
     };
@@ -132,10 +140,11 @@ export default {
       )
       .then(res => {
         this.uid = res.data.posting.uid;
+        this.tags = res.data.posting.tags;
         if (this.uid === this.$store.getters.getUid) {
-          this.isWriter = true;
+          this.isWritter = true;
         } else {
-          this.isWriter = false;
+          this.isWritter = false;
         }
       });
 
@@ -181,7 +190,7 @@ export default {
           this.pid = res.data.posting.pid;
           this.comments = res.data.comments;
           this.recomments = res.data.recomments;
-          this.tags = res.data.tags;
+          this.tags = res.data.posting.tags;
         })
         .catch(err => {});
     },
