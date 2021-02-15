@@ -82,7 +82,7 @@ public class RoadcommentController {
 		return new ResponseEntity<Map<String, Object>>(result, status);
 	}
 	
-	@DeleteMapping("/delete")
+	@PostMapping("/delete")
 	public Object deleteComment(@RequestBody Curriculum curriculum, HttpServletRequest request) {
 		logger.trace("deleteComment start");
 		Map<String, Object> result = new HashMap<>();

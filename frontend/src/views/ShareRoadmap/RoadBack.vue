@@ -1,6 +1,13 @@
 <template>
   <div>
     <base-header class="pb-10 pt-5 pt-md-2 bg-gradient-default">
+      <button
+        @click="goToBack"
+        class="btn"
+        style="background-color: rgb(242, 214, 174);"
+      >
+        돌아가기
+      </button>
     <br>
     <br>
     <br>
@@ -12,7 +19,7 @@
       <b-row>
         <b-col>
           <b-card no-body class="border-0">
-            <div style="width: 100%;">
+            <div style="width: 100%; height : 100%">
               <Roadmap :roadmapMode=roadmapMode :roadmapData=roadmapData :inputText=inputText @create-roadmap=createRoadmap :isroadback=isroadback :rmid=sendrmid ref="roadmap"/>
             </div>
           </b-card>
@@ -85,7 +92,7 @@ export default {
         "linkDataArray": [
       ]}
       }else{
-        axios.get(`${this.$store.getters.getServer}/roadmap/get/${this.rmid}`)
+        axios.get(`${this.$store.getters.getServer}/roadmap/get/comment/${this.rmid}`)
           .then((res) => {
             if(res.data.msg == 'success'){
               this.roadmapData = JSON.parse(res.data['roadmaps'].tmp);
@@ -177,7 +184,7 @@ export default {
         });
     },
     goToBack() {
-      this.$router.push({ name: "read_user_roadmap" })
+      this.$router.push({ name: "shareboard" })
     }
   }
 };
