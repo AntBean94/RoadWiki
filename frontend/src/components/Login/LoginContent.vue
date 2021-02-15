@@ -2,10 +2,13 @@
   <div>
     <b-button @click="modalShow = !modalShow" variant="primary">로그인</b-button>
 
-    <b-modal v-model="modalShow" hide-footer centered>
-      <!-- <template #modal-title class="text-center">
-        <h1 class="ml-2">로그인</h1>
+    <b-modal v-model="modalShow" hide-footer hide-header centered>
+      <!-- <template #modal-title class="text-center mx-auto">
+        <div class="h1">로그인</div>
       </template> -->
+      <div class="h1 text-center display-3 mb-4">
+        <img src="/img/brand/logo_blue.png" alt="roadwiki" width="250rem;">
+      </div>
       <base-input alternative
               class="mb-3"
               name="Email"
