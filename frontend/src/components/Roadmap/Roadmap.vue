@@ -80,7 +80,7 @@ export default {
     roadmapData: Object, // 변수 하나를 줘가지고 그러네
     inputText: String,
     isroadback: Boolean,
-    rmid: Number,
+    rmid: Number
   },
   data() {
     return {
@@ -88,7 +88,7 @@ export default {
       dates: "",
       memotext: "",
       descript: "",
-      
+
       // Get more form https://flatpickr.js.org/options/
       config: {
         wrap: true, // set wrap to true only when using 'input-group'
@@ -107,7 +107,7 @@ export default {
         sdid: 0,
         text: "",
         content: ""
-      },
+      }
     };
   },
   components: {
@@ -123,17 +123,17 @@ export default {
         initialAutoScale: go.Diagram.Uniform,
         "undoManager.isEnabled": true,
         "animationManager.isEnabled": false,
-        allowLink : false,
+        allowLink: false,
         allowRelink: false,
         allowReshape: false,
-        allowZoom : false,
-        allowVerticalScroll : false,
-        allowHorizontalScroll : false,
+        allowZoom: false,
+        allowVerticalScroll: false,
+        allowHorizontalScroll: false,
         "clickCreatingTool.archetypeNodeData": {
           text: "훈수용",
           category: "comment"
         },
-        
+
         positionComputation: function(diagram, pt) {
           return new go.Point(Math.floor(pt.x), Math.floor(pt.y));
         }
@@ -141,7 +141,7 @@ export default {
     } else {
       myDiagram = $(go.Diagram, this.$refs.myDiagramDiv, {
         initialContentAlignment: go.Spot.Center,
-        "undoManager.isEnabled": true,
+        "undoManager.isEnabled": true
       });
     }
 
@@ -515,18 +515,20 @@ export default {
     });
 
     if (!iseditable) {
-      myDiagram.addDiagramListener("PartCreated", (e) => {
+      myDiagram.addDiagramListener("PartCreated", e => {
         this.saveComment(e.subject.part.data);
       });
-  
-      myDiagram.addDiagramListener("SelectionMoved", (e) => {
-        this.updateComment(e.diagram.selection.first().data)
+
+      myDiagram.addDiagramListener("SelectionMoved", e => {
+        e.subject.each(p => { this.updateComment(p.part.data); });
+      });
+      myDiagram.addDiagramListener("TextEdited", e => {
+        this.updateComment(e.subject.part.data);
+      });
+      myDiagram.addDiagramListener("SelectionDeleted", e => {
+        e.subject.each(p => { this.deleteComment(p.part.data); });
       });
     }
-
-    myDiagram.addDiagramListener("TextEdited", (e) => {
-      this.updateComment(e.subject.part.data)
-    });
 
     myDiagram.addDiagramListener("BackgroundSingleClicked", function() {
       curriculumData = -1;
@@ -565,8 +567,7 @@ export default {
       myDiagram.isReadOnly = true;
     }
     //-----------------------------------------------------------------------------------|
-
-    this.readRoadmap();
+      this.readRoadmap();
     // // 수정로그 가져오기
     // update쪽으로 옮기기
     // this.readRoadmapLog();
@@ -575,8 +576,8 @@ export default {
     curriculumData = -1;
 
     //로드백 타이머 시작
-    if(!iseditable){
-    this.startRoadback();
+    if (!iseditable) {
+      this.startRoadback();
     }
   },
   watch: {
@@ -690,8 +691,7 @@ export default {
     },
     checkCur(e) {
       // 차후에 DB에 요청을 보낸다음 DB정보로 반영
-      if(curriculumData.category == 'comment')
-        return
+      if (curriculumData.category == "comment") return;
       this.headertext = curriculumData.text;
       if (curriculumData.category)
         this.dates = curriculumData.startdate + " to " + curriculumData.enddate;
@@ -766,50 +766,60 @@ export default {
     serveRoadmap() {
       return myDiagram.model.toJson();
     },
-    startRoadback(){
+    startRoadback() {
       roadbacktimer = setInterval(() => {
-        if(myDiagram.toolManager.textEditingTool.isActive || myDiagram.toolManager.draggingTool.Wc) {
-          return
+        if (
+          myDiagram.toolManager.textEditingTool.isActive ||
+          myDiagram.toolManager.draggingTool.Wc
+        ) {
+          return;
         }
         let url = `${this.$store.getters.getServer}/roadmap/get/comment/${this.rmid}`;
-       axios
-        .get(url)
+        axios
+          .get(url)
+          .then(res => {
+            myDiagram.model = go.Model.fromJson(res.data["roadmaps"].tmp);
+          })
+          .catch(err => {
+            console.error(err);
+          });
+      }, 2000);
+    },
+    saveComment(data) {
+      data.rmid = this.rmid;
+      axios
+        .put(`${this.$store.getters.getServer}/roadcomment/insert`, data)
         .then(res => {
-           myDiagram.model = go.Model.fromJson(res.data['roadmaps'].tmp);
+          if (res.data.msg != "success") alert("통신 오류");
         })
         .catch(err => {
           console.error(err);
         });
-      }, 2000);
     },
-    saveComment(data) {
-      data.rmid = this.rmid
-      axios.put(`${this.$store.getters.getServer}/roadcomment/insert`,
-        data
-      )
-      .then(res => {
-        if(res.data.msg != 'success')
-          alert("통신 오류")
-      })
-      .catch(err => {
-        console.error(err)
-      })
+    updateComment(data) {
+      axios
+        .put(`${this.$store.getters.getServer}/roadcomment/update`, data)
+        .then(res => {
+          if (res.data.msg != "success") alert("통신 오류");
+        })
+        .catch(err => {
+          console.error(err);
+        });
     },
-    updateComment(data){
-      axios.put(`${this.$store.getters.getServer}/roadcomment/update`, data)
-      .then(res => {
-        if(res.data.msg != 'success')
-          alert("통신 오류")
-      })
-      .catch(err => {
-        console.error(err)
-      })
-    },
+    deleteComment(data){
+      axios
+        .post(`${this.$store.getters.getServer}/roadcomment/delete`, data)
+        .then(res => {
+          if (res.data.msg != "success") alert("통신 오류");
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    }
   },
-  destroyed(){
+  destroyed() {
     clearInterval(roadbacktimer);
-  },
-  
+  }
 };
 </script>
 

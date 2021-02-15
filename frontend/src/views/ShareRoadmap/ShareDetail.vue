@@ -84,7 +84,6 @@ export default {
     
   },
   mounted() {
-    console.log(this.roadmap)
     if (this.roadmap) {
       this.getPostingInfo()
       this.previewRoadmap()
@@ -147,7 +146,6 @@ export default {
           if(res.data.msg == 'success'){
             
           }else{
-            console.log(res)
             alert("데이터 로드에 실패했습니다.");
           }
       })
@@ -160,7 +158,6 @@ export default {
     cancelLike() {
       axios.put(`${this.$store.getters.getServer}/roadmapshare/dislike/${this.$store.getters.getUid}/${this.pid}`)
       .then((res) => {
-        console.log(res)
       }).catch((e) =>{
         console.log(e);
 

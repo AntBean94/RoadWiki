@@ -48,8 +48,8 @@ public class RoadcommentServiceImpl implements RoadcommentService {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			int uid = roadmaprepo.selectUidByRmid(rmid);
-			if(nowuid != uid)
-				throw new RuntimeException("wrong user");
+//			if(nowuid != uid)
+//				throw new RuntimeException("wrong user");
 			if (roadcommentrepo.delete(key,rmid) != 1)
 				throw new RuntimeException("Query wrong");
 		} catch (Exception e) {
@@ -64,8 +64,8 @@ public class RoadcommentServiceImpl implements RoadcommentService {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			int uid = roadmaprepo.selectUidByRmid(rmid);
-			if(nowuid != uid)
-				throw new RuntimeException("wrong user");
+	//		if(nowuid != uid)
+	//			throw new RuntimeException("wrong user");
 			roadcommentrepo.deleteAll(rmid);
 		} catch (Exception e) {
 			logger.error("Service deleteAll : Something wrong");
