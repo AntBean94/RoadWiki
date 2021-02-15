@@ -141,6 +141,7 @@ export default {
     } else {
       myDiagram = $(go.Diagram, this.$refs.myDiagramDiv, {
         initialContentAlignment: go.Spot.Center,
+        initialAutoScale: go.Diagram.Uniform,
         "undoManager.isEnabled": true
       });
     }
