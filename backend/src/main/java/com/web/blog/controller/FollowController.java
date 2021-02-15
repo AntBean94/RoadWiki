@@ -38,7 +38,7 @@ public class FollowController {
 	LoginServiceImpl loginServ;
 
 	@GetMapping("/list/{uid}")
-	public Object getInfo(@PathVariable int touid, int fromuid, HttpServletRequest request) {
+	public Object getInfo(@PathVariable int uid, HttpServletRequest request) {
 		try {
 			int nowUid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			Map<String, Object> result = (Map<String, Object>) followService.getInfo(nowUid, uid);
