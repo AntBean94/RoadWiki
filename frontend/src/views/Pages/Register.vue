@@ -68,7 +68,7 @@
                     </div>
                     <div class="col-3 pl-0 mt-4 pt-2">
                       <!-- 만약 기존에 계정이 존재하는 이메일이라면 this email is already taken 보여주기 -->
-                      <b-button variant = "provence" v-if="!confirmEmail" @click="emailNumSend" class="mr-0 ml-0" size="md">인증하기</b-button>
+                      <b-button variant = "provence" v-if="!confirmEmail" @click="emailNumSend" class="mr-0 ml-0 source-han-serif-k-light" size="md">인증하기</b-button>
                       <ModalEmailValidation :isEmailModal="isEmailModal" :userEmail="email" @close="closeModal"/>
                       <!-- <ModalEmailValidation/> -->
                       <b-button v-if="confirmEmail" disabled>인증완료</b-button>
@@ -123,11 +123,11 @@
                     <b-col cols="12">
                       <base-input :rules="{ required: { allowFalse: false } }" name="회원약관 동의" Policy>
                         <b-form-checkbox v-model="agree">
-                          <span class="text-muted">
+                          <span class="text-muted source-han-serif-k-extralight">
                             <b-link 
                               v-b-modal.modal-scrollable 
                               variant="link" 
-                              class="m-0 p-0" 
+                              class="m-0 p-0 source-han-serif-k-extralight" 
                               @click="isPolicyModal = true">
                               회원 약관
                             </b-link>
@@ -139,7 +139,7 @@
                     </b-col>
                   </b-row>
                   <div class="text-center">
-                    <b-button block type="submit" variant="provence" class="mt-4" @click="signUp">가입하기</b-button>
+                    <b-button block type="submit" variant="provence" class="mt-4 source-han-serif-k-extralight" @click="signUp">가입하기</b-button>
                   </div>
                   <div class="text-center">
                   </div>
