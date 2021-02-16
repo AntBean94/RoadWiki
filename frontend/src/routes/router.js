@@ -5,7 +5,7 @@ import store from '@/store'
 
 vue.use(VueRouter);
 
-// configure routerthis.
+//intro페이지를 위한 스크롤 이벤트 처리 
 const router = new VueRouter({
   routes, // short for routes: routes
   linkActiveClass: 'active',
@@ -28,13 +28,13 @@ router.beforeEach((to, from, next) => {
   if (store.getters.getAccessToken === null)
     if (sessionStorage.getItem('auth-token') !== null)
       store.commit('LOADUSERTOKEN');
-  if (to.name === 'main') {
+  if (to.name === 'intro') {
     if (store.getters.getAccessToken !== null)
     next({ name: 'read_user_roadmap' })
   }
-  else if (to.name !== 'main' && to.name !== 'register' && to.name !== 'board') { 
+  else if (to.name !== 'intro' && to.name !== 'register' && to.name !== 'board') { 
     if (store.getters.getAccessToken === null) { 
-      next({name:'main'})
+      next({name:'intro'})
       alert('로그인이 필요한 서비스입니다.')
     }
   }
