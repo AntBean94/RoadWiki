@@ -8,13 +8,10 @@ public class Roadmap {
 	private String createDate;
 	private String tmp;
 	private int permission;
-	//private List<Curriculum> 
-	
-	public Roadmap() {
-
-	}
-	
-	public Roadmap(int rmid, int uid, String name, int rmorder, String createDate, String tmp, int permission) {
+	private int term;
+	public Roadmap(int rmid, int uid, String name, int rmorder, String createDate, String tmp, int permission,
+			int term) {
+		super();
 		this.rmid = rmid;
 		this.uid = uid;
 		this.name = name;
@@ -22,8 +19,11 @@ public class Roadmap {
 		this.createDate = createDate;
 		this.tmp = tmp;
 		this.permission = permission;
+		this.term = term;
 	}
-	
+	public Roadmap() {
+		super();
+	}
 	public int getRmid() {
 		return rmid;
 	}
@@ -66,11 +66,16 @@ public class Roadmap {
 	public void setPermission(int permission) {
 		this.permission = permission;
 	}
-
+	public int getTerm() {
+		return term;
+	}
+	public void setTerm(int term) {
+		this.term = term;
+	}
 	@Override
 	public String toString() {
 		return "Roadmap [rmid=" + rmid + ", uid=" + uid + ", name=" + name + ", rmorder=" + rmorder + ", createDate="
-				+ createDate + ", tmp=" + tmp + ", permission=" + permission + "]";
+				+ createDate + ", tmp=" + tmp + ", permission=" + permission + ", term=" + term + "]";
 	}
 	
 	
