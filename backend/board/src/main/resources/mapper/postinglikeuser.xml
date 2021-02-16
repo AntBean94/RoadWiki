@@ -11,6 +11,14 @@
 		and uid=#{uid}
 	</select>
 	
+	<select id="selectList" parameterType="int" resultType="Posting">
+		select *
+		from posting
+		where pid in (select pid
+					 from postinglikeuser
+					 where uid=#{uid})
+	</select>
+	
 	<select id="totallike" parameterType="int" resultType="int">
 		select count(*)
 		from postinglikeuser

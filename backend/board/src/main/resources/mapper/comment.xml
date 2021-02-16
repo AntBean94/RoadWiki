@@ -9,6 +9,28 @@
 		from comment 
 		where cid=#{cid}
 	</select>
+	
+	<select id="selectList" parameterType="Integer" resultType="Posting">
+		select *
+		from posting
+		where pid in (select pid 
+					  from comment
+					  where uid=#{uid})
+	</select>
+	
+	<select id="countComment" parameterType="Integer" resultType="Integer">
+		select count(cid) 
+		from comment 
+		where pid=#{pid}
+	</select>
+	
+	<select id="selectUserName" parameterType="Integer" resultType="String">
+		select name
+		from user
+		where uid=(select uid 
+					from comment
+					where cid=#{cid})
+	</select>
 
  	<select id="selectListPid" parameterType="Integer" resultType="Comment">
 		select * 
@@ -34,5 +56,10 @@
 		from comment 
 		where cid=#{cid}
 	</delete>
-
+	
+	<select id="totalCount" parameterType="Integer" resultType="int">
+		select count(*)
+		from comment
+		where uid=#{uid}
+	</select>
 </mapper>
