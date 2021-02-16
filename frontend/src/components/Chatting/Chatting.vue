@@ -58,7 +58,7 @@ export default {
         .get(SERVER_URL + "/chat/open")
         .then(response => {
           this.room = response.data.chatRoom;
-          sessionStorage.setItem("roomid", response.data.chatRoom.roomid);
+          localStorage.setItem("roomid", response.data.chatRoom.roomid);
           this.connect();
         })
         .catch(response => {
@@ -68,7 +68,7 @@ export default {
     sendMsg: function() {
       var msg = {
         type: "TALK",
-        roomid: sessionStorage.getItem("roomid"),
+        roomid: localStorage.getItem("roomid"),
         sender: this.sender,
         msg: this.message
       };
@@ -83,7 +83,7 @@ export default {
         {},
         frame => {
           this.stompClient.subscribe(
-            "/sub/chat/room/" + sessionStorage.getItem("roomid"),
+            "/sub/chat/room/" + localStorage.getItem("roomid"),
             res => {
               let jsonBody = JSON.parse(res.body);
               let m = {
@@ -102,7 +102,7 @@ export default {
           );
           var msg = {
             type: "JOIN",
-            roomid: sessionStorage.getItem("roomid"),
+            roomid: localStorage.getItem("roomid"),
             sender: this.sender,
             msg: this.message
           };
