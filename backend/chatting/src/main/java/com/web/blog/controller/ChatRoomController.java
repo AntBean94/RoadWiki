@@ -37,7 +37,7 @@ public class ChatRoomController {
 	@Autowired
 	ChatRoomService chatRoomServ;
 	
-	@PostMapping("create")
+	@PostMapping("/create")
 	public Object createRoom(@RequestBody String name) {
 		logger.trace("create room");
 		Map<String, Object> result = null;

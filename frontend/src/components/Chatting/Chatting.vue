@@ -45,7 +45,7 @@ export default {
       sender: "익명",
       message: "",
       messages: [],
-      rooms: [],
+      rooms: []
     };
   },
   created() {
@@ -53,9 +53,9 @@ export default {
     this.getRoom();
   },
   methods: {
-    getRoom: function() {
+    getRooms: function() {
       axios
-        .get(SERVER_URL + "/chat/room")
+        .get(SERVER_URL + "/chat/open")
         .then(response => {
           this.room = response.data.chatRoom;
           sessionStorage.setItem("roomid", response.data.chatRoom.roomid);
@@ -92,9 +92,9 @@ export default {
                 message: jsonBody.msg
               };
               this.messages.push(m);
-              
+
               var container = this.$el.querySelector("#content");
-              
+
               setTimeout(function() {
                 container.scrollTop = container.scrollHeight;
               }, 1);

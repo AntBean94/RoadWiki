@@ -19,4 +19,5 @@ public interface UserRepo {
 	public int update(User user) throws SQLException;
 	public int delete(String email) throws SQLException;
 	public String getName(int uid) throws SQLException;
+	public User canName(String name) throws SQLException;
 }

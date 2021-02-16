@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.web.blog.model.dto.Follow;
+import com.web.blog.model.dto.User;
 import com.web.blog.model.repo.FollowRepo;
 
 @Service
@@ -23,9 +24,9 @@ public class FollowServiceImpl implements FollowService {
 	public Object getInfo(int fromuid, int touid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			int[] followerList = followRepo.selectFollowers(touid);
+			Follow[] followerList = followRepo.selectFollowers(touid);
 			for (int i = 0; i < followerList.length; i++) {
-				if (followerList[i] == fromuid) {
+				if (followerList[i].getFromuid() == fromuid) {
 					result.put("isFollow", true);
 					break;
 				} else {
@@ -39,7 +40,45 @@ public class FollowServiceImpl implements FollowService {
 		}
 		return result;
 	}
-
+	
+	@Override
+	public Object getFollowerList(int touid) throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			Follow[] followerList = followRepo.selectFollowers(touid);
+			User[] users = new User[followerList.length];
+			for (int i = 0; i < followerList.length; i++) {
+				int uid = followerList[i].getTouid();
+				User[] u = followRepo.selectFollowerUid(uid);
+				users[i] = u[0];
+			}
+			result.put("followerlists", users);
+		} catch (Exception e) {
+			throw e;
+		}
+		return result;
+	}
+	
+	@Override
+	public Object getFollowingList(int fromuid) throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			Follow[] followerList = followRepo.selectFollowings(fromuid);
+			User[] users = new User[followerList.length];
+			for (int i = 0; i < followerList.length; i++) {
+				int uid = followerList[i].getFromuid();
+				User[] u = followRepo.selectFollowerUid(uid);
+				users[i] = u[0];
+			}
+			for(User u: users)
+				System.out.println(u);
+			result.put("followinglists", users);
+		} catch (Exception e) {
+			throw e;
+		}
+		return result;
+	}
+	
 	@Override
 	public Object userFollow(Follow follow) {
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -63,6 +102,4 @@ public class FollowServiceImpl implements FollowService {
 		}
 		return result;
 	}
-	
-	
 }

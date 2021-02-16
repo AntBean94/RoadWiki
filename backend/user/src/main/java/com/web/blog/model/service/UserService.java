@@ -12,9 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.web.blog.model.dto.User;
 
 public interface UserService {
-	
 	public Object getInfo(int uid, int loginuser);
 	public Object join(User user) throws Exception;
+	public Object checkName(String name) throws SQLException;
 	public Object checkUser(String email) throws SQLException;
 	public Object modify(User user);
 	public Object withdraw(String email);
