@@ -103,7 +103,7 @@ export default {
         .catch(err => {
           console.error(err)
         })
-        this.$router.push({ name: 'shareboard' })
+        this.$router.push({ name: '공유로드맵\'s' })
       } else if (!this.title) {
         alert("글의 제목을 입력해주세요.")
       } else if (!this.rmid) {
