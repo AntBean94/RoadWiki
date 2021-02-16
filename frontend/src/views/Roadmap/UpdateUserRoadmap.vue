@@ -26,6 +26,7 @@
       >
         생성완료
       </button>
+
       <!-- 사용법 modal / start -->
       <b-button
         v-b-modal.modal-1
@@ -39,6 +40,17 @@
         </div>
       </b-button>
 
+      <!-- 장기 중기 단기 선택 라디오 -->
+    <b-form-group v-slot="{ ariaDescribedby }">
+      <b-form-radio-group
+        id="btn-radios-1"
+        v-model="term"
+        :options="options"
+        :aria-describedby="ariaDescribedby"
+        name="radios-btn-default"
+        buttons
+      ></b-form-radio-group>
+    </b-form-group>
       <div v-if="checkRB">
         <button
           class="btn"
@@ -179,7 +191,13 @@ export default {
       logData: [],
       roadmapMode: 1,
       inputText: "",
-      checkRB: false
+      checkRB: false,
+        term: 1,
+        options: [
+          { text: '장기', value: 1 },
+          { text: '중기', value: 2 },
+          { text: '단기', value: 3 },
+        ]
     };
   },
   created() {},
@@ -258,6 +276,7 @@ export default {
           uid: this.$store.getters.getUid,
           rmorder: this.rmorder,
           name: this.roadmapname,
+          term: this.term,
           tmp: childRoadmapData
         })
         .then(res => {
@@ -277,6 +296,7 @@ export default {
         .post(`${this.$store.getters.getServer}/roadmap/create`, {
           uid: this.$store.getters.getUid,
           name: this.roadmapname,
+          term: this.term,
           tmp: childRoadmapData
         })
         .then(res => {
