@@ -37,18 +37,16 @@
       >
         <b-form-group class="mb-0">
           <b-input-group class="input-group-alternative input-group-merge">
-            <b-form-input 
-              placeholder="Search" 
+            <b-form-input
+              placeholder="Search"
               type="text"
               v-model="searchQuery"
-              @keydown.enter="clickSearch"
-            > 
+              @keydown.enter.prevent="clickSearch"
+            >
             </b-form-input>
 
             <div class="input-group-append">
-              <span class="input-group-text" 
-                @click="clickSearch"
-              >
+              <span class="input-group-text" @click="clickSearch">
                 <i class="fas fa-search"></i>
               </span>
             </div>
@@ -170,7 +168,7 @@ export default {
       this.activeNotifications = false;
     },
     checkUrl(url) {
-      let array = ["roadmap", "update_user_roamdap"];
+      let array = ["roadmap", "update_user_roamdap", "roadback"];
       let isHeader = true;
       array.map(path => {
         if (url === path) isHeader = false;
@@ -178,20 +176,28 @@ export default {
       this.isHeader = isHeader;
     },
     myProfile() {
-      this.$router.push({name: 'profile', query: {profileId: this.$store.getters.getUid}})
+      this.$router.push({
+        name: "profile",
+        query: { profileId: this.$store.getters.getUid }
+      });
     },
     logOut() {
-      this.$store.dispatch("LOGOUT").then(() => {
-        this.$router.push('/')
-      })
-      .catch(() => {
-        alert('로그아웃에 실패했습니다.')
-      })
+      this.$store
+        .dispatch("LOGOUT")
+        .then(() => {
+          this.$router.push("/");
+        })
+        .catch(() => {
+          alert("로그아웃에 실패했습니다.");
+        });
     },
     clickSearch() {
       console.log(this.searchQuery);
-      this.$router.push({name: 'searchlist', query: {searchKeyword: `${this.searchQuery}`}})
-    },
+      this.$router.push({
+        name: "searchlist",
+        query: { searchKeyword: `${this.searchQuery}` }
+      });
+    }
   }
 };
 </script>

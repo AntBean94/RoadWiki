@@ -129,6 +129,7 @@ export default {
       axios
         .get(adr)
         .then(response => {
+          console.log(response.data);
           this.postings = response.data.postings;
           this.names = response.data.names;
           this.commentCnts = response.data.commentCnts;

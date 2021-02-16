@@ -85,11 +85,11 @@
                 class="card-profile-stats d-flex justify-content-center mt-md-5"
               >
                 <div>
-                  <span class="heading">{{ followerlist.length }}</span>
+                  <span class="heading">{{ followerlists.length }}</span>
                   <span class="description">follower</span>
                 </div>
                 <div>
-                  <span class="heading">{{ followinglist.length }}</span>
+                  <span class="heading">{{ followinglists.length }}</span>
                   <span class="description">following</span>
                 </div>
                 <div>
@@ -224,7 +224,9 @@ export default {
       postings: [],
       likepostings: [],
       commentpostings: [],
-      commentCnt: 0
+      commentCnt: 0,
+      followerlists: [],
+      followinglists: []
     };
   },
   created() {
@@ -299,6 +301,30 @@ export default {
       )
       .then(res => {
         this.commentpostings = res.data.commentpostings;
+      })
+      .catch(err => {});
+
+    // 본인 팔로워 리스트 가져오기
+    axios
+      .get(
+        `${this.$store.getters.getServer}/follow/followerlist/${this.profileuid}`
+      )
+      .then(res => {
+        this.followerlists = res.data.followerlists;
+        console.log(res.data);
+        console.log(this.followerlists);
+      })
+      .catch(err => {});
+
+    // 본인 팔로우 리스트 가져오기
+    axios
+      .get(
+        `${this.$store.getters.getServer}/follow/followinglist/${this.profileuid}`
+      )
+      .then(res => {
+        this.followinglists = res.data.followinglists;
+        console.log(res.data);
+        console.log(this.followinglists);
       })
       .catch(err => {});
   },
