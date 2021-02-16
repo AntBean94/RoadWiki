@@ -50,6 +50,7 @@ public class UserServiceImpl implements UserService {
 				result.put("msg", "fail");
 				return result;
 			}
+			logger.info("getInfo Start");
 			result.put("uid", tmp.getUid());
 			result.put("email", tmp.getEmail());
 			result.put("name", tmp.getName());

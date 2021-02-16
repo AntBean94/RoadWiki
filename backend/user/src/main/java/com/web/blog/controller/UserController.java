@@ -87,6 +87,8 @@ public class UserController {
 		try {
 //			String email = (String) loginServ.getData(request.getHeader("auth-token")).get("email");
 			int loginUid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			logger.info("loginUid : " + loginUid);
+			logger.info("pathuid : " + uid);
 			logger.info(Integer.toString(loginUid));
 			Map<String, Object> result = (Map<String, Object>) userServ.getInfo(uid, loginUid);
 			result.put("msg", SUCCESS);

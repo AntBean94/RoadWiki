@@ -93,6 +93,8 @@ public class FileServiceImpl implements FileService {
 	public Object showImage(int uid, HttpServletRequest request) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
+			String path = "../../frontend/public/statics/upload/" + uid ;
+			logger.info("path : " + path);
 			String filename = fileSearch("../../frontend/public/statics/upload/" + uid, 0);
 			logger.info("filename : " + filename);
 			map.put("path", "/statics/upload/" + uid + "/" +filename);
