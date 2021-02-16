@@ -5,7 +5,7 @@
     <b-container>
       <b-row align-h="end">
         <!-- <b-button variant="primary" class="mt-2" @click="detailBoard">detail board</b-button> -->
-        <b-button variant="primary" class="mt-2" @click="createBoard"
+        <b-button variant="peach-quartz" class="mt-2 mr-2" @click="createBoard"
           >새 글 작성</b-button
         >
       </b-row>
@@ -59,7 +59,7 @@ export default {
       this.isSelected = false;
     },
     createBoard() {
-      this.$router.push({name: 'create_board' })
+      this.$router.push({name: '글쓰기' })
     },
     // detailBoard() {
     //   this.$router.push({name: 'detail_board', query: { pid: pid }})

@@ -9,6 +9,8 @@ import com.web.blog.model.dto.Comment;
 @Repository
 public interface CommentRepo {
 	public Comment select(int cid) throws SQLException;
+	public int countComment(int pid) throws SQLException;
+	public String selectUserName(int cid) throws SQLException;
 	public Comment[] selectListPid(int pid) throws SQLException;
 	public int insert(Comment comment) throws SQLException;
 	public int update(Comment comment) throws SQLException;

@@ -3,7 +3,7 @@
     <hr class="my-2">
       <b-row>
         <b-col cols="8" align-self="center">
-          [img] 작성자 : {{ this.nickname }}
+          [img] 작성자 : {{ recomment.userName }}
         </b-col>
         <b-col v-if="!isUpdate">
           <h5>
@@ -21,8 +21,8 @@
           </p>
         </b-col>
         <b-col align-h="end" class="my-2">
-          <i class="far fa-thumbs-up fa-2x ml-3" v-if="!like" @click="clickLike"><span class="h3 ml-1">{{ recomment.likeCnt }}</span></i>
-          <i class="fas fa-thumbs-up fa-2x ml-3" v-if="like" @click="cancelLike"><span class="h3 ml-1">{{ recomment.likeCnt }}</span></i>
+          <i class="far fa-thumbs-up fa-2x ml-3 text-peach-quartz" v-if="!like" @click="clickLike"><span class="h3 ml-1">{{ recomment.likeCnt }}</span></i>
+          <i class="fas fa-thumbs-up fa-2x ml-3 text-peach-quartz" v-if="like" @click="cancelLike"><span class="h3 ml-1">{{ recomment.likeCnt }}</span></i>
         </b-col>
       </b-row>
       <b-row v-if="isUpdate">
@@ -44,7 +44,7 @@
         <b-col cols="8">
         </b-col>
         <!-- 아이콘 가운데정렬 -->
-        <b-col align-h="end" class="my-2" v-if="isRecommentWriter">
+        <b-col align-h="end" class="my-2" v-if="recomment.uid === $store.getters.getUid">
           <i class="far fa-trash-alt fa-lg mr-3" style="color: tomato" @click="deleteRecomment"></i>
           <i class="far fa-edit fa-lg mr-3" style="color: Dodgerblue" @click="updateRecomment"></i>
         </b-col>
@@ -61,7 +61,6 @@ export default {
     return {
       like: false,
       nickname: '',
-      isRecommentWriter: false,
       isUpdate: false,
     }
   },
@@ -105,12 +104,7 @@ export default {
     .catch((err) => {
       console.log(err)
     })
-
-    if (this.recomment.uid === this.$store.getters.getUid) {
-      this.isRecommentWriter = true
-    } else {
-      this.isRecommentWriter = false
-    }
+  
   }
 }
 </script>
