@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.web.blog.model.dto.Posting;
 import com.web.blog.model.dto.PostingHateUser;
 import com.web.blog.model.dto.PostingLikeUser;
 import com.web.blog.model.repo.PostingLikeUserRepo;
@@ -29,7 +30,19 @@ public class BoardLikeServieImpl implements BoardLikeService {
 		}
 		return result;
 	}
-
+	
+	public Object getPostingLikeList(int uid) throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			Posting[] postings = postinglikeuserRepo.selectList(uid);
+			result.put("msg", "success");
+			result.put("likepostings", postings);
+		} catch (Exception e) {
+			throw e;
+		}
+		return result;
+	}
+	
 	@Override
 	public Object registPostingLike(PostingLikeUser postingLikeUser) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
