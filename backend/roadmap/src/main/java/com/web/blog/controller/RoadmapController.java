@@ -181,12 +181,12 @@ public class RoadmapController {
 			logger.error("input data type error");
 			result.put("msg", FAIL);
 			result.put("errorMsg", e.getMessage());
-			status = HttpStatus.NO_CONTENT;
+			status = HttpStatus.OK;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			result.put("msg", FAIL);
 			result.put("errorMsg", e.getMessage());
-			status = HttpStatus.NO_CONTENT;
+			status = HttpStatus.OK;
 		}
 		return new ResponseEntity<Map<String, Object>>(result, status);
 	}
@@ -207,12 +207,12 @@ public class RoadmapController {
 			logger.error("input data type error");
 			result.put("msg", FAIL);
 			result.put("errorMsg", e.getMessage());
-			status = HttpStatus.NO_CONTENT;
+			status = HttpStatus.OK;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			result.put("msg", FAIL);
 			result.put("errorMsg", e.getMessage());
-			status = HttpStatus.NO_CONTENT;
+			status = HttpStatus.OK;
 		}
 		return new ResponseEntity<Map<String, Object>>(result, status);
 	}
@@ -233,12 +233,12 @@ public class RoadmapController {
 			logger.error("input data type error");
 			result.put("msg", FAIL);
 			result.put("errorMsg", e.getMessage());
-			status = HttpStatus.NO_CONTENT;
+			status = HttpStatus.OK;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			result.put("msg", FAIL);
 			result.put("errorMsg", e.getMessage());
-			status = HttpStatus.NO_CONTENT;
+			status = HttpStatus.OK;
 		}
 		return new ResponseEntity<Map<String, Object>>(result, status);
 	}

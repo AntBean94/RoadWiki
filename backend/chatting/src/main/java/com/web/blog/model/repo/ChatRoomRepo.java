@@ -3,6 +3,7 @@ package com.web.blog.model.repo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
@@ -38,12 +39,15 @@ public class ChatRoomRepo {
 	}
 	
 	public List<ChatRoom> selectAll(){
+		List<ChatRoom> rooms =  opsHashChatRoom.values(CHAT_ROOMS);
+		if(rooms.size() == 0) {
+			insert(new ChatRoom(UUID.randomUUID().toString(), "잡담", 1));
+			insert(new ChatRoom(UUID.randomUUID().toString(), "java", 1));
+			insert(new ChatRoom(UUID.randomUUID().toString(), "C++", 1));
+			insert(new ChatRoom(UUID.randomUUID().toString(), "python", 1));
+		}
 		return opsHashChatRoom.values(CHAT_ROOMS);
 	}
-	
-//	public ChatRoom selectByTypeName(ChatRoom chatRoom) {
-//		return opsHashChatRoom.get(CHAT_ROOMS, chatRoom)
-//	}
 	
 	public ChatRoom select(String roomid) {
 		return opsHashChatRoom.get(CHAT_ROOMS, roomid);

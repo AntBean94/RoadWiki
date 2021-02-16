@@ -43,7 +43,7 @@ export default {
         });
     },
   goDetail() {
-      this.$router.push({ name: 'sharedetail' , params: { roadmap: this.roadmap, username: this.username }})
+      this.$router.push({name: '공유로드맵' , params: { roadmap: this.roadmap,uname: this.username }})
     },
   },
   created(){

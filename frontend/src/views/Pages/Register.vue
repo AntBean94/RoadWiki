@@ -2,37 +2,19 @@
   <div>
     <!-- register -->
     <!-- Header -->
-    <div class="header bg-gradient-default py-7 py-lg-8 pt-lg-9">
+    <div class="header pb-7">
       <b-container class="container">
-        <div class="header-body text-center mb-7">
+        <div class="header-body text-center mb-4">
           <b-row class="justify-content-center">
-            <b-col xl="5" lg="6" md="8" class="px-5">
-              <b-link href="/#/main">
-                <img
-                  src="/img/brand/white_roadwiki.png"
-                  alt="roadwiki"
-                  width="250rem;"
-                />
-              </b-link>
+            <b-col xl="5" lg="6" md="8" class="px-5 py-5">
+              <router-link to="/main">
+                <img src="/img/brand/logo_blue.png" alt="roadwiki" width="250rem;">
+              </router-link>
             </b-col>
           </b-row>
+
         </div>
       </b-container>
-      <div class="separator separator-bottom separator-skew zindex-100">
-        <svg
-          x="0"
-          y="0"
-          viewBox="0 0 2560 100"
-          preserveAspectRatio="none"
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <polygon
-            class="fill-default"
-            points="2560 0 2560 100 0 100"
-          ></polygon>
-        </svg>
-      </div>
     </div>
     <!-- Page content -->
     <b-container class="mt--8 pb-5">
@@ -40,7 +22,10 @@
       <b-row class="justify-content-center">
         <b-col lg="6" md="8">
           <b-card no-body class="bg-secondary border-0">
-            <b-card-body class="px-lg-5 py-lg-5">
+            <b-card-body class="px-lg-5 pt-0">
+              <b-row align-h="end" class="mb-2 h5">
+                (*표시가 있는 항목은 필수 입력 항목입니다.)
+              </b-row>
               <div class="text-center text-muted mb-4">
                 <!-- <br> -->
                 <!-- <h1>회원가입</h1> -->
@@ -51,30 +36,29 @@
               >
                 <b-form role="form" @submit.prevent="handleSubmit(onSubmit)">
                   <!-- required속성이 true이면 The Name field is required라는 창이 뜸 -->
-                  <base-input
-                    alternative
-                    class="mb-3"
-                    prepend-icon="ni ni-hat-3"
-                    placeholder="닉네임"
-                    name="닉네임"
-                    :rules="{ required: true }"
-                    v-model="name"
-                    @blur="canUseNickName"
-                  >
+                  <base-input alternative
+                              class="mb-3"
+                              label="닉네임*"
+                              prepend-icon="ni ni-hat-3"
+                              placeholder="닉네임"
+                              name="닉네임"
+                              :rules="{required: true}"
+                              v-model="name"
+                              @blur="canUseNickName">
                   </base-input>
 
                   <div class="row">
                     <div class="col-9">
-                      <base-input
-                        alternative
-                        class="mb-3"
-                        prepend-icon="ni ni-email-83"
-                        placeholder="example123@ssafy.com"
-                        name="이메일"
-                        :rules="{ required: true, email: true }"
-                        v-model="email"
-                        v-if="!confirmEmail"
-                      >
+                      <base-input alternative
+                                  label="이메일*"
+                                  class="mb-3"
+                                  prepend-icon="ni ni-email-83"
+                                  placeholder="example123@ssafy.com"
+                                  name="이메일"
+                                  :rules="{required: true, email: true}"
+                                  v-model="email"
+                                  v-if="!confirmEmail"
+                                  >
                       </base-input>
                       <base-input
                         alternative
@@ -86,56 +70,44 @@
                       >
                       </base-input>
                     </div>
-                    <div class="col-3 pl-0">
+                    <div class="col-3 pl-0 mt-4 pt-2">
                       <!-- 만약 기존에 계정이 존재하는 이메일이라면 this email is already taken 보여주기 -->
-                      <b-button
-                        v-if="!confirmEmail"
-                        @click="emailNumSend"
-                        class="mr-0 ml-0"
-                        >인증하기</b-button
-                      >
-                      <ModalEmailValidation
-                        :isEmailModal="isEmailModal"
-                        :userEmail="email"
-                        @close="closeModal"
-                      />
+                      <b-button variant = "provence" v-if="!confirmEmail" @click="emailNumSend" class="mr-0 ml-0 source-han-serif-k-light" size="md">인증하기</b-button>
+                      <ModalEmailValidation :isEmailModal="isEmailModal" :userEmail="email" @close="closeModal"/>
                       <!-- <ModalEmailValidation/> -->
                       <b-button v-if="confirmEmail" disabled>인증완료</b-button>
                     </div>
                   </div>
 
-                  <base-input
-                    alternative
-                    class="mb-3"
-                    prepend-icon="ni ni-lock-circle-open"
-                    placeholder="비밀번호"
-                    type="password"
-                    name="비밀번호"
-                    vid="password"
-                    :rules="{ required: true, min: 8 }"
-                    v-model="password"
-                  >
+                  <base-input alternative
+                              label="비밀번호*"
+                              class="mb-3"
+                              prepend-icon="ni ni-lock-circle-open"
+                              placeholder="비밀번호"
+                              type="password"
+                              name="비밀번호"
+                              vid="password"
+                              :rules="{required: true, min: 8}"
+                              v-model="password">
                   </base-input>
 
-                  <base-input
-                    alternative
-                    class="mb-3"
-                    prepend-icon="ni ni-lock-circle-open"
-                    placeholder="비밀번호 확인"
-                    type="password"
-                    name="비밀번호 확인"
-                    :rules="{ required: true, min: 8, password: password }"
-                    v-model="rePassword"
-                  >
+                  <base-input alternative
+                              label="비밀번호 확인*"
+                              class="mb-3"
+                              prepend-icon="ni ni-lock-circle-open"
+                              placeholder="비밀번호 확인"
+                              type="password"
+                              name="비밀번호 확인"
+                              :rules="{required: true, min: 8, password: password}"
+                              v-model="rePassword">
                   </base-input>
                   <hr class="my-4" />
                   <div>
-                    <b-form-group
-                      label="관심 개발 분야"
-                      v-slot="{ ariaDescribedby }"
-                    >
-                      <p>1순위부터 체크해주세요</p>
-                      <b-container>
+                    <b-form-group v-slot="{ ariaDescribedby }">
+                      <div class="form-control-label">관심 개발 분야*</div>
+                      <div class="form-control-label my-1">(1순위부터 3순위까지 순서대로 체크해주세요.)</div>
+                      <!-- <p>1순위부터 체크해주세요</p> -->
+                      <b-container class="mt-2 bg-white rounded py-2 shadow-sm">
                         <b-form-checkbox
                           v-for="option in options"
                           v-model="selected"
@@ -143,14 +115,15 @@
                           :value="option.kwid"
                           :aria-describedby="ariaDescribedby"
                           name="flavour-3a"
+                          class="py-1"
                         >
-                          {{ option.word }}
+                          <strong>{{ option.word }}</strong>
                         </b-form-checkbox>
                       </b-container>
                     </b-form-group>
                   </div>
-                  <hr class="my-4" />
-                  <b-row class=" my-4">
+                  <hr class="my-4">
+                  <b-row class="my-4">
                     <b-col cols="12">
                       <base-input
                         :rules="{ required: { allowFalse: false } }"
@@ -158,13 +131,12 @@
                         Policy
                       >
                         <b-form-checkbox v-model="agree">
-                          <span class="text-muted">
-                            <b-link
-                              v-b-modal.modal-scrollable
-                              variant="link"
-                              class="m-0 p-0"
-                              @click="isPolicyModal = true"
-                            >
+                          <span class="text-muted source-han-serif-k-extralight">
+                            <b-link 
+                              v-b-modal.modal-scrollable 
+                              variant="link" 
+                              class="m-0 p-0 source-han-serif-k-extralight" 
+                              @click="isPolicyModal = true">
                               회원 약관
                             </b-link>
                             에 동의합니다.
@@ -179,13 +151,9 @@
                     </b-col>
                   </b-row>
                   <div class="text-center">
-                    <b-button
-                      type="submit"
-                      variant="primary"
-                      class="mt-4"
-                      @click="signUp"
-                      >가입하기</b-button
-                    >
+                    <b-button block type="submit" variant="provence" class="mt-4 source-han-serif-k-extralight" @click="signUp">가입하기</b-button>
+                  </div>
+                  <div class="text-center">
                   </div>
                   <div class="text-center"></div>
                 </b-form>

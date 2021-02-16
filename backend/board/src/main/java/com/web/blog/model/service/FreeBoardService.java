@@ -1,15 +1,12 @@
 package com.web.blog.model.service;
 
-import java.sql.SQLException;
-import java.util.Map;
-
 import com.web.blog.model.dto.Comment;
 import com.web.blog.model.dto.Posting;
-import com.web.blog.model.dto.PostingLikeUser;
 import com.web.blog.model.dto.Recomment;
 
 public interface FreeBoardService {
 	public Object getPostingListAll(String page_s, String classifier, String...tags) throws Exception;
+	public Object getPostingListUid(int uid) throws Exception;
 	public Object getPostingListByName(String page_s, String classifier, String word, String...tags) throws Exception;
 	public Object getPostingListByTitle(String page_s, String classifier, String word, String...tags) throws Exception;
 	public Object getPostingListByContent(String page_s, String classifier, String word, String...tags) throws Exception;
@@ -24,4 +21,5 @@ public interface FreeBoardService {
 	public Object editRecomment(Recomment recomment) throws Exception;
 	public Object deleteRecomment(String rcid) throws Exception;
 	public Object totalCount() throws Exception;
+	public Object getPostingByCommentUid(int uid) throws Exception;
 }

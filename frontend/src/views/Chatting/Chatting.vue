@@ -1,35 +1,32 @@
 <template>
   <div>
-      {{ roomid }}
-      <br>
-      
       <div id="chatting">
-        <header style="height:10%">
-        <p style="display:inline-block">{{ name }} 채팅방에 오신것을 환영합니다.</p>
+        <header style="height:10% ; text-align: center;">
+        <h1 style="display:inline-block; margin-top: 2rem;">{{ name }} 채팅방에 오신것을 환영합니다.</h1>
         </header>
         <div
-            style="height:80%; border:black 1px solid; overflow: scroll;"
+            style="height:85%; border:grey 0.3px solid; "
             id="content"
         >
         <!-- <ul style="margin:0px"> -->
         <li
             v-for="(message, idx) in messages"
             v-bind:key="idx"
-            style="margin:0px; font-size:14px"
+            style="margin:0px; font-size:16px"
         >
             {{ message.sender }} >> {{ message.message }}
         </li>
         <!-- </ul> -->
         </div>
-        <footer style="height:10%">
-        <input id="userName" type="text" v-model="sender" style="width:20%" readonly/>
+        <footer style="height:5%">
+        <input id="userName" type="text" v-model="sender" style="width:20%; height: 100%;" readonly/>
         <input
-            type="text"
+            type="textarea"
             v-model="message"
             v-on:keypress.enter="sendMsg"
-            style="width:60%"
+            style="width:60%; height: 100%; "
         />
-        <button type="button" @click="sendMsg" style="width:20%">전송</button>
+        <button type="button" @click="sendMsg" style="width:20%; height: 100%;">전송</button>
         </footer>
       </div>
   </div>
@@ -137,12 +134,16 @@ export default {
 
 <style>
 #chatting{
-  width: 900px;
-  height: 600px;
-  background-color: whitesmoke;
-  border: 1px black solid;
+  overflow: scroll;
+  margin-left: 15rem;
+  width: 90rem;
+  height: 60rem;
+  background-color: white;
+  border: 0.5px rgb(0, 0, 0) solid;
+  overflow-x: hidden ;
+  overflow-y: auto;
 }
 #userName{
-    background-color:rgb(204, 204, 204);
+    background-color:rgb(230, 227, 227);
 }
 </style>

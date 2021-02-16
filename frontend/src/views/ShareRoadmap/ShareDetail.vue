@@ -137,8 +137,8 @@ export default {
       this.previewRoadmap();
       this.likecheck();
     } else {
-      this.$router.push({ name: "shareboard" });
-      return;
+      this.$router.push({ name: '공유로드맵\'s' })
+      return
     }
   },
   methods: {
@@ -260,10 +260,7 @@ export default {
       this.likeCnt--;
     },
     goToCreate() {
-      this.$router.push({
-        name: "update_user_roamdap",
-        params: { rmid: this.rmid, CUMode: 0 }
-      });
+      this.$router.push({ name : '로드맵 수정하기', params: { rmid: this.rmid, CUMode: 0 }})
     },
     goToRoadBack() {
       this.$router.push({ name: "roadback", params: { rmid: this.rmid } });
