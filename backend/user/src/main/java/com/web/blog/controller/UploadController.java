@@ -28,9 +28,9 @@ public class UploadController {
 	
 	@PostMapping("/pic2")
 	public Object getImg(@RequestPart(value="file", required=true) MultipartFile file) throws Exception {
-		System.out.println("in");
-		System.out.println(file);
-		System.out.println(file.toString());
+//		System.out.println("in");
+//		System.out.println(file);
+//		System.out.println(file.toString());
 		
 //		System.out.println(dto.toString());
 		

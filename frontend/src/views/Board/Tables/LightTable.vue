@@ -129,7 +129,7 @@ export default {
       axios
         .get(adr)
         .then(response => {
-          console.log(response.data);
+          console.log(response.data.commentCnts);
           this.postings = response.data.postings;
           this.names = response.data.names;
           this.commentCnts = response.data.commentCnts;
@@ -159,8 +159,8 @@ export default {
         });
     },
     clickName(uid) {
-      console.log(uid)
-      this.$router.push({ name: "프로필", query: {profileId: uid} })
+      console.log(uid);
+      this.$router.push({ name: "프로필", query: { profileId: uid } });
     },
     getCommentNum() {
       console.log(this.row.pid);

@@ -76,22 +76,7 @@
         document.body.classList.remove('nav-open');
         this.showMenu = false;
       },
-      // setBackgroundColor() {
-      //   document.body.classList.add('bg-default');
-      // },
-      // removeBackgroundColor() {
-      //   document.body.classList.remove('bg-default');
-      // },
-      // updateBackground() {
-      //   if (!this.$route.meta.noBodyBackground) {
-      //     this.setBackgroundColor();
-      //   } else {
-      //     this.removeBackgroundColor()
-      //   }
-      // }
-    },
-    beforeDestroy() {
-      this.removeBackgroundColor();
+
     },
     beforeRouteUpdate(to, from, next) {
       // Close the mobile menu first then transition to next page
@@ -104,14 +89,6 @@
         next();
       }
     },
-    watch: {
-      $route: {
-        immediate: true,
-        handler: function () {
-          this.updateBackground()
-        }
-      }
-    }
   };
 </script>
 <style lang="scss">

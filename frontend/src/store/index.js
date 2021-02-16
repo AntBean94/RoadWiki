@@ -54,8 +54,8 @@ export default new Vuex.Store({
   mutations: {
     LOADUSERTOKEN(state) {
       console.log("set token");
-      state.accessToken = sessionStorage.getItem("auth-token");
-      state.user = JSON.parse(sessionStorage.getItem("user"));
+      state.accessToken = localStorage.getItem("auth-token");
+      state.user = JSON.parse(localStorage.getItem("user"));
       console.log("load : " + state.user);
       axios.defaults.headers.common["auth-token"] = state.accessToken;
     },
@@ -98,11 +98,11 @@ export default new Vuex.Store({
           axios.defaults.headers.common[
             "auth-token"
           ] = `${response.data["authorizationToken"]}`;
-          sessionStorage.setItem(
+          localStorage.setItem(
             "auth-token",
             `${response.data["authorizationToken"]}`
           );
-          sessionStorage.setItem("user", JSON.stringify(this.getters.getUser));
+          localStorage.setItem("user", JSON.stringify(this.getters.getUser));
         })
         .catch(() => {
           reject();
@@ -111,7 +111,7 @@ export default new Vuex.Store({
     LOGOUT(context) {
       context.commit("LOGOUT");
       axios.defaults.headers.common["auth-token"] = null;
-      sessionStorage.removeItem("auth-token");
+      localStorage.removeItem("auth-token");
     },
     SETINFO(context, user) {
       context.commit("SETINFO", user);

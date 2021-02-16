@@ -26,7 +26,7 @@ export default router;
 
 // router.beforeEach((to, from, next) => {
 //   if (store.getters.getAccessToken === null)
-//     if (sessionStorage.getItem('auth-token') !== null)
+//     if (localStorage.getItem('auth-token') !== null)
 //       store.commit('LOADUSERTOKEN');
 //   if (to.name === 'intro') {
 //     if (store.getters.getAccessToken !== null)

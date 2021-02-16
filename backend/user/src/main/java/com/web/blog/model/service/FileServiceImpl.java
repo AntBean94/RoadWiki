@@ -93,6 +93,8 @@ public class FileServiceImpl implements FileService {
 	public Object showImage(int uid, HttpServletRequest request) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
+			String path = "../../frontend/public/statics/upload/" + uid ;
+			logger.info("path : " + path);
 			String filename = fileSearch("../../frontend/public/statics/upload/" + uid, 0);
 			logger.info("filename : " + filename);
 			map.put("path", "/statics/upload/" + uid + "/" +filename);
@@ -152,7 +154,7 @@ public class FileServiceImpl implements FileService {
 			Thread.sleep(1500);// 삭제가 쓰레드형태로 같이 진행되는거같아서 임시로 슬립
 			filename = fileSearch("./target/classes/statics/bgupload/" + uid, 1);
 		} catch (Exception e) {
-			System.out.println("no folder");
+			logger.error("no folder");
 		}
 		Thread.sleep(1500);// 삭제가 쓰레드형태로 같이 진행되는거같아서 임시로 슬립
 		// parent directory를 찾는다.
@@ -182,12 +184,12 @@ public class FileServiceImpl implements FileService {
 
 	@Override
 	public byte[] showbgImg(String uid, HttpServletRequest request) throws Exception {
-		System.out.println("image uid : " + uid);
+		logger.info("image uid : " + uid);
 		String filename = "";
 		try {
 			filename = fileSearch("./target/classes/statics/bgupload/" + uid, 0);
 		} catch (Exception e) {
-			System.out.println("no folder");
+			logger.error("no folder");
 		}
 		InputStream in = null;
 		try {
