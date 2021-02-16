@@ -130,7 +130,7 @@ export default {
         allowVerticalScroll: false,
         allowHorizontalScroll: false,
         "clickCreatingTool.archetypeNodeData": {
-          text: "훈수용",
+          text: "피드백 할 내용을 적으세요.",
           category: "comment"
         },
 
