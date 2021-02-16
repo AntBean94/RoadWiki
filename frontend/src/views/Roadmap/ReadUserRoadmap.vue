@@ -2,7 +2,7 @@
 
   <div>
     <!-- header 시작 -->
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-default">
+        <base-header class="pb-6 pb-8 pt-5 pt-md-8" id="baseheader">
     <!-- carousel도 컴포넌트화 필요 -->
       <!-- Card stats -->
       <br>
@@ -127,15 +127,17 @@ export default {
     },
     // updateuserroadmap을 create, update모두 가능하도록 변경(mode로 나눈다.)
     goToCreate() {
-      this.$router.push({ name : 'update_user_roamdap', params: { rmid: 0, CUMode: 0 }})
+        this.$router.push({ name : '로드맵 수정하기', params: { rmid: 0, CUMode: 0 }})
     },
     goToUpdate() {
-      this.$router.push({ name: 'update_user_roamdap', params: { rmid: this.rmid, rmorder: this.rmorder, CUMode: 1 }})
+        this.$router.push({ name: '로드맵 수정하기', params: { rmid: this.rmid, rmorder: this.rmorder, CUMode: 1 }})
     },
   },
 }
 </script>
 
 <style>
-
+#baseheader {
+  background-color: #b5c7d3;
+}
 </style>
