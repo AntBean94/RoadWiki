@@ -8,42 +8,44 @@
       	<b-row>
 			<b-col>
 				<b-card no-body class="border-0">
-					<h1> {{ username }} 님의 일정 </h1>
-
 					<div id="calendar">
-						<div class="calendar-controls">
-							<div class="notification is-success">
-								{{ message }}
-								{{ newItemMemo }}
+							<div class>
+								<!-- 모달관련 -->
+								<div>
+									<b-modal id="modal-scrollable" scrollable title="로드위키">
+										<!-- 일정상세정보 -->
+										<div class="field">
+											<label class="label">Title</label>
+											<div class="control my-2">
+												{{ this.showTitle}}
+											</div>
+										</div>
+										<div class="field">
+											<label class="label">Start date</label>
+											<div class="control">
+												<input v-model="newItemStartDate" class="input" type="date" />
+											</div>
+										</div>
+										<div class="field">
+											<label class="label">End date</label>
+											<div class="control">
+												<input v-model="newItemEndDate" class="input" type="date" />
+											</div>
+										</div>
+										<template #modal-footer="{cancel}">
+										<!-- Emulate built in modal footer ok and cancel button actions -->
+										<b-button size="lm" variant="success" @click="clickUpdateItem">
+											일정업데이트
+										</b-button>
+										<b-button size="lm" variant="danger" @click="clickDeleteItem">
+											일정삭제하기
+										</b-button>
+										<b-button size="lm" variant="danger" @click="cancel()">
+											Cancel
+										</b-button>
+										</template>
+									</b-modal>
 								</div>
-							<div class="box">
-								<div class="field">
-									<label class="label">Title</label>
-									<div class="control">
-										<input v-model="showTitle" class="input"  type="text" disabled/>
-									</div>
-								</div>
-								<div class="field">
-									<label class="label">Start date</label>
-									<div class="control">
-										<input v-model="newItemStartDate" class="input" type="date" />
-									</div>
-								</div>
-
-								<div class="field">
-									<label class="label">End date</label>
-									<div class="control">
-										<input v-model="newItemEndDate" class="input" type="date" />
-									</div>
-								</div>
-
-								<base-button id="updateScheduleBtn" class="my-3" @click="clickUpdateItem" :disabled="disabledBtn">
-									Udpate schedule
-								</base-button>
-								<base-button id="deleteScheduleBtn" class="my-3 " @click="clickDeleteItem" :disabled="disabledBtn">
-									Delete schedule
-								</base-button>
-							</div>
 						</div>
 						<div class="calendar-parent">
 							<calendar-view
@@ -225,6 +227,7 @@ export default {
 			this.showTitle = e.title
 			this.message = `일정: ${e.title}`
 			this.newItemMemo = e.originalItem.memo;
+			this.$root.$emit('bv::show::modal', 'modal-scrollable')
 		},
 		setShowDate(d) {
 			this.showDate = d
@@ -327,16 +330,7 @@ export default {
 .cv-wrapper.period-year .cv-week {
 	min-height: 6rem;
 }
-/* These styles are optional, to illustrate the flexbility of styling the calendar purely with CSS. */
-/* Add some styling for items tagged with the "birthday" class */
-.theme-default .cv-item.birthday {
-	background-color: #e0f0e0;
-	border-color: #d7e7d7;
-}
-.theme-default .cv-item.birthday::before {
-	content: "\1F382"; /* Birthday cake */
-	margin-right: 0.5em;
-}
+
 /* The following classes style the classes computed in myDateClasses and passed to the component's dateClasses prop. */
 .theme-default .cv-day.ides {
 	background-color:#dbdbdb;
@@ -390,5 +384,32 @@ export default {
 .theme-default .cv-item.blue {
 	background-color: paleturquoise;
 	border-color: paleturquoise
+}
+/* 지난 날 */
+.theme-default .cv-day.past {
+	background-color: rgb(253, 251, 251) ;
+}
+.theme-default .cv-header-day{
+	background-color: white;
+}
+/* 다가올 날 */
+.theme-default .cv-day.outsideOfMonth{
+	background-color: rgb(253, 251, 251) ;
+}
+
+.theme-default .cv-header, .theme-default .cv-header-day{
+	background-color: white;
+}
+/* 헤더 속성 */
+.cv-header button {
+	box-sizing: border-box;
+    line-height: 1em;
+    font-size: 1em;
+    border-width: 1px;
+    background-color: white;
+}
+/* 오늘 날짜에표시 */
+.theme-default .cv-day.today {
+    background-color: white;
 }
 </style>

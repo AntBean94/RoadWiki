@@ -214,8 +214,8 @@ export default {
     readRoadmap() {
       // 페이지 초기화시 rmid여부 확인해서 바탕화면으로 redirect
       if (this.rmid === undefined) {
-        console.log("확인");
-        this.$router.push({ name: "read_user_roadmap" });
+        console.log('확인')
+        this.$router.push({ name: '나의 로드맵' })
         return;
       }
       if (this.rmid == 0) {
@@ -278,12 +278,13 @@ export default {
           name: this.roadmapname,
           term: this.term,
           tmp: childRoadmapData
-        })
-        .then(res => {
-          if (res.data.msg == "success") {
-            this.$router.push({ name: "read_user_roadmap" });
-          } else {
-            alert("업데이트 실패했습니다.");
+        }
+      )
+      .then((res) => {
+        if(res.data.msg == 'success'){
+        this.$router.push({ name: '나의 로드맵' })
+          }else{
+            alert("업데이트 실패했습니다.")
           }
         })
         .catch(e => {
@@ -298,16 +299,16 @@ export default {
           name: this.roadmapname,
           term: this.term,
           tmp: childRoadmapData
-        })
-        .then(res => {
-          if (res.data.msg == "success") {
-            this.$router.push({ name: "read_user_roadmap" });
-          } else {
-            alert("생성에 실패했습니다.");
-          }
-        })
-        .catch(e => {
-          alert("axios 오류");
+        }
+      )
+      .then((res) => {
+        if(res.data.msg == 'success'){
+          this.$router.push({ name: '나의 로드맵' })
+        }else{
+          alert("생성에 실패했습니다.")
+        }
+        }).catch((e) =>{
+          alert('axios 오류 4')
         });
     },
     checkCur(e) {
@@ -330,11 +331,7 @@ export default {
         });
     },
     goToBack() {
-      this.$router.push({ name: "read_user_roadmap" });
-    },
-    checkRoadBack() {
-      this.checkRB = true;
-      // axios.get(`${this.$store.getters.getServer}/`)
+      this.$router.push({ name: "나의 로드맵" })
     }
   }
 };

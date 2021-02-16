@@ -149,7 +149,7 @@ export default {
     openDetail(row) {
       const pid = row.pid;
       this.$store.dispatch("SETPID", pid);
-      this.$router.push({ name: "detail_board", query: { pid } });
+      this.$router.push({ name: "게시글", query: { pid } });
     },
     getTotalNum() {
       axios
@@ -159,8 +159,8 @@ export default {
         });
     },
     clickName(uid) {
-      console.log(uid);
-      this.$router.push({ name: "profile", query: { profileId: uid } });
+      console.log(uid)
+      this.$router.push({ name: "프로필", query: {profileId: uid} })
     },
     getCommentNum() {
       console.log(this.row.pid);

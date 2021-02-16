@@ -130,7 +130,7 @@ export default {
           })
           .then(res => {
             console.log(res);
-            this.$router.push({ name: "shareboard" });
+            this.$router.push({ name: "공유로드맵\'s" });
           })
           .catch(err => {
             console.error(err);
