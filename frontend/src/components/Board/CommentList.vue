@@ -1,17 +1,17 @@
 <template>
   <div class="p-2">
-    <hr class="my-2">
+    <hr class="my-2" v-if="idx != 0">
     <b-row>
       <b-col cols="8" align-self="center">
-        [img] 작성자 : {{ nickname }}
+        [img] 작성자 : {{ comment.userName }}
       </b-col>
       <b-col v-if="!isUpdate">
         <h5>
           {{ comment.createDate }}
         </h5>
-        <h5 v-if="comment.modifyDate !== null">
+        <!-- <h5 v-if="comment.modifyDate !== null">
           {{ comment.modifyDate }}
-        </h5>
+        </h5> -->
       </b-col>
     </b-row>
     <b-row v-if="!isUpdate">
@@ -21,8 +21,8 @@
         </p>
       </b-col>
       <b-col align-h="end" class="my-2">
-        <i class="far fa-thumbs-up fa-2x ml-3" v-if="!like" @click="clickLike"><span class="h3 ml-1">{{ comment.likeCnt }}</span></i>
-        <i class="fas fa-thumbs-up fa-2x ml-3" v-if="like" @click="cancelLike"><span class="h3 ml-1">{{ comment.likeCnt }}</span></i>
+        <i class="far fa-thumbs-up fa-2x ml-3 text-peach-quartz" v-if="!like" @click="clickLike"><span class="h3 ml-1">{{ comment.likeCnt }}</span></i>
+        <i class="fas fa-thumbs-up fa-2x ml-3 text-peach-quartz" v-if="like" @click="cancelLike"><span class="h3 ml-1">{{ comment.likeCnt }}</span></i>
       </b-col>
     </b-row>
     <b-row v-if="isUpdate">
@@ -36,19 +36,19 @@
         >
         </textarea>
         <b-row align-h="end">
-          <b-button variant="default" class="mt-2 mr-3" @click="sendComment">수정 완료</b-button>
+          <b-button variant="classic-blue" class="mt-2 mr-3" @click="sendComment">수정 완료</b-button>
         </b-row>
       </base-input>
     </b-row>
     <b-row v-if="!isUpdate">
       <b-col cols="8" class="mb-2">
-        <b-button size="sm" @click="makeRecomment">
+        <b-button variant="stucco" size="sm" @click="makeRecomment">
           <i class="fas fa-reply"></i>
           답글
         </b-button>
       </b-col>
       <!-- 아이콘 가운데정렬 -->
-      <b-col align-h="end" class="my-2" v-if="isCommentWriter">
+      <b-col align-h="end" class="my-2" v-if="comment.uid === $store.getters.getUid">
         <i class="far fa-trash-alt fa-lg mr-3" style="color: tomato" @click="deleteComment"></i>
         <i class="far fa-edit fa-lg mr-3" style="color: Dodgerblue" @click="updateComment"></i>
       </b-col>
@@ -77,11 +77,10 @@ export default {
       uid: '',
       nickname: '',
       likeCnt: '',
-      isCommentWriter: false,
       isUpdate: false,
     }
   },
-  props: ['comment', 'recomments'],
+  props: ['comment', 'recomments', 'idx'],
   created() {
     axios.get(`${this.$store.getters.getServer}/user/name/${this.comment.uid}`)
     .then((res) => {
@@ -90,12 +89,6 @@ export default {
     .catch((err) => {
       console.log(err)
     })
-
-    if (this.comment.uid === this.$store.getters.getUid) {
-      this.isCommentWriter = true
-    } else {
-      this.isCommentWriter = false
-    }
   },
   methods: {
     // 대댓글 작성 이후 recomment다시 false로 바꿔주기

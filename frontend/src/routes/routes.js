@@ -1,4 +1,4 @@
-import DashboardLayout from '@/views/Layout/DashboardLayout.vue';
+import DashboardNavbar from '@/views/Layout/DashboardNavbar.vue';
 import AuthLayout from '@/views/Pages/AuthLayout.vue';
 import NothingMain from '@/views/NothingMain.vue';
 
@@ -18,8 +18,10 @@ const routes = [
   },
   {
     path: '/',
-    redirect: 'intro',
-    component: DashboardLayout,
+
+    redirect: 'main',
+    component: DashboardNavbar,
+
     children: [
       
       {
@@ -38,7 +40,7 @@ const routes = [
       },
       {
         path: '/profile/',
-        name: 'profile',
+        name: '프로필',
         component: () => import(/* webpackChunkName: "demo" */ '../views/Pages/UserProfile.vue')
       },
       {
@@ -46,7 +48,6 @@ const routes = [
         name: 'profile-update',
         component: () => import(/* webpackChunkName: "demo" */ '../views/Pages/ProfileUpdate.vue')
       },
-              
       {
         path: '/maps',
         name: 'maps',
@@ -60,67 +61,63 @@ const routes = [
       },
       {
         path: '/tmp_board',
-        name: 'tmp_board',
+        name: '게시판',
         component: () => import('../views/Board/Board.vue')
       },
       {
         path: '/create-board',
-        name: 'create_board',
+        name: '글쓰기',
         component: () => import('../views/Board/CreateBoard.vue'),
         props: true
       },
       {
         path: '/detail-board',
-        name: 'detail_board',
+        name: '게시글',
         props: true,
         component: () => import('../views/Board/DetailBoard.vue')
       },
       {
-        path: '/update-board/:pid',
-        name: 'update_board',
-        props: route => ({
-          pid: Number(route.params.pid)
-        }),
+        path: '/update-board/',
+        name: '글 수정하기',
         component: () => import('../views/Board/UpdateBoard.vue')
       },
       {
         path: '/read-user-roadmap',
-        name: 'read_user_roadmap',
+        name: "나의 로드맵",
         component: () => import(/* webpackChunkName: "demo" */ '../views/Roadmap/ReadUserRoadmap.vue')
       },
       {
         path: '/update-user-roadmap',
-        name: 'update_user_roamdap',
+        name: '로드맵 수정하기',
         component: () => import('../views/Roadmap/UpdateUserRoadmap.vue'),
         props: true
       },
       {
         path: '/official-roadmap',
-        name: 'official_roadmap',
+        name: '공식 로드맵',
         component: () => import('../views/Roadmap/OfficialRoadmap.vue'),
         props: true
       },
       {
         path: '/admin',
-        name: 'admin',
+        name: '로드맵 관리자',
         component: () => import('../views/Roadmap/AdminRoadmap.vue'),
       },
       {
         path: '/calendar',
-        name: 'calendar',
+        name: '캘린더',
         component: () => import('../views/Calendar/Calendar.vue'),
         props: true
       },
       {
         path: '/shareboard',
-        name: 'shareboard',
+        name: '공유로드맵\'s',
         component: () => import('../views/ShareRoadmap/ShareBoard.vue'),
       },
-
       // chatting 
       {
         path: '/chatting-main',
-        name: 'chatting_main',
+        name: '채팅 카테고리',
         component: () => import('../views/Chatting/ChattingMain.vue'),
       },
       {
@@ -130,20 +127,18 @@ const routes = [
       component: () => import('../views/Chatting/Chatting.vue'),
       },
       {
-
         path: '/sharedetail',
-        name: 'sharedetail',
+        name: '공유로드맵',
         component: () => import('../views/ShareRoadmap/ShareDetail.vue'),
       },
       {
         path: '/searchlist',
-        name: 'searchlist',
+        name: '검색결과',
         component: () => import('../views/Search/SearchList.vue'),
-
       },
       {
         path: '/createshareboard',
-        name: 'create_share_board',
+        name: '로드맵 공유하기',
         component: () => import('../views/ShareRoadmap/CreateShareBoard.vue'),
         props: true,
       },

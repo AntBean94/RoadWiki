@@ -11,7 +11,7 @@
       </textarea>
       <b-row align-h="end">
         <b-button 
-          variant="default" 
+          variant="provence" 
           class="mt-2 mr-3" 
           @click="sendRecomment"
           size="sm"
@@ -38,15 +38,19 @@ export default {
         'cid': this.cid,
         'content': this.content,
       }
-      axios.post(`${this.$store.getters.getServer}/freeboard/recomment`, recomment)
-      .then((res) => {
-        // alert('대댓글이 작성되었습니다.')
-        this.content = ''
-        this.$emit('sendRecomment')
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+      if (recomment.content.length > 0) {
+        axios.post(`${this.$store.getters.getServer}/freeboard/recomment`, recomment)
+        .then((res) => {
+          // alert('대댓글이 작성되었습니다.')
+          this.content = ''
+          this.$emit('sendRecomment')
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      } else {
+        alert('대댓글을 작성해주세요')
+      }
     },
   },
 }

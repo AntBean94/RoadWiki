@@ -21,14 +21,14 @@
         >
         </sidebar-item>
 
-        <sidebar-item
+        <!-- <sidebar-item
           :link="{
             name: 'Profile',
             path: '/profile',
             icon: 'ni ni-single-02 text-yellow'
           }"
         >
-        </sidebar-item>
+        </sidebar-item> -->
 
         <sidebar-item
           :link="{
@@ -143,11 +143,6 @@ function initScrollbar(className) {
     }, 100);
   }
 }
-// flatpickr
-// import flatPickr from "vue-flatpickr-component";
-// import "flatpickr/dist/flatpickr.css";
-// import 'flatpickr/dist/themes/material_blue.css';
-// import {Hindi} from 'flatpickr/dist/l10n/hi.js';
 
 import DashboardNavbar from "./DashboardNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
