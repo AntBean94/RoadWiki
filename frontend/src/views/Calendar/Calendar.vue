@@ -8,14 +8,10 @@
       	<b-row>
 			<b-col>
 				<b-card no-body class="border-0">
-
 					<div id="calendar">
-						<div class="calendar-controls">
 							<div class>
 								<!-- 모달관련 -->
 								<div>
-									<b-button v-b-modal.modal-scrollable>상세일정보기</b-button>
-
 									<b-modal id="modal-scrollable" scrollable title="로드위키">
 										<!-- 일정상세정보 -->
 										<div class="field">
@@ -36,15 +32,20 @@
 												<input v-model="newItemEndDate" class="input" type="date" />
 											</div>
 										</div>
-										<base-button id="updateScheduleBtn" class="my-3" @click="clickUpdateItem" :disabled="disabledBtn">
-										Udpate schedule
-										</base-button>
-										<base-button id="deleteScheduleBtn" class="my-3 " @click="clickDeleteItem" :disabled="disabledBtn">
-										Delete schedule
-										</base-button>
+										<template #modal-footer="{cancel}">
+										<!-- Emulate built in modal footer ok and cancel button actions -->
+										<b-button size="lm" variant="success" @click="clickUpdateItem">
+											일정업데이트
+										</b-button>
+										<b-button size="lm" variant="danger" @click="clickDeleteItem">
+											일정삭제하기
+										</b-button>
+										<b-button size="lm" variant="danger" @click="cancel()">
+											Cancel
+										</b-button>
+										</template>
 									</b-modal>
 								</div>
-							</div>
 						</div>
 						<div class="calendar-parent">
 							<calendar-view
@@ -226,6 +227,7 @@ export default {
 			this.showTitle = e.title
 			this.message = `일정: ${e.title}`
 			this.newItemMemo = e.originalItem.memo;
+			this.$root.$emit('bv::show::modal', 'modal-scrollable')
 		},
 		setShowDate(d) {
 			this.showDate = d

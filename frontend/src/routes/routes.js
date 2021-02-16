@@ -117,12 +117,12 @@ const routes = [
       // chatting 
       {
         path: '/chatting-main',
-        name: '채팅 카테고리',
+        name: '채팅카테고리',
         component: () => import('../views/Chatting/ChattingMain.vue'),
       },
       {
       path: '/chatting',
-      name: 'chatting',
+      name: '채팅',
       props: true,
       component: () => import('../views/Chatting/Chatting.vue'),
       },

@@ -380,7 +380,7 @@ export default {
       this.$router.push({ name: "캘린더" })
     },
     goToChat() {
-      this.$router.push({ name: "채팅" })
+      this.$router.push({ name: "채팅카테고리" })
     },
     activeSearch() {
       if (this.isSearch) {
