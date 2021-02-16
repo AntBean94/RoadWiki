@@ -253,8 +253,6 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		} catch (NumberFormatException e) {
 			throw new RuntimeException("input data type error");
 		} catch (Exception e) {
-			e.printStackTrace();
-
 			throw e;
 		}
 		return result;
