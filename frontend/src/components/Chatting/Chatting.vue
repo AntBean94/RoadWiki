@@ -53,9 +53,9 @@ export default {
     this.getRoom();
   },
   methods: {
-    getRoom: function() {
+    getRooms: function() {
       axios
-        .get(SERVER_URL + "/chat/room")
+        .get(SERVER_URL + "/chat/open")
         .then(response => {
           this.room = response.data.chatRoom;
           sessionStorage.setItem("roomid", response.data.chatRoom.roomid);
