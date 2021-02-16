@@ -76,7 +76,6 @@ public class UserServiceImpl implements UserService {
 		try {
 			if (userRepo.insert(user) == 1) {
 				int uid = userRepo.select(user.getEmail()).getUid();
-				System.out.println(user.getKeyword());
 				for (int i = 0; i < user.getKeyword().length; i++) {
 					Map<String, String> map = new HashMap<String, String>();
 					map.put("uid", Integer.toString(uid));
@@ -186,7 +185,6 @@ public class UserServiceImpl implements UserService {
 		String today = new SimpleDateFormat("yyMMdd").format(new Date());
 		// String saveFolder = realPath + File.separator + today;
 		String saveFolder = File.separator + today;
-		System.out.println(saveFolder);
 		File folder = new File(saveFolder);
 		if (!folder.exists())
 			folder.mkdirs();
@@ -200,7 +198,6 @@ public class UserServiceImpl implements UserService {
 				fileInfoDto.setSaveFolder(today);
 				fileInfoDto.setOriginFile(originalFileName);
 				fileInfoDto.setSaveFile(saveFileName);
-				System.out.println(mfile.getOriginalFilename() + "   " + saveFileName);
 				mfile.transferTo(new File(folder, saveFileName));
 			}
 			fileInfos.add(fileInfoDto);

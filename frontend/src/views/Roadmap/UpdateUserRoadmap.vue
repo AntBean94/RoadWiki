@@ -302,6 +302,7 @@ export default {
         }
       )
       .then((res) => {
+        console.log(res)
         if(res.data.msg == 'success'){
           this.$router.push({ name: '나의 로드맵' })
         }else{
