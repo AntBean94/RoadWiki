@@ -76,27 +76,6 @@ public class ChatRoomController {
 		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 	}
 	
-//	@GetMapping("/room")
-//	@ResponseBody
-//	public Object anonymousRoom() {
-//		logger.trace("anonymous chat room");
-//		Map<String, Object> result = null;
-//		try {
-//			result = chatRoomServ.joinAnonymousChatRoom();
-//			logger.trace("anonymousRoomId : " + ((ChatRoom)result.get("chatRoom")).getRoomid());
-//			result.put("msg", SUCCESS);
-//		} catch (Exception e) {
-//			logger.error(e.getMessage());
-//			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>() {
-//				{
-//					put("errorMsg", e.getMessage());
-//					put("msg", FAIL);
-//				}
-//			}, HttpStatus.OK);
-//		}
-//		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
-//	}
-	
 	@GetMapping("/room/{roomid}")
 	@ResponseBody
 	public Object joinRoom(@PathVariable String roomid) {
