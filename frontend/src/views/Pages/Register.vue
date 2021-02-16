@@ -21,7 +21,7 @@
       <!-- Table -->
       <b-row class="justify-content-center">
         <b-col lg="6" md="8">
-          <b-card no-body class="bg-secondary border-0">
+          <b-card no-body class="bg-apple-bg border-0">
             <b-card-body class="px-lg-5 pt-0">
               <b-row align-h="end" class="mb-2 h5">
                 (*표시가 있는 항목은 필수 입력 항목입니다.)
@@ -38,7 +38,6 @@
                   <!-- required속성이 true이면 The Name field is required라는 창이 뜸 -->
                   <base-input alternative
                               class="mb-3"
-                              label="닉네임*"
                               prepend-icon="ni ni-hat-3"
                               placeholder="닉네임"
                               name="닉네임"
@@ -50,7 +49,6 @@
                   <div class="row">
                     <div class="col-9">
                       <base-input alternative
-                                  label="이메일*"
                                   class="mb-3"
                                   prepend-icon="ni ni-email-83"
                                   placeholder="example123@ssafy.com"
@@ -70,7 +68,7 @@
                       >
                       </base-input>
                     </div>
-                    <div class="col-3 pl-0 mt-4 pt-2">
+                    <div class="col-3 pl-0">
                       <!-- 만약 기존에 계정이 존재하는 이메일이라면 this email is already taken 보여주기 -->
                       <b-button variant = "provence" v-if="!confirmEmail" @click="emailNumSend" class="mr-0 ml-0 source-han-serif-k-light" size="md">인증하기</b-button>
                       <ModalEmailValidation :isEmailModal="isEmailModal" :userEmail="email" @close="closeModal"/>
@@ -80,7 +78,6 @@
                   </div>
 
                   <base-input alternative
-                              label="비밀번호*"
                               class="mb-3"
                               prepend-icon="ni ni-lock-circle-open"
                               placeholder="비밀번호"
@@ -92,7 +89,6 @@
                   </base-input>
 
                   <base-input alternative
-                              label="비밀번호 확인*"
                               class="mb-3"
                               prepend-icon="ni ni-lock-circle-open"
                               placeholder="비밀번호 확인"
