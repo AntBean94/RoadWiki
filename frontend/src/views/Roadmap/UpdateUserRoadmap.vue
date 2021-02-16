@@ -2,12 +2,13 @@
   <div>
     <base-header class="pb-2 pt-2 pt-md-2 bg-gradient-default">
       <!-- Card stats -->
-      <a
+      <button
         @click="goToBack"
         class="btn"
         style="background-color: rgb(242, 214, 174);"
-        >돌아가기</a
       >
+        돌아가기
+      </button>
       <button
         v-if="CUMode"
         class="btn"
@@ -25,6 +26,7 @@
       >
         생성완료
       </button>
+
       <!-- 사용법 modal / start -->
       <b-button
         v-b-modal.modal-1
@@ -37,21 +39,52 @@
           <span>How to use</span>
         </div>
       </b-button>
-    <b-form-input v-model="roadmapname" class="inline-block" placeholder="로드맵 제목을 입력해 주세요." style="width:30%; display:inline-block;"></b-form-input>
-    <!-- 커리큘럼 히스토리 보여주기 -->
-    <div>
-      <!--부트스트랩 드롭다운-->
-      <div>
-        <b-dropdown id="dropdown-1" text="이전 수정 기록" class="m-md-2">
-          <b-dropdown-item 
-            @click="previewRoadmap(item.rmid)" 
-            v-for="(item, index) in logData" 
-            :key="index">{{ item.createDate }} | {{ item.name }}
-          </b-dropdown-item>
-        </b-dropdown>
+
+      <!-- 장기 중기 단기 선택 라디오 -->
+    <b-form-group v-slot="{ ariaDescribedby }">
+      <b-form-radio-group
+        id="btn-radios-1"
+        v-model="term"
+        :options="options"
+        :aria-describedby="ariaDescribedby"
+        name="radios-btn-default"
+        buttons
+      ></b-form-radio-group>
+    </b-form-group>
+      <div v-if="checkRB">
+        <button
+          class="btn"
+          @click="checkRoadBack"
+          style="background-color: rgb(181, 199, 211);"
+        >
+          피드백 보기
+        </button>
       </div>
-    </div>
-    <!-- 커리큘럼 히스토리 끝 -->
+      <div v-else>
+   
+      </div>
+
+      <b-form-input
+        v-model="roadmapname"
+        class="inline-block"
+        placeholder="로드맵 제목을 입력해 주세요."
+        style="width:30%; display:inline-block;"
+      ></b-form-input>
+      <!-- 커리큘럼 히스토리 보여주기 -->
+      <div>
+        <!--부트스트랩 드롭다운-->
+        <div>
+          <b-dropdown id="dropdown-1" text="이전 수정 기록" class="m-md-2">
+            <b-dropdown-item
+              @click="previewRoadmap(item.rmid)"
+              v-for="(item, index) in logData"
+              :key="index"
+              >{{ item.createDate }} | {{ item.name }}
+            </b-dropdown-item>
+          </b-dropdown>
+        </div>
+      </div>
+      <!-- 커리큘럼 히스토리 끝 -->
 
       <b-modal id="modal-1" title="BootstrapVue">
         <h3>로드위키 사용법</h3>
@@ -102,17 +135,26 @@
       </b-modal>
       <!-- 사용법 modal / end -->
 
-      <br>
-      <b-form-input v-model="inputText" placeholder="커리큘럼 검색하기" id="curSearch"></b-form-input>
+      <br />
+      <b-form-input
+        v-model="inputText"
+        placeholder="커리큘럼 검색하기"
+        id="curSearch"
+      ></b-form-input>
     </base-header>
-
 
     <b-container fluid class="mt-1">
       <b-row>
         <b-col>
           <b-card no-body class="border-0">
             <div style="width: 100%;">
-              <Roadmap :roadmapMode=roadmapMode :roadmapData=roadmapData :inputText=inputText @create-roadmap=createRoadmap ref="roadmap"/>
+              <Roadmap
+                :roadmapMode="roadmapMode"
+                :roadmapData="roadmapData"
+                :inputText="inputText"
+                @create-roadmap="createRoadmap"
+                ref="roadmap"
+              />
             </div>
           </b-card>
         </b-col>
@@ -122,14 +164,14 @@
 </template>
 
 <script>
-import dropdown from 'vue-dropdowns';
-import Roadmap from '@/components/Roadmap/Roadmap.vue'     
+import dropdown from "vue-dropdowns";
+import Roadmap from "@/components/Roadmap/Roadmap.vue";
 
 export default {
   name: "",
   components: {
     dropdown: dropdown,
-    Roadmap,
+    Roadmap
   },
   props: {
     rmid: {
@@ -140,7 +182,7 @@ export default {
     },
     CUMode: {
       type: Number
-    },
+    }
   },
   data() {
     return {
@@ -149,20 +191,24 @@ export default {
       logData: [],
       roadmapMode: 1,
       inputText: "",
+      checkRB: false,
+        term: 1,
+        options: [
+          { text: '장기', value: 1 },
+          { text: '중기', value: 2 },
+          { text: '단기', value: 3 },
+        ]
     };
   },
-  created(){
-  },
+  created() {},
   mounted() {
     this.readRoadmap();
     // 수정로그 가져오기
     this.readRoadmapLog();
     // props 데이터 확인 후 없으면 메인페이지로 보내기
   },
-  watch: {
-  },
-  computed: {
-  },
+  watch: {},
+  computed: {},
   methods: {
     // read 요청보내기
     readRoadmap() {
@@ -172,55 +218,65 @@ export default {
         this.$router.push({ name: '나의 로드맵' })
         return;
       }
-      if(this.rmid == 0){
-        this.roadmapData = { "class": "go.GraphLinksModel",
-        "linkFromPortIdProperty": "fromPort",
-        "linkToPortIdProperty": "toPort",
-        "nodeDataArray": [
-      ],
-        "linkDataArray": [
-      ]}
-      }else{
-        axios.get(`${this.$store.getters.getServer}/roadmap/get/${this.rmid}`)
-          .then((res) => {
-            if(res.data.msg == 'success'){
-              this.roadmapData = JSON.parse(res.data['roadmaps'].tmp);
-              if (res.data['roadmaps'].uid < 0 || res.data['roadmaps'].uid == this.$store.getters.getUid) {
-                this.roadmapname = res.data['roadmaps'].name;
+      if (this.rmid == 0) {
+        this.roadmapData = {
+          class: "go.GraphLinksModel",
+          linkFromPortIdProperty: "fromPort",
+          linkToPortIdProperty: "toPort",
+          nodeDataArray: [],
+          linkDataArray: []
+        };
+      } else {
+        axios
+          .get(`${this.$store.getters.getServer}/roadmap/get/${this.rmid}`)
+          .then(res => {
+            if (res.data.msg == "success") {
+              this.roadmapData = JSON.parse(res.data["roadmaps"].tmp);
+              if (
+                res.data["roadmaps"].uid < 0 ||
+                res.data["roadmaps"].uid == this.$store.getters.getUid
+              ) {
+                this.roadmapname = res.data["roadmaps"].name;
               }
-            }else{
-              alert("데이터 로드에 실패했습니다.")
+            } else {
+              alert("데이터 로드에 실패했습니다.");
             }
-          }).catch((e) =>{
-            alert("axios 오류 1")
+          })
+          .catch(e => {
+            alert("axios 오류");
           });
-        }
+      }
     },
 
     // 로드맵 로그 가져오는 함수(mounted에서 rmorder를 불러온뒤 실행)
-    readRoadmapLog(){
-      if(this.CUMode == 1){
-         axios.get(`${this.$store.getters.getServer}/roadmap/log/${this.$store.getters.getUid}/${this.rmorder}`)
-        .then((res) => {
-          if(res.data.msg == 'success'){
-            this.logData = res.data['roadmaps'];  
-          }else{
-            console.log(e);
-            alert("데이터 로드에 실패했습니다.")
-          }
-        }).catch((e) =>{
-          alert("axios 오류 2")
-        });
+    readRoadmapLog() {
+      if (this.CUMode == 1) {
+        axios
+          .get(
+            `${this.$store.getters.getServer}/roadmap/log/${this.$store.getters.getUid}/${this.rmorder}`
+          )
+          .then(res => {
+            if (res.data.msg == "success") {
+              this.logData = res.data["roadmaps"];
+            } else {
+              console.log(e);
+              alert("데이터 로드에 실패했습니다.");
+            }
+          })
+          .catch(e => {
+            alert("axios 오류");
+          });
       }
     },
     // update 요청보내기
     updateRoadmap() {
-      const childRoadmapData = this.$refs.roadmap.serveRoadmap()
+      const childRoadmapData = this.$refs.roadmap.serveRoadmap();
       axios
         .post(`${this.$store.getters.getServer}/roadmap/update`, {
           uid: this.$store.getters.getUid,
           rmorder: this.rmorder,
           name: this.roadmapname,
+          term: this.term,
           tmp: childRoadmapData
         }
       )
@@ -232,15 +288,16 @@ export default {
           }
         })
         .catch(e => {
-          alert("axios 오류 3");
+          alert("axios 오류");
         });
     },
     createRoadmap() {
-      const childRoadmapData = this.$refs.roadmap.serveRoadmap()
+      const childRoadmapData = this.$refs.roadmap.serveRoadmap();
       axios
         .post(`${this.$store.getters.getServer}/roadmap/create`, {
           uid: this.$store.getters.getUid,
           name: this.roadmapname,
+          term: this.term,
           tmp: childRoadmapData
         }
       )
@@ -259,17 +316,18 @@ export default {
       this.headertext = curriculumName;
     },
     previewRoadmap(clickrmid) {
-        axios.get(`${this.$store.getters.getServer}/roadmap/get/${clickrmid}`)
-        .then((res) => {
-          if(res.data.msg == 'success'){
-          this.roadmapData = JSON.parse(res.data['roadmaps'].tmp);
-          }else{
-            alert("데이터 로드에 실패했습니다.")
+      axios
+        .get(`${this.$store.getters.getServer}/roadmap/get/${clickrmid}`)
+        .then(res => {
+          if (res.data.msg == "success") {
+            this.roadmapData = JSON.parse(res.data["roadmaps"].tmp);
+          } else {
+            alert("데이터 로드에 실패했습니다.");
           }
         })
         .catch(e => {
           console.log(e);
-          alert("axios 오류 5");
+          alert("axios 오류");
         });
     },
     goToBack() {
@@ -281,7 +339,7 @@ export default {
 
 <style>
 #header {
-  padding-bottom: 4px; 
+  padding-bottom: 4px;
 }
 #curSearch {
   width: 150px;

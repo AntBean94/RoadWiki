@@ -35,11 +35,26 @@
                   {{ address }}
                 </b-link>
               </div>
-              <br>
+              <br />
               <!-- v-if 해서 uid랑 해당 계정의 id가 같을 때만 수정하기 버튼 활성화 -->
-              <router-link :to="{ name : 'profile-update' }" class="btn btn-primary" v-if="!isSearch">수정하기</router-link>
-              <b-button variant = "primary" v-show="(isSearch && !isFollow)" @click="sendFollowing">팔로우 하기</b-button>
-              <b-button variant = "danger" v-show="(isSearch && isFollow)" @click="sendUnfollowing">팔로우 취소</b-button>
+              <router-link
+                :to="{ name: 'profile-update' }"
+                class="btn btn-primary"
+                v-if="!isSearch"
+                >수정하기</router-link
+              >
+              <b-button
+                variant="primary"
+                v-show="isSearch && !isFollow"
+                @click="sendFollowing"
+                >팔로우 하기</b-button
+              >
+              <b-button
+                variant="danger"
+                v-show="isSearch && isFollow"
+                @click="sendUnfollowing"
+                >팔로우 취소</b-button
+              >
             </b-col>
           </b-row>
         </b-container>
@@ -81,17 +96,16 @@
                   </b-modal>
                 </div>
                 <div>
-                  <span class="heading">{{ followinglist.length }}</span>
+                  <span class="heading">{{ followinglists.length }}</span>
                   <span class="description">following</span>
                 </div>
                 <div>
-                  <!-- 현재는 로드맵 갯수와 연결 -->
-                  <span class="heading">{{ roadmaps.length }}</span>
+                  <span class="heading">{{ postings.length }}</span>
                   <span class="description">게시글</span>
                 </div>
                 <div>
                   <!-- 현재는 로드맵 갯수와 연결 -->
-                  <span class="heading">{{ roadmaps.length }}</span>
+                  <span class="heading">{{ commentCnt }}</span>
                   <span class="description">댓글</span>
                 </div>
               </div>
@@ -118,7 +132,7 @@
             <b-container>
               <b-row class="h3 justify-content-center">
                 <!-- <i class="ni ni-palette mr-2"></i> -->
-                {{ nickname }}님의 로드맵 (로드맵 갯수)
+                {{ nickname }}님의 로드맵 ({{ roadmaps.length }})
               </b-row>
               <b-row
                 v-for="(roadmap, idx) in roadmaps"
@@ -126,7 +140,7 @@
                 class="justify-content-center"
               >
                 <b-link href="" class="opacity-8">
-                  {{ roadmap }}
+                  {{ roadmap.name }}
                 </b-link>
               </b-row>
             </b-container>
@@ -134,16 +148,15 @@
             <b-container>
               <b-row class="h3 justify-content-center">
                 <!-- <i class="ni ni-palette mr-2"></i> -->
-                {{ nickname }}님의 게시글 (게시글 갯수)(현재는 로드맵이랑
-                연결되어있음)
+                {{ nickname }}님의 게시글 ({{ postings.length }})
               </b-row>
               <b-row
-                v-for="(roadmap, idx) in roadmaps"
+                v-for="(posting, idx) in postings"
                 :key="idx"
                 class="justify-content-center"
               >
                 <b-link href="" class="opacity-8">
-                  {{ roadmap }}
+                  {{ posting.title }}
                 </b-link>
               </b-row>
             </b-container>
@@ -151,16 +164,15 @@
             <b-container>
               <b-row class="h3 justify-content-center">
                 <!-- <i class="ni ni-palette mr-2"></i> -->
-                {{ nickname }}님이 좋아요한 게시글 (게시글 갯수)(현재는
-                로드맵이랑 연결되어있음)
+                {{ nickname }}님이 좋아요한 게시글 ({{ likepostings.length }})
               </b-row>
               <b-row
-                v-for="(roadmap, idx) in roadmaps"
+                v-for="(likeposting, idx) in likepostings"
                 :key="idx"
                 class="justify-content-center"
               >
                 <b-link href="" class="opacity-8">
-                  {{ roadmap }}
+                  {{ likeposting.title }}
                 </b-link>
               </b-row>
             </b-container>
@@ -168,16 +180,15 @@
             <b-container>
               <b-row class="h3 justify-content-center">
                 <!-- <i class="ni ni-palette mr-2"></i> -->
-                {{ nickname }}님이 댓글단 게시글 (게시글 갯수)(현재는 로드맵이랑
-                연결되어있음)
+                {{ nickname }}님이 댓글단 게시글 ({{ commentpostings.length }})
               </b-row>
               <b-row
-                v-for="(roadmap, idx) in roadmaps"
+                v-for="(commentposting, idx) in commentpostings"
                 :key="idx"
                 class="justify-content-center"
               >
                 <b-link href="" class="opacity-8">
-                  {{ roadmap }}
+                  {{ commentposting.title }}
                 </b-link>
               </b-row>
             </b-container>
@@ -191,105 +202,178 @@
 <script>
 import UserCard from "./UserProfile/UserCard.vue";
 
-  export default {
-    components: {
-      UserCard,
-    },
-    props: ['youruid'],
-    data() {
-      return{
-        nickname: '',
-        introduction: '술잔을 들자하니 천하가 내발아래 있고 6팀 친구들 또한 옆에 있으니 염라대왕 두렵지 않구나',
-        address: 'https://github.com/',
-        profileImg: '',
-        backImg: '',
-        keywordtexts: [],
-        followerlist: [],
-        followinglist: [],
-        boards: '',
-        comments: '',
-        major: '기계공학',
-        email: '',
-        roadmaps: ['첫 번째 로드맵', '두 번째 로드맵', '세 번째 로드맵'],
-        uid: "",
-        isSearch: true,
-        profileUrl: '',
-        profileUid: 0,
-        isFollow: false,
-      }
-    },
-    created() {
-      // 현재 로그인 된 계정
-      this.uid = this.$store.getters.getUid;
+export default {
+  components: {
+    UserCard
+  },
+  props: ["youruid"],
+  data() {
+    return {
+      nickname: "",
+      introduction:
+        "술잔을 들자하니 천하가 내발아래 있고 6팀 친구들 또한 옆에 있으니 염라대왕 두렵지 않구나",
+      address: "https://github.com/",
+      profileImg: "",
+      backImg: "",
+      keywordtexts: [],
+      followerlist: [],
+      followinglist: [],
+      boards: "",
+      comments: "",
+      major: "기계공학",
+      email: "",
+      uid: "",
+      isSearch: true,
+      profileUrl: "",
+      profileUid: 0,
+      isFollow: false,
+      roadmaps: [],
+      postings: [],
+      likepostings: [],
+      commentpostings: [],
+      commentCnt: 0,
+      followerlists: [],
+      followinglists: []
+    };
+  },
+  created() {
+    // 현재 로그인 된 계정
+    this.uid = this.$store.getters.getUid;
 
-      // 해당 계정의 프로필 사진 가져오는 걸로 해야함
-      axios.get(`${this.$store.getters.getServer}/user/image`).then(res => {
-        this.profileUrl = res.data.path;
-      });
+    // 해당 계정의 프로필 사진 가져오는 걸로 해야함
+    axios.get(`${this.$store.getters.getServer}/user/image`).then(res => {
+      this.profileUrl = res.data.path;
+    });
 
-      // params로 uid를 받아오지 못했다면 (자기 프로필이니까)
-      if (this.$route.query.profileId === undefined) {
-        this.profileuid = this.uid
-      } else {
-        this.profileuid = this.$route.query.profileId
-      }
+    // params로 uid를 받아오지 못했다면 (자기 프로필이니까)
+    if (this.$route.query.profileId === undefined) {
+      this.profileuid = this.uid;
+    } else {
+      this.profileuid = this.$route.query.profileId;
+    }
 
-      axios.get(`${this.$store.getters.getServer}/user/info/${this.profileuid}`)
-      .then((res) => {
+    axios
+      .get(`${this.$store.getters.getServer}/user/info/${this.profileuid}`)
+      .then(res => {
         if (res.data.isEqual) {
-          this.isSearch = false
+          this.isSearch = false;
         } else {
-          this.isSearch = true
+          this.isSearch = true;
         }
-        this.nickname = res.data.name
-        this.email = res.data.email
-        this.keywords = res.data.keywords
-        this.keywordtexts = res.data.keywordtexts
+        this.nickname = res.data.name;
+        this.email = res.data.email;
+        this.keywords = res.data.keywords;
+        this.keywordtexts = res.data.keywordtexts;
       })
-      .catch((err) => {
+      .catch(err => {
         alert("로그인이 필요한 서비스입니다.");
         this.$store.dispatch("LOGOUT").then(() => {
           this.$router.replace("/");
         });
       });
 
-      this.getFollowList()
+    this.getFollowList();
+
+    // 본인 로드맵 가져오기
+    axios
+      .get(`${this.$store.getters.getServer}/roadmap/list/${this.profileuid}`)
+      .then(res => {
+        this.roadmaps = res.data.roadmaps;
+      })
+      .catch(err => {});
+
+    // 본인 게시글 가져오기
+    axios
+      .get(`${this.$store.getters.getServer}/freeboard/list/${this.profileuid}`)
+      .then(res => {
+        this.postings = res.data.postings;
+        this.commentCnt = res.data.commentCnt;
+      })
+      .catch(err => {});
+
+    // 본인 좋아요 게시글 가져오기
+    axios
+      .get(
+        `${this.$store.getters.getServer}/freeboard/likelist/${this.profileuid}`
+      )
+      .then(res => {
+        this.likepostings = res.data.likepostings;
+      })
+      .catch(err => {});
+
+    // 본인 댓글 게시글 가져오기
+    axios
+      .get(
+        `${this.$store.getters.getServer}/freeboard/commentlist/${this.profileuid}`
+      )
+      .then(res => {
+        this.commentpostings = res.data.commentpostings;
+      })
+      .catch(err => {});
+
+    // 본인 팔로워 리스트 가져오기
+    axios
+      .get(
+        `${this.$store.getters.getServer}/follow/followerlist/${this.profileuid}`
+      )
+      .then(res => {
+        this.followerlists = res.data.followerlists;
+        console.log(res.data);
+        console.log(this.followerlists);
+      })
+      .catch(err => {});
+
+    // 본인 팔로우 리스트 가져오기
+    axios
+      .get(
+        `${this.$store.getters.getServer}/follow/followinglist/${this.profileuid}`
+      )
+      .then(res => {
+        this.followinglists = res.data.followinglists;
+        console.log(res.data);
+        console.log(this.followinglists);
+      })
+      .catch(err => {});
   },
   methods: {
     getFollowList() {
-      axios.get(`${this.$store.getters.getServer}/follow/list/${this.profileuid}`)
-      .then((res) => {
-        console.log(res.data)
-        this.followerlist = res.data.followers
-        this.followinglist = res.data.followings
-        if (res.data.isFollow) {
-          this.isFollow = true
-        } else {
-          this.isFollow = false
-        }
-      })
+      axios
+        .get(`${this.$store.getters.getServer}/follow/list/${this.profileuid}`)
+        .then(res => {
+          this.followerlist = res.data.followers;
+          this.followinglist = res.data.followings;
+          if (res.data.isFollow) {
+            this.isFollow = true;
+          } else {
+            this.isFollow = false;
+          }
+        });
     },
     sendFollowing() {
       let follow = {
-        'touid': `${this.profileuid}`
-      }
-      axios.post(`${this.$store.getters.getServer}/follow/userfollow`, follow)
-      .then((res) => {
-        if (res.data.msg === 'success') {
-          this.isFollow = true
-        }
-        this.getFollowList()
-      })
+        touid: `${this.profileuid}`
+      };
+      axios
+        .post(`${this.$store.getters.getServer}/follow/userfollow`, follow)
+        .then(res => {
+          if (res.data.msg === "success") {
+            this.isFollow = true;
+          }
+          this.getFollowList();
+        });
     },
     sendUnfollowing() {
-      axios.delete(`${this.$store.getters.getServer}/follow/userunfollow/${this.profileuid}`)
-      .then((res) => {
-        if (res.data.msg === 'success') {
-          this.isFollow = false
-        }
-        this.getFollowList()
-      })
-    },
+      axios
+        .delete(
+          `${this.$store.getters.getServer}/follow/userunfollow/${this.profileuid}`
+        )
+        .then(res => {
+          if (res.data.msg === "success") {
+            this.isFollow = false;
+          }
+          this.getFollowList();
+        });
+    }
   }
 };
 </script>

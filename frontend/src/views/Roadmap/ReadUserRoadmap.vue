@@ -9,15 +9,19 @@
         <carousel :per-page="4" :mouse-drag="true">
           <slide v-for="(item, index) in userRoadmapList" :key="index" >
             <b-col @click="previewRoadmap(item.rmorder, item.rmid)">
-                  <stats-card type="gradient-red"
-                            :sub-title="item.name"
+                  <stats-card type="red"
                             icon="ni ni-active-40"
+                            :sub-title="item.name"
                             class="mb-4 btn" 
                             :rmid="item.rmid"
                             :rmorder="item.rmorder"
                             >
                   <template slot="footer">
                     <span class="text-success mr-2">{{ item.createDate }}</span>
+                    <br>
+                    <span v-if="item.term == 1" class="text mr-2">장기</span>
+                    <span v-if="item.term == 2" class="text mr-2">중기</span>
+                    <span v-if="item.term == 3" class="text mr-2">단기</span>
                   </template>
                 </stats-card>
                 </b-col>
@@ -77,6 +81,7 @@ export default {
     const uid = String(this.$store.getters.getUid)
     axios.get(`${this.$store.getters.getServer}/roadmap/list/${uid}`)
       .then((res) => {
+        console.log(res);
         if(res.data.msg == 'success') {
           // 유저의 roadmaplist
           if(res.data['roadmaps'].length){

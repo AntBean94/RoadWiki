@@ -1,7 +1,7 @@
 <template>
   <div class="nothing-main">
     <b-navbar-brand to="/" class="mt-5 ml-5">
-      <img src="img/brand/logo_blue.png" width="250rem;">
+      <img src="img/brand/logo_blue.png" width="250rem;" />
     </b-navbar-brand>
     <!-- <base-nav
       :transparent="true"
@@ -38,13 +38,13 @@
 </template>
 
 <script>
-import LoginContent from '@/components/Login/LoginContent.vue'
+import LoginContent from "@/components/Login/LoginContent.vue";
 
 export default {
   components: {
-    LoginContent,
-  },
-}
+    LoginContent
+  }
+};
 </script>
 
 <style>

@@ -312,7 +312,7 @@ export default {
       this.activeNotifications = false;
     },
     checkUrl(url) {
-      let array = ["roadmap", "update_user_roamdap"];
+      let array = ["roadmap", "update_user_roamdap", "roadback"];
       let isHeader = true;
       array.map(path => {
         if (url === path) isHeader = false;
@@ -323,12 +323,14 @@ export default {
       this.$router.push({name: '프로필', query: {profileId: this.$store.getters.getUid}})
     },
     logOut() {
-      this.$store.dispatch("LOGOUT").then(() => {
-        this.$router.push('/')
-      })
-      .catch(() => {
-        alert('로그아웃에 실패했습니다.')
-      })
+      this.$store
+        .dispatch("LOGOUT")
+        .then(() => {
+          this.$router.push("/");
+        })
+        .catch(() => {
+          alert("로그아웃에 실패했습니다.");
+        });
     },
     clickSearch() {
       console.log(this.searchQuery);

@@ -20,7 +20,7 @@
     <b-container class="mt--8 pb-5">
       <!-- Table -->
       <b-row class="justify-content-center">
-        <b-col lg="6" md="8" >
+        <b-col lg="6" md="8">
           <b-card no-body class="bg-secondary border-0">
             <b-card-body class="px-lg-5 pt-0">
               <b-row align-h="end" class="mb-2 h5">
@@ -30,7 +30,10 @@
                 <!-- <br> -->
                 <!-- <h1>회원가입</h1> -->
               </div>
-              <validation-observer v-slot="{handleSubmit}" ref="formValidator">
+              <validation-observer
+                v-slot="{ handleSubmit }"
+                ref="formValidator"
+              >
                 <b-form role="form" @submit.prevent="handleSubmit(onSubmit)">
                   <!-- required속성이 true이면 The Name field is required라는 창이 뜸 -->
                   <base-input alternative
@@ -57,13 +60,14 @@
                                   v-if="!confirmEmail"
                                   >
                       </base-input>
-                      <base-input alternative
-                                  prepend-icon="ni ni-email-83"
-                                  v-if="confirmEmail"
-                                  v-model="email"
-                                  placeholder="email"
-                                  disabled
-                                  >
+                      <base-input
+                        alternative
+                        prepend-icon="ni ni-email-83"
+                        v-if="confirmEmail"
+                        v-model="email"
+                        placeholder="email"
+                        disabled
+                      >
                       </base-input>
                     </div>
                     <div class="col-3 pl-0 mt-4 pt-2">
@@ -97,7 +101,7 @@
                               :rules="{required: true, min: 8, password: password}"
                               v-model="rePassword">
                   </base-input>
-                  <hr class="my-4">
+                  <hr class="my-4" />
                   <div>
                     <b-form-group v-slot="{ ariaDescribedby }">
                       <div class="form-control-label">관심 개발 분야*</div>
@@ -121,7 +125,11 @@
                   <hr class="my-4">
                   <b-row class="my-4">
                     <b-col cols="12">
-                      <base-input :rules="{ required: { allowFalse: false } }" name="회원약관 동의" Policy>
+                      <base-input
+                        :rules="{ required: { allowFalse: false } }"
+                        name="회원약관 동의"
+                        Policy
+                      >
                         <b-form-checkbox v-model="agree">
                           <span class="text-muted source-han-serif-k-extralight">
                             <b-link 
@@ -131,8 +139,12 @@
                               @click="isPolicyModal = true">
                               회원 약관
                             </b-link>
-                            에 동의합니다. 
-                            <ModalPolicy v-if="isPolicyModal" @close="isPolicyModal = false" @accept="accept"/>
+                            에 동의합니다.
+                            <ModalPolicy
+                              v-if="isPolicyModal"
+                              @close="isPolicyModal = false"
+                              @accept="accept"
+                            />
                           </span>
                         </b-form-checkbox>
                       </base-input>
@@ -143,6 +155,7 @@
                   </div>
                   <div class="text-center">
                   </div>
+                  <div class="text-center"></div>
                 </b-form>
               </validation-observer>
             </b-card-body>
@@ -154,152 +167,167 @@
 </template>
 
 <script>
-  import ModalEmailValidation from "@/components/Validation/ModalEmailValidation.vue";
-  import ModalPolicy from '@/components/Validation/ModalPolicy.vue';
+import ModalEmailValidation from "@/components/Validation/ModalEmailValidation.vue";
+import ModalPolicy from "@/components/Validation/ModalPolicy.vue";
 
-  import { extend } from 'vee-validate';
+import { extend } from "vee-validate";
 
-  extend('password', {
-    params: ['target'],
-    validate(value, { target }) {
-      return value === target;
+extend("password", {
+  params: ["target"],
+  validate(value, { target }) {
+    return value === target;
+  },
+  message: "비밀번호가 일치하지 않습니다."
+});
+
+export default {
+  name: "register",
+  components: {
+    ModalEmailValidation,
+    ModalPolicy
+  },
+  data() {
+    return {
+      name: "",
+      email: "",
+      password: "",
+      rePassword: "",
+      isPolicyModal: false,
+      confirmEmail: false,
+      agree: false,
+      selected: [],
+      options: [],
+      isLoginModal: false,
+      isEmailModal: false
+    };
+  },
+  created() {
+    axios.get(`${this.$store.getters.getServer}/keyword/list`).then(res => {
+      this.options = res.data.keywords;
+    });
+  },
+  methods: {
+    // 닉네임 입력창에서 포커싱8이 사라지는 순간 -> 닉네임 사용가능한지 확인 (이미 있는 닉네임인지)
+    canUseNickName() {
+      axios
+        .get(`${this.$store.getters.getServer}/user/existname/${this.name}`)
+        .then(res => {
+          console.log(res.data);
+          //msg == fail 이면 중복
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
-    message: '비밀번호가 일치하지 않습니다.'
-  });
-
-  export default {
-    name: 'register',
-    components: {
-      ModalEmailValidation,
-      ModalPolicy,
+    onSubmit() {
+      // this will be called only after form is valid. You can do an api call here to register users
     },
-    data() {
-      return {
-        name: '',
-        email: '',
-        password: '',
-        rePassword: '',
-        isPolicyModal: false,
-        confirmEmail: false,
-        agree: false,
-        selected: [],
-        options: [],
-        isLoginModal: false,
-        isEmailModal: false,
+    closeModal(e) {
+      this.isEmailModal = false;
+      if (e === true) {
+        this.confirmEmail = true;
+      } else {
+        this.confirmEmail = false;
       }
     },
-    created() {
-      axios.get(`${this.$store.getters.getServer}/keyword/list`)
-      .then((res) => {
-        this.options = res.data.keywords
-      })
+    accept() {
+      this.isPolicyModal = false;
+      this.agree = true;
     },
-    methods: {
-      // 닉네임 입력창에서 포커싱이 사라지는 순간 -> 닉네임 사용가능한지 확인 (이미 있는 닉네임인지)
-      canUseNickName() {
-
-      },
-      onSubmit() {
-        // this will be called only after form is valid. You can do an api call here to register users
-      },
-      closeModal(e) {
-        this.isEmailModal = false
-        if (e === true) {
-          this.confirmEmail = true
-        } else { this.confirmEmail = false}
-      },
-      accept() {
-        this.isPolicyModal = false
-        this.agree = true
-      },
-      emailNumSend() {
-        // 이미 존재하는 이메일인 경우, 존재하는 이메일 경고창 -> 이메일 인증 막기
-        axios.get(`${this.$store.getters.getServer}/user/canjoin/${this.email}`)
-        .then((res) => {
+    emailNumSend() {
+      // 이미 존재하는 이메일인 경우, 존재하는 이메일 경고창 -> 이메일 인증 막기
+      axios
+        .get(`${this.$store.getters.getServer}/user/canjoin/${this.email}`)
+        .then(res => {
           if (res.data.msg === "success") {
-            axios.get(`${this.$store.getters.getServer}/email/${this.email}`)
-            .then((res) => {
-              console.log(res.data.msg)
-              if (res.data.msg === "success") {
-                this.isEmailModal = true
-                this.$store.dispatch('SETCODE', res.data['code']);
-                this.$store.dispatch('SETEMAIL', res.data['email']);
-              } else {
-                alert('인증번호 메일 발송에 실패했습니다. 다시 시도해주세요.')
-                this.isEmailModal = false
-              }
-            })
+            axios
+              .get(`${this.$store.getters.getServer}/email/${this.email}`)
+              .then(res => {
+                console.log(res.data.msg);
+                if (res.data.msg === "success") {
+                  this.isEmailModal = true;
+                  this.$store.dispatch("SETCODE", res.data["code"]);
+                  this.$store.dispatch("SETEMAIL", res.data["email"]);
+                } else {
+                  alert(
+                    "인증번호 메일 발송에 실패했습니다. 다시 시도해주세요."
+                  );
+                  this.isEmailModal = false;
+                }
+              });
           } else {
-            alert('이미 존재하는 이메일입니다. 다른 이메일 주소를 입력해주세요.')
+            alert(
+              "이미 존재하는 이메일입니다. 다른 이메일 주소를 입력해주세요."
+            );
           }
-        })
-      },
-      signUp() {
-        // 인풋이 다 안채워지면 회원가입 버튼이 비활성화되게 로직 추가
-        const user = {
-          email: this.email,
-          name: this.name,
-          password: this.password,
-          keyword: this.selected,
-        }
-        if (this.confirmEmail && 
-            this.selected.length >= 3 && 
-            this.password.length >= 8 && 
-            this.password === this.rePassword && 
-            this.agree === true) {
-          axios.post(`${this.$store.getters.getServer}/user/join`, user)
-          .then((res) => {
-            console.log('##############################')
-            console.log(res.data)
-            console.log('##############################')
+        });
+    },
+    signUp() {
+      // 인풋이 다 안채워지면 회원가입 버튼이 비활성화되게 로직 추가
+      const user = {
+        email: this.email,
+        name: this.name,
+        password: this.password,
+        keyword: this.selected
+      };
+      if (
+        this.confirmEmail &&
+        this.selected.length >= 3 &&
+        this.password.length >= 8 &&
+        this.password === this.rePassword &&
+        this.agree === true
+      ) {
+        axios
+          .post(`${this.$store.getters.getServer}/user/join`, user)
+          .then(res => {
+            console.log("##############################");
+            console.log(res.data);
+            console.log("##############################");
             // console.log('잘 가나요오오오오오오오오오오')
             const userinfo = {
               email: this.email,
-              password: this.password,
-            }
-            this.$store.dispatch("LOGIN", userinfo)
-            .then(() => {
-              this.$router.push('/dashboard')
-            })
-          })
-          // this.$router.replace('/dashboard')
+              password: this.password
+            };
+            this.$store.dispatch("LOGIN", userinfo).then(() => {
+              this.$router.push("/dashboard");
+            });
+          });
+        // this.$router.replace('/dashboard')
+      } else {
+        if (!this.confirmEmail) {
+          alert("이메일 인증이 완료되지 않았습니다.");
         } else {
-          if (!this.confirmEmail) {
-            alert('이메일 인증이 완료되지 않았습니다.')
+          if (this.password.length < 8) {
+            alert("비밀번호는 8자리 이상으로 입력해주세요.");
           } else {
-            if (this.password.length < 8) {
-              alert('비밀번호는 8자리 이상으로 입력해주세요.')
+            if (this.password !== this.rePassword) {
+              alert("비밀번호를 다시 확인해주세요");
             } else {
-              if (this.password !== this.rePassword) {
-                alert('비밀번호를 다시 확인해주세요')
+              if (this.selected.length < 3) {
+                alert("관심 개발 분야 3개 이상 체크해주세요.");
               } else {
-                if (this.selected.length < 3) {
-                  alert('관심 개발 분야 3개 이상 체크해주세요.')
-                } else {
-                  if (!this.agree) {
-                    alert('약관 동의해주세요')
-                  }
+                if (!this.agree) {
+                  alert("약관 동의해주세요");
                 }
               }
             }
           }
         }
-      },
+      }
+    }
+  },
+  watch: {
+    selected() {
+      console.log(this.selected);
     },
-    watch: {
-      selected() {
-        console.log(this.selected)
-      },
-      password() {
-        // isPasswordEqual()
-      },
-      rePassword() {
-        // isPasswordEqual()
-      },
+    password() {
+      // isPasswordEqual()
     },
-    computed: {
-    },
-    
-  };
+    rePassword() {
+      // isPasswordEqual()
+    }
+  },
+  computed: {}
+};
 </script>
 <style></style>

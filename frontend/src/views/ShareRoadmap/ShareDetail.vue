@@ -3,30 +3,63 @@
     <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-default">
     </base-header>
 
-
-    <b-container style="background: white; border-radius: 1rem;" class="py-4 mt-4">
+    <b-container
+      style="background: white; border-radius: 1rem;"
+      class="py-4 mt-4"
+    >
       <b-row>
         <h1 class="ml-3 mb-0">{{ title }}</h1>
+        <b-col></b-col>
+        <button
+          v-if="useRoadback"
+          class="btn"
+          style="background-color: rgb(256, 256, 256);"
+          @click="goToRoadBack"
+        >
+          로드백 달러가기
+        </button>
       </b-row>
-      <hr class="my-2">
+      <hr class="my-2" />
       <b-row>
         <b-col cols="1" class="pr-0 mb-2">? 무엇 img 들어갈 곳</b-col>
         <b-col>
-          <h3>
-            작성자 : {{ name }}
-          </h3>
+          <h3>작성자 : {{ username }}</h3>
           <h5>
             {{ createDate }}
           </h5>
         </b-col>
+        <button
+          v-if="useRoadback  && !toggleFeedback"
+          class="btn"
+          style="background-color: rgb(256, 256, 256);"
+          @click="previewRoadback"
+        >
+          로드백 같이 볼래요
+        </button>
+        <button
+          v-if="useRoadback && isWriter && toggleFeedback"
+          class="btn"
+          style="background-color: rgb(256, 256, 256);"
+          @click="deleteRoadback"
+        >
+          로드백 다 지울래요
+        </button>
+        <button
+          v-if="useRoadback  && toggleFeedback"
+          class="btn"
+          style="background-color: rgb(256, 256, 256);"
+          @click="previewRoadmap"
+        >
+          로드백 안볼래요
+        </button>
       </b-row>
-      <hr class="my-2">
+      <hr class="my-2" />
       <b-row>
         <b-container>
           <b-card no-body class="border-0">
             <div class="inline-block" style="width: 100%;">
               <!-- goJS/start-->
-              <Roadmap :roadmapMode=roadmapMode :roadmapData=roadmapData />
+              <Roadmap :roadmapMode="roadmapMode" :roadmapData="roadmapData" />
               <!--goJs/end -->
             </div>
           </b-card>
@@ -35,55 +68,74 @@
           {{ content }}
         </p> -->
       </b-row>
-      <b-row align-h="end" class="my-2" v-if="isWriter">
+      <b-row align-h="end" class="my-2" v-if="isWriter && false">
         <!-- 게시물의 uid와 현재 uid가 동일 할 때 보여줄 내용 -->
-        <i class="far fa-trash-alt fa-lg mr-3" style="color: tomato" @click="deleteBoard"></i>
-        <i class="far fa-edit fa-lg mr-3" style="color: Dodgerblue" @click="updateBoard"></i>
+        <i
+          class="far fa-trash-alt fa-lg mr-3"
+          style="color: tomato"
+          @click="deleteBoard"
+        ></i>
+        <i
+          class="far fa-edit fa-lg mr-3"
+          style="color: Dodgerblue"
+          @click="updateBoard"
+        ></i>
       </b-row>
       <b-row>
-        <i class="far fa-thumbs-up fa-2x ml-3" v-if="!like" @click="clickLike"><span class="h3 ml-1">좋아요{{likeCnt}}</span></i>
-        <i class="fas fa-thumbs-up fa-2x ml-3" v-if="like" @click="cancelLike"><span class="h3 ml-1">좋아요{{likeCnt}}</span></i>
-        <button class="btn" style="background-color: rgb(256, 256, 256);" @click="goToCreate">내보내기</button>
+        <i class="far fa-thumbs-up fa-2x ml-3" v-if="!like" @click="clickLike"
+          ><span class="h3 ml-1">좋아요{{ likeCnt }}</span></i
+        >
+        <i class="fas fa-thumbs-up fa-2x ml-3" v-if="like" @click="cancelLike"
+          ><span class="h3 ml-1">좋아요{{ likeCnt }}</span></i
+        >
+        <button
+          class="btn"
+          style="background-color: rgb(256, 256, 256);"
+          @click="goToCreate"
+        >
+          내보내기
+        </button>
       </b-row>
     </b-container>
-
   </div>
 </template>
 
 <script>
-import Roadmap from '@/components/Roadmap/Roadmap.vue'
-import "codemirror/lib/codemirror.css"; 
-import "@toast-ui/editor/dist/toastui-editor.css"; 
+import Roadmap from "@/components/Roadmap/Roadmap.vue";
+import "codemirror/lib/codemirror.css";
+import "@toast-ui/editor/dist/toastui-editor.css";
 
 export default {
-  name: '',
+  name: "",
+  props: {
+    roadmap: Object,
+    username: String
+  },
   components: {
-    Roadmap,
+    Roadmap
   },
   data() {
     return {
       roadmapMode: 0,
-      roadmapData: {}, 
-      name: '',
-      title: '',
-      createDate: '',
-      uid: '',
+      roadmapData: {},
+      title: "",
+      createDate: "",
+      uid: "",
       like: false,
-      likeCnt: '',
-      pid: '',
+      likeCnt: "",
+      pid: "",
       isWriter: false,
-      roadmap: '',
-      rmid: '',
-    }
+      rmid: "",
+      useRoadback: "",
+      toggleFeedback : false,
+    };
   },
-  created() {
-    
-  },
+  created() {},
   mounted() {
-    if (this.$route.params.roadmap) {
-      this.getPostingInfo()
-      this.previewRoadmap()
-      this.likecheck()
+    if (this.roadmap) {
+      this.getPostingInfo();
+      this.previewRoadmap();
+      this.likecheck();
     } else {
       this.$router.push({ name: '공유로드맵\'s' })
       return
@@ -91,39 +143,79 @@ export default {
   },
   methods: {
     getPostingInfo() {
-      this.roadmap = this.$route.params.roadmap
-      this.name = this.$route.params.uname
-      this.title = this.roadmap.title
-      this.createDate = this.roadmap.createDate
-      this.uid = this.roadmap.uid
-      this.likeCnt = this.roadmap.likecnt
-      this.pid = this.roadmap.pid
-      this.rmid = this.roadmap.rmid
+      this.title = this.roadmap.title;
+      this.createDate = this.roadmap.createDate;
+      this.uid = this.roadmap.uid;
+      this.likeCnt = this.roadmap.likecnt;
+      this.pid = this.roadmap.pid;
+      this.rmid = this.roadmap.rmid;
+      this.useRoadback = this.roadmap.useroadback;
+      if (this.uid === this.$store.getters.getUid) {
+        this.isWriter = true;
+      } else {
+        this.isWriter = false;
+      }
     },
     previewRoadmap() {
-      axios.get(`${this.$store.getters.getServer}/roadmap/get/${this.rmid}`)
-      .then((res) => {
-        if(res.data.msg == 'success'){
-        this.roadmapData = JSON.parse(res.data['roadmaps'].tmp);
-        }else{
-          alert("데이터 로드에 실패했습니다.");
-        }
-      }).catch((e) =>{
-        console.log(e)
-        alert("axios 오류")
-      });
-    },
-    likecheck(){
-        axios.get(`${this.$store.getters.getServer}/roadmapshare/islike/${this.pid}`)
-        .then((res) => {
-          if(res.data.msg == 'success'){
-            this.like = res.data.islike
-          }else{
+      axios
+        .get(`${this.$store.getters.getServer}/roadmap/get/${this.rmid}`)
+        .then(res => {
+          if (res.data.msg == "success") {
+            this.roadmapData = JSON.parse(res.data["roadmaps"].tmp);
+            this.toggleFeedback = false;
+          } else {
             alert("데이터 로드에 실패했습니다.");
           }
-        }).catch((e) =>{
-          console.log(e)
-          alert("axios 오류")
+        })
+        .catch(e => {
+          console.log(e);
+          alert("axios 오류");
+        });
+    },
+    previewRoadback(){
+        axios
+        .get(`${this.$store.getters.getServer}/roadmap/get/comment/${this.rmid}`)
+        .then(res => {
+          if (res.data.msg == "success") {
+            this.roadmapData = JSON.parse(res.data["roadmaps"].tmp);
+            this.toggleFeedback = true;
+          } else {
+            alert("데이터 로드에 실패했습니다.");
+          }
+        })
+        .catch(e => {
+          console.log(e);
+          alert("axios 오류");
+        });
+    },
+    deleteRoadback(){
+        axios
+        .delete(`${this.$store.getters.getServer}/roadcomment/deleteall/${this.rmid}`)
+        .then(res => {
+          if (res.data.msg == "success") {
+            this.previewRoadback();
+          } else {
+            alert("본인의 로드맵이 아니잖아요");
+          }
+        })
+        .catch(e => {
+          console.log(e);
+          alert("axios 오류");
+        });
+    },
+    likecheck() {
+      axios
+        .get(`${this.$store.getters.getServer}/roadmapshare/islike/${this.pid}`)
+        .then(res => {
+          if (res.data.msg == "success") {
+            this.like = res.data.islike;
+          } else {
+            alert("데이터 로드에 실패했습니다.");
+          }
+        })
+        .catch(e => {
+          console.log(e);
+          alert("axios 오류");
         });
     },
     updateBoard() {
@@ -138,40 +230,43 @@ export default {
       // })
     },
     clickLike() {
-      axios.put(`${this.$store.getters.getServer}/roadmapshare/like/${this.$store.getters.getUid}/${this.pid}`)
-      .then((res) => {
-          if(res.data.msg == 'success'){
-            
-          }else{
-            console.log(res)
+      axios
+        .put(
+          `${this.$store.getters.getServer}/roadmapshare/like/${this.$store.getters.getUid}/${this.pid}`
+        )
+        .then(res => {
+          if (res.data.msg == "success") {
+          } else {
             alert("데이터 로드에 실패했습니다.");
           }
-      })
-      .catch((e) =>{
-        console.log(encodeURI);
-      })
-      this.like = true
-      this.likeCnt ++
+        })
+        .catch(e => {
+          console.log(encodeURI);
+        });
+      this.like = true;
+      this.likeCnt++;
     },
     cancelLike() {
-      axios.put(`${this.$store.getters.getServer}/roadmapshare/dislike/${this.$store.getters.getUid}/${this.pid}`)
-      .then((res) => {
-        console.log(res)
-      }).catch((e) =>{
-        console.log(e);
+      axios
+        .put(
+          `${this.$store.getters.getServer}/roadmapshare/dislike/${this.$store.getters.getUid}/${this.pid}`
+        )
+        .then(res => {})
+        .catch(e => {
+          console.log(e);
+        });
 
-      })
-
-      this.like = false
-      this.likeCnt -- 
+      this.like = false;
+      this.likeCnt--;
     },
     goToCreate() {
       this.$router.push({ name : '로드맵 수정하기', params: { rmid: this.rmid, CUMode: 0 }})
     },
-  },
-}
+    goToRoadBack() {
+      this.$router.push({ name: "roadback", params: { rmid: this.rmid } });
+    }
+  }
+};
 </script>
 
-<style>
-
-</style>
+<style></style>
