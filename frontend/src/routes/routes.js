@@ -5,6 +5,12 @@ import NothingMain from '@/views/NothingMain.vue';
 import NotFound from '@/views/NotFoundPage.vue';
 
 const routes = [
+  // 도입부 페이지
+  {
+    path: '/intro',
+    name: 'intro',
+    component: () => import(/* webpackChunkName: "demo" */ '../views/Intro/Intro.vue')
+  },
   {
     path: '/main',
     name: 'main',
@@ -12,9 +18,12 @@ const routes = [
   },
   {
     path: '/',
+
     redirect: 'main',
     component: DashboardNavbar,
+
     children: [
+      
       {
         path: '/dashboard',
         redirect: '/read-user-roadmap',
