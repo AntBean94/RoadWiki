@@ -87,6 +87,11 @@ const routes = [
         component: () => import(/* webpackChunkName: "demo" */ '../views/Roadmap/ReadUserRoadmap.vue')
       },
       {
+        path: '/read-user-roadmap1',
+        name: "나의 로드맵",
+        component: () => import(/* webpackChunkName: "demo" */ '../views/Roadmap/ReadUserRoadmap1.vue')
+      },
+      {
         path: '/update-user-roadmap',
         name: '로드맵 수정하기',
         component: () => import('../views/Roadmap/UpdateUserRoadmap.vue'),

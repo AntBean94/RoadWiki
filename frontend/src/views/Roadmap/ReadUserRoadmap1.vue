@@ -5,28 +5,10 @@
     <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue">
     <!-- carousel도 컴포넌트화 필요 -->
       <!-- Card stats -->
-      <!-- 단기 : 빨간색 -->
-      <!-- 중기 : 노란색 -->
-      <!-- 장기 : 초록색 -->
       <br>
         <carousel :per-page="4" :mouse-drag="true">
           <slide v-for="(item, index) in userRoadmapList" :key="index" >
             <b-col @click="previewRoadmap(item.rmorder, item.rmid)" id="carouselCard" >
-              <stats-card   
-                id="carouselCard"          
-                :sub-title="item.name"
-                class="mb-4 btn" 
-                :rmid="item.rmid"
-                :rmorder="item.rmorder"
-                >
-                <template slot="footer">
-                  <span class="text-monument mr-2">{{ item.createDate }}</span>
-                  <br>
-                  <span v-if="item.term == 1" class="text mr-2">장기</span>
-                  <span v-if="item.term == 2" class="text mr-2">중기</span>
-                  <span v-if="item.term == 3" class="text mr-2">단기</span>
-                </template>
-              </stats-card>
               
               <b-card 
                 id="carouselCard"
@@ -34,11 +16,12 @@
               >
               <!-- 장기 -->
               <div v-if="item.term == 1">
-                <b-card-body class="border border-traffic-green">
-                  <b-card-title>
+                <b-card-body class="border border-traffic-green rounded p-3 cardboarder" align="center"
+                style="border: solid 10px;">
+                  <b-card-title class="h3">
                     {{ item.name }}
                   </b-card-title> 
-                  <b-card-text class="small text-muted">
+                  <b-card-text class="small text-muted text-center">
                     {{ item.createDate }}
                   </b-card-text>
                 </b-card-body>
@@ -46,11 +29,11 @@
 
               <!-- 중기 -->
               <div v-else-if="item.term == 2">
-                <b-card-body class="border border-traffic-yellow">
-                  <b-card-title>
+                <b-card-body class="border border-traffic-yellow rounded p-3" align="center">
+                  <b-card-title class="h3">
                     {{ item.name }}
                   </b-card-title> 
-                  <b-card-text class="small text-muted">
+                  <b-card-text class="small text-muted text-center">
                     {{ item.createDate }}
                   </b-card-text>
                 </b-card-body>
@@ -58,11 +41,11 @@
 
               <!-- 단기 -->
               <div v-else>
-                <b-card-body class="border border-traffic-red">
-                  <b-card-title>
+                <b-card-body class="border border-traffic-red rounded p-3" align="center">
+                  <b-card-title class="h3">
                     {{ item.name }}
                   </b-card-title> 
-                  <b-card-text class="small text-muted">
+                  <b-card-text class="small text-muted text-center">
                     {{ item.createDate }}
                   </b-card-text>
                 </b-card-body>
@@ -79,8 +62,8 @@
       <b-row>
         <b-col>
           <div style="text-align: right;">
-            <b-button @click="goToCreate" variant="cornhusk">생성하기</b-button>
-            <b-button class="btn" @click="goToUpdate" variant="classic-blue">수정하기</b-button>
+            <b-button class="mb-3 mr-2" @click="goToCreate" variant="cornhusk">생성하기</b-button>
+            <b-button class="mb-3 ml-2" @click="goToUpdate" variant="classic-blue">수정하기</b-button>
           </div>
           <b-card no-body class="border-0">
             <div class="inline-block" style="width: 100%;">
@@ -102,24 +85,7 @@ import router from '@/routes/router'
 import { Carousel, Slide } from 'vue-carousel';
 
 
-export default {
-  router,
-  name: 'ReadUserRoadmap',
-  components: {
-    Roadmap,
-    Carousel,
-    Slide,  
-    UpdateUserRoadmap,
-  },
-  data() {
-    return {
-      roadmapMode: 0,
-      userRoadmapList: [{"name": "안녕", "term": 1}, {"name": "안녕", "term": 3}, {"name": "안녕", "term": 2}],
-      isSelectCard: false,
-      rmid: 0,
-      rmorder: 0,
-      // roadmapData: {},
-      roadmapData: { "class": "go.GraphLinksModel",
+let roadmapDataTemp = { "class": "go.GraphLinksModel",
   "linkFromPortIdProperty": "fromPort",
   "linkToPortIdProperty": "toPort",
   "nodeDataArray": [
@@ -149,7 +115,27 @@ export default {
 {"from":-1, "to":5, "fromPort":"B", "toPort":"T"},
 {"from":5, "to":4, "fromPort":"B", "toPort":"T"},
 {"from":0, "to":4, "fromPort":"B", "toPort":"T"}
- ]},
+ ]}
+
+export default {
+  router,
+  name: 'ReadUserRoadmap',
+  components: {
+    Roadmap,
+    Carousel,
+    Slide,  
+    UpdateUserRoadmap,
+  },
+  data() {
+    return {
+      roadmapMode: 0,
+      userRoadmapList: [{"name": "안녕안녕안녕안녕안", "term": 1, "createDate": "2020-12-12", "rmid": 1, "rmorder": 1 , "tmp": roadmapDataTemp }, 
+      {"name": "안녕2", "term": 3, "createDate": "2020-12-12", "rmid": 2, "rmorder": 2, "tmp": roadmapDataTemp}, 
+      {"name": "안녕3", "term": 2, "createDate": "2020-12-12", "rmid": 3, "rmorder": 3, "tmp": roadmapDataTemp}],
+      isSelectCard: false,
+      rmid: 0,
+      rmorder: 0,
+      roadmapData: roadmapDataTemp,
     }
   },
   created() {
@@ -213,4 +199,10 @@ export default {
 </script>
 
 <style>
+/* .roadmap {
+  width: 175px;
+  height: 140;
+  border-width: 10px;
+  border-style: solid;
+} */
 </style>
