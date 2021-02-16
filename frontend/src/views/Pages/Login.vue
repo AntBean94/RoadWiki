@@ -45,6 +45,7 @@
               </div>
               <validation-observer v-slot="{handleSubmit}" ref="formValidator">
                 <b-form role="form" @submit.prevent="handleSubmit(onSubmit)">
+                  <h3>닉네임</h3>
                   <base-input alternative
                               class="mb-3"
                               name="Email"

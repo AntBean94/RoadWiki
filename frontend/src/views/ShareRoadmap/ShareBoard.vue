@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     createBoard() {
-      this.$router.push({ name: "create_share_board" });
+      this.$router.push({ name: "로드맵 공유하기" });
     },
     getSharedRoadmap() {
       axios

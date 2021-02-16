@@ -4,6 +4,7 @@ public class Comment {
 	private int cid;
 	private int pid;
 	private int uid;
+	private String userName;
 	private String content;
 	private String createDate;
 	private String modifyDate;
@@ -12,20 +13,19 @@ public class Comment {
 	public Comment() {
 		super();
 	}
-	
-	public Comment(int cid, int pid, int uid, String content, String createDate, String modifyDate,
+
+	public Comment(int cid, int pid, int uid, String userName, String content, String createDate, String modifyDate,
 			int likeCnt) {
 		super();
 		this.cid = cid;
 		this.pid = pid;
 		this.uid = uid;
+		this.userName = userName;
 		this.content = content;
 		this.createDate = createDate;
 		this.modifyDate = modifyDate;
 		this.likeCnt = likeCnt;
 	}
-
-
 
 	public int getCid() {
 		return cid;
@@ -49,6 +49,14 @@ public class Comment {
 
 	public void setUid(int uid) {
 		this.uid = uid;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getContent() {
@@ -85,9 +93,8 @@ public class Comment {
 
 	@Override
 	public String toString() {
-		return "Comment [cid=" + cid + ", pid=" + pid + ", uid=" + uid + ", content=" + content
-				+ ", createDate=" + createDate + ", modifyDate=" + modifyDate + ", likeCnt=" + likeCnt + "]";
+		return "Comment [cid=" + cid + ", pid=" + pid + ", uid=" + uid + ", userName=" + userName + ", content="
+				+ content + ", createDate=" + createDate + ", modifyDate=" + modifyDate + ", likeCnt=" + likeCnt + "]";
 	}
-
 	
 }

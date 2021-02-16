@@ -2,9 +2,7 @@
   <div>
       <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-default"></base-header> 
           <ChattingList v-if="showChattingList === true" @get-roominfo="getRoomid"/>
-          <Chatting v-else :roomid="roomid" :name="name" />
-          
-        
+          <Chatting v-else :roomid="roomid" :name="name" />   
   </div>
 </template>
 

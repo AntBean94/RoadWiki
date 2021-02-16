@@ -22,8 +22,6 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 	@Autowired
 	ChatRoomRepo chatRoomRepo;
 	
-//	private ChatRoom anonymousRoom = null;
-	
 	@Override
 	public Map<String, Object> createOpenRoom(String name) {
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -38,27 +36,6 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 		return result;
 	}
 	
-//	@Override
-//	public Map<String, Object> joinAnonymousChatRoom() {
-//		Map<String, Object> result = new HashMap<String, Object>();
-//		if(anonymousRoom != null) {
-//			result.put("chatRoom", anonymousRoom);
-//		}
-//		else {
-//			try {
-//				ChatRoom chatRoom = chatRoomRepo.select(roomid)(new ChatRoom("", "anonymousRoom", 0))[0];
-//				if(chatRoom == null) {
-//					chatRoom = new ChatRoom(UUID.randomUUID().toString(), "anonymousRoom", 0);
-//					chatRoomRepo.insert(chatRoom);
-//				}
-//				result.put("chatRoom", chatRoom);
-//			} catch(Exception e) {
-//				throw e;
-//			}
-//		}
-//		return result;
-//	}
-	
 	@Override
 	public Map<String, Object> getChatRoom(String roomid) {
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -69,9 +46,6 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 	@Override
 	public Map<String, Object> getOpenRoom(String name) {
 		Map<String, Object> result = new HashMap<String, Object>();
-		for(ChatRoom cr:chatRoomRepo.selectAll()){
-			System.out.println(cr);
-		}
 		result.put("chatRooms", chatRoomRepo.selectAll());
 		return result;
 	}

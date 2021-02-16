@@ -2,22 +2,26 @@
 
   <div>
     <!-- header 시작 -->
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-default">
+    <base-header class="pb-6 pb-8 pt-5 pt-md-8" id="baseheader">
     <!-- carousel도 컴포넌트화 필요 -->
       <!-- Card stats -->
       <br>
         <carousel :per-page="4" :mouse-drag="true">
           <slide v-for="(item, index) in userRoadmapList" :key="index" >
             <b-col @click="previewRoadmap(item.rmorder, item.rmid)">
-                  <stats-card type="gradient-red"
-                            :sub-title="item.name"
+                  <stats-card type="red"
                             icon="ni ni-active-40"
+                            :sub-title="item.name"
                             class="mb-4 btn" 
                             :rmid="item.rmid"
                             :rmorder="item.rmorder"
                             >
                   <template slot="footer">
                     <span class="text-success mr-2">{{ item.createDate }}</span>
+                    <br>
+                    <span v-if="item.term == 1" class="text mr-2">장기</span>
+                    <span v-if="item.term == 2" class="text mr-2">중기</span>
+                    <span v-if="item.term == 3" class="text mr-2">단기</span>
                   </template>
                 </stats-card>
                 </b-col>
@@ -77,6 +81,7 @@ export default {
     const uid = String(this.$store.getters.getUid)
     axios.get(`${this.$store.getters.getServer}/roadmap/list/${uid}`)
       .then((res) => {
+        console.log(res);
         if(res.data.msg == 'success') {
           // 유저의 roadmaplist
           if(res.data['roadmaps'].length){
@@ -122,15 +127,17 @@ export default {
     },
     // updateuserroadmap을 create, update모두 가능하도록 변경(mode로 나눈다.)
     goToCreate() {
-      this.$router.push({ name : 'update_user_roamdap', params: { rmid: 0, CUMode: 0 }})
+      this.$router.push({ name : '로드맵 수정하기', params: { rmid: 0, CUMode: 0 }})
     },
     goToUpdate() {
-      this.$router.push({ name: 'update_user_roamdap', params: { rmid: this.rmid, rmorder: this.rmorder, CUMode: 1 }})
+      this.$router.push({ name: '로드맵 수정하기', params: { rmid: this.rmid, rmorder: this.rmorder, CUMode: 1 }})
     },
   },
 }
 </script>
 
 <style>
-
+#baseheader {
+  background-color: #b5c7d3;
+}
 </style>
