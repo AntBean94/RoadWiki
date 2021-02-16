@@ -26,8 +26,8 @@
            width="200px"
            style="float: left; margin-left: 400px;"
            class="animate__animated animate__flipInX">
-      <p class="title-right"> 고민을 털어 놓으세요</p>
-      <pre class="animate__animated animate__fadeIn animate__delay-1s" style="text-align: right; padding-right: 250px;">
+      <h1 class="title-right"> 고민을 털어 놓으세요</h1>
+      <pre class="animate__animated animate__fadeIn animate__delay-1s" style="text-align: right; padding-right: 300px;">
         로드맵 생성에 대한 고민을 털어 놓으세요. 
         내가 하는 고민이 모두가 하는 고민이라고 생각하고 
         편하게 고민을 털어 놓으세요.
@@ -139,7 +139,7 @@ pre{
   font-size: 36px;
 }
 .title-right{
-  padding-right: 250px;
+  padding-right: 300px;
   text-align: right;
   font-size: 36px;
 }
