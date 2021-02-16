@@ -78,8 +78,7 @@ export default {
   },
   created() {
     // carousel로 띄울 roadmap 리스트 요청
-    const uid = String(this.$store.getters.getUid)
-    axios.get(`${this.$store.getters.getServer}/roadmap/list/${uid}`)
+    axios.get(`${this.$store.getters.getServer}/roadmap/list/${this.$store.getters.getUid}`)
       .then((res) => {
         console.log(res);
         if(res.data.msg == 'success') {
