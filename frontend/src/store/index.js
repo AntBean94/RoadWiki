@@ -14,7 +14,6 @@ export default new Vuex.Store({
     accessToken: null,
     user: {
       uid: "",
-      uid: "",
       email: "",
       name: "",
       createDate: ""
