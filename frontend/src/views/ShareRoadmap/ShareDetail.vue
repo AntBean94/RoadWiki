@@ -23,7 +23,7 @@
       <b-row>
         <b-col cols="1" class="pr-0 mb-2">? 무엇 img 들어갈 곳</b-col>
         <b-col>
-          <h3>작성자 : {{ username }}</h3>
+          <h3>작성자 : {{ uname }}</h3>
           <h5>
             {{ createDate }}
           </h5>
@@ -109,7 +109,7 @@ export default {
   name: "",
   props: {
     roadmap: Object,
-    username: String
+    uname: String
   },
   components: {
     Roadmap

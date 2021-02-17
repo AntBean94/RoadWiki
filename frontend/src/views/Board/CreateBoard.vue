@@ -1,9 +1,9 @@
 <template>
   <div class="d-flex flex-column">
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-default">
+    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue">
     </base-header>
 
-    <div class="p-4 bg-secondary">
+    <div class="p-4">
       <b-input
         placeholder="제목"
         class="form-control-alternative"

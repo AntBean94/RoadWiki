@@ -71,8 +71,6 @@ public class FollowServiceImpl implements FollowService {
 				User[] u = followRepo.selectFollowerUid(uid);
 				users[i] = u[0];
 			}
-			for(User u: users)
-				System.out.println(u);
 			result.put("followinglists", users);
 		} catch (Exception e) {
 			throw e;

@@ -64,7 +64,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			String[] names = new String[Postings.length];
 			int[] commentCnt = new int[Postings.length];
 			for (int i = 0; i < Postings.length; i++) {
-				names[i] = userRepo.getName(Postings[i].getUid());
+				names[i] = userRepo.getName(Postings[i].getUid()).getName();
 				commentCnt[i] = commentRepo.countComment(Postings[i].getPid());
 			}
 			result.put("names", names);
@@ -112,7 +112,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			String[] names = new String[Postings.length];
 			int[] commentCnt = new int[Postings.length];
 			for (int i = 0; i < Postings.length; i++) {
-				names[i] = userRepo.getName(Postings[i].getUid());
+				names[i] = userRepo.getName(Postings[i].getUid()).getName();
 				commentCnt[i] = commentRepo.countComment(Postings[i].getPid());
 			}
 			result.put("names", names);
@@ -142,7 +142,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			String[] names = new String[Postings.length];
 			int[] commentCnt = new int[Postings.length];
 			for (int i = 0; i < Postings.length; i++) {
-				names[i] = userRepo.getName(Postings[i].getUid());
+				names[i] = userRepo.getName(Postings[i].getUid()).getName();
 				commentCnt[i] = commentRepo.countComment(Postings[i].getPid());
 			}
 			result.put("names", names);
@@ -172,7 +172,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			String[] names = new String[Postings.length];
 			int[] commentCnt = new int[Postings.length];
 			for (int i = 0; i < Postings.length; i++) {
-				names[i] = userRepo.getName(Postings[i].getUid());
+				names[i] = userRepo.getName(Postings[i].getUid()).getName();
 				commentCnt[i] = commentRepo.countComment(Postings[i].getPid());
 			}
 			result.put("names", names);
@@ -197,7 +197,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			String[] tags = postingRepo.selectTags(Integer.parseInt(pid));
 			posting.setTags(tags);
 			result.put("posting", posting);
-
+				
 			List<Comment> comments = new ArrayList<>();
 			for (Comment c : commentRepo.selectListPid(Integer.parseInt(pid))) {
 				String name = commentRepo.selectUserName(c.getCid());
@@ -219,7 +219,8 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 				}
 			}
 			result.put("recomments", recomments);
-			result.put("name", userRepo.getName(posting.getUid()));
+			result.put("user", userRepo.getName(posting.getUid()));
+//			result.put("oneline", userRepo.getOneline(posting.getUid()));
 
 		} catch (NumberFormatException e) {
 			throw new RuntimeException("input data type error");
@@ -327,7 +328,6 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			if (commentRepo.update(comment) == 1) {
 				result.put("msg", "success");
 			}
-
 			else
 				result.put("msg", "fail");
 		} catch (NumberFormatException e) {

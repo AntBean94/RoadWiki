@@ -14,7 +14,7 @@
         <!-- <b-row class="justify-content-end"><BackgroundImg /></b-row> -->
       </b-container>
     </div>
-
+    
     <b-container fluid class="mt--6">
       <b-card no-body class="card-profile" alt="Image placeholder" img-top>
         <b-row class="justify-content-start">
@@ -23,21 +23,18 @@
               <b-row>
                 <b-img
                   :src="profileUrl"
-                  v-model="profileUrl"
-                  rounded="circle"
                 />
               </b-row>
               <b-row class="justify-content-end"> </b-row>
             </b-container>
           </b-col>
         </b-row>
-
         <b-card-header
           class="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4 mb-4"
         >
-          <h1 class="display-1">
-            <!-- email.com -->
-          </h1>
+          <!-- <h1 class="display-1">
+            email.com
+          </h1> -->
         </b-card-header>
         <b-card-body class="pt-0">
           <b-row>
@@ -165,50 +162,6 @@
                 </div>
               </b-col>
             </b-row>
-            <b-row class="mb-3">
-              <b-col cols="3" class="text-center" align-self="center">
-                <h2>
-                  <!-- <i class="ni ni-hat-3 mr-2"></i> -->
-                  배경 사진
-                </h2>
-              </b-col>
-              <b-col>
-                <h3>여기에 배경 사진 파일 명</h3>
-                <!-- <ProfileImg/> -->
-              </b-col>
-              <b-col>
-                <div>
-                  <b-button size="sm" @click="modalShow = !modalShow"
-                    >사진📷</b-button
-                  >
-
-                  <b-modal v-model="modalShow" hide-footer>
-                    <template #modal-title>
-                      <h1>프로필 업로드</h1>
-                    </template>
-                    <div>
-                      <b-form-file
-                        v-model="file1"
-                        placeholder="Choose a file or drop it here..."
-                        drop-placeholder="Drop file here..."
-                      ></b-form-file>
-                      <div class="mt-3">
-                        Selected file: {{ file1 ? file1.name : "" }}
-                      </div>
-                    </div>
-                    <div class="text-center">
-                      <base-button
-                        type="primary"
-                        native-type="submit"
-                        class="my-4"
-                        @click="uploadHandler"
-                        >확인</base-button
-                      >
-                    </div>
-                  </b-modal>
-                </div>
-              </b-col>
-            </b-row>
 
             <hr class="my-4" />
             <b-row class="justify-content-end">
@@ -280,8 +233,11 @@ export default {
   created() {
     this.uid = this.$store.getters.getUid;
 
-    axios.get(`${this.$store.getters.getUserServer}/user/image`).then(res => {
+    axios.get(`${this.$store.getters.getUserServer}/user/image/${this.uid}`).then(res => {
       this.profileUrl = res.data.path;
+      console.log('##########')
+      console.log(this.profileUrl)
+      console.log('##########')
     });
 
     axios

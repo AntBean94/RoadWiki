@@ -69,7 +69,7 @@
             <div class="card-profile-image">
               <a href="#">
                 <!-- <b-img src="img/theme/team-4.jpg" rounded="circle" /> -->
-                <b-img :src="profileUrl" rounded="circle" />
+                <b-avatar :src="profileUrl"></b-avatar>
               </a>
             </div>
           </b-col>
@@ -110,6 +110,7 @@
                   <!-- 현재는 로드맵 갯수와 연결 -->
                   <span class="heading">{{ commentCnt }}</span>
                   <span class="description">댓글</span>
+
                 </div>
               </div>
             </b-col>
@@ -238,17 +239,12 @@ export default {
       commentpostings: [],
       commentCnt: 0,
       followerlists: [],
-      followinglists: []
+      followinglists: [],
     };
   },
   created() {
     // 현재 로그인 된 계정
     this.uid = this.$store.getters.getUid;
-
-    // 해당 계정의 프로필 사진 가져오는 걸로 해야함
-    axios.get(`${this.$store.getters.getUserServer}/user/image`).then(res => {
-      this.profileUrl = res.data.path;
-    });
 
     // params로 uid를 받아오지 못했다면 (자기 프로필이니까)
     if (this.$route.query.profileId === undefined) {
@@ -256,6 +252,11 @@ export default {
     } else {
       this.profileuid = this.$route.query.profileId;
     }
+
+    // 해당 계정의 프로필 사진 가져오는 걸로 해야함
+    axios.get(`${this.$store.getters.getUserServer}/user/image/${this.profileuid}`).then(res => {
+      this.profileUrl = res.data.path;
+    });
 
     axios
       .get(`${this.$store.getters.getUserServer}/user/info/${this.profileuid}`)
