@@ -16,7 +16,7 @@ import com.web.blog.model.dto.Curriculum;
 import com.web.blog.model.dto.Curriculumtext;
 import com.web.blog.model.repo.CurriculumRepo;
 import com.web.blog.model.repo.RoadcommentRepo;
-import com.web.blog.model.repo.RoadmapRepo;
+import com.web.blog.model.repo.UserRepo;
 
 @Service
 public class CurriculumServiceImpl implements CurriculumService {
@@ -24,16 +24,19 @@ public class CurriculumServiceImpl implements CurriculumService {
 
 	@Autowired
 	CurriculumRepo curriculumrepo;
-	
+
+	@Autowired
+	UserRepo userrepo;
+
 	@Autowired
 	RoadcommentRepo roadcommentrepo;
 
 	@Override
-	public Object insertText(String uid, Curriculumtext curriculumtext) {
+	public Object insertText(int uid, Curriculumtext curriculumtext) {
 		// sdid , mdid, bdid 순으로 검사하면서 있으면 그 위치에 넣는 repo 실행
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			if (Integer.parseInt(uid) > 0)
+			if (uid > 0)
 				throw new RuntimeException("Access denied");
 
 			if (curriculumtext.getMdid() != 0)
@@ -42,9 +45,8 @@ public class CurriculumServiceImpl implements CurriculumService {
 				else if (curriculumtext.getBdid() != 0)
 					if (curriculumrepo.insertMiddleText(curriculumtext) != 1)
 						throw new RuntimeException("Query wrong");
-					else
-						if (curriculumrepo.insertBigText(curriculumtext) != 1)
-							throw new RuntimeException("Query wrong");
+					else if (curriculumrepo.insertBigText(curriculumtext) != 1)
+						throw new RuntimeException("Query wrong");
 		} catch (Exception e) {
 			logger.error("Service insertText : Something wrong");
 			throw e;
@@ -54,11 +56,11 @@ public class CurriculumServiceImpl implements CurriculumService {
 	}
 
 	@Override
-	public Object deleteText(String uid, Curriculumtext curriculumtext) {
+	public Object deleteText(int uid, Curriculumtext curriculumtext) {
 		// sdid,mdid,bdid 순으로 검사하면서 있으면 그 위치에 꺼 삭제하는 repo 실행
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			if (Integer.parseInt(uid) > 0)
+			if (uid > 0)
 				throw new RuntimeException("Access denied");
 
 			if (curriculumtext.getSdid() != 0)
@@ -78,45 +80,98 @@ public class CurriculumServiceImpl implements CurriculumService {
 	}
 
 	@Override
-	public Object getSuggest() { //big
+	public Object getSuggest(int uid) throws Exception { // big
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			result.put("suggest", curriculumrepo.selectBigText());
-		} catch (Exception e) {
-			logger.error("Service getSuggestBybdid : Something wrong");
-			throw e;
-		}
-		return result;
-	}
-	@Override
-	public Object getSuggestBybdid(String bdid) { //middle
-		Map<String, Object> result = new HashMap<String, Object>();
-		try {
-			int bdidnum = Integer.parseInt(bdid);
-			result.put("suggest", curriculumrepo.selectMiddleText(bdidnum));
+			List<Curriculumtext> usersmall = new ArrayList<Curriculumtext>();
+			for (String keyword : userrepo.selectkeywordtext(uid))
+				usersmall.addAll(curriculumrepo.selectSmallTextBykeyword(keyword));
+
+			Curriculumtext[] big = curriculumrepo.selectBigText();
+			List<Curriculumtext> randombox = new ArrayList<Curriculumtext>();
 			
+			for (Curriculumtext bi : big) {
+				randombox.add(bi);
+				for (Curriculumtext us : usersmall) {
+					if (us.getBdid() == bi.getBdid())
+						for(int i = 0 ; i < 5;  i++)
+							randombox.add(bi);
+				}
+			}
+			int rand = (int)(Math.random()*randombox.size());
+			result.put("recommend", randombox.get(rand));
+			result.put("suggest", big);
 		} catch (Exception e) {
 			logger.error("Service getSuggestBybdid : Something wrong");
 			throw e;
 		}
 		return result;
 	}
+
 	@Override
-	public Object getSuggestBybdidmdid(String bdid, String mdid) { //small
+	public Object getSuggestBybdid(int uid, int bdid) throws Exception { // middle
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			int bdidnum = Integer.parseInt(bdid);
-			int mdidnum = Integer.parseInt(mdid);
-			result.put("suggest", curriculumrepo.selectSmallText(bdidnum,mdidnum));
+			List<Curriculumtext> usersmall = new ArrayList<Curriculumtext>();
+			for (String keyword : userrepo.selectkeywordtext(uid))
+				usersmall.addAll(curriculumrepo.selectSmallTextBykeyword(keyword));
+
+			Curriculumtext[] middle = curriculumrepo.selectMiddleText(bdid);
+			List<Curriculumtext> randombox = new ArrayList<Curriculumtext>();
+			
+			for (Curriculumtext mid : middle) {
+				randombox.add(mid);
+				for (Curriculumtext us : usersmall) {
+					if (us.getMdid() == mid.getMdid())
+						for(int i = 0 ; i < 5;  i++)
+							randombox.add(mid);
+				}
+			}
+			int rand = (int)(Math.random()*randombox.size());
+			
+			result.put("recommend", randombox.get(rand));
+			result.put("suggest", middle);
+			String[] keywords = userrepo.selectkeywordtext(uid);
+
 		} catch (Exception e) {
 			logger.error("Service getSuggestBybdid : Something wrong");
 			throw e;
 		}
 		return result;
 	}
-	
+
 	@Override
-	public Object getSuggestBySearch(String text) { //search
+	public Object getSuggestBybdidmdid(int uid, int bdid, int mdid) throws Exception { // small
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			List<Curriculumtext> usersmall = new ArrayList<Curriculumtext>();
+			for (String keyword : userrepo.selectkeywordtext(uid))
+				usersmall.addAll(curriculumrepo.selectSmallTextBykeyword(keyword));
+
+			Curriculumtext[] small = curriculumrepo.selectSmallText(bdid, mdid);
+			List<Curriculumtext> randombox = new ArrayList<Curriculumtext>();
+			
+			for (Curriculumtext sm : small) {
+				randombox.add(sm);
+				for (Curriculumtext us : usersmall) {
+					if (us.getMdid() == sm.getMdid())
+						for(int i = 0 ; i < 5;  i++)
+							randombox.add(sm);
+				}
+			}
+			int rand = (int)(Math.random()*randombox.size());
+			result.put("recommend", randombox.get(rand));
+			result.put("suggest", small);
+
+		} catch (Exception e) {
+			logger.error("Service getSuggestBybdid : Something wrong");
+			throw e;
+		}
+		return result;
+	}
+
+	@Override
+	public Object getSuggestBySearch(String text) { // search
 		Map<String, Object> result = new HashMap<String, Object>();
 		List<Curriculumtext> currilist = new ArrayList<Curriculumtext>();
 		try {
@@ -130,19 +185,18 @@ public class CurriculumServiceImpl implements CurriculumService {
 		}
 		return result;
 	}
-	
-	//여기까지 추천 용
-	//여기부터 로드맵 용
+
+	// 여기까지 추천 용
+	// 여기부터 로드맵 용
 
 	@Override
-	public void create(int rmid ,JsonArray nodeDataArray) {
+	public void create(int rmid, JsonArray nodeDataArray) {
 		// small, middle, big 나누어서 따로 list 만들어 저장하고 각각 repo실행
 		List<Curriculum> small = new ArrayList<Curriculum>();
 		List<Curriculum> middle = new ArrayList<Curriculum>();
 		List<Curriculum> big = new ArrayList<Curriculum>();
 		List<Curriculum> cus = new ArrayList<Curriculum>();
-		
-		
+
 		try {
 			for (int i = 0; i < nodeDataArray.size(); i++) {
 				Curriculum curr = new Curriculum();
@@ -178,8 +232,8 @@ public class CurriculumServiceImpl implements CurriculumService {
 			if (big.size() != 0)
 				if (curriculumrepo.insertBig(big) == 0)
 					throw new RuntimeException("big Query wrong");
-			if(cus.size() != 0)
-				if(curriculumrepo.insertCus(cus) == 0)
+			if (cus.size() != 0)
+				if (curriculumrepo.insertCus(cus) == 0)
 					throw new RuntimeException("cus Query wrong");
 		} catch (Exception e) {
 			logger.error("Curri Service create : Something wrong");
@@ -198,8 +252,8 @@ public class CurriculumServiceImpl implements CurriculumService {
 			Curriculumlist.addAll(curriculumrepo.selectMiddleByRmid(rmid));
 			Curriculumlist.addAll(curriculumrepo.selectBigByRmid(rmid));
 			Curriculumlist.addAll(curriculumrepo.selectCusByRmid(rmid));
-			
-			for(Curriculum curri : Curriculumlist) {
+
+			for (Curriculum curri : Curriculumlist) {
 				JsonObject obj = new JsonObject();
 				obj.addProperty("category", curri.getCategory());
 				obj.addProperty("content", curri.getContent());
@@ -221,7 +275,7 @@ public class CurriculumServiceImpl implements CurriculumService {
 		}
 		return nodeDataArray;
 	}
-	
+
 	@Override
 	public JsonArray getCurriculumCommentByrmid(int rmid) {
 		// small, middle, big 에서 rmid로 싹 긁어오고 json으로 만들어서 보내주기
@@ -234,8 +288,8 @@ public class CurriculumServiceImpl implements CurriculumService {
 			Curriculumlist.addAll(curriculumrepo.selectBigByRmid(rmid));
 			Curriculumlist.addAll(curriculumrepo.selectCusByRmid(rmid));
 			Curriculumlist.addAll(roadcommentrepo.selectRoadComment(rmid));
-			
-			for(Curriculum curri : Curriculumlist) {
+
+			for (Curriculum curri : Curriculumlist) {
 				JsonObject obj = new JsonObject();
 				obj.addProperty("category", curri.getCategory());
 				obj.addProperty("content", curri.getContent());

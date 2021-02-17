@@ -15,7 +15,14 @@
 		and bdid =
 		#{bdid}
 	</select>
-
+	
+	<select id="selectSmallTextBykeyword" parameterType="String"
+		resultType="Curriculumtext">
+		select *
+		from smalldata
+		where text = #{keyword}
+	</select>
+	
 	<select id="selectMiddleText" parameterType="int"
 		resultType="Curriculumtext">
 		select *

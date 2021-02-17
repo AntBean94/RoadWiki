@@ -97,7 +97,7 @@ export default {
       dates: "2020-12-12 ~ 2021-12-12",
       memotext: "임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다",
       descript: "",
-
+      recommend : "",
       // Get more form https://flatpickr.js.org/options/
       config: {
         wrap: true, // set wrap to true only when using 'input-group'
@@ -325,7 +325,36 @@ export default {
         this.makePort("B", go.Spot.Bottom, go.Spot.Bottom, true, false)
       )
     );
-
+    // 맨위 빈칸 만들기 모델
+    myDiagram.nodeTemplateMap.add(
+      "Blank",
+      $(
+        go.Node,
+        "Table",
+        {
+          // the Node.location is at the center of each node
+          locationSpot: go.Spot.Center,
+          movable: false,
+          deletable: false,
+          selectable: false
+        },
+        $(
+          go.Panel,
+          "Spot",
+          $(go.Shape, "Circle", {
+            desiredSize: new go.Size(70, 70),
+            fill: "#F9F8F3",
+            stroke: "#F9F8F3",
+            strokeWidth: 3.5
+          }),
+          $(go.TextBlock, "Start", this.textStyle(), new go.Binding("text"))
+        ),
+        // three named ports, one on each side except the top, all output only:
+        this.makePort("L", go.Spot.Left, go.Spot.Left, false, false),
+        this.makePort("R", go.Spot.Right, go.Spot.Right, false, false),
+        this.makePort("B", go.Spot.Bottom, go.Spot.Bottom, false, false)
+      )
+    );
     // custom 모델
     myDiagram.nodeTemplateMap.add(
       "Custom",
@@ -705,9 +734,15 @@ export default {
     },
     checkCur(e) {
       // 차후에 DB에 요청을 보낸다음 DB정보로 반영
-      if (curriculumData.category == "comment") return;
+      if (curriculumData.category == "comment" || curriculumData == -1) {
+        this.headertext = "";
+        this.dates = "";
+      this.memotext = "";
+      this.descript = "";  
+        return;
+      }
       this.headertext = curriculumData.text;
-      if (curriculumData.category)
+      if (curriculumData.dates)
         this.dates = curriculumData.startdate + " ~ " + curriculumData.enddate;
       this.memotext = curriculumData.memo;
       this.descript = curriculumData.content;
@@ -729,6 +764,8 @@ export default {
       axios
         .get(url)
         .then(res => {
+          this.recommend = res.data.recommend.text;
+          this.get_recommend();
           for (var i = 0; i < res.data["suggest"].length; i++) {
             res.data["suggest"][i].category = color;
             res.data["suggest"][i].startdate = "";
@@ -745,10 +782,15 @@ export default {
             start.text = "시작";
             res.data["suggest"].push(start);
           }
+          let blank = _.cloneDeep(this.curData);
+          blank.category = "Blank";
+           blank.text = "";
+          res.data["suggest"].unshift(blank);
           recommendCurData = res.data["suggest"];
           myPalette.model.nodeDataArray = recommendCurData;
         })
         .catch(e => {
+          console.log(res);
           console.error(e);
         });
     },
@@ -767,10 +809,15 @@ export default {
             res.data["suggest"][i].enddate = "";
             res.data["suggest"][i].memo = "";
           }
+           let blank = _.cloneDeep(this.curData);
+          blank.category = "Blank";
+           blank.text = "";
+          res.data["suggest"].unshift(blank);
           recommendCurData = res.data["suggest"];
           myPalette.model.nodeDataArray = recommendCurData;
         })
         .catch(err => {
+          console.log(res);
           console.error(err);
         });
     },
@@ -832,11 +879,14 @@ export default {
         .catch(err => {
           console.error(err);
         });
-    }
+    },
+    get_recommend(){
+      this.$emit('get_recommend',this.recommend);
+    },
   },
   destroyed() {
     clearInterval(roadbacktimer);
-  }
+  },
 };
 </script>
 
