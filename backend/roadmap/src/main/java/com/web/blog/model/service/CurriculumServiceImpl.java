@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -32,6 +33,7 @@ public class CurriculumServiceImpl implements CurriculumService {
 	RoadcommentRepo roadcommentrepo;
 
 	@Override
+	@Transactional
 	public Object insertText(int uid, Curriculumtext curriculumtext) {
 		// sdid , mdid, bdid 순으로 검사하면서 있으면 그 위치에 넣는 repo 실행
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -56,6 +58,7 @@ public class CurriculumServiceImpl implements CurriculumService {
 	}
 
 	@Override
+	@Transactional
 	public Object deleteText(int uid, Curriculumtext curriculumtext) {
 		// sdid,mdid,bdid 순으로 검사하면서 있으면 그 위치에 꺼 삭제하는 repo 실행
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -190,6 +193,7 @@ public class CurriculumServiceImpl implements CurriculumService {
 	// 여기부터 로드맵 용
 
 	@Override
+	@Transactional
 	public void create(int rmid, JsonArray nodeDataArray) {
 		// small, middle, big 나누어서 따로 list 만들어 저장하고 각각 repo실행
 		List<Curriculum> small = new ArrayList<Curriculum>();

@@ -196,6 +196,7 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
+    @Transactional
     @Override
     public void upload(MultipartFile[] files, Model model, HttpSession session) throws Exception, IOException {
         String realPath = servletContext.getRealPath("/upload");
@@ -236,3 +237,4 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 }
+
