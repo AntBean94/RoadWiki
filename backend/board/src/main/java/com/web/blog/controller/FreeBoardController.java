@@ -303,6 +303,7 @@ public class FreeBoardController {
 			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			postingLikeUser.setUid(uid);
 			result = (Map<String, Object>) boardlikeService.registPostingLike(postingLikeUser);
+			result = (Map<String, Object>) boardlikeService.postingLikeUp(postingLikeUser.getPid());
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
@@ -318,6 +319,7 @@ public class FreeBoardController {
 		try {
 			Map<String, Object> result;
 			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			result = (Map<String, Object>) boardlikeService.postingLikeDown(pid);
 			result = (Map<String, Object>) boardlikeService.deletePostingLike(new PostingLikeUser(uid, pid));
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		} catch(Exception e) {
@@ -368,6 +370,36 @@ public class FreeBoardController {
 			Map<String, Object> result;
 			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) boardlikeService.deletePostingHate(new PostingHateUser(uid, pid));
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.OK);
+		}
+	}
+	
+	@PutMapping("/postinglikeUp/{pid}")
+	public Object postingLikeUp(@PathVariable int pid, HttpServletRequest request) {
+		try {
+			Map<String, Object> result;
+			result = (Map<String, Object>) boardlikeService.postingLikeUp(pid);
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.OK);
+		}
+	}
+	
+	@PutMapping("/postinglikeDown/{pid}")
+	public Object postingLikeDown(@PathVariable int pid, HttpServletRequest request) {
+		try {
+			Map<String, Object> result;
+			result = (Map<String, Object>) boardlikeService.postingLikeDown(pid);
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
