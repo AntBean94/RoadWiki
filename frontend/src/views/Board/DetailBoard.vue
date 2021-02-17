@@ -29,13 +29,14 @@
           <hr class="my-2" />
           <Viewer v-if="content != null" :initialValue="content" />
           <b-row class="mr-1 my-3">
-            <div
-              class="ml-1 mt-2 mr-1 bg-cornhusk rounded-pill py-1 px-2"
+            <badge
+              class="mr-2"
               v-for="(tag, idx) in tags"
               :key="idx"
             >
+              <!-- class="ml-1 mt-2 mr-1 bg-cornhusk rounded-pill py-1 px-2" -->
               <span class="h5"># {{ tag }}</span>
-            </div>
+            </badge>
           </b-row>
           <b-row align-h="end" class="my-2" v-if="isWritter">
             <!-- 게시물의 uid와 현재 uid가 동일 할 때 보여줄 내용 -->

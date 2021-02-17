@@ -319,16 +319,23 @@ export default {
 </script>
 
 <style>
+.label{
+	font-size: 21px;
+}
+.control{
+	font-size: 24px;
+}
 #calendar {
-  display: flex;
-  flex-direction: row;
-  /* font-family: Calibri, sans-serif; */
-  width: 90%;
-  min-width: 30rem;
-  max-width: 100rem;
-  min-height: 40rem;
-  margin-left: auto;
-  margin-right: auto;
+	display: flex;
+	flex-direction: row;
+	/* font-family: Calibri, sans-serif; */
+	width: 90%;
+	min-width: 30rem;
+	max-width: 100rem;
+	min-height: 40rem;
+	margin: 1rem;
+	margin-left: auto;
+	margin-right: auto;
 }
 .calendar-controls {
   /* margin-left : 0.1rem; */
