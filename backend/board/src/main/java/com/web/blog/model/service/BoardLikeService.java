@@ -11,4 +11,6 @@ public interface BoardLikeService {
 	public Object getPostingHateUser(PostingHateUser postingHateUser) throws Exception;
 	public Object registPostingHate(PostingHateUser postingHateUser) throws Exception;
 	public Object deletePostingHate(PostingHateUser postingHateUser) throws Exception;
+	public Object postingLikeUp(int pid) throws Exception;
+	public Object postingLikeDown(int pid) throws Exception;
 }
