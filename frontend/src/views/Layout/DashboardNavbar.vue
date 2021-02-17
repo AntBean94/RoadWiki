@@ -56,7 +56,7 @@
           <div v-if="isHoverB">
             <i
               @mouseover="checkHoverB"
-              class="btn ni ni-bullet-list-67 text-red"
+              class="btn ni ni-bullet-list-67 text-black"
             ></i>
           </div>
           <div v-else>
@@ -70,10 +70,10 @@
           </div>
 
           <div v-if="isHoverS">
-            <i
+            <i 
               @mouseover="checkHoverS"
-              class="btn ni ni-bullet-list-67 text-black"
-            ></i>
+              class="fas fa-share-alt
+            "></i>
           </div>
           <div v-else>
             <h1
