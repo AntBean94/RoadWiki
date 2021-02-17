@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.web.blog.model.dto.Follow;
 import com.web.blog.model.dto.User;
@@ -70,8 +71,6 @@ public class FollowServiceImpl implements FollowService {
 				User[] u = followRepo.selectFollowerUid(uid);
 				users[i] = u[0];
 			}
-			for(User u: users)
-				System.out.println(u);
 			result.put("followinglists", users);
 		} catch (Exception e) {
 			throw e;
@@ -80,6 +79,7 @@ public class FollowServiceImpl implements FollowService {
 	}
 	
 	@Override
+	@Transactional
 	public Object userFollow(Follow follow) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -92,6 +92,7 @@ public class FollowServiceImpl implements FollowService {
 	}
 
 	@Override
+	@Transactional
 	public Object userUnfollow(Follow follow) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {

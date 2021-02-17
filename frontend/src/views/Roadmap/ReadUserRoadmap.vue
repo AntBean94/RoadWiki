@@ -8,14 +8,17 @@
       <!-- 중기 : 노란색 -->
       <!-- 장기 : 초록색 -->
       <br>
-         <carousel :per-page="5" :mouse-drag="true">
-          <slide v-for="(item, index) in userRoadmapList" :key="index" >
-            <b-col @click="previewRoadmap(item.rmorder, item.rmid)" id="carouselCard" >
+         <carousel :per-page="4" :mouse-drag="true">
+          <slide v-for="(item, index) in userRoadmapList" :key="index"> 
+            <b-col>
               
+              <b-row align-h="end" class="mr-1 pb-1">
+                <i class="fas fa-times text-traffic-red" @click="deleteRoadmap(item.rmorder)"></i>
+              </b-row>
               <b-card 
                 id="carouselCard"
-                class="text-center"
-                style="width: 20rem; height: 10rem;"
+                class="text-center mb-2"
+                @click="previewRoadmap(item.rmorder, item.rmid)"
               >
                 <!-- 장기 -->
                 <div v-if="item.term == 1">
@@ -70,7 +73,7 @@
           <b-card no-body class="border-0">
             <div class="inline-block" style="width: 100%;">
               <!-- goJS/start-->
-              <Roadmap :roadmapMode="roadmapMode" :roadmapData="roadmapData" />
+              <Roadmap :roadmapMode="roadmapMode" :roadmapData="roadmapData" :roadmapname="roadmapname"/>
               <!--goJs/end -->
             </div>
           </b-card>
@@ -103,35 +106,13 @@ export default {
       isSelectCard: false,
       rmid: 0,
       rmorder: 0,
-      roadmapData: {}
+      roadmapData: {},
+      roadmapname: "",
     };
   },
   created() {
     // carousel로 띄울 roadmap 리스트 요청
-    axios
-      .get(
-        `${this.$store.getters.getRoadmapServer}/roadmap/list/${this.$store.getters.getUid}`
-      )
-      .then(res => {
-        console.log(res);
-        if (res.data.msg == "success") {
-          // 유저의 roadmaplist
-          if (res.data["roadmaps"].length) {
-            this.userRoadmapList = res.data["roadmaps"];
-            // 시작페이지에서 클릭없이 첫 번째 로드맵을 보여줄 수 있도록 저장
-            this.previewRoadmap(
-              this.userRoadmapList[0].rmorder,
-              this.userRoadmapList[0].rmid
-            );
-          }
-        } else {
-          alert("데이터 로드에 실패했습니다.");
-        }
-      })
-      .catch(e => {
-        console.log(e);
-        alert("axios 오류");
-      });
+    this.getUserRoadmapList();
   },
   mounted() {},
   computed: {},
@@ -146,7 +127,8 @@ export default {
         .then(res => {
           if (res.data.msg == "success") {
             this.roadmapData = JSON.parse(res.data["roadmaps"].tmp);
-            // this.load: ismounted 사용여부 확인 후 지울 것
+            this.roadmapname = res.data["roadmaps"].name
+            console.log(this.roadmapname)
             this.load();
           } else {
             alert("데이터 로드에 실패했습니다.");
@@ -157,6 +139,26 @@ export default {
           alert("axios 오류");
         });
     },
+    deleteRoadmap(clickrmorder){
+      console.log(clickrmorder)
+      console.log('잘찍히나요?')
+      axios
+        .delete(`${this.$store.getters.getRoadmapServer}/roadmap/delete/${this.$store.getters.getUid}/${clickrmorder}`)
+        .then(res => {
+          console.log(res);
+          if (res.data.msg === "success") {
+            this.getUserRoadmapList();
+            alert("삭제 완료");
+          } else {
+            alert("데이터 로드에 실패했습니다.");
+          }
+        })
+        .catch(e => {
+          console.log(e);
+          alert("axios 오류");
+        });
+    },
+
     // 외부 json파일 초기화면에 출력
     load() {
       // ismounted? 어디서 쓰이는지 확인
@@ -174,17 +176,50 @@ export default {
         name: "로드맵 수정하기",
         params: { rmid: this.rmid, rmorder: this.rmorder }
       });
+    },
+    getUserRoadmapList() {
+      axios
+      .get(
+        `${this.$store.getters.getRoadmapServer}/roadmap/list/${this.$store.getters.getUid}`
+      )
+      .then(res => {
+        console.log(res);
+        if (res.data.msg == "success") {
+          // 유저의 roadmaplist
+          if (res.data["roadmaps"].length) {
+            this.userRoadmapList = res.data["roadmaps"];
+            // 시작페이지에서 클릭없이 첫 번째 로드맵을 보여줄 수 있도록 저장
+            this.previewRoadmap(
+              this.userRoadmapList[0].rmorder,
+              this.userRoadmapList[0].rmid
+            );
+          }else{
+            this.userRoadmapList = [];
+            this.roadmapData = {};
+            this.load();
+          }
+        } else {
+          alert("데이터 로드에 실패했습니다.");
+        }
+      })
+      .catch(e => {
+        console.log(e);
+        alert("axios 오류");
+      });
     }
   }
 };
 </script>
 
 <style>
-.roadmap {
+#carouselCard:hover {
+  box-shadow: 4px 3px 5px rgba(56, 54, 54, 0.5);
+}
+/* .roadmap {
   width: 175px;
-  height: 140;
+  height: 140px;
   border-width: 10px;
   border-style: solid;
   overflow: hidden;
-}
+} */
 </style>

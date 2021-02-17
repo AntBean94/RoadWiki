@@ -159,6 +159,11 @@ const routes = [
         component: () => import('../views/ShareRoadmap/RoadBack.vue'),
         props: true,
       },
+      {
+        path: '/mainpage',
+        name: "mainpage",
+        component: () => import('../views/Mainpage/Mainpage.vue'),
+      },
     ]
   },
   {
@@ -166,15 +171,25 @@ const routes = [
     // redirect: 'login',
     component: AuthLayout,
     children: [
-      {
-        path: '/login',
-        name: 'login',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/Pages/Login.vue')
-      },
+      // {
+      //   path: '/login',
+      //   name: 'login',
+      //   component: () => import(/* webpackChunkName: "demo" */ '../views/Pages/Login.vue')
+      // },
       {
         path: '/register',
         name: 'register',
         component: () => import(/* webpackChunkName: "demo" */ '../views/Pages/Register.vue')
+      },
+      {
+        path: '/find-password',
+        name: '비밀번호찾기',
+        component: () => import(/* webpackChunkName: "demo" */ '../components/Login/FindPassword.vue')
+      },
+      {
+        path: '/reset-password',
+        name: '비밀번호재설정',
+        component: () => import(/* webpackChunkName: "demo" */ '../components/Login/ResetPassword.vue')
       },
       { path: '*', component: NotFound },
     ]

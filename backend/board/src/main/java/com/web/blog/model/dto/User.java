@@ -9,27 +9,25 @@ public class User {
 	private String email;
 	private String name;
 	private String createDate;
-	private List<FileInfoDto> image;
-	private List<FileInfoDto> bgImage;
-	private String address;
 	private String keyword[];
+	private String address;
+	private String oneline;
+	private String major;
 	
-	public User() {
-		super();
-	}
+	public User() {}
 
-	public User(int uid, String password, String email, String name, String createDate, List<FileInfoDto> image,
-			List<FileInfoDto> bgImage, String address, String[] keyword) {
+	public User(int uid, String password, String email, String name, String createDate, String[] keyword,
+			String address, String oneline, String major) {
 		super();
 		this.uid = uid;
 		this.password = password;
 		this.email = email;
 		this.name = name;
 		this.createDate = createDate;
-		this.image = image;
-		this.bgImage = bgImage;
-		this.address = address;
 		this.keyword = keyword;
+		this.address = address;
+		this.oneline = oneline;
+		this.major = major;
 	}
 
 	public int getUid() {
@@ -72,20 +70,12 @@ public class User {
 		this.createDate = createDate;
 	}
 
-	public List<FileInfoDto> getImage() {
-		return image;
+	public String[] getKeyword() {
+		return keyword;
 	}
 
-	public void setImage(List<FileInfoDto> image) {
-		this.image = image;
-	}
-
-	public List<FileInfoDto> getBgImage() {
-		return bgImage;
-	}
-
-	public void setBgImage(List<FileInfoDto> bgImage) {
-		this.bgImage = bgImage;
+	public void setKeyword(String[] keyword) {
+		this.keyword = keyword;
 	}
 
 	public String getAddress() {
@@ -96,18 +86,26 @@ public class User {
 		this.address = address;
 	}
 
-	public String[] getKeyword() {
-		return keyword;
+	public String getOneline() {
+		return oneline;
 	}
 
-	public void setKeyword(String[] keyword) {
-		this.keyword = keyword;
+	public void setOneline(String oneline) {
+		this.oneline = oneline;
+	}
+
+	public String getMajor() {
+		return major;
+	}
+
+	public void setMajor(String major) {
+		this.major = major;
 	}
 
 	@Override
 	public String toString() {
 		return "User [uid=" + uid + ", password=" + password + ", email=" + email + ", name=" + name + ", createDate="
-				+ createDate + ", image=" + image + ", bgImage=" + bgImage + ", address=" + address + ", keyword="
-				+ Arrays.toString(keyword) + "]";
+				+ createDate + ", keyword=" + Arrays.toString(keyword) + ", address=" + address + ", oneline=" + oneline
+				+ ", major=" + major + "]";
 	}
 }

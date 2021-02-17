@@ -3,6 +3,9 @@
     <base-header class="pb-2 pt-2 pt-md-2 bg-baby-blue">
       <!-- Card stats -->
       <b-container>
+        <b-row class="pt-2">
+          <i class="fas fa-arrow-left fa-2x text-classic-blue" @click="goToBack"></i>
+        </b-row>
         <b-row class="pt-4">
           <!-- 장기 중기 단기 선택 라디오 -->
           <b-form-group v-slot="{ ariaDescribedby }" class="mb-0">
@@ -40,12 +43,12 @@
         </b-row>
 
         <b-row align-h="end" class="mt-3">
-          <b-button
+          <!-- <b-button
             @click="goToBack"
             variant="peach-quartz"
           >
             돌아가기
-          </b-button>
+          </b-button> -->
 
           <b-button
             @click="createRoadmap"
@@ -136,6 +139,7 @@
                 :roadmapMode="roadmapMode"
                 :roadmapData="roadmapData"
                 :inputText="inputText"
+                :roadmapname="roadmapname"
                 @create-roadmap="createRoadmap"
                 ref="roadmap"
               />
@@ -172,20 +176,23 @@ export default {
       logData: [],
       roadmapMode: 1,
       inputText: "",
-      term: 1,
+      term: 3,
       options: [
-        { text: "단기", value: 1 },
+        { text: "단기", value: 3 },
         { text: "중기", value: 2 },
-        { text: "장기", value: 3 }
+        { text: "장기", value: 1 }
       ],
       btnColors: [
-        'traffic-red', 
-        'traffic-yellow', 
         'traffic-green',
+        'traffic-yellow', 
+        'traffic-red', 
       ],
     };
   },
-  created() {},
+  created() {
+    if (this.rmid) {
+      this.previewRoadmap(this.rmid)}
+  },
   mounted() {
   },
   watch: {},
@@ -193,6 +200,22 @@ export default {
   methods: {
     showInfo() {
       this.$refs['infoRoadmap'].show()
+    },
+    previewRoadmap(rmid) {
+      axios
+        .get(`${this.$store.getters.getRoadmapServer}/roadmap/get/${rmid}`)
+        .then(res => {
+          if (res.data.msg == "success") {
+            this.roadmapData = JSON.parse(res.data["roadmaps"].tmp);
+            this.roadmapname = res.data["roadmaps"].name
+          } else {
+            alert("데이터 로드에 실패했습니다.");
+          }
+        })
+        .catch(e => {
+          console.log(e);
+          alert("axios 오류");
+        });
     },
     createRoadmap() {
       const childRoadmapData = this.$refs.roadmap.serveRoadmap();

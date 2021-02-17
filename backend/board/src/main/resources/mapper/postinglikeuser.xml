@@ -30,6 +30,12 @@
 		into postinglikeuser(pid, uid)
 		values(#{pid}, #{uid})
 	</insert>
+	
+	<update id="updateLikeCnt" parameterType="Map">
+		update posting
+		set likeCnt = #{likeCnt}
+		where pid=#{pid}
+	</update>
 
 	<delete id="delete" parameterType="PostingLikeUser">
 		delete 

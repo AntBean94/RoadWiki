@@ -12,7 +12,7 @@
               <div>
                 <!-- 모달관련 -->
                 <div>
-                  <b-modal id="modal-scrollable" scrollable title="로드위키">
+                  <b-modal ref = "calendar-modal" id="modal-scrollable" scrollable title="로드위키">
                     <!-- 일정상세정보 -->
                     <div class="field">
                       <label class="label">일정</label>
@@ -177,15 +177,42 @@ export default {
           item.mdid = curr.mdid;
           item.bdid = curr.bdid;
           item.memo = curr.memo;
+          //날짜,  대중소 에 따른 classes 색 변경
+          let classes = ""
+          console.log(curr.startdate);
+          var today = new Date();
+          var dd = today.getDate();
+          var mm = today.getMonth()+1;
+          var yyyy = today.getFullYear();
+
+          if(dd<10) {
+              dd='0'+dd
+          } 
+
+          if(mm<10) {
+              mm='0'+mm
+          } 
+
+          today =yyyy+'-'+ mm+'-'+dd;
+          let start = (new Date(curr.startdate)).getTime();
+          let end = (new Date(curr.enddate)).getTime();
+          today = (new Date(today)).getTime();
+
+          if(end < today)
+            classes = " past"
+          else if(start<=today)
+            classes = " now"
+          else
+            classes = " future"
 
           if (curr.category === "blue") {
-            item.classes = "blue";
+            item.classes = "big" + classes;
           } else if (curr.category === "black") {
-            item.classes = "orange";
+            item.classes = "middle"+ classes;
           } else if (curr.category === "green") {
-            item.classes = "purple";
+            item.classes = "small"+ classes;
           } else {
-            item.classes = "yellow";
+            item.classes = "yellow" + classes;
           }
           this.items.push(item);
         });
@@ -307,6 +334,7 @@ export default {
               return;
             }
           });
+          this.$refs['calendar-modal'].hide()
         })
         .catch(e => {
           console.log(e);
@@ -412,13 +440,25 @@ export default {
 .disabled {
   background-color: #ccc9c9c2;
 }
-.theme-default .cv-item.yellow {
+
+/* 스케쥴 색상 */
+.theme-default .cv-item.big {
   background-color: lemonchiffon;
-  border-color: lemonchiffon;
 }
-.theme-default .cv-item.blue {
+.theme-default .cv-item.middle {
   background-color: paleturquoise;
-  border-color: paleturquoise;
+}
+.theme-default .cv-item.small {
+  background-color: rgb(26, 231, 135)
+}
+.theme-default .cv-item.past { /*과거*/
+  border-color: rgb(229, 157, 229);
+}
+.theme-default .cv-item.now { /*현재*/
+  border-color: rgb(226, 238, 175);
+}
+.theme-default .cv-item.future { /* 미래*/
+  border-color: rgb(38, 0, 253);
 }
 /* 지난 날 */
 .theme-default .cv-day.past {

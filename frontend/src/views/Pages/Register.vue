@@ -244,11 +244,15 @@ export default {
       axios
         .get(`${this.$store.getters.getUserServer}/user/existname/${this.name}`)
         .then(res => {
+          if (this.name && res.data.msg === "fail") {
+            alert('이미 존재하는 닉네임입니다.')
+            this.name = ''
+          }
           console.log(res.data);
           //msg == fail 이면 중복
         })
         .catch(err => {
-          console.log(err);
+          alert('오류가 발생했습니다.')
         });
     },
     onSubmit() {
@@ -312,10 +316,6 @@ export default {
         axios
           .post(`${this.$store.getters.getUserServer}/user/join`, user)
           .then(res => {
-            console.log("##############################");
-            console.log(res.data);
-            console.log("##############################");
-            // console.log('잘 가나요오오오오오오오오오오')
             const userinfo = {
               email: this.email,
               password: this.password

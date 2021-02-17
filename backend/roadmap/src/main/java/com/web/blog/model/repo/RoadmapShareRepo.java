@@ -24,4 +24,6 @@ public interface RoadmapShareRepo {
 	
 	public int selectlike(int uid, int pid);
 	
+	public RoadmapShare[] selectLikeHigh(int cnt);
+	
 }

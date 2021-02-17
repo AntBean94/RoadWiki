@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.web.blog.model.dto.Comment;
 import com.web.blog.model.dto.Posting;
@@ -63,7 +64,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			String[] names = new String[Postings.length];
 			int[] commentCnt = new int[Postings.length];
 			for (int i = 0; i < Postings.length; i++) {
-				names[i] = userRepo.getName(Postings[i].getUid());
+				names[i] = userRepo.getName(Postings[i].getUid()).getName();
 				commentCnt[i] = commentRepo.countComment(Postings[i].getPid());
 			}
 			result.put("names", names);
@@ -111,7 +112,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			String[] names = new String[Postings.length];
 			int[] commentCnt = new int[Postings.length];
 			for (int i = 0; i < Postings.length; i++) {
-				names[i] = userRepo.getName(Postings[i].getUid());
+				names[i] = userRepo.getName(Postings[i].getUid()).getName();
 				commentCnt[i] = commentRepo.countComment(Postings[i].getPid());
 			}
 			result.put("names", names);
@@ -141,7 +142,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			String[] names = new String[Postings.length];
 			int[] commentCnt = new int[Postings.length];
 			for (int i = 0; i < Postings.length; i++) {
-				names[i] = userRepo.getName(Postings[i].getUid());
+				names[i] = userRepo.getName(Postings[i].getUid()).getName();
 				commentCnt[i] = commentRepo.countComment(Postings[i].getPid());
 			}
 			result.put("names", names);
@@ -171,7 +172,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			String[] names = new String[Postings.length];
 			int[] commentCnt = new int[Postings.length];
 			for (int i = 0; i < Postings.length; i++) {
-				names[i] = userRepo.getName(Postings[i].getUid());
+				names[i] = userRepo.getName(Postings[i].getUid()).getName();
 				commentCnt[i] = commentRepo.countComment(Postings[i].getPid());
 			}
 			result.put("names", names);
@@ -196,7 +197,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			String[] tags = postingRepo.selectTags(Integer.parseInt(pid));
 			posting.setTags(tags);
 			result.put("posting", posting);
-
+				
 			List<Comment> comments = new ArrayList<>();
 			for (Comment c : commentRepo.selectListPid(Integer.parseInt(pid))) {
 				String name = commentRepo.selectUserName(c.getCid());
@@ -218,7 +219,8 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 				}
 			}
 			result.put("recomments", recomments);
-			result.put("name", userRepo.getName(posting.getUid()));
+			result.put("user", userRepo.getName(posting.getUid()));
+//			result.put("oneline", userRepo.getOneline(posting.getUid()));
 
 		} catch (NumberFormatException e) {
 			throw new RuntimeException("input data type error");
@@ -229,6 +231,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
+	@Transactional
 	public Object registPosting(Posting posting, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -259,6 +262,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
+	@Transactional
 	public Object editPosting(Posting posting, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -278,6 +282,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
+	@Transactional
 	public Object deletePosting(String pid_s, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -297,6 +302,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
+	@Transactional
 	public Object registComment(Comment comment, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -314,6 +320,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
+	@Transactional
 	public Object editComment(Comment comment, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -321,7 +328,6 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 			if (commentRepo.update(comment) == 1) {
 				result.put("msg", "success");
 			}
-
 			else
 				result.put("msg", "fail");
 		} catch (NumberFormatException e) {
@@ -333,6 +339,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
+	@Transactional
 	public Object deleteComment(String cid, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -351,6 +358,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
+	@Transactional
 	public Object registRecomment(Recomment recomment) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -367,6 +375,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
+	@Transactional
 	public Object editRecomment(Recomment recomment) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -383,6 +392,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
+	@Transactional
 	public Object deleteRecomment(String rcid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -427,4 +437,18 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		}
 		return result;
 	}
+	
+	@Override
+	@Transactional
+	public Object getLikeHigh(int cnt) throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			result.put("postings" , postingRepo.selectLikeHigh(cnt));
+		} catch (Exception e) {
+			logger.error("sql error");
+			throw e;
+		}
+		return result;
+	}
+
 }
