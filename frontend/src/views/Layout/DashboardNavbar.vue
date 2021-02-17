@@ -70,10 +70,11 @@
           </div>
 
           <div v-if="isHoverS">
-            <i 
+            <i
               @mouseover="checkHoverS"
               class="fas fa-share-alt
-            "></i>
+            "
+            ></i>
           </div>
           <div v-else>
             <h1
@@ -210,7 +211,7 @@
       <content-footer v-if="!$route.meta.hideFooter"></content-footer>
     </div>
     <div>
-      <Chatting v-on:remove="removeChatting" v-if="chattingOn" />
+      <chatting-bg v-on:remove="removeChatting" v-if="chattingOn" />
       <button id="chat" class="btn" @click="createChatting" v-else>
         chatting
       </button>
@@ -222,6 +223,7 @@ import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import LoginContent from "@/components/Login/LoginContent.vue";
 import LogoutContent from "@/components/Logout/LogoutContent.vue";
+import ChattingBg from "@/components/Chatting/ChattingBg";
 
 function hasElement(className) {
   return document.getElementsByClassName(className).length > 0;
@@ -242,8 +244,6 @@ import ContentFooter from "./ContentFooter.vue";
 import DashboardContent from "./Content.vue";
 import { FadeTransition } from "vue2-transitions";
 import { mapGetters } from "vuex";
-import Chatting from "@/components/Chatting/Chatting";
-
 import { CollapseTransition } from "vue2-transitions";
 import { BaseNav, Modal } from "@/components";
 
@@ -257,7 +257,7 @@ export default {
     FadeTransition,
     LoginContent,
     LogoutContent,
-    Chatting
+    ChattingBg
   },
   props: {
     type: {
