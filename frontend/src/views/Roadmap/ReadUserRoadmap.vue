@@ -17,7 +17,7 @@
               >
                 <!-- 장기 -->
                 <div v-if="item.term == 1">
-                  <b-card-body class="border border-traffic-green rounded p-3 cardboarder" align="center">
+                  <b-card-body class="border border-traffic-green rounded" align="center">
                     <b-card-title class="h3">
                       {{ item.name }}
                     </b-card-title> 
@@ -29,7 +29,7 @@
 
                 <!-- 중기 -->
                 <div v-else-if="item.term == 2">
-                  <b-card-body class="border border-traffic-yellow rounded p-3" align="center">
+                  <b-card-body class="border border-traffic-yellow rounded" align="center">
                     <b-card-title class="h3">
                       {{ item.name }}
                     </b-card-title> 
@@ -41,7 +41,7 @@
 
                 <!-- 단기 -->
                 <div v-else>
-                  <b-card-body class="border border-traffic-red rounded p-3" align="center">
+                  <b-card-body class="border border-traffic-red rounded" align="center">
                     <b-card-title class="h3">
                       {{ item.name }}
                     </b-card-title> 

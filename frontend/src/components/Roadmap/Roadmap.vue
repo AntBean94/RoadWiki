@@ -18,11 +18,12 @@
       v-if="!isroadback"
       title="Curriculum Information"
       style="width: 252px;"
+      class="text-center"
     >
       <hr />
       <h3>{{ headertext }}</h3>
-      <hr />
-      <b-card-text>
+      <hr v-show="headertext.length > 0"/>
+      <b-card-text v-if="roadmapMode">
         <base-input label="시작날짜-종료날짜">
           <flat-pickr
             slot-scope="{ focus, blur }"
@@ -36,15 +37,22 @@
           </flat-pickr>
         </base-input>
       </b-card-text>
+      <b-card-text v-else>
+        <h3>시작날짜-종료날짜</h3>
+        <p>{{ dates }}</p>
+      </b-card-text>
       <hr />
       <span>{{ descript }}</span>
-      <hr />
-      <b-card-text>
+      <hr v-show="descript.length > 0"/>
+
+      <b-card-text v-if="roadmapMode">
         <b-form-input
           v-model="memotext"
           placeholder="Enter your memo"
-          :readonly="!roadmapMode"
         ></b-form-input>
+      </b-card-text>
+      <b-card-text v-else>
+        <p>{{ memotext }}</p>
       </b-card-text>
     </b-card>
     <!-- 커리큘럼 데이터 출력 카드/end -->
@@ -85,8 +93,9 @@ export default {
   data() {
     return {
       headertext: "",
-      dates: "",
-      memotext: "",
+      // 빈 값으로 바꾸고 주석 해제
+      dates: "2020-12-12 ~ 2021-12-12",
+      memotext: "임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다",
       descript: "",
 
       // Get more form https://flatpickr.js.org/options/
@@ -695,7 +704,7 @@ export default {
       if (curriculumData.category == "comment") return;
       this.headertext = curriculumData.text;
       if (curriculumData.category)
-        this.dates = curriculumData.startdate + " to " + curriculumData.enddate;
+        this.dates = curriculumData.startdate + " ~ " + curriculumData.enddate;
       this.memotext = curriculumData.memo;
       this.descript = curriculumData.content;
     },
