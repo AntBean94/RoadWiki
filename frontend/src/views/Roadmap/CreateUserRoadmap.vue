@@ -186,7 +186,10 @@ export default {
       ],
     };
   },
-  created() {},
+  created() {
+    if (this.rmid) {
+      this.previewRoadmap(this.rmid)}
+  },
   mounted() {
   },
   watch: {},
@@ -194,6 +197,22 @@ export default {
   methods: {
     showInfo() {
       this.$refs['infoRoadmap'].show()
+    },
+    previewRoadmap(rmid) {
+      axios
+        .get(`${this.$store.getters.getRoadmapServer}/roadmap/get/${rmid}`)
+        .then(res => {
+          if (res.data.msg == "success") {
+            this.roadmapData = JSON.parse(res.data["roadmaps"].tmp);
+            this.roadmapname = res.data["roadmaps"].name
+          } else {
+            alert("데이터 로드에 실패했습니다.");
+          }
+        })
+        .catch(e => {
+          console.log(e);
+          alert("axios 오류");
+        });
     },
     createRoadmap() {
       const childRoadmapData = this.$refs.roadmap.serveRoadmap();

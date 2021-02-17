@@ -1,6 +1,6 @@
 <template>
   <div>
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-default">
+    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue">
     </base-header>
     <div>
       <b-button variant="primary" class="mt-2" @click="createBoard"

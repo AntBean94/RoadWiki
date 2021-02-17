@@ -1,4 +1,4 @@
-p<template>
+<template>
   <!--goJS/start-->
   <div
     style="width: 100%; display: flex; justify-content: space-between; z-index:1;"
@@ -6,7 +6,7 @@ p<template>
     <div
       v-show="roadmapMode && !isroadback"
       ref="myPaletteDiv"
-      style="width: 150px; margin-right: 2px; background-color: #F9F8F3;"
+      style="width: 170px; margin-right: 2px; background-color: #F9F8F3;"
     ></div>
     <div
       ref="myDiagramDiv"
@@ -51,10 +51,12 @@ p<template>
           </flat-pickr>
         </base-input>
       </b-card-text>
+
       <b-card-text v-else>
         <h3>시작날짜-종료날짜</h3>
         <p>{{ dates }}</p>
       </b-card-text>
+
       <hr />
       <span>{{ descript }}</span>
       <hr v-show="descript.length > 0"/>
@@ -167,6 +169,7 @@ export default {
       myDiagram = $(go.Diagram, this.$refs.myDiagramDiv, {
         initialContentAlignment: go.Spot.Center,
         initialAutoScale: go.Diagram.Uniform,
+        
         "undoManager.isEnabled": true
       });
     }
@@ -609,7 +612,7 @@ export default {
           // 추천 커리큘럼 전역변수로 저장되어있음
           recommendCurData
         ),
-        autoScale: go.Diagram.UniformToFill,
+        autoScale: go.Diagram.UniformToFill
       }
     );
 
@@ -762,8 +765,11 @@ export default {
         return;
       }
       this.headertext = this.curriculumData.text;
-      if (this.curriculumData.dates)
-        this.dates = this.curriculumData.startdate + " ~ " + this.curriculumData.enddate;
+
+      if (this.curriculumData.startdate)
+        this.dates = this.curriculumData.startdate + " to " + this.curriculumData.enddate;
+      else
+        this.dates = ""
       this.memotext = this.curriculumData.memo;
       this.descript = this.curriculumData.content;
     },
@@ -810,7 +816,6 @@ export default {
           myPalette.model.nodeDataArray = recommendCurData;
         })
         .catch(e => {
-          console.log(res);
           console.error(e);
         });
     },
@@ -837,7 +842,6 @@ export default {
           myPalette.model.nodeDataArray = recommendCurData;
         })
         .catch(err => {
-          console.log(res);
           console.error(err);
         });
     },

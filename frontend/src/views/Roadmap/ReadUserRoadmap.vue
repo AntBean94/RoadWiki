@@ -7,14 +7,14 @@
       <br>
          <carousel :per-page="4" :mouse-drag="true">
           <slide v-for="(item, index) in userRoadmapList" :key="index"> 
-            <b-col id="carouselCard">
+            <b-col>
               
               <b-row align-h="end" class="mr-1 pb-1">
                 <i class="fas fa-times text-traffic-red" @click="deleteRoadmap(item.rmorder)"></i>
               </b-row>
               <b-card 
                 id="carouselCard"
-                class="text-center"
+                class="text-center mb-2"
                 @click="previewRoadmap(item.rmorder, item.rmid)"
               >
                 <!-- 장기 -->
@@ -209,6 +209,9 @@ export default {
 </script>
 
 <style>
+#carouselCard:hover {
+  box-shadow: 4px 3px 5px rgba(56, 54, 54, 0.5);
+}
 /* .roadmap {
   width: 175px;
   height: 140px;

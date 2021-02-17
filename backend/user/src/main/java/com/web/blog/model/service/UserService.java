@@ -21,4 +21,5 @@ public interface UserService {
 	public Object login(User user);
 	public void upload(MultipartFile[] files, Model model, HttpSession session) throws Exception, IOException;
 	public Object getName(String uid) throws Exception;
+	public Object updatePassword(String email, String password) throws SQLException;
 }

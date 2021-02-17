@@ -136,9 +136,10 @@
         v-model="inputText"
         placeholder="커리큘럼 검색하기"
         id="curSearch"
+        style="display: inline-block"
       ></b-form-input>
 
-      <span>{{ recommend }} 어떠세요?</span>
+      <span class="ml-3" style="display: inline-block">{{ recommend }} 어떠세요?</span>
     </base-header>
 
     <b-container fluid class="mt-1">
@@ -205,10 +206,14 @@ export default {
   },
   created() {},
   mounted() {
-    this.readRoadmap();
-    // 수정로그 가져오기
-    this.readRoadmapLog();
-    // props 데이터 확인 후 없으면 메인페이지로 보내기
+    if (this.rmid) {
+      this.readRoadmap();
+      // 수정로그 가져오기
+      this.readRoadmapLog();
+      // props 데이터 확인 후 없으면 메인페이지로 보내기
+    } else {
+      this.$router.push({ name: "나의 로드맵" })
+    }
   },
   watch: {},
   computed: {},
@@ -224,7 +229,6 @@ export default {
             tmp: childRoadmapData
           })
           .then(res => {
-            console.log(res);
             if (res.data.msg == "success") {
               this.$router.push({ name: "나의 로드맵" });
             } else {
@@ -244,11 +248,6 @@ export default {
     // read 요청보내기
     readRoadmap() {
       // 페이지 초기화시 rmid여부 확인해서 바탕화면으로 redirect
-      if (this.rmid === undefined) {
-        console.log("확인");
-        this.$router.push({ name: "나의 로드맵" });
-        return;
-      }
       if (this.rmid == 0) {
         this.roadmapData = {
           class: "go.GraphLinksModel",
@@ -285,29 +284,25 @@ export default {
 
     // 로드맵 로그 가져오는 함수(mounted에서 rmorder를 불러온뒤 실행)
     readRoadmapLog() {
-      if (this.CUMode == 1) {
-        axios
-          .get(
-            `${this.$store.getters.getRoadmapServer}/roadmap/log/${this.$store.getters.getUid}/${this.rmorder}`
-          )
-          .then(res => {
-            if (res.data.msg == "success") {
-              this.logData = res.data["roadmaps"];
-            } else {
-              console.log(e);
-              alert("데이터 로드에 실패했습니다.");
-            }
-          })
-          .catch(e => {
-            alert("axios 오류");
-          });
-      }
+      axios
+        .get(
+          `${this.$store.getters.getRoadmapServer}/roadmap/log/${this.$store.getters.getUid}/${this.rmorder}`
+        )
+        .then(res => {
+          if (res.data.msg == "success") {
+            this.logData = res.data["roadmaps"];
+          } else {
+            console.log(e);
+            alert("데이터 로드에 실패했습니다.");
+          }
+        })
+        .catch(e => {
+          alert("axios 오류");
+        });
     },
     // update 요청보내기
     updateRoadmap() {
       const childRoadmapData = this.$refs.roadmap.serveRoadmap();
-      console.log('####################')
-      console.log(this.roadmapname.length)
       if (this.roadmapname.length >0) {
         axios
           .post(`${this.$store.getters.getRoadmapServer}/roadmap/update`, {
@@ -352,7 +347,6 @@ export default {
         });
     },
     getRecommend(recommend){
-      console.log(recommend);
       this.recommend = recommend;
     },
     goToBack() {
