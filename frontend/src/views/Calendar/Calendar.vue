@@ -12,21 +12,27 @@
 							<div class>
 								<!-- 모달관련 -->
 								<div>
-									<b-modal id="modal-scrollable" scrollable title="로드위키">
+									<b-modal id="modal-scrollable" scrollable title="로드위키" >
 										<!-- 일정상세정보 -->
-										<div class="field">
+										<div class="field" style="margin: 1rem;">
 											<label class="label">Title</label>
 											<div class="control my-2">
 												{{ this.showTitle}}
 											</div>
 										</div>
-										<div class="field">
+										<div class="field" style="margin: 1rem;">
+											<label class="label">메모</label>
+											<div class="control my-2" style="font-size: 24px;">
+												{{ this.items.memo}}
+											</div>
+										</div>
+										<div class="field" style="margin: 1rem;">
 											<label class="label">Start date</label>
 											<div class="control">
 												<input v-model="newItemStartDate" class="input" type="date" />
 											</div>
 										</div>
-										<div class="field">
+										<div class="field" style="margin: 1rem;">
 											<label class="label">End date</label>
 											<div class="control">
 												<input v-model="newItemEndDate" class="input" type="date" />
@@ -34,14 +40,14 @@
 										</div>
 										<template #modal-footer="{cancel}">
 										<!-- Emulate built in modal footer ok and cancel button actions -->
-										<b-button size="lm" variant="success" @click="clickUpdateItem">
+										<b-button size="lm" variant="traffic-green"  @click="clickUpdateItem">
 											일정업데이트
 										</b-button>
-										<b-button size="lm" variant="danger" @click="clickDeleteItem">
+										<b-button size="lm" variant="traffic-red" @click="clickDeleteItem">
 											일정삭제하기
 										</b-button>
-										<b-button size="lm" variant="danger" @click="cancel()">
-											Cancel
+										<b-button size="lm" variant="traffic-red" @click="cancel()">
+											취소하기
 										</b-button>
 										</template>
 									</b-modal>
@@ -297,7 +303,12 @@ export default {
 </script>
 
 <style>
-
+.label{
+	font-size: 21px;
+}
+.control{
+	font-size: 24px;
+}
 #calendar {
 	display: flex;
 	flex-direction: row;
@@ -306,6 +317,7 @@ export default {
 	min-width: 30rem;
 	max-width: 100rem;
 	min-height: 40rem;
+	margin: 1rem;
 	margin-left: auto;
 	margin-right: auto;
 }
