@@ -63,7 +63,7 @@ public class UserController {
 					put("errorMsg", e.getMessage());
 					put("msg", FAIL);
 				}
-			}, HttpStatus.NO_CONTENT);
+			}, HttpStatus.OK);
 		}
 	}
 
@@ -86,7 +86,7 @@ public class UserController {
 					put("errorMsg", e.getMessage());
 					put("msg", FAIL);
 				}
-			}, HttpStatus.NO_CONTENT);
+			}, HttpStatus.OK);
 		}
 	}
 
@@ -104,7 +104,7 @@ public class UserController {
 					put("errorMsg", e.getMessage());
 					put("msg", FAIL);
 				}
-			}, HttpStatus.NO_CONTENT);
+			}, HttpStatus.OK);
 		}
 	}
 	
@@ -147,7 +147,7 @@ public class UserController {
 					put("errorMsg", e.getMessage());
 					put("msg", FAIL);
 				}
-			}, HttpStatus.NO_CONTENT);
+			}, HttpStatus.OK);
 		}
 	}
 
@@ -167,7 +167,7 @@ public class UserController {
 					put("errorMsg", e.getMessage());
 					put("msg", FAIL);
 				}
-			}, HttpStatus.NO_CONTENT);
+			}, HttpStatus.OK);
 		}
 	}
 
@@ -187,7 +187,7 @@ public class UserController {
 					put("errorMsg", e.getMessage());
 					put("msg", FAIL);
 				}
-			}, HttpStatus.NO_CONTENT);
+			}, HttpStatus.OK);
 		}
 	}
 
@@ -227,7 +227,7 @@ public class UserController {
 					put("errorMsg", e.getMessage());
 					put("msg", FAIL);
 				}
-			}, HttpStatus.NO_CONTENT);
+			}, HttpStatus.OK);
 		}
 	}
 }

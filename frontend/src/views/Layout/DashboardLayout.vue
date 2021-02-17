@@ -115,10 +115,6 @@
 
       <content-footer v-if="!$route.meta.hideFooter"></content-footer>
     </div>
-    <div>
-      <Chatting v-on:remove="removeChatting" v-if="chattingOn" />
-      <button id="chat" @click="createChatting" v-else>chatting</button>
-    </div>
   </div>
 </template>
 
@@ -149,7 +145,6 @@ import ContentFooter from "./ContentFooter.vue";
 import DashboardContent from "./Content.vue";
 import { FadeTransition } from "vue2-transitions";
 import { mapGetters } from "vuex";
-import Chatting from "@/components/Chatting/Chatting";
 
 export default {
   components: {
@@ -158,8 +153,7 @@ export default {
     DashboardContent,
     FadeTransition,
     LoginContent,
-    LogoutContent,
-    Chatting
+    LogoutContent
   },
   created() {
     let url = this.$route.name;
@@ -187,12 +181,6 @@ export default {
         if (url === path) isHeader = false;
       });
       this.isHeader = isHeader;
-    },
-    removeChatting() {
-      this.chattingOn = false;
-    },
-    createChatting() {
-      this.chattingOn = true;
     }
   },
   logOut() {
