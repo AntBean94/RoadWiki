@@ -34,13 +34,13 @@
 										</div>
 										<template #modal-footer="{cancel}">
 										<!-- Emulate built in modal footer ok and cancel button actions -->
-										<b-button size="lm" variant="success" @click="clickUpdateItem">
+										<b-button size="lm" variant="traffic-green"  @click="clickUpdateItem">
 											일정업데이트
 										</b-button>
-										<b-button size="lm" variant="danger" @click="clickDeleteItem">
+										<b-button size="lm" variant="youtube" @click="clickDeleteItem">
 											일정삭제하기
 										</b-button>
-										<b-button size="lm" variant="danger" @click="cancel()">
+										<b-button size="lm" variant="youtube" @click="cancel()">
 											Cancel
 										</b-button>
 										</template>
@@ -306,6 +306,7 @@ export default {
 	min-width: 30rem;
 	max-width: 100rem;
 	min-height: 40rem;
+	margin: 1rem;
 	margin-left: auto;
 	margin-right: auto;
 }
