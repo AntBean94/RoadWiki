@@ -9,49 +9,49 @@
 			<b-col>
 				<b-card no-body class="border-0">
 					<div id="calendar">
-							<div class>
-								<!-- 모달관련 -->
-								<div>
-									<b-modal id="modal-scrollable" scrollable title="로드위키" >
-										<!-- 일정상세정보 -->
-										<div class="field" style="margin: 1rem;">
-											<label class="label">Title</label>
-											<div class="control my-2">
-												{{ this.showTitle}}
-											</div>
+						<div class>
+							<!-- 모달관련 -->
+							<div>
+								<b-modal id="modal-scrollable" scrollable title="로드위키" >
+									<!-- 일정상세정보 -->
+									<div class="field" style="margin: 1rem;">
+										<label class="label">Title</label>
+										<div class="control my-2">
+											{{ this.showTitle}}
 										</div>
-										<div class="field" style="margin: 1rem;">
-											<label class="label">메모</label>
-											<div class="control my-2" style="font-size: 24px;">
-												{{ this.items.memo}}
-											</div>
+									</div>
+									<div class="field" style="margin: 1rem;">
+										<label class="label">메모</label>
+										<div class="control my-2" style="font-size: 24px;">
+											{{ this.items.memo}}
 										</div>
-										<div class="field" style="margin: 1rem;">
-											<label class="label">Start date</label>
-											<div class="control">
-												<input v-model="newItemStartDate" class="input" type="date" />
-											</div>
+									</div>
+									<div class="field" style="margin: 1rem;">
+										<label class="label">Start date</label>
+										<div class="control">
+											<input v-model="newItemStartDate" class="input" type="date" />
 										</div>
-										<div class="field" style="margin: 1rem;">
-											<label class="label">End date</label>
-											<div class="control">
-												<input v-model="newItemEndDate" class="input" type="date" />
-											</div>
+									</div>
+									<div class="field" style="margin: 1rem;">
+										<label class="label">End date</label>
+										<div class="control">
+											<input v-model="newItemEndDate" class="input" type="date" />
 										</div>
-										<template #modal-footer="{cancel}">
-										<!-- Emulate built in modal footer ok and cancel button actions -->
-										<b-button size="lm" variant="traffic-green"  @click="clickUpdateItem">
-											일정업데이트
-										</b-button>
-										<b-button size="lm" variant="traffic-red" @click="clickDeleteItem">
-											일정삭제하기
-										</b-button>
-										<b-button size="lm" variant="traffic-red" @click="cancel()">
-											취소하기
-										</b-button>
-										</template>
-									</b-modal>
-								</div>
+									</div>
+									<template #modal-footer="{cancel}">
+									<!-- Emulate built in modal footer ok and cancel button actions -->
+									<b-button size="lm" variant="traffic-green"  @click="clickUpdateItem">
+										일정업데이트
+									</b-button>
+									<b-button size="lm" variant="traffic-red" @click="clickDeleteItem">
+										일정삭제하기
+									</b-button>
+									<b-button size="lm" variant="traffic-red" @click="cancel()">
+										취소하기
+									</b-button>
+									</template>
+								</b-modal>
+							</div>
 						</div>
 						<div class="calendar-parent">
 							<calendar-view
