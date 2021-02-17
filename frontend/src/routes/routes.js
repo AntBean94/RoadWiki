@@ -159,6 +159,11 @@ const routes = [
         component: () => import('../views/ShareRoadmap/RoadBack.vue'),
         props: true,
       },
+      {
+        path: '/mainpage',
+        name: "mainpage",
+        component: () => import('../views/Mainpage/Mainpage.vue'),
+      },
     ]
   },
   {
