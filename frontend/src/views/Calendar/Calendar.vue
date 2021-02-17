@@ -9,19 +9,25 @@
         <b-col>
           <b-card no-body class="border-0">
             <div id="calendar">
-              <div class>
+              <div>
                 <!-- 모달관련 -->
                 <div>
                   <b-modal id="modal-scrollable" scrollable title="로드위키">
                     <!-- 일정상세정보 -->
                     <div class="field">
-                      <label class="label">Title</label>
+                      <label class="label">일정</label>
                       <div class="control my-2">
                         {{ this.showTitle }}
                       </div>
                     </div>
+										<div class="field">
+                      <label class="label">메모</label>
+                      <div class="control my-2">
+                        {{ this.items.memo }}
+                      </div>
+                    </div>
                     <div class="field">
-                      <label class="label">Start date</label>
+                      <label class="label">시작 날짜</label>
                       <div class="control">
                         <input
                           v-model="newItemStartDate"
@@ -31,7 +37,7 @@
                       </div>
                     </div>
                     <div class="field">
-                      <label class="label">End date</label>
+                      <label class="label">종료 날짜</label>
                       <div class="control">
                         <input
                           v-model="newItemEndDate"
@@ -320,20 +326,20 @@ export default {
 
 <style>
 .label{
-	font-size: 21px;
+	margin: 0.5rem;
+	font-size: 1rem;
 }
-.control{
-	font-size: 24px;
-}
+
 #calendar {
 	display: flex;
 	flex-direction: row;
 	/* font-family: Calibri, sans-serif; */
-	width: 90%;
+	width: 100rem;
+	height: 50rem;
 	min-width: 30rem;
 	max-width: 100rem;
-	min-height: 40rem;
-	margin: 1rem;
+	min-height: 50rem;
+	margin-top: 5rem;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -388,8 +394,9 @@ export default {
   padding: 1.25rem;
 }
 .control {
+	margin: 0.5rem;
   clear: both;
-  font-size: 1rem;
+  font-size: 1.2rem;
   position: relative;
   text-align: left;
 }
@@ -428,6 +435,7 @@ export default {
 .theme-default .cv-header,
 .theme-default .cv-header-day {
   background-color: white;
+	border-width: 0px 0px 1px 0px;
 }
 /* 헤더 속성 */
 .cv-header button {

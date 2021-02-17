@@ -96,7 +96,7 @@ export default {
     return {
       roadmapMode: 0,
       // 서버 연결시 반드시 비어있는 리스트로 반환한다.
-      userRoadmapList:[],
+      userRoadmapList: [],
       isSelectCard: false,
       rmid: 0,
       rmorder: 0,
@@ -162,14 +162,14 @@ export default {
     // updateuserroadmap을 create, update모두 가능하도록 변경(mode로 나눈다.)
     goToCreate() {
       this.$router.push({
-        name: "로드맵 수정하기",
-        params: { rmid: 0, CUMode: 0 }
+        name: "로드맵 생성하기",
+        params: { rmid: 0 }
       });
     },
     goToUpdate() {
       this.$router.push({
         name: "로드맵 수정하기",
-        params: { rmid: this.rmid, rmorder: this.rmorder, CUMode: 1 }
+        params: { rmid: this.rmid, rmorder: this.rmorder }
       });
     }
   }
