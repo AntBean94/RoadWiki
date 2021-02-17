@@ -120,5 +120,12 @@
         select count(*)
         from posting
     </select>
+    
+	<select id="selectLikeHigh" parameterType="Integer" resultType="Posting">
+		select *
+		from posting
+		order by likeCnt DESC limit 0, #{cnt};
+	</select>
+	
 
 </mapper>
