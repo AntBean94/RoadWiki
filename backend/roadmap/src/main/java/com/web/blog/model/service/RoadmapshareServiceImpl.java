@@ -202,5 +202,18 @@ public class RoadmapshareServiceImpl implements RoadmapshareService {
 		}
 		return result;
 	}
+	
+	@Override
+	@Transactional
+	public Object getLikeHigh(int cnt) throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			result.put("roadmapshares" , roadmapshareRepo.selectLikeHigh(cnt));
+		} catch (Exception e) {
+			logger.error("Service getLikeHigh : Something wrong");
+			throw e;
+		}
+		return result;
+	}
 
 }

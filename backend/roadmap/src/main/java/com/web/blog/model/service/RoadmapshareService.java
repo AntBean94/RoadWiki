@@ -20,5 +20,6 @@ public interface RoadmapshareService {
 	public Object dislike(int nowuid,int uid,int pid) throws Exception;
 
 	public Object isShared(int rmid) throws Exception;
+	public Object getLikeHigh(int cnt) throws Exception;
 	
 }	

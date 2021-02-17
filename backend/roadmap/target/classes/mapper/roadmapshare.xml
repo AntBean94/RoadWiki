@@ -69,6 +69,12 @@
 		from roadmaplikeuser
 		where pid = #{pid} and uid = #{uid}
 	</select>
+	
+	<select id="selectLikeHigh" parameterType="Integer" resultType="RoadmapShare">
+		select *
+		from roadmapshare
+		order by likeCnt DESC limit 0, #{cnt};
+	</select>
 
 </mapper>
 	
