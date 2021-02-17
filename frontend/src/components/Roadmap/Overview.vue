@@ -30,7 +30,6 @@ export default {
         "undoManager.isEnabled": true,
         isReadOnly: true,
         allowSelect: false,
-        
       });
 
     // 로드맵 모델 설정
