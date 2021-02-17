@@ -40,5 +40,4 @@ public class ApplicationConfig implements WebMvcConfigurer{
 //			.excludePathPatterns(Arrays.asList("/user/**"));
 	}
 	
-	
 }
