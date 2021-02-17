@@ -26,5 +26,7 @@ public interface PostingRepo {
 	public int insertTag(Map<String, Object> map) throws SQLException;
 	public int update(Posting posting) throws SQLException;
 	public int delete(int pid) throws SQLException;
-	public int totalCount() throws SQLException;
+	public int totalCount() throws SQLException;	
+	public Posting[] selectLikeHigh(int cnt);
+
 }

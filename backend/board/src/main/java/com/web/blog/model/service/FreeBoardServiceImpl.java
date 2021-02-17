@@ -437,4 +437,18 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		}
 		return result;
 	}
+	
+	@Override
+	@Transactional
+	public Object getLikeHigh(int cnt) throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			result.put("postings" , postingRepo.selectLikeHigh(cnt));
+		} catch (Exception e) {
+			logger.error("sql error");
+			throw e;
+		}
+		return result;
+	}
+
 }
