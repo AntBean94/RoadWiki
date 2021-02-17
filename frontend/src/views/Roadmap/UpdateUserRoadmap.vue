@@ -137,6 +137,8 @@
         placeholder="커리큘럼 검색하기"
         id="curSearch"
       ></b-form-input>
+
+      <span>{{ recommend }} 어떠세요?</span>
     </base-header>
 
     <b-container fluid class="mt-1">
@@ -149,6 +151,7 @@
                 :roadmapData="roadmapData"
                 :inputText="inputText"
                 @create-roadmap="createRoadmap"
+                @get_recommend ="getRecommend"
                 ref="roadmap"
               />
             </div>
@@ -186,6 +189,7 @@ export default {
       inputText: "",
       checkRB: false,
       term: 1,
+      recommend :"",
       options: [
         { text: "단기", value: 1 },
         { text: "중기", value: 2 },
@@ -343,6 +347,10 @@ export default {
           console.log(e);
           alert("axios 오류");
         });
+    },
+    getRecommend(recommend){
+      console.log(recommend);
+      this.recommend = recommend;
     },
     goToBack() {
       this.$router.push({ name: "나의 로드맵" });

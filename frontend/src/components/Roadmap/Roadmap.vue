@@ -110,6 +110,7 @@ export default {
       dates: "",
       memotext: "",
       descript: "",
+      recommend : "",
       // Get more form https://flatpickr.js.org/options/
       config: {
         wrap: true, // set wrap to true only when using 'input-group'
@@ -338,7 +339,7 @@ export default {
         this.makePort("B", go.Spot.Bottom, go.Spot.Bottom, true, false)
       )
     );
- // 맨위 빈칸 만들기 모델
+    // 맨위 빈칸 만들기 모델
     myDiagram.nodeTemplateMap.add(
       "Blank",
       $(
@@ -748,17 +749,18 @@ export default {
     },
     checkCur(e) {
       // 차후에 DB에 요청을 보낸다음 DB정보로 반영
-      if (this.curriculumData.category == "comment") return;
-      this.headertext = this.curriculumData.text;
-      if (this.curriculumData.category)
-        this.dates = this.curriculumData.startdate + " to " + this.curriculumData.enddate;
-      this.memotext = this.curriculumData.memo;
-      this.descript = this.curriculumData.content;
-      if (this.curriculumData == -1) {
-        this.descript = ""
-        this.memotext = ""
-        this.dates = ""
+      if (curriculumData.category == "comment" || curriculumData == -1) {
+        this.headertext = "";
+        this.dates = "";
+      this.memotext = "";
+      this.descript = "";  
+        return;
       }
+      this.headertext = curriculumData.text;
+      if (curriculumData.dates)
+        this.dates = curriculumData.startdate + " ~ " + curriculumData.enddate;
+      this.memotext = curriculumData.memo;
+      this.descript = curriculumData.content;
     },
     getRecommendCur() {
       const _ = require("lodash");
@@ -777,6 +779,8 @@ export default {
       axios
         .get(url)
         .then(res => {
+          this.recommend = res.data.recommend.text;
+          this.get_recommend();
           for (var i = 0; i < res.data["suggest"].length; i++) {
             res.data["suggest"][i].category = color;
             res.data["suggest"][i].startdate = "";
@@ -793,7 +797,7 @@ export default {
             start.text = "시작";
             res.data["suggest"].push(start);
           }
-           let blank = _.cloneDeep(this.curData);
+          let blank = _.cloneDeep(this.curData);
           blank.category = "Blank";
            blank.text = "";
           res.data["suggest"].unshift(blank);
@@ -801,6 +805,7 @@ export default {
           myPalette.model.nodeDataArray = recommendCurData;
         })
         .catch(e => {
+          console.log(res);
           console.error(e);
         });
     },
@@ -827,6 +832,7 @@ export default {
           myPalette.model.nodeDataArray = recommendCurData;
         })
         .catch(err => {
+          console.log(res);
           console.error(err);
         });
     },
@@ -888,11 +894,14 @@ export default {
         .catch(err => {
           console.error(err);
         });
-    }
+    },
+    get_recommend(){
+      this.$emit('get_recommend',this.recommend);
+    },
   },
   destroyed() {
     clearInterval(roadbacktimer);
-  }
+  },
 };
 </script>
 

@@ -16,6 +16,7 @@
               <!-- 한줄 소개 들어갈 부분 -->
               <p class="text-white mt-0 mb-3">
                 {{ introduction }}
+                <!--이거 나중에 글자 깨지는거 고쳐주세요 명 상 명희가 명상을하면 명명상 -->
               </p>
               <div>
                 <svg
@@ -128,6 +129,7 @@
                 :key="idx"
               >
                 {{ keywordtext }}
+                <!-- 네 너가 다시 수정하세요 -->
               </b-badge>
             </div>
             <hr class="my-4" />
@@ -224,6 +226,7 @@ export default {
       comments: "",
       major: "기계공학",
       email: "",
+      oneline: "",
       uid: "",
       isSearch: true,
       profileUrl: "",
@@ -257,7 +260,6 @@ export default {
     axios
       .get(`${this.$store.getters.getUserServer}/user/info/${this.profileuid}`)
       .then(res => {
-        console.log(res.data);
         if (res.data.isEqual) {
           this.isSearch = false;
         } else {
@@ -267,6 +269,9 @@ export default {
         this.email = res.data.email;
         this.keywords = res.data.keywords;
         this.keywordtexts = res.data.keywordtexts;
+        this.address = res.data.address;
+        this.major = res.data.major;
+        this.oneline = res.data.oneline;
       })
       .catch(err => {
         alert("로그인이 필요한 서비스입니다.");
@@ -325,8 +330,6 @@ export default {
       )
       .then(res => {
         this.followerlists = res.data.followerlists;
-        console.log(res.data);
-        console.log(this.followerlists);
       })
       .catch(err => {});
 
@@ -337,8 +340,6 @@ export default {
       )
       .then(res => {
         this.followinglists = res.data.followinglists;
-        console.log(res.data);
-        console.log(this.followinglists);
       })
       .catch(err => {});
   },

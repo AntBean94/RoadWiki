@@ -12,6 +12,7 @@ public interface CurriculumRepo {
 	
 	
 	public Curriculumtext[] selectSmallText(int bdid,int mdid);
+	public List<Curriculumtext> selectSmallTextBykeyword(String keyword);
 	public Curriculumtext[] selectMiddleText(int bdid);
 	public Curriculumtext[] selectBigText();
 	

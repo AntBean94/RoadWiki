@@ -43,7 +43,7 @@ public class CurriculumController {
 
 		try {
 			logger.info("roadmap : " + curriculumtext.toString());
-			String nowuid = Integer.toString((int) loginServ.getData(request.getHeader("auth-token")).get("uid"));
+			int nowuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) Curriculumservice.insertText(nowuid, curriculumtext);
 			result.put("msg", SUCCESS);
 			status = HttpStatus.OK;
@@ -68,7 +68,7 @@ public class CurriculumController {
 		
 		try {
 			logger.info("roadmap : " + curriculumtext.toString());
-			String nowuid = Integer.toString((int) loginServ.getData(request.getHeader("auth-token")).get("uid"));
+			int nowuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) Curriculumservice.deleteText(nowuid, curriculumtext);
 			result.put("msg", SUCCESS);
 			status = HttpStatus.OK;
@@ -110,12 +110,13 @@ public class CurriculumController {
 	}
 	
 	@GetMapping("/suggest")
-	public Object suggest() {
+	public Object suggest(HttpServletRequest request) {
 		logger.trace("suggest start");
 		Map<String, Object> result = new HashMap<>();
 		HttpStatus status = null;
 		try {
-			result = (Map<String, Object>) Curriculumservice.getSuggest();
+			int nowuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			result = (Map<String, Object>) Curriculumservice.getSuggest(nowuid);
 			result.put("msg", SUCCESS);
 			status = HttpStatus.OK;
 		} catch (NumberFormatException e) {
@@ -133,13 +134,14 @@ public class CurriculumController {
 	}
 	
 	@GetMapping("/suggest/{bdid}")
-	public Object suggestByBdid(@PathVariable String bdid) {
+	public Object suggestByBdid(@PathVariable int bdid,HttpServletRequest request) {
 		logger.trace("suggestByBdid start");
 		Map<String, Object> result = new HashMap<>();
 		HttpStatus status = null;
 		try {
 			logger.info("bdid : " + bdid);
-			result = (Map<String, Object>) Curriculumservice.getSuggestBybdid(bdid);
+			int nowuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			result = (Map<String, Object>) Curriculumservice.getSuggestBybdid(nowuid,bdid);
 			result.put("msg", SUCCESS);
 			status = HttpStatus.OK;
 		} catch (NumberFormatException e) {
@@ -157,14 +159,15 @@ public class CurriculumController {
 	}
 	
 	@GetMapping("/suggest/{bdid}/{mdid}")
-	public Object suggestByBdidMdid(@PathVariable String bdid,@PathVariable String mdid) {
+	public Object suggestByBdidMdid(@PathVariable int bdid,@PathVariable int mdid,HttpServletRequest request) {
 		logger.trace("suggestByBdidMdid start");
 		Map<String, Object> result = new HashMap<>();
 		HttpStatus status = null;
 		try {
 			logger.info("bdid : " + bdid);
 			logger.info("mdid : " + mdid);
-			result = (Map<String, Object>) Curriculumservice.getSuggestBybdidmdid(bdid,mdid);
+			int nowuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			result = (Map<String, Object>) Curriculumservice.getSuggestBybdidmdid(nowuid,bdid,mdid);
 			result.put("msg", SUCCESS);
 			status = HttpStatus.OK;
 		} catch (NumberFormatException e) {
