@@ -44,7 +44,7 @@ import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 import store from "@/store";
 
-const SERVER_URL = store.getters.getServer;
+const SERVER_URL = store.getters.getChattingServer;
 
 export default {
   name: "Chatting",
@@ -62,7 +62,7 @@ export default {
   },
   created() {
     this.sender = this.$store.getters.getName;
-    localStorage.setItem("roomid", this.roomid);
+    sessionStorage.setItem("roomid", this.roomid);
     this.connect();
   },
   computed: {},
@@ -71,7 +71,7 @@ export default {
     sendMsg: function() {
       var msg = {
         type: "TALK",
-        roomid: localStorage.getItem("roomid"),
+        roomid: sessionStorage.getItem("roomid"),
         sender: this.sender,
         msg: this.message
       };
@@ -86,7 +86,7 @@ export default {
         {},
         frame => {
           this.stompClient.subscribe(
-            "/sub/chat/room/" + localStorage.getItem("roomid"),
+            "/sub/chat/room/" + sessionStorage.getItem("roomid"),
             res => {
               let jsonBody = JSON.parse(res.body);
               let m = {
@@ -105,7 +105,7 @@ export default {
           );
           var msg = {
             type: "JOIN",
-            roomid: localStorage.getItem("roomid"),
+            roomid: sessionStorage.getItem("roomid"),
             sender: this.sender,
             msg: this.message
           };

@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     getPosting() {
-      const adr = `${this.$store.getters.getServer}/freeboard/posting/${this.pid}`;
+      const adr = `${this.$store.getters.getBoardServer}/freeboard/posting/${this.pid}`;
       axios
         .get(adr)
         .then(response => {

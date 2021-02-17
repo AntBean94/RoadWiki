@@ -530,13 +530,17 @@ export default {
       });
 
       myDiagram.addDiagramListener("SelectionMoved", e => {
-        e.subject.each(p => { this.updateComment(p.part.data); });
+        e.subject.each(p => {
+          this.updateComment(p.part.data);
+        });
       });
       myDiagram.addDiagramListener("TextEdited", e => {
         this.updateComment(e.subject.part.data);
       });
       myDiagram.addDiagramListener("SelectionDeleted", e => {
-        e.subject.each(p => { this.deleteComment(p.part.data); });
+        e.subject.each(p => {
+          this.deleteComment(p.part.data);
+        });
       });
     }
 
@@ -577,7 +581,7 @@ export default {
       myDiagram.isReadOnly = true;
     }
     //-----------------------------------------------------------------------------------|
-      this.readRoadmap();
+    this.readRoadmap();
     // // 수정로그 가져오기
     // update쪽으로 옮기기
     // this.readRoadmapLog();
@@ -713,13 +717,13 @@ export default {
       let color;
       let url;
       if (curriculumData == -1 || !curriculumData.category) {
-        url = `${this.$store.getters.getServer}/curriculum/suggest`;
+        url = `${this.$store.getters.getRoadmapServer}/curriculum/suggest`;
         color = "blue";
       } else if (curriculumData.mdid != 0) {
-        url = `${this.$store.getters.getServer}/curriculum/suggest/${curriculumData.bdid}/${curriculumData.mdid}`;
+        url = `${this.$store.getters.getRoadmapServer}/curriculum/suggest/${curriculumData.bdid}/${curriculumData.mdid}`;
         color = "green";
       } else if (curriculumData.bdid != 0) {
-        url = `${this.$store.getters.getServer}/curriculum/suggest/${curriculumData.bdid}`;
+        url = `${this.$store.getters.getRoadmapServer}/curriculum/suggest/${curriculumData.bdid}`;
         color = "black";
       }
       axios
@@ -749,7 +753,7 @@ export default {
         });
     },
     getSearchCur() {
-      let url = `${this.$store.getters.getServer}/curriculum/search/${this.inputText}`;
+      let url = `${this.$store.getters.getRoadmapServer}/curriculum/search/${this.inputText}`;
       let color = "";
       axios
         .get(url)
@@ -784,7 +788,7 @@ export default {
         ) {
           return;
         }
-        let url = `${this.$store.getters.getServer}/roadmap/get/comment/${this.rmid}`;
+        let url = `${this.$store.getters.getRoadmapServer}/roadmap/get/comment/${this.rmid}`;
         axios
           .get(url)
           .then(res => {
@@ -798,7 +802,7 @@ export default {
     saveComment(data) {
       data.rmid = this.rmid;
       axios
-        .put(`${this.$store.getters.getServer}/roadcomment/insert`, data)
+        .put(`${this.$store.getters.getRoadmapServer}/roadcomment/insert`, data)
         .then(res => {
           if (res.data.msg != "success") alert("통신 오류");
         })
@@ -808,7 +812,7 @@ export default {
     },
     updateComment(data) {
       axios
-        .put(`${this.$store.getters.getServer}/roadcomment/update`, data)
+        .put(`${this.$store.getters.getRoadmapServer}/roadcomment/update`, data)
         .then(res => {
           if (res.data.msg != "success") alert("통신 오류");
         })
@@ -816,9 +820,12 @@ export default {
           console.error(err);
         });
     },
-    deleteComment(data){
+    deleteComment(data) {
       axios
-        .post(`${this.$store.getters.getServer}/roadcomment/delete`, data)
+        .post(
+          `${this.$store.getters.getRoadmapServer}/roadcomment/delete`,
+          data
+        )
         .then(res => {
           if (res.data.msg != "success") alert("통신 오류");
         })

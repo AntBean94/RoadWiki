@@ -62,9 +62,9 @@ import "@toast-ui/editor/dist/toastui-editor.css";
 import "codemirror/lib/codemirror.css";
 import { Editor } from "@toast-ui/vue-editor";
 import store from "@/store";
-import routes from '@/routes/routes';
+import routes from "@/routes/routes";
 
-// local 이 아니라 this.$store.getters.getServer 73이아니라 파람으로 받아온거$route.param
+// local 이 아니라 this.$store.getters.getBoardServer 73이아니라 파람으로 받아온거$route.param
 // axios.get(`http://localhost:8085/freeboard/posting/73`)
 
 // console.log(routes.query.pid)
@@ -82,25 +82,28 @@ export default {
       },
       tags: ["첫번째 태그", "두번째 태그", "세번째 태그", "네번째 태그"],
       tagInput: "",
-      title: "",
+      title: ""
     };
   },
   methods: {
     getOriginPosting() {
-      axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
-      .then((res) => {
-        console.log('origin data')
-        console.log(res.data)
-        this.content = res.data.posting.content
-        this.title = res.data.posting.title
-        console.log('여기는 title')
-        console.log(this.title)
-      })
+      axios
+        .get(
+          `${this.$store.getters.getBoardServer}/freeboard/posting/${this.$route.query.pid}`
+        )
+        .then(res => {
+          console.log("origin data");
+          console.log(res.data);
+          this.content = res.data.posting.content;
+          this.title = res.data.posting.title;
+          console.log("여기는 title");
+          console.log(this.title);
+        });
     },
     datachange() {
       const content = this.$refs.toastuiEditor.invoke("getMarkdown");
       axios
-        .post(`${this.$store.getters.getServer}/freeboard/posting`, {
+        .post(`${this.$store.getters.getBoardServer}/freeboard/posting`, {
           title: this.title,
           content: content
         })
@@ -118,16 +121,15 @@ export default {
     editorLoading() {
       axios
         .get(
-          `${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`
+          `${this.$store.getters.getBoardServer}/freeboard/posting/${this.$route.query.pid}`
         )
         .then(res => {
           this.content = res.data.posting.content;
         })
-        .finally(() => {
-        });
+        .finally(() => {});
     }
     // onEditorLoad() {
-    //   axios.get(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
+    //   axios.get(`${this.$store.getters.getBoardServer}/freeboard/posting/${this.$route.query.pid}`)
     //   .then((res) => {
     //     console.log(res.data.posting)
     //     this.name = res.data.name
@@ -143,19 +145,17 @@ export default {
   },
   watch: {
     content: function() {
-      console.log("바뀌는중...")
+      console.log("바뀌는중...");
     }
   },
   created() {
     console.log(
-      `${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`
+      `${this.$store.getters.getBoardServer}/freeboard/posting/${this.$route.query.pid}`
     );
     this.getOriginPosting();
     this.editorLoading();
-  },
-}
+  }
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

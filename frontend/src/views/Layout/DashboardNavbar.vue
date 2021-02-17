@@ -291,7 +291,7 @@ export default {
     this.checkUrl(url);
     this.url = url;
 
-    axios.get(`${this.$store.getters.getServer}/user/image`).then(res => {
+    axios.get(`${this.$store.getters.getUserServer}/user/image`).then(res => {
       this.profileUrl = res.data.path;
       console.log(this.profileUrl);
     });

@@ -120,7 +120,7 @@ export default {
   },
   methods: {
     getList() {
-      let adr = `${this.$store.getters.getServer}/freeboard/list/board/${this.selector}`;
+      let adr = `${this.$store.getters.getBoardServer}/freeboard/list/board/${this.selector}`;
       if (this.word === "") adr += "/ ";
       else adr + `/${this.word}`;
       adr += `/${this.currentPage}`;
@@ -153,7 +153,7 @@ export default {
     },
     getTotalNum() {
       axios
-        .get(`${this.$store.getters.getServer}/freeboard/totalCount`)
+        .get(`${this.$store.getters.getBoardServer}/freeboard/totalCount`)
         .then(res => {
           this.totalPageNum = res.data.total;
         });
@@ -165,7 +165,7 @@ export default {
     getCommentNum() {
       console.log(this.row.pid);
       axios.get(
-        `${this.$store.getters.getServer}/freeboard/posting/${this.row.pid}`
+        `${this.$store.getters.getBoardServer}/freeboard/posting/${this.row.pid}`
       );
     }
   },

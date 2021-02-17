@@ -41,16 +41,16 @@
       </b-button>
 
       <!-- 장기 중기 단기 선택 라디오 -->
-    <b-form-group v-slot="{ ariaDescribedby }">
-      <b-form-radio-group
-        id="btn-radios-1"
-        v-model="term"
-        :options="options"
-        :aria-describedby="ariaDescribedby"
-        name="radios-btn-default"
-        buttons
-      ></b-form-radio-group>
-    </b-form-group>
+      <b-form-group v-slot="{ ariaDescribedby }">
+        <b-form-radio-group
+          id="btn-radios-1"
+          v-model="term"
+          :options="options"
+          :aria-describedby="ariaDescribedby"
+          name="radios-btn-default"
+          buttons
+        ></b-form-radio-group>
+      </b-form-group>
       <div v-if="checkRB">
         <button
           class="btn"
@@ -60,9 +60,7 @@
           피드백 보기
         </button>
       </div>
-      <div v-else>
-   
-      </div>
+      <div v-else></div>
 
       <b-form-input
         v-model="roadmapname"
@@ -192,12 +190,12 @@ export default {
       roadmapMode: 1,
       inputText: "",
       checkRB: false,
-        term: 1,
-        options: [
-          { text: '장기', value: 1 },
-          { text: '중기', value: 2 },
-          { text: '단기', value: 3 },
-        ]
+      term: 1,
+      options: [
+        { text: "장기", value: 1 },
+        { text: "중기", value: 2 },
+        { text: "단기", value: 3 }
+      ]
     };
   },
   created() {},
@@ -214,8 +212,8 @@ export default {
     readRoadmap() {
       // 페이지 초기화시 rmid여부 확인해서 바탕화면으로 redirect
       if (this.rmid === undefined) {
-        console.log('확인')
-        this.$router.push({ name: '나의 로드맵' })
+        console.log("확인");
+        this.$router.push({ name: "나의 로드맵" });
         return;
       }
       if (this.rmid == 0) {
@@ -228,7 +226,9 @@ export default {
         };
       } else {
         axios
-          .get(`${this.$store.getters.getServer}/roadmap/get/${this.rmid}`)
+          .get(
+            `${this.$store.getters.getRoadmapServer}/roadmap/get/${this.rmid}`
+          )
           .then(res => {
             if (res.data.msg == "success") {
               this.roadmapData = JSON.parse(res.data["roadmaps"].tmp);
@@ -253,7 +253,7 @@ export default {
       if (this.CUMode == 1) {
         axios
           .get(
-            `${this.$store.getters.getServer}/roadmap/log/${this.$store.getters.getUid}/${this.rmorder}`
+            `${this.$store.getters.getRoadmapServer}/roadmap/log/${this.$store.getters.getUid}/${this.rmorder}`
           )
           .then(res => {
             if (res.data.msg == "success") {
@@ -272,19 +272,18 @@ export default {
     updateRoadmap() {
       const childRoadmapData = this.$refs.roadmap.serveRoadmap();
       axios
-        .post(`${this.$store.getters.getServer}/roadmap/update`, {
+        .post(`${this.$store.getters.getRoadmapServer}/roadmap/update`, {
           uid: this.$store.getters.getUid,
           rmorder: this.rmorder,
           name: this.roadmapname,
           term: this.term,
           tmp: childRoadmapData
-        }
-      )
-      .then((res) => {
-        if(res.data.msg == 'success'){
-        this.$router.push({ name: '나의 로드맵' })
-          }else{
-            alert("업데이트 실패했습니다.")
+        })
+        .then(res => {
+          if (res.data.msg == "success") {
+            this.$router.push({ name: "나의 로드맵" });
+          } else {
+            alert("업데이트 실패했습니다.");
           }
         })
         .catch(e => {
@@ -294,22 +293,22 @@ export default {
     createRoadmap() {
       const childRoadmapData = this.$refs.roadmap.serveRoadmap();
       axios
-        .post(`${this.$store.getters.getServer}/roadmap/create`, {
+        .post(`${this.$store.getters.getRoadmapServer}/roadmap/create`, {
           uid: this.$store.getters.getUid,
           name: this.roadmapname,
           term: this.term,
           tmp: childRoadmapData
-        }
-      )
-      .then((res) => {
-        console.log(res)
-        if(res.data.msg == 'success'){
-          this.$router.push({ name: '나의 로드맵' })
-        }else{
-          alert("생성에 실패했습니다.")
-        }
-        }).catch((e) =>{
-          alert('axios 오류 4')
+        })
+        .then(res => {
+          console.log(res);
+          if (res.data.msg == "success") {
+            this.$router.push({ name: "나의 로드맵" });
+          } else {
+            alert("생성에 실패했습니다.");
+          }
+        })
+        .catch(e => {
+          alert("axios 오류 4");
         });
     },
     checkCur(e) {
@@ -318,7 +317,7 @@ export default {
     },
     previewRoadmap(clickrmid) {
       axios
-        .get(`${this.$store.getters.getServer}/roadmap/get/${clickrmid}`)
+        .get(`${this.$store.getters.getRoadmapServer}/roadmap/get/${clickrmid}`)
         .then(res => {
           if (res.data.msg == "success") {
             this.roadmapData = JSON.parse(res.data["roadmaps"].tmp);
@@ -332,7 +331,7 @@ export default {
         });
     },
     goToBack() {
-      this.$router.push({ name: "나의 로드맵" })
+      this.$router.push({ name: "나의 로드맵" });
     }
   }
 };
