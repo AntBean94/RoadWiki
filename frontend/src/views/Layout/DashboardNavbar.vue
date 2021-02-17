@@ -41,7 +41,10 @@
       <b-navbar-nav class="align-items-center ml-auto ml-md-0">
         <div v-if="isSearch" class="row" id="menu">
           <div v-if="isHoverO">
-            <i @mouseover="checkHoverO" class="btn ni ni-tv-2 text-black nav-btn"></i>
+            <i
+              @mouseover="checkHoverO"
+              class="btn ni ni-tv-2 text-black nav-btn"
+            ></i>
           </div>
           <div v-else>
             <h1
@@ -86,14 +89,15 @@
           </div>
 
           <div v-if="isHoverC">
-            <i 
-              class="btn far fa-comments nav-btn"
-              @mouseover="checkHoverC"
-            >
+            <i class="btn far fa-comments nav-btn" @mouseover="checkHoverC">
             </i>
           </div>
           <div v-else>
-            <h1 @mouseleave="checkHoverC" @click="goToChat(url)" class="btn m-0 p-1 nav-btn">
+            <h1
+              @mouseleave="checkHoverC"
+              @click="goToChat(url)"
+              class="btn m-0 p-1 nav-btn"
+            >
               Chat
             </h1>
           </div>
@@ -212,7 +216,14 @@
     </div>
     <div>
       <chatting-bg v-on:remove="removeChatting" v-if="chattingOn" />
-      <b-button id="chat" @click="createChatting" pill v-else size="lg" class="px-5">
+      <b-button
+        id="chat"
+        @click="createChatting"
+        pill
+        v-else
+        size="lg"
+        class="px-5"
+      >
         <!-- chatting -->
         <i class="far fa-comment-dots fa-2x"></i>
       </b-button>
@@ -288,7 +299,7 @@ export default {
       locO: true,
       locB: true,
       locS: true,
-      url: "",
+      url: ""
     };
   },
   created() {
@@ -297,9 +308,11 @@ export default {
     this.url = url;
     this.checkUrl(url);
 
-    axios.get(`${this.$store.getters.getUserServer}/user/image/${this.uid}`).then(res => {
-      this.profileUrl = res.data.path;
-    });
+    axios
+      .get(`${this.$store.getters.getUserServer}/user/image/${this.uid}`)
+      .then(res => {
+        this.profileUrl = res.data.path;
+      });
   },
   computed: {
     routeName() {
@@ -363,7 +376,7 @@ export default {
     },
     goToMain(url) {
       if (url != "나의 로드맵") {
-        this.$router.push({ name: "dashboard" });
+        this.$router.push({ name: "mainpage" });
       }
     },
     clickSearch() {
@@ -431,7 +444,7 @@ export default {
       } else {
         this.isSearch = true;
       }
-    },
+    }
   },
   computed: {
     ...mapGetters(["getAccessToken"])
