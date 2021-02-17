@@ -8,7 +8,9 @@
       </template>
       <div>
         <b-form-group label="" v-slot="{ ariaDescribedby }">
-          <p>가장 관심있는 것부터 순서대로 체크해주세요. (3개 이상 선택 가능)</p>
+          <p>
+            가장 관심있는 것부터 순서대로 체크해주세요. (3개 이상 선택 가능)
+          </p>
           <b-container>
             <b-form-checkbox
               v-for="option in options"
@@ -37,7 +39,13 @@
         </b-form-group>
       </div>
       <div class="text-center">
-        <base-button type="primary" native-type="submit" class="my-4" @click="sendFlavour">확인</base-button>
+        <base-button
+          type="primary"
+          native-type="submit"
+          class="my-4"
+          @click="sendFlavour"
+          >확인</base-button
+        >
       </div>
     </b-modal>
   </div>
@@ -47,32 +55,28 @@
 
 <script>
 export default {
-  props: ['keywords'],
+  props: ["keywords"],
   data() {
     return {
       modalShow: false,
-      options: [],
-    }
+      options: []
+    };
   },
   created() {
-    axios.get(`${this.$store.getters.getServer}/keyword/list`)
-    .then((res) => {
-      this.options = res.data.keywords
-    })
+    axios.get(`${this.$store.getters.getUserServer}/keyword/list`).then(res => {
+      this.options = res.data.keywords;
+    });
   },
   methods: {
     clickBtn() {
-      this.modalShow = true
-
+      this.modalShow = true;
     },
     sendFlavour() {
-      this.modalShow = false
-      this.$emit('changeFlavour', this.keywords)
-    },
-  },
-}
+      this.modalShow = false;
+      this.$emit("changeFlavour", this.keywords);
+    }
+  }
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

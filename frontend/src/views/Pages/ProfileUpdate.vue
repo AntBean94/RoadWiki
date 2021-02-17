@@ -283,12 +283,12 @@ export default {
   created() {
     this.uid = this.$store.getters.getUid;
 
-    axios.get(`${this.$store.getters.getServer}/user/image`).then(res => {
+    axios.get(`${this.$store.getters.getUserServer}/user/image`).then(res => {
       this.profileUrl = res.data.path;
     });
 
     axios
-      .get(`${this.$store.getters.getServer}/user/info/${this.uid}`)
+      .get(`${this.$store.getters.getUserServer}/user/info/${this.uid}`)
       .then(res => {
         this.nickname = res.data.name;
         this.email = res.data.email;
@@ -301,7 +301,7 @@ export default {
           this.$router.replace("/");
         });
       });
-    axios.get(`${this.$store.getters.getServer}/keyword/list`).then(res => {
+    axios.get(`${this.$store.getters.getUserServer}/keyword/list`).then(res => {
       this.options = res.data.keywords;
     });
   },
@@ -311,7 +311,7 @@ export default {
     },
     withDrawal() {
       axios
-        .delete(`${this.$store.getters.getServer}/user/withdraw`)
+        .delete(`${this.$store.getters.getUserServer}/user/withdraw`)
         .then(() => {
           alert("회원 탈퇴가 완료되었습니다.");
           this.$store.dispatch("LOGOUT").then(() => {
@@ -343,7 +343,7 @@ export default {
       };
 
       axios
-        .put(`${this.$store.getters.getServer}/user/modify`, user)
+        .put(`${this.$store.getters.getUserServer}/user/modify`, user)
         .then(res => {
           if (res.data.msg == "success") {
             alert("회원 수정이 완료되었습니다.");
@@ -361,7 +361,7 @@ export default {
       // this.modalShow = false;
 
       await axios
-        .post(`${this.$store.getters.getServer}/user/pic`, formData, {
+        .post(`${this.$store.getters.getUserServer}/user/pic`, formData, {
           headers: { "content-type": "multipart/form-data" }
         })
         .then(res => {

@@ -5,11 +5,11 @@ import com.web.blog.model.dto.Curriculumtext;
 
 public interface CurriculumService {
 	
-	public Object insertText(String uid,Curriculumtext curriculumtext);
-	public Object deleteText(String uid,Curriculumtext curriculumtext);
-	public Object getSuggest();
-	public Object getSuggestBybdid(String bdid);
-	public Object getSuggestBybdidmdid(String bdid, String mdid);
+	public Object insertText(int uid,Curriculumtext curriculumtext);
+	public Object deleteText(int uid,Curriculumtext curriculumtext);
+	public Object getSuggest(int uid) throws Exception;
+	public Object getSuggestBybdid(int uid,int bdid) throws Exception;
+	public Object getSuggestBybdidmdid(int uid,int bdid, int mdid) throws Exception;
 
 	
 	public void create(int rmid,JsonArray nodeDataArray);

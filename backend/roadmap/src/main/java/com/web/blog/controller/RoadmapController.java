@@ -42,26 +42,22 @@ public class RoadmapController {
 	public Object listRoadmap(@PathVariable int uid,HttpServletRequest request) {
 		logger.trace("listRoadmap start");
 		Map<String, Object> result = new HashMap<>();
-		HttpStatus status = null;
+		HttpStatus status = HttpStatus.OK;
 		try {
 			logger.info("uid : " + uid);
 			logger.info(request.getHeader("auth-token"));
 			logger.info("nowuid : " + loginServ.getData(request.getHeader("auth-token")).get("uid"));
-
 			int nowuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) roadmapservice.getRoadmapListByUid( nowuid, uid);
 			result.put("msg", SUCCESS);
-			status = HttpStatus.OK;
 		} catch (NumberFormatException e) {
 			logger.error("input data type error");
 			result.put("msg", FAIL);
 			result.put("errorMsg", e.getMessage());
-			status = HttpStatus.OK;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			result.put("msg", FAIL);
 			result.put("errorMsg", e.getMessage());
-			status = HttpStatus.OK;
 		}
 		return new ResponseEntity<Map<String, Object>>(result, status);
 	}
@@ -70,21 +66,18 @@ public class RoadmapController {
 	public Object listOfficialRoadmap(HttpServletRequest request) {
 		logger.trace("listOfficialRoadmap start");
 		Map<String, Object> result = new HashMap<>();
-		HttpStatus status = null;
+		HttpStatus status = HttpStatus.OK;
 		try {
 			result = (Map<String, Object>) roadmapservice.getOfficialRoadmapList();
 			result.put("msg", SUCCESS);
-			status = HttpStatus.OK;
 		} catch (NumberFormatException e) {
 			logger.error("input data type error");
 			result.put("msg", FAIL);
 			result.put("errorMsg", e.getMessage());
-			status = HttpStatus.OK;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			result.put("msg", FAIL);
 			result.put("errorMsg", e.getMessage());
-			status = HttpStatus.OK;
 		}
 		return new ResponseEntity<Map<String, Object>>(result, status);
 	}
@@ -94,23 +87,20 @@ public class RoadmapController {
 			HttpServletRequest request) {
 		logger.trace("listLog start");
 		Map<String, Object> result = new HashMap<>();
-		HttpStatus status = null;
+		HttpStatus status = HttpStatus.OK;
 		try {
 			logger.info("uid : " + uid + " rmorder : " + rmorder);
 			int nowuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) roadmapservice.getRoadmapListByRmorder(nowuid, uid, rmorder);
 			result.put("msg", SUCCESS);
-			status = HttpStatus.OK;
 		} catch (NumberFormatException e) {
 			logger.error("input data type error");
 			result.put("msg", FAIL);
 			result.put("errorMsg", e.getMessage());
-			status = HttpStatus.OK;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			result.put("msg", FAIL);
 			result.put("errorMsg", e.getMessage());
-			status = HttpStatus.OK;
 		}
 		return new ResponseEntity<Map<String, Object>>(result, status);
 	}
@@ -119,24 +109,21 @@ public class RoadmapController {
 	public Object getRoadmap(@PathVariable int rmid, HttpServletRequest request) {
 		logger.trace("getRoadmap start");
 		Map<String, Object> result = new HashMap<>();
-		HttpStatus status = null;
+		HttpStatus status = HttpStatus.OK;
 		try {
 
 			logger.info("rmid : " + rmid);
 			int nowuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) roadmapservice.getRoadmap(nowuid, rmid);
 			result.put("msg", SUCCESS);
-			status = HttpStatus.OK;
 		} catch (NumberFormatException e) {
 			logger.error("input data type error");
 			result.put("msg", FAIL);
 			result.put("errorMsg", e.getMessage());
-			status = HttpStatus.OK;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			result.put("msg", FAIL);
 			result.put("errorMsg", e.getMessage());
-			status = HttpStatus.OK;
 		}
 		return new ResponseEntity<Map<String, Object>>(result, status);
 	}
@@ -145,22 +132,19 @@ public class RoadmapController {
 	public Object getRoadmapComment(@PathVariable int rmid, HttpServletRequest request) {
 		logger.trace("getRoadmapComment start");
 		Map<String, Object> result = new HashMap<>();
-		HttpStatus status = null;
+		HttpStatus status = HttpStatus.OK;
 		try {
 			logger.info("rmid : " + rmid);
 			result = (Map<String, Object>) roadmapservice.getRoadmapComment(rmid);
 			result.put("msg", SUCCESS);
-			status = HttpStatus.OK;
 		} catch (NumberFormatException e) {
 			logger.error("input data type error");
 			result.put("msg", FAIL);
 			result.put("errorMsg", e.getMessage());
-			status = HttpStatus.OK;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			result.put("msg", FAIL);
 			result.put("errorMsg", e.getMessage());
-			status = HttpStatus.OK;
 		}
 		return new ResponseEntity<Map<String, Object>>(result, status);
 	}
@@ -169,24 +153,21 @@ public class RoadmapController {
 	public Object createRoadmap(@RequestBody Roadmap roadmap, HttpServletRequest request) {
 		logger.trace("createRoadmap start");
 		Map<String, Object> result = new HashMap<>();
-		HttpStatus status = null;
+		HttpStatus status = HttpStatus.OK;
 
 		try {
 			logger.info("roadmap : " + roadmap.toString());
 			int nowuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) roadmapservice.create(nowuid, roadmap);
 			result.put("msg", SUCCESS);
-			status = HttpStatus.OK;
 		} catch (NumberFormatException e) {
 			logger.error("input data type error");
 			result.put("msg", FAIL);
 			result.put("errorMsg", e.getMessage());
-			status = HttpStatus.OK;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			result.put("msg", FAIL);
 			result.put("errorMsg", e.getMessage());
-			status = HttpStatus.OK;
 		}
 		return new ResponseEntity<Map<String, Object>>(result, status);
 	}
@@ -195,24 +176,21 @@ public class RoadmapController {
 	public Object updateRoadmap(@RequestBody Roadmap roadmap, HttpServletRequest request) {
 		logger.trace("updateRoadmap start");
 		Map<String, Object> result = new HashMap<>();
-		HttpStatus status = null;
+		HttpStatus status = HttpStatus.OK;
 
 		try {
 			logger.info("roadmap : " + roadmap.toString());
 			int nowuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) roadmapservice.modify(nowuid, roadmap);
 			result.put("msg", SUCCESS);
-			status = HttpStatus.OK;
 		} catch (NumberFormatException e) {
 			logger.error("input data type error");
 			result.put("msg", FAIL);
 			result.put("errorMsg", e.getMessage());
-			status = HttpStatus.OK;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			result.put("msg", FAIL);
 			result.put("errorMsg", e.getMessage());
-			status = HttpStatus.OK;
 		}
 		return new ResponseEntity<Map<String, Object>>(result, status);
 	}
@@ -221,24 +199,21 @@ public class RoadmapController {
 	public Object deleteRoadmap(@PathVariable int uid, @PathVariable int rmorder, HttpServletRequest request) {
 		logger.trace("deleteRoadmap start");
 		Map<String, Object> result = new HashMap<>();
-		HttpStatus status = null;
+		HttpStatus status = HttpStatus.OK;
 
 		try {
 			logger.info("uid : " + uid + " rmorder : " + rmorder);
 			int nowuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) roadmapservice.deleteRoadmap(nowuid, uid, rmorder);
 			result.put("msg", SUCCESS);
-			status = HttpStatus.OK;
 		} catch (NumberFormatException e) {
 			logger.error("input data type error");
 			result.put("msg", FAIL);
 			result.put("errorMsg", e.getMessage());
-			status = HttpStatus.OK;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			result.put("msg", FAIL);
 			result.put("errorMsg", e.getMessage());
-			status = HttpStatus.OK;
 		}
 		return new ResponseEntity<Map<String, Object>>(result, status);
 	}

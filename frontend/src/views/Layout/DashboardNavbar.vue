@@ -56,7 +56,7 @@
           <div v-if="isHoverB">
             <i
               @mouseover="checkHoverB"
-              class="btn ni ni-bullet-list-67 text-red"
+              class="btn ni ni-bullet-list-67 text-black"
             ></i>
           </div>
           <div v-else>
@@ -70,10 +70,10 @@
           </div>
 
           <div v-if="isHoverS">
-            <i
+            <i 
               @mouseover="checkHoverS"
-              class="btn ni ni-bullet-list-67 text-black"
-            ></i>
+              class="fas fa-share-alt
+            "></i>
           </div>
           <div v-else>
             <h1
@@ -291,7 +291,7 @@ export default {
     this.checkUrl(url);
     this.url = url;
 
-    axios.get(`${this.$store.getters.getServer}/user/image`).then(res => {
+    axios.get(`${this.$store.getters.getUserServer}/user/image`).then(res => {
       this.profileUrl = res.data.path;
       console.log(this.profileUrl);
     });

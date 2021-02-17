@@ -61,7 +61,7 @@ export default {
     console.log("createMode는 ", this.createMode);
     const uid = String(this.$store.getters.getUid);
     axios
-      .get(`${this.$store.getters.getServer}/roadmap/list/${uid}`)
+      .get(`${this.$store.getters.getRoadmapServer}/roadmap/list/${uid}`)
       .then(res => {
         if (res.data.msg == "success") {
           // 유저의 roadmaplist
@@ -81,12 +81,14 @@ export default {
     checkRoadmapToShare(rmid, name) {
       // 1. 로드맵 데이터 호출
       axios
-        .get(`${this.$store.getters.getServer}/roadmapshare/isshared/${rmid}`)
+        .get(
+          `${this.$store.getters.getRoadmapServer}/roadmapshare/isshared/${rmid}`
+        )
         .then(res => {
           if (res.data.isShared) {
             alert("이미 공유된 로드맵입니다.");
-          }else{
-            this.selectRoadmapToShare(rmid, name)
+          } else {
+            this.selectRoadmapToShare(rmid, name);
           }
         })
         .catch(e => {
@@ -94,9 +96,9 @@ export default {
           alert("axios 오류");
         });
     },
-    selectRoadmapToShare(rmid, name) {   
+    selectRoadmapToShare(rmid, name) {
       axios
-        .get(`${this.$store.getters.getServer}/roadmap/get/${rmid}`)
+        .get(`${this.$store.getters.getRoadmapServer}/roadmap/get/${rmid}`)
         .then(res => {
           if (res.data.msg == "success") {
             this.roadmapData = JSON.parse(res.data["roadmaps"].tmp);
@@ -122,7 +124,7 @@ export default {
     createRoadmapToShare() {
       if (this.rmid && this.title) {
         axios
-          .post(`${this.$store.getters.getServer}/roadmapshare/insert`, {
+          .post(`${this.$store.getters.getRoadmapServer}/roadmapshare/insert`, {
             rmid: this.rmid,
             uid: this.$store.getters.getUid,
             title: this.title,
@@ -130,7 +132,7 @@ export default {
           })
           .then(res => {
             console.log(res);
-            this.$router.push({ name: "공유로드맵\'s" });
+            this.$router.push({ name: "공유로드맵's" });
           })
           .catch(err => {
             console.error(err);

@@ -37,7 +37,6 @@
       aria-controls="mhtable"
       align="center"
     ></b-pagination>
-
   </div>
 </template>
 
@@ -57,13 +56,16 @@ export default {
       searchCategory: ["title", "name"],
       category: "title",
       inputtext: "",
-      currentPage : 1,
-      totalPageNum: 3,
+      currentPage: 1,
+      totalPageNum: 3
     };
   },
   computed: {
-    viewShareList: function () {
-      return this.shareList.slice((this.currentPage-1) * 10, (this.currentPage-1) * 10 + 10 )
+    viewShareList: function() {
+      return this.shareList.slice(
+        (this.currentPage - 1) * 10,
+        (this.currentPage - 1) * 10 + 10
+      );
     }
   },
   methods: {
@@ -72,12 +74,12 @@ export default {
     },
     getSharedRoadmap() {
       axios
-        .get(`${this.$store.getters.getServer}/roadmapshare/get`)
+        .get(`${this.$store.getters.getRoadmapServer}/roadmapshare/get`)
         .then(response => {
           this.shareList = response.data.roadmapshares;
           this.usernameList = response.data.username;
-          this.totalPageNum = response.data.roadmapshares.length
-          this.currentPage = 1
+          this.totalPageNum = response.data.roadmapshares.length;
+          this.currentPage = 1;
         })
         .catch(e => {
           console.log(e);
@@ -86,13 +88,13 @@ export default {
     searchSharedRoadmap() {
       axios
         .get(
-          `${this.$store.getters.getServer}/roadmapshare/get/${this.category}/${this.inputtext}`
+          `${this.$store.getters.getRoadmapServer}/roadmapshare/get/${this.category}/${this.inputtext}`
         )
         .then(response => {
           this.shareList = response.data.roadmapshares;
           this.usernameList = response.data.username;
-          this.totalPageNum = response.data.roadmapshares.length
-          this.currentPage = 1
+          this.totalPageNum = response.data.roadmapshares.length;
+          this.currentPage = 1;
         })
         .catch(e => {
           console.log(e);
@@ -101,7 +103,7 @@ export default {
     selectCategory(item) {
       this.category = item;
     }
-  },
+  }
 };
 </script>
 
