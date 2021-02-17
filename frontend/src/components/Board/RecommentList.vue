@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-secondary px-4 pb-3 pt-2">
+  <div class="px-4 pb-3 pt-2">
     <hr class="my-2" />
     <b-row>
       <b-col cols="8" align-self="center">

@@ -104,6 +104,7 @@ export default {
     isroadback: Boolean,
     rmid: Number,
     roadmapname: String,
+    checkName: Boolean,
   },
   data() {
     return {
@@ -673,6 +674,9 @@ export default {
       // 검색메서드 실행
       if (this.inputText != "") this.getSearchCur();
       else this.getRecommendCur();
+    },
+    roadmapname: function() {
+      this.curriculumData = -1
     }
   },
   computed: {},

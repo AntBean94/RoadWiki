@@ -72,8 +72,7 @@
           <div v-if="isHoverS">
             <i
               @mouseover="checkHoverS"
-              class="fas fa-share-alt
-            "
+              class="btn fas fa-share-alt"
             ></i>
           </div>
           <div v-else>
@@ -88,7 +87,7 @@
 
           <div v-if="isHoverC">
             <i 
-              class="far fa-comments"
+              class="btn far fa-comments"
               @mouseover="checkHoverC"
             >
             </i>
@@ -213,9 +212,9 @@
     </div>
     <div>
       <chatting-bg v-on:remove="removeChatting" v-if="chattingOn" />
-      <b-button id="chat" @click="createChatting" pill v-else>
-        chatting
-        <i class="far fa-comment-dots"></i>
+      <b-button id="chat" @click="createChatting" pill v-else size="lg" class="px-5">
+        <!-- chatting -->
+        <i class="far fa-comment-dots fa-2x"></i>
       </b-button>
     </div>
   </div>
@@ -306,6 +305,7 @@ export default {
   },
   watch: {
     $route(to) {
+      console.log(to.name)
       this.checkUrl(to.name);
       this.url = to.name;
     }
@@ -420,12 +420,7 @@ export default {
       } else {
         this.isSearch = true;
       }
-    }
-  },
-  watch: {
-    $route(to) {
-      this.checkUrl(to.name);
-    }
+    },
   },
   computed: {
     ...mapGetters(["getAccessToken"])
@@ -436,8 +431,8 @@ export default {
 <style>
 #chat {
   position: fixed;
-  right: 5px;
-  bottom: 5px;
+  right: 30px;
+  bottom: 30px;
   background-color: skyblue;
 }
 #mainNav {

@@ -5,9 +5,9 @@
     <!-- carousel도 컴포넌트화 필요 -->
       <!-- Card stats -->
       <br>
-         <carousel :per-page="4" :mouse-drag="true" >
-          <slide v-for="(item, index) in userRoadmapList" :key="index">
-            <b-col id="carouselCard" >
+         <carousel :per-page="4" :mouse-drag="true">
+          <slide v-for="(item, index) in userRoadmapList" :key="index"> 
+            <b-col id="carouselCard">
               
               <b-row align-h="end" class="mr-1 pb-1">
                 <i class="fas fa-times text-traffic-red" @click="deleteRoadmap(item.rmorder)"></i>
@@ -15,7 +15,6 @@
               <b-card 
                 id="carouselCard"
                 class="text-center"
-                style="width: 20rem; height: 10rem;"
                 @click="previewRoadmap(item.rmorder, item.rmid)"
               >
                 <!-- 장기 -->
@@ -71,7 +70,7 @@
           <b-card no-body class="border-0">
             <div class="inline-block" style="width: 100%;">
               <!-- goJS/start-->
-              <Roadmap :roadmapMode="roadmapMode" :roadmapData="roadmapData" :roadmapname="roadmapname" />
+              <Roadmap :roadmapMode="roadmapMode" :roadmapData="roadmapData" :roadmapname="roadmapname"/>
               <!--goJs/end -->
             </div>
           </b-card>
@@ -126,6 +125,7 @@ export default {
           if (res.data.msg == "success") {
             this.roadmapData = JSON.parse(res.data["roadmaps"].tmp);
             this.roadmapname = res.data["roadmaps"].name
+            console.log(this.roadmapname)
             this.load();
           } else {
             alert("데이터 로드에 실패했습니다.");
@@ -136,7 +136,6 @@ export default {
           alert("axios 오류");
         });
     },
-
     deleteRoadmap(clickrmorder){
       console.log(clickrmorder)
       console.log('잘찍히나요?')
@@ -210,11 +209,11 @@ export default {
 </script>
 
 <style>
-.roadmap {
+/* .roadmap {
   width: 175px;
-  height: 140;
+  height: 140px;
   border-width: 10px;
   border-style: solid;
   overflow: hidden;
-}
+} */
 </style>

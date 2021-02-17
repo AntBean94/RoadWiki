@@ -29,14 +29,14 @@
           <hr class="my-2" />
           <Viewer v-if="content != null" :initialValue="content" />
           <b-row class="mr-1 my-3">
-            <badge
+            <b-badge
               class="mr-2"
               v-for="(tag, idx) in tags"
               :key="idx"
             >
               <!-- class="ml-1 mt-2 mr-1 bg-cornhusk rounded-pill py-1 px-2" -->
               <span class="h5"># {{ tag }}</span>
-            </badge>
+            </b-badge>
           </b-row>
           <b-row align-h="end" class="my-2" v-if="isWritter">
             <!-- 게시물의 uid와 현재 uid가 동일 할 때 보여줄 내용 -->
@@ -91,7 +91,7 @@
           <h2 class="ml-3 mb-2">{{ comments.length }}개의 댓글</h2>
         </b-row>
         <!-- 댓글 폼 필요 -->
-        <CommentForm :pid="pid" @sendComment="getPostingInfo" />
+        <CommentForm :pid="pid" @sendComment="getPostingInfo"/>
         <!-- <CommentList :comments="comments" :recomments="recomments"/>       -->
         <b-container v-for="(comment, idx) in comments" :key="idx">
           <CommentList
