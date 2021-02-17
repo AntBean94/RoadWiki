@@ -1,4 +1,4 @@
-<template>
+p<template>
   <!--goJS/start-->
   <div
     style="width: 100%; display: flex; justify-content: space-between; z-index:1;"
@@ -16,13 +16,27 @@
     <!-- 커리큘럼 데이터 출력 카드/start -->
     <b-card
       v-if="!isroadback"
-      title="Curriculum Information"
       style="width: 252px;"
       class="text-center"
     >
-      <hr />
-      <h3>{{ headertext }}</h3>
-      <hr v-show="headertext.length > 0"/>
+      <!-- 헤더텍스트 색 구분 blue, black, green (대, 중, 소) -->
+      <div v-if="curriculumData === -1">
+        <h3>Curriculum Information</h3>
+      </div>
+      <div v-else-if="curriculumData.category === 'blue'" class="bigCur">
+        <h2>{{ headertext }}</h2>
+      </div>
+      <div v-else-if="curriculumData.category === 'black'" class="middleCur">
+        <h2>{{ headertext }}</h2>
+      </div>
+      <div v-else-if="curriculumData.category === 'green'" class="smallCur">
+        <h2>{{ headertext }}</h2>
+      </div>
+      <div v-else class="otherCur">
+        <h2>{{ headertext }}</h2>
+      </div>
+      <hr>
+
       <b-card-text v-if="roadmapMode">
         <base-input label="시작날짜-종료날짜">
           <flat-pickr
@@ -73,7 +87,7 @@ let $ = go.GraphObject.make;
 let myDiagram;
 let myPalette;
 // node 속성(card에 띄우기위한) 체크위한 전역변수(여기서만 사용)
-let curriculumData = -1;
+// let curriculumData = -1;
 
 // 커리큘럼 클릭시 요청을통해 받아온 데이터를 여기에 저장하면 됨
 let recommendCurData = [
@@ -93,11 +107,9 @@ export default {
   data() {
     return {
       headertext: "",
-      // 빈 값으로 바꾸고 주석 해제
-      dates: "2020-12-12 ~ 2021-12-12",
-      memotext: "임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다",
+      dates: "",
+      memotext: "",
       descript: "",
-
       // Get more form https://flatpickr.js.org/options/
       config: {
         wrap: true, // set wrap to true only when using 'input-group'
@@ -116,7 +128,8 @@ export default {
         sdid: 0,
         text: "",
         content: ""
-      }
+      },
+      curriculumData: -1,
     };
   },
   components: {
@@ -231,7 +244,7 @@ export default {
             "RoundedRectangle",
             {
               fill: "rgb(255, 255, 255)",
-              stroke: "rgb(132, 137, 140)",
+              stroke: "rgb(137, 119, 173)",
               strokeWidth: 2.5,
               strokeJoin: "round",
               strokeCap: "square"
@@ -325,7 +338,36 @@ export default {
         this.makePort("B", go.Spot.Bottom, go.Spot.Bottom, true, false)
       )
     );
-
+ // 맨위 빈칸 만들기 모델
+    myDiagram.nodeTemplateMap.add(
+      "Blank",
+      $(
+        go.Node,
+        "Table",
+        {
+          // the Node.location is at the center of each node
+          locationSpot: go.Spot.Center,
+          movable: false,
+          deletable: false,
+          selectable: false
+        },
+        $(
+          go.Panel,
+          "Spot",
+          $(go.Shape, "Circle", {
+            desiredSize: new go.Size(70, 70),
+            fill: "#F9F8F3",
+            stroke: "#F9F8F3",
+            strokeWidth: 3.5
+          }),
+          $(go.TextBlock, "Start", this.textStyle(), new go.Binding("text"))
+        ),
+        // three named ports, one on each side except the top, all output only:
+        this.makePort("L", go.Spot.Left, go.Spot.Left, false, false),
+        this.makePort("R", go.Spot.Right, go.Spot.Right, false, false),
+        this.makePort("B", go.Spot.Bottom, go.Spot.Bottom, false, false)
+      )
+    );
     // custom 모델
     myDiagram.nodeTemplateMap.add(
       "Custom",
@@ -520,8 +562,8 @@ export default {
 
     // 어떤 커리큘럼을 눌렀는지 체크 => 커리큘럼 추천에 활용할 데이터 추출
     // 추천 로직 1 단계
-    myDiagram.addDiagramListener("ObjectSingleClicked", function(e) {
-      curriculumData = e.subject.part.data;
+    myDiagram.addDiagramListener("ObjectSingleClicked", (e) => {
+      this.curriculumData = e.subject.part.data;
     });
 
     if (!iseditable) {
@@ -544,8 +586,8 @@ export default {
       });
     }
 
-    myDiagram.addDiagramListener("BackgroundSingleClicked", function() {
-      curriculumData = -1;
+    myDiagram.addDiagramListener("BackgroundSingleClicked", (e) => {
+      this.curriculumData = -1;
     });
 
     // 팔레트 설정 관련 코드
@@ -563,7 +605,8 @@ export default {
         model: new go.GraphLinksModel(
           // 추천 커리큘럼 전역변수로 저장되어있음
           recommendCurData
-        )
+        ),
+        autoScale: go.Diagram.UniformToFill,
       }
     );
 
@@ -587,7 +630,7 @@ export default {
     // this.readRoadmapLog();
     this.getRecommendCur();
     // 팔레트 초기화
-    curriculumData = -1;
+    this.curriculumData = -1;
 
     //로드백 타이머 시작
     if (!iseditable) {
@@ -599,25 +642,25 @@ export default {
     headertext: function() {
       // 데이터 호출하는 함수
       if (
-        curriculumData.bdid == 0 &&
-        curriculumData.mdid == 0 &&
-        curriculumData.sdid == 0
+        this.curriculumData.bdid == 0 &&
+        this.curriculumData.mdid == 0 &&
+        this.curriculumData.sdid == 0
       ) {
         return;
       }
       this.getRecommendCur();
     },
     memotext: function() {
-      if (curriculumData != -1) curriculumData.memo = this.memotext;
+      if (this.curriculumData != -1) this.curriculumData.memo = this.memotext;
     },
     dates: function() {
-      if (curriculumData != -1) {
+      if (this.curriculumData != -1) {
         if (this.dates.length > 10) {
-          curriculumData.startdate = this.dates.slice(0, 10);
-          curriculumData.enddate = this.dates.slice(14, 24);
+          this.curriculumData.startdate = this.dates.slice(0, 10);
+          this.curriculumData.enddate = this.dates.slice(14, 24);
         } else {
-          curriculumData.startdate = this.dates;
-          curriculumData.enddate = this.dates;
+          this.curriculumData.startdate = this.dates;
+          this.curriculumData.enddate = this.dates;
         }
       }
     },
@@ -705,25 +748,30 @@ export default {
     },
     checkCur(e) {
       // 차후에 DB에 요청을 보낸다음 DB정보로 반영
-      if (curriculumData.category == "comment") return;
-      this.headertext = curriculumData.text;
-      if (curriculumData.category)
-        this.dates = curriculumData.startdate + " ~ " + curriculumData.enddate;
-      this.memotext = curriculumData.memo;
-      this.descript = curriculumData.content;
+      if (this.curriculumData.category == "comment") return;
+      this.headertext = this.curriculumData.text;
+      if (this.curriculumData.category)
+        this.dates = this.curriculumData.startdate + " to " + this.curriculumData.enddate;
+      this.memotext = this.curriculumData.memo;
+      this.descript = this.curriculumData.content;
+      if (this.curriculumData == -1) {
+        this.descript = ""
+        this.memotext = ""
+        this.dates = ""
+      }
     },
     getRecommendCur() {
       const _ = require("lodash");
       let color;
       let url;
-      if (curriculumData == -1 || !curriculumData.category) {
+      if (this.curriculumData == -1 || !this.curriculumData.category) {
         url = `${this.$store.getters.getRoadmapServer}/curriculum/suggest`;
         color = "blue";
-      } else if (curriculumData.mdid != 0) {
-        url = `${this.$store.getters.getRoadmapServer}/curriculum/suggest/${curriculumData.bdid}/${curriculumData.mdid}`;
+      } else if (this.curriculumData.mdid != 0) {
+        url = `${this.$store.getters.getRoadmapServer}/curriculum/suggest/${this.curriculumData.bdid}/${this.curriculumData.mdid}`;
         color = "green";
-      } else if (curriculumData.bdid != 0) {
-        url = `${this.$store.getters.getRoadmapServer}/curriculum/suggest/${curriculumData.bdid}`;
+      } else if (this.curriculumData.bdid != 0) {
+        url = `${this.$store.getters.getRoadmapServer}/curriculum/suggest/${this.curriculumData.bdid}`;
         color = "black";
       }
       axios
@@ -735,7 +783,7 @@ export default {
             res.data["suggest"][i].enddate = "";
             res.data["suggest"][i].memo = "";
           }
-          if (curriculumData == -1) {
+          if (this.curriculumData == -1) {
             let custom = _.cloneDeep(this.curData);
             custom.category = "Custom";
             custom.text = "User Custom";
@@ -745,6 +793,10 @@ export default {
             start.text = "시작";
             res.data["suggest"].push(start);
           }
+           let blank = _.cloneDeep(this.curData);
+          blank.category = "Blank";
+           blank.text = "";
+          res.data["suggest"].unshift(blank);
           recommendCurData = res.data["suggest"];
           myPalette.model.nodeDataArray = recommendCurData;
         })
@@ -767,6 +819,10 @@ export default {
             res.data["suggest"][i].enddate = "";
             res.data["suggest"][i].memo = "";
           }
+           let blank = _.cloneDeep(this.curData);
+          blank.category = "Blank";
+           blank.text = "";
+          res.data["suggest"].unshift(blank);
           recommendCurData = res.data["suggest"];
           myPalette.model.nodeDataArray = recommendCurData;
         })
@@ -840,4 +896,25 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.bigCur {
+  display: inline-block;
+  border-bottom: 3px solid #b4e7f8;
+  box-shadow: inset 0 -4px 0 #b4e7f8;
+}
+.middleCur {
+  display: inline-block;
+  border-bottom: 3px solid #ffb3fb;
+  box-shadow: inset 0 -4px 0 #ffb3fb;
+}
+.smallCur {
+  display: inline-block;
+  border-bottom: 3px solid #a9ffae;
+  box-shadow: inset 0 -4px 0 #a9ffae;
+}
+.otherCur {
+  display: inline-block;
+  border-bottom: 3px solid #f4f8b4;
+  box-shadow: inset 0 -4px 0 #f4f8b4;
+}
+</style>
