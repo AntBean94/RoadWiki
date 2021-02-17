@@ -17,7 +17,9 @@ public interface UserRepo {
 	public int insert(User user) throws SQLException;
 	public int insertkeyword(Map data) throws SQLException;
 	public int update(User user) throws SQLException;
+	public int updatekeyword(Map data) throws SQLException;
 	public int delete(String email) throws SQLException;
+	public int deletekeyword(int uid) throws SQLException;
 	public String getName(int uid) throws SQLException;
 	public User canName(String name) throws SQLException;
 }

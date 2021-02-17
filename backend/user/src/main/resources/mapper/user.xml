@@ -50,14 +50,25 @@
 	
 	<update id="update" parameterType="User">
 		update user
-		set name=#{name}
-		where email=#{email}
+		set name=#{name}, address=#{address}, oneline=#{oneline}, major=#{major}
+		where uid=#{uid}
+	</update>
+	
+	<update id="updatekeyword" parameterType="map">
+		update userkeyword
+		set kwid=#{kwid}, priority=#{priority}
+		where uid=#{uid}
 	</update>
 	
 	<delete id="delete" parameterType="String">
 		delete 
 		from user 
 		where email=#{email}
+	</delete>
+	
+	<delete id="deletekeyword" parameterType="int">
+		delete from userkeyword
+		where uid=#{uid}
 	</delete>
 	
 	<select id="getName" parameterType="Integer" resultType="String">
