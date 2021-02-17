@@ -118,6 +118,7 @@ public class RoadmapshareServiceImpl implements RoadmapshareService {
 	}
 
 	@Override
+	@Transactional
 	public Object insert(RoadmapShare roadmapshare,int nowuid) throws Exception {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -134,6 +135,7 @@ public class RoadmapshareServiceImpl implements RoadmapshareService {
 	}
 
 	@Override
+	@Transactional
 	public Object delete(int nowuid, int pid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {

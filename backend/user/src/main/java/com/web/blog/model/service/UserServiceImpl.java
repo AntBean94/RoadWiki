@@ -72,8 +72,8 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	@Transactional
 	@Override
+	@Transactional
 	public Object join(User user) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -196,6 +196,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional
 	public void upload(MultipartFile[] files, Model model, HttpSession session) throws Exception, IOException {
 		String realPath = servletContext.getRealPath("/upload");
 		String today = new SimpleDateFormat("yyMMdd").format(new Date());

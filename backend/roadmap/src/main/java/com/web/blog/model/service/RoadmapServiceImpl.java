@@ -77,6 +77,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 	}
 
 	@Override
+	@Transactional
 	public Object deleteRoadmap(int nowuid, int uid, int rmorder) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {

@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.web.blog.model.dto.Comment;
 import com.web.blog.model.dto.Posting;
@@ -229,6 +230,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
+	@Transactional
 	public Object registPosting(Posting posting, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -259,6 +261,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
+	@Transactional
 	public Object editPosting(Posting posting, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -278,6 +281,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
+	@Transactional
 	public Object deletePosting(String pid_s, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -297,6 +301,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
+	@Transactional
 	public Object registComment(Comment comment, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -314,6 +319,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
+	@Transactional
 	public Object editComment(Comment comment, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -333,6 +339,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
+	@Transactional
 	public Object deleteComment(String cid, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -351,6 +358,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
+	@Transactional
 	public Object registRecomment(Recomment recomment) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -367,6 +375,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
+	@Transactional
 	public Object editRecomment(Recomment recomment) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -383,6 +392,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	}
 
 	@Override
+	@Transactional
 	public Object deleteRecomment(String rcid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
