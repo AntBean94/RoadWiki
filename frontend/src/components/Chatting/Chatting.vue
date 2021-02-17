@@ -59,6 +59,7 @@ export default {
   },
   watch: {
     roomid: function(newVal, oldVal) {
+      this.disconnect();
       this.message = "";
       this.messages = [];
       this.connect();
@@ -66,6 +67,9 @@ export default {
   },
   created() {
     this.sender = store.getters.getName;
+  },
+  destroyed() {
+    this.disconnect();
   },
   methods: {
     sendMsg: function() {
@@ -82,6 +86,11 @@ export default {
         };
         this.stompClient.send("/pub/chat/message", JSON.stringify(msg), {});
         this.message = "";
+      }
+    },
+    disconnect: function() {
+      if (this.stompClient !== undefined) {
+        this.stompClient.disconnect();
       }
     },
     connect: function() {
@@ -129,6 +138,7 @@ export default {
       );
     },
     close: function() {
+      this.disconnect();
       this.$emit("close");
     }
   }

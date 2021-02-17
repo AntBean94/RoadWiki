@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.web.blog.model.dto.Curriculum;
 import com.web.blog.model.repo.CalendarRepo;
@@ -46,6 +47,7 @@ public class CalendarServiceImpl implements CalendarService {
 	}
 
 	@Override
+	@Transactional
 	public Object updateInfo(Curriculum curriculum) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
