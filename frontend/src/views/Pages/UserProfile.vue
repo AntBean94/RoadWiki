@@ -1,12 +1,8 @@
 <template>
   <div>
-    <div
-      class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center profile-header"
-      style="min-height: 600px; background-image: url(img/theme/profile-cover.jpg); background-size: cover; background-position: center top;"
-    >
+    <!-- <base-header class="pb-2 pt-2 pt-md-2 bg-baby-blue"> -->
+    <base-header class="pb-9 pt-9 bg-baby-blue">
       <b-container fluid>
-        <!-- Mask -->
-        <span class="mask bg-gradient-default opacity-5"></span>
         <!-- Header container -->
         <b-container fluid class="d-flex align-items-center">
           <b-row>
@@ -45,7 +41,7 @@
                 >수정하기</router-link
               >
               <b-button
-                variant="primary"
+                variant="classic-blue"
                 v-show="isSearch && !isFollow"
                 @click="sendFollowing"
                 >팔로우 하기</b-button
@@ -60,7 +56,9 @@
           </b-row>
         </b-container>
       </b-container>
-    </div>
+    <!-- </div> -->
+    </base-header>
+
 
     <b-container fluid class="mt--6">
       <b-card no-body class="card-profile" alt="Image placeholder" img-top>
@@ -69,7 +67,7 @@
             <div class="card-profile-image">
               <a href="#">
                 <!-- <b-img src="img/theme/team-4.jpg" rounded="circle" /> -->
-                <b-avatar :src="profileUrl"></b-avatar>
+                <b-img :src="profileUrl" rounded="circle" />
               </a>
             </div>
           </b-col>
@@ -225,7 +223,7 @@ export default {
       followinglist: [],
       boards: "",
       comments: "",
-      major: "기계공학",
+      major: "",
       email: "",
       oneline: "",
       uid: "",
