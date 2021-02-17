@@ -87,10 +87,11 @@
           </div>
 
           <div v-if="isHoverC">
-            <i
+            <i 
+              class="far fa-comments"
               @mouseover="checkHoverC"
-              class="btn ni ni-bullet-list-67 text-black"
-            ></i>
+            >
+            </i>
           </div>
           <div v-else>
             <h1 @mouseleave="checkHoverC" @click="goToChat" class="btn m-0 p-1">
@@ -212,9 +213,10 @@
     </div>
     <div>
       <chatting-bg v-on:remove="removeChatting" v-if="chattingOn" />
-      <button id="chat" class="btn" @click="createChatting" v-else>
+      <b-button id="chat" @click="createChatting" pill v-else>
         chatting
-      </button>
+        <i class="far fa-comment-dots"></i>
+      </b-button>
     </div>
   </div>
 </template>

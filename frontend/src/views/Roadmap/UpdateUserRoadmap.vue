@@ -150,6 +150,7 @@
                 :roadmapMode="roadmapMode"
                 :roadmapData="roadmapData"
                 :inputText="inputText"
+                :roadmapname="roadmapname"
                 @create-roadmap="createRoadmap"
                 @get_recommend ="getRecommend"
                 ref="roadmap"
@@ -188,17 +189,17 @@ export default {
       roadmapMode: 1,
       inputText: "",
       checkRB: false,
-      term: 1,
+      term: 2,
       recommend :"",
       options: [
-        { text: "단기", value: 1 },
+        { text: "단기", value: 3 },
         { text: "중기", value: 2 },
-        { text: "장기", value: 3 }
+        { text: "장기", value: 1 }
       ],
       btnColors: [
-        'traffic-red', 
-        'traffic-yellow', 
         'traffic-green',
+        'traffic-yellow', 
+        'traffic-red', 
       ],
     };
   },
@@ -262,6 +263,7 @@ export default {
             `${this.$store.getters.getRoadmapServer}/roadmap/get/${this.rmid}`
           )
           .then(res => {
+            console.log(res);
             if (res.data.msg == "success") {
               this.roadmapData = JSON.parse(res.data["roadmaps"].tmp);
               if (
@@ -269,6 +271,7 @@ export default {
                 res.data["roadmaps"].uid == this.$store.getters.getUid
               ) {
                 this.roadmapname = res.data["roadmaps"].name;
+                this.term = res.data["roadmaps"].term;
               }
             } else {
               alert("데이터 로드에 실패했습니다.");

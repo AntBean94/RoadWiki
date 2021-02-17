@@ -21,7 +21,7 @@ p<template>
     >
       <!-- 헤더텍스트 색 구분 blue, black, green (대, 중, 소) -->
       <div v-if="curriculumData === -1">
-        <h3>Curriculum Information</h3>
+        <h1 class="bold">{{ roadmapname }}</h1>
       </div>
       <div v-else-if="curriculumData.category === 'blue'" class="bigCur">
         <h2>{{ headertext }}</h2>
@@ -102,7 +102,8 @@ export default {
     roadmapData: Object, // 변수 하나를 줘가지고 그러네
     inputText: String,
     isroadback: Boolean,
-    rmid: Number
+    rmid: Number,
+    roadmapname: String,
   },
   data() {
     return {
@@ -405,10 +406,10 @@ export default {
           )
         ),
         // four named ports, one on each side: node의 가지 옵션
-        this.makePort("T", go.Spot.Top, go.Spot.TopSide, false, true),
+        this.makePort("T", go.Spot.Top, go.Spot.TopSide, true, true),
         this.makePort("L", go.Spot.Left, go.Spot.LeftSide, true, true),
         this.makePort("R", go.Spot.Right, go.Spot.RightSide, true, true),
-        this.makePort("B", go.Spot.Bottom, go.Spot.BottomSide, true, false)
+        this.makePort("B", go.Spot.Bottom, go.Spot.BottomSide, true, true)
       )
     );
 
@@ -749,18 +750,18 @@ export default {
     },
     checkCur(e) {
       // 차후에 DB에 요청을 보낸다음 DB정보로 반영
-      if (curriculumData.category == "comment" || curriculumData == -1) {
+      if (this.curriculumData.category == "comment" || this.curriculumData == -1) {
         this.headertext = "";
         this.dates = "";
       this.memotext = "";
       this.descript = "";  
         return;
       }
-      this.headertext = curriculumData.text;
-      if (curriculumData.dates)
-        this.dates = curriculumData.startdate + " ~ " + curriculumData.enddate;
-      this.memotext = curriculumData.memo;
-      this.descript = curriculumData.content;
+      this.headertext = this.curriculumData.text;
+      if (this.curriculumData.dates)
+        this.dates = this.curriculumData.startdate + " ~ " + this.curriculumData.enddate;
+      this.memotext = this.curriculumData.memo;
+      this.descript = this.curriculumData.content;
     },
     getRecommendCur() {
       const _ = require("lodash");
@@ -791,11 +792,11 @@ export default {
             let custom = _.cloneDeep(this.curData);
             custom.category = "Custom";
             custom.text = "User Custom";
-            res.data["suggest"].push(custom);
+            res.data["suggest"].unshift(custom);
             let start = _.cloneDeep(this.curData);
             start.category = "Start";
             start.text = "시작";
-            res.data["suggest"].push(start);
+            res.data["suggest"].unshift(start);
           }
           let blank = _.cloneDeep(this.curData);
           blank.category = "Blank";

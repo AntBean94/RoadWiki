@@ -136,6 +136,7 @@
                 :roadmapMode="roadmapMode"
                 :roadmapData="roadmapData"
                 :inputText="inputText"
+                :roadmapname="roadmapname"
                 @create-roadmap="createRoadmap"
                 ref="roadmap"
               />
@@ -172,16 +173,16 @@ export default {
       logData: [],
       roadmapMode: 1,
       inputText: "",
-      term: 1,
+      term: 3,
       options: [
-        { text: "단기", value: 1 },
+        { text: "단기", value: 3 },
         { text: "중기", value: 2 },
-        { text: "장기", value: 3 }
+        { text: "장기", value: 1 }
       ],
       btnColors: [
-        'traffic-red', 
-        'traffic-yellow', 
         'traffic-green',
+        'traffic-yellow', 
+        'traffic-red', 
       ],
     };
   },
