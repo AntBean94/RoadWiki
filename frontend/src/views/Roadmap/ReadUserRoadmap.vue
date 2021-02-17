@@ -1,32 +1,59 @@
 <template>
   <div>
     <!-- header 시작 -->
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8" id="baseheader">
-      <!-- carousel도 컴포넌트화 필요 -->
+    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue">
+    <!-- carousel도 컴포넌트화 필요 -->
       <!-- Card stats -->
-      <br />
-      <carousel :per-page="4" :mouse-drag="true">
-        <slide v-for="(item, index) in userRoadmapList" :key="index">
-          <b-col @click="previewRoadmap(item.rmorder, item.rmid)">
-            <stats-card
-              type="red"
-              icon="ni ni-active-40"
-              :sub-title="item.name"
-              class="mb-4 btn"
-              :rmid="item.rmid"
-              :rmorder="item.rmorder"
-            >
-              <template slot="footer">
-                <span class="text-success mr-2">{{ item.createDate }}</span>
-                <br />
-                <span v-if="item.term == 1" class="text mr-2">장기</span>
-                <span v-if="item.term == 2" class="text mr-2">중기</span>
-                <span v-if="item.term == 3" class="text mr-2">단기</span>
-              </template>
-            </stats-card>
-          </b-col>
-        </slide>
-      </carousel>
+      <br>
+         <carousel :per-page="5" :mouse-drag="true">
+          <slide v-for="(item, index) in userRoadmapList" :key="index" >
+            <b-col @click="previewRoadmap(item.rmorder, item.rmid)" id="carouselCard" >
+              
+              <b-card 
+                id="carouselCard"
+                class="text-center"
+                style="width: 20rem; height: 10rem;"
+              >
+                <!-- 장기 -->
+                <div v-if="item.term == 1">
+                  <b-card-body class="border border-traffic-green rounded" align="center">
+                    <b-card-title class="h3">
+                      {{ item.name }}
+                    </b-card-title> 
+                    <b-card-text class="small text-muted text-center">
+                      {{ item.createDate }}
+                    </b-card-text>
+                  </b-card-body>
+                </div>
+
+                <!-- 중기 -->
+                <div v-else-if="item.term == 2">
+                  <b-card-body class="border border-traffic-yellow rounded" align="center">
+                    <b-card-title class="h3">
+                      {{ item.name }}
+                    </b-card-title> 
+                    <b-card-text class="small text-muted text-center">
+                      {{ item.createDate }}
+                    </b-card-text>
+                  </b-card-body>
+                </div>
+
+                <!-- 단기 -->
+                <div v-else>
+                  <b-card-body class="border border-traffic-red rounded" align="center">
+                    <b-card-title class="h3">
+                      {{ item.name }}
+                    </b-card-title> 
+                    <b-card-text class="small text-muted text-center">
+                      {{ item.createDate }}
+                    </b-card-text>
+                  </b-card-body>
+                </div>
+              </b-card>
+
+            </b-col>
+          </slide>
+        </carousel>
     </base-header>
     <!-- header 종료 -->
     <!-- 다이어그램 container -->
@@ -34,20 +61,8 @@
       <b-row>
         <b-col>
           <div style="text-align: right;">
-            <button
-              class="btn"
-              style="background-color: rgb(256, 256, 256);"
-              @click="goToCreate"
-            >
-              생성하기
-            </button>
-            <button
-              class="btn"
-              style="background-color: rgb(256, 256, 256);"
-              @click="goToUpdate"
-            >
-              수정하기
-            </button>
+            <b-button class="mb-3 mr-2" @click="goToCreate" variant="cornhusk">생성하기</b-button>
+            <b-button class="mb-3 ml-2" @click="goToUpdate" variant="classic-blue">수정하기</b-button>
           </div>
           <b-card no-body class="border-0">
             <div class="inline-block" style="width: 100%;">
@@ -80,7 +95,10 @@ export default {
   data() {
     return {
       roadmapMode: 0,
-      userRoadmapList: [],
+      // 서버 연결시 반드시 비어있는 리스트로 반환한다.
+      userRoadmapList: [{"name": "안녕안녕안녕안녕안", "term": 1, "createDate": "2020-12-12", "rmid": 1, "rmorder": 1 , "tmp": roadmapDataTemp }, 
+      {"name": "안녕2", "term": 3, "createDate": "2020-12-12", "rmid": 2, "rmorder": 2, "tmp": roadmapDataTemp}, 
+      {"name": "안녕3", "term": 2, "createDate": "2020-12-12", "rmid": 3, "rmorder": 3, "tmp": roadmapDataTemp}],
       isSelectCard: false,
       rmid: 0,
       rmorder: 0,
@@ -161,7 +179,11 @@ export default {
 </script>
 
 <style>
-#baseheader {
-  background-color: #b5c7d3;
+.roadmap {
+  width: 175px;
+  height: 140;
+  border-width: 10px;
+  border-style: solid;
+  overflow: hidden;
 }
 </style>
