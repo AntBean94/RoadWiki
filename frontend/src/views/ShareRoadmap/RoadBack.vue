@@ -200,7 +200,7 @@ export default {
         });
     },
     goToBack() {
-      this.$router.push({ name: "shareboard" });
+      this.$router.push({ name: "공유로드맵" });
     }
   }
 };

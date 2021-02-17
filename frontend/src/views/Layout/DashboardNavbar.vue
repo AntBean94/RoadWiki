@@ -8,7 +8,7 @@
       v-if="isHeader"
     >
       <a
-        @click="goToMain"
+        @click="goToMain(url)"
         class="h1 mb-0 mr-2 text-black text-uppercase d-none d-lg-inline-block active router-link-active"
       >
         <img src="/img/brand/logo_word.png" alt="roadwiki" width="200rem;" />
@@ -41,13 +41,13 @@
       <b-navbar-nav class="align-items-center ml-auto ml-md-0">
         <div v-if="isSearch" class="row" id="menu">
           <div v-if="isHoverO">
-            <i @mouseover="checkHoverO" class="btn ni ni-tv-2 text-black"></i>
+            <i @mouseover="checkHoverO" class="btn ni ni-tv-2 text-black nav-btn"></i>
           </div>
           <div v-else>
             <h1
               @mouseleave="checkHoverO"
-              @click="goToOfficial"
-              class="btn m-0 p-1"
+              @click="goToOfficial(url)"
+              class="btn m-0 p-1 nav-btn"
             >
               Official
             </h1>
@@ -56,43 +56,44 @@
           <div v-if="isHoverB">
             <i
               @mouseover="checkHoverB"
-              class="btn ni ni-bullet-list-67 text-black"
+              class="btn ni ni-bullet-list-67 text-black nav-btn"
             ></i>
           </div>
           <div v-else>
             <h1
               @mouseleave="checkHoverB"
-              @click="goToBoard"
-              class="btn m-0 p-1"
+              @click="goToBoard(url)"
+              class="btn m-0 p-1 nav-btn"
             >
               Board
             </h1>
           </div>
 
           <div v-if="isHoverS">
-            <i 
+            <i
               @mouseover="checkHoverS"
-              class="fas fa-share-alt
-            "></i>
+              class="btn fas fa-share-alt nav-btn"
+            ></i>
           </div>
           <div v-else>
             <h1
               @mouseleave="checkHoverS"
-              @click="goToShare"
-              class="btn m-0 p-1"
+              @click="goToShare(url)"
+              class="btn m-0 p-1 nav-btn"
             >
               Share
             </h1>
           </div>
 
           <div v-if="isHoverC">
-            <i
+            <i 
+              class="btn far fa-comments nav-btn"
               @mouseover="checkHoverC"
-              class="btn ni ni-bullet-list-67 text-black"
-            ></i>
+            >
+            </i>
           </div>
           <div v-else>
-            <h1 @mouseleave="checkHoverC" @click="goToChat" class="btn m-0 p-1">
+            <h1 @mouseleave="checkHoverC" @click="goToChat(url)" class="btn m-0 p-1 nav-btn">
               Chat
             </h1>
           </div>
@@ -150,11 +151,11 @@
           >
             <b-media no-body class="align-items-center">
               <span class="avatar avatar-sm rounded-circle">
-                <b-img
+                <b-avatar
                   alt="Image placeholder"
                   :src="profileUrl"
                   v-model="profileUrl"
-                />
+                ></b-avatar>
               </span>
               <b-media-body class="ml-2 d-none d-lg-block">
                 <!-- <span class="mb-0 text-sm  font-weight-bold">John Snow</span> -->
@@ -210,10 +211,11 @@
       <content-footer v-if="!$route.meta.hideFooter"></content-footer>
     </div>
     <div>
-      <Chatting v-on:remove="removeChatting" v-if="chattingOn" />
-      <button id="chat" class="btn" @click="createChatting" v-else>
-        chatting
-      </button>
+      <chatting-bg v-on:remove="removeChatting" v-if="chattingOn" />
+      <b-button id="chat" @click="createChatting" pill v-else size="lg" class="px-5">
+        <!-- chatting -->
+        <i class="far fa-comment-dots fa-2x"></i>
+      </b-button>
     </div>
   </div>
 </template>
@@ -222,6 +224,7 @@ import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import LoginContent from "@/components/Login/LoginContent.vue";
 import LogoutContent from "@/components/Logout/LogoutContent.vue";
+import ChattingBg from "@/components/Chatting/ChattingBg";
 
 function hasElement(className) {
   return document.getElementsByClassName(className).length > 0;
@@ -242,8 +245,6 @@ import ContentFooter from "./ContentFooter.vue";
 import DashboardContent from "./Content.vue";
 import { FadeTransition } from "vue2-transitions";
 import { mapGetters } from "vuex";
-import Chatting from "@/components/Chatting/Chatting";
-
 import { CollapseTransition } from "vue2-transitions";
 import { BaseNav, Modal } from "@/components";
 
@@ -257,7 +258,7 @@ export default {
     FadeTransition,
     LoginContent,
     LogoutContent,
-    Chatting
+    ChattingBg
   },
   props: {
     type: {
@@ -282,18 +283,22 @@ export default {
       isHoverB: true,
       isHoverS: true,
       isHoverC: true,
-      isSearch: true
+      isSearch: true,
+      locR: true,
+      locO: true,
+      locB: true,
+      locS: true,
+      url: "",
     };
   },
   created() {
     this.uid = this.$store.getters.getUid;
     let url = this.$route.name;
-    this.checkUrl(url);
     this.url = url;
+    this.checkUrl(url);
 
-    axios.get(`${this.$store.getters.getUserServer}/user/image`).then(res => {
+    axios.get(`${this.$store.getters.getUserServer}/user/image/${this.uid}`).then(res => {
       this.profileUrl = res.data.path;
-      console.log(this.profileUrl);
     });
   },
   computed: {
@@ -305,7 +310,6 @@ export default {
   watch: {
     $route(to) {
       this.checkUrl(to.name);
-      this.url = to.name;
     }
   },
   mounted() {
@@ -334,7 +338,7 @@ export default {
       this.activeNotifications = false;
     },
     checkUrl(url) {
-      let array = ["roadmap", "update_user_roamdap", "roadback"];
+      let array = ["로드맵 생성하기", "로드맵 수정하기", "roadback"];
       let isHeader = true;
       array.map(path => {
         if (url === path) isHeader = false;
@@ -357,17 +361,16 @@ export default {
           alert("로그아웃에 실패했습니다.");
         });
     },
+    goToMain(url) {
+      if (url != "나의 로드맵") {
+        this.$router.push({ name: "dashboard" });
+      }
+    },
     clickSearch() {
-      console.log(this.searchQuery);
       this.$router.push({
         name: "검색결과",
         query: { searchKeyword: `${this.searchQuery}` }
       });
-    },
-    goToMain() {
-      if (this.url != "read_user_roadmap") {
-        this.$router.push({ name: "dashboard" });
-      }
     },
     checkHoverO() {
       if (this.isHoverO) {
@@ -397,20 +400,30 @@ export default {
         this.isHoverC = true;
       }
     },
-    goToOfficial() {
-      this.$router.push({ name: "공식 로드맵" });
+    goToOfficial(url) {
+      if (url != "공식 로드맵") {
+        this.$router.push({ name: "공식 로드맵" });
+      }
     },
-    goToBoard() {
-      this.$router.push({ name: "게시판" });
+    goToBoard(url) {
+      if (url != "게시판") {
+        this.$router.push({ name: "게시판" });
+      }
     },
-    goToShare() {
-      this.$router.push({ name: "공유로드맵's" });
+    goToShare(url) {
+      if (url != "공유로드맵's") {
+        this.$router.push({ name: "공유로드맵's" });
+      }
     },
-    goToCalendar() {
-      this.$router.push({ name: "캘린더" });
+    goToCalendar(url) {
+      if (url != "캘린더") {
+        this.$router.push({ name: "캘린더" });
+      }
     },
-    goToChat() {
-      this.$router.push({ name: "채팅카테고리" });
+    goToChat(url) {
+      if (url != "채팅카테고리") {
+        this.$router.push({ name: "채팅카테고리" });
+      }
     },
     activeSearch() {
       if (this.isSearch) {
@@ -418,12 +431,7 @@ export default {
       } else {
         this.isSearch = true;
       }
-    }
-  },
-  watch: {
-    $route(to) {
-      this.checkUrl(to.name);
-    }
+    },
   },
   computed: {
     ...mapGetters(["getAccessToken"])
@@ -434,8 +442,8 @@ export default {
 <style>
 #chat {
   position: fixed;
-  right: 5px;
-  bottom: 5px;
+  right: 30px;
+  bottom: 30px;
   background-color: skyblue;
 }
 #mainNav {
@@ -446,16 +454,16 @@ export default {
 #routeName {
   color: #84898c;
 }
-#btnNav {
-  height: 20px;
-  width: 55px;
-}
 #searchBlock {
   color: black;
   text-decoration-color: black;
 }
 #menu {
   margin: auto;
+}
+.nav-btn {
+  height: 40px;
+  width: 60px;
 }
 /* #testdiv {
   position: fixed;

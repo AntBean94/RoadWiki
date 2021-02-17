@@ -1,7 +1,5 @@
 <template>
   <div>
-    <!-- <b-button v-b-modal.modal-email>버튼</b-button> -->
-
     <b-modal
       class="modal fade"
       v-model="isEmailModal"
@@ -9,7 +7,7 @@
       centered
       hide-footer
       >
-      <template #modal-header="{ close }">
+      <template #modal-header="{ }">
         <h5 class="ml-auto" @click="closeModal">x</h5>
       </template>
 
@@ -51,9 +49,6 @@
         this.isConfirm = false
         alert('인증에 실패했습니다.')
       },
-      test() {
-        console.log('잘 눌림')
-      }
     },
   }
 </script>

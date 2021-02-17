@@ -1,39 +1,67 @@
 <template>
   <div>
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-default">
+    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue">
+    <!-- carousel도 컴포넌트화 필요 -->
       <!-- Card stats -->
-      <br />
-      <carousel :per-page="4" :mouse-drag="true">
-        <slide v-for="(item, index) in curriculumData" :key="index">
-          <b-col @click="previewRoadmap(item.rmid)">
-            <stats-card
-              type="gradient-red"
-              :sub-title="item.name"
-              icon="ni ni-active-40"
-              class="mb-4 btn"
-              :rmid="item.rmid"
-            >
-              <template slot="footer">
-                <span class="text-success mr-2">{{ item.createDate }}</span>
-              </template>
-            </stats-card>
-          </b-col>
-        </slide>
-      </carousel>
+      <br>
+         <carousel :per-page="4" :mouse-drag="true">
+          <slide v-for="(item, index) in curriculumData" :key="index"> 
+            <b-col>
+              
+              <b-row v-if="uid < 0" align-h="end" class="mr-1 pb-1">
+                <i class="fas fa-times text-traffic-red" @click="deleteRoadmap(item.rmorder)"></i>
+              </b-row>
+              <b-card 
+                id="carouselCard"
+                class="text-center"
+                @click="previewRoadmap(item.rmid)"
+              >
+                <!-- 장기 -->
+                <div v-if="item.term == 1">
+                  <b-card-body class="border border-traffic-green rounded" align="center">
+                    <b-card-title class="h3">
+                      {{ item.name }}
+                    </b-card-title> 
+                    <b-card-text class="small text-muted text-center">
+                      {{ item.createDate }}
+                    </b-card-text>
+                  </b-card-body>
+                </div>
+
+                <!-- 중기 -->
+                <div v-else-if="item.term == 2">
+                  <b-card-body class="border border-traffic-yellow rounded" align="center">
+                    <b-card-title class="h3">
+                      {{ item.name }}
+                    </b-card-title> 
+                    <b-card-text class="small text-muted text-center">
+                      {{ item.createDate }}
+                    </b-card-text>
+                  </b-card-body>
+                </div>
+
+                <!-- 단기 -->
+                <div v-else>
+                  <b-card-body class="border border-traffic-red rounded" align="center">
+                    <b-card-title class="h3">
+                      {{ item.name }}
+                    </b-card-title> 
+                    <b-card-text class="small text-muted text-center">
+                      {{ item.createDate }}
+                    </b-card-text>
+                  </b-card-body>
+                </div>
+              </b-card>
+
+            </b-col>
+          </slide>
+        </carousel>
     </base-header>
 
     <b-container fluid class="mt--7">
       <b-row>
         <b-col>
           <div style="text-align : right;">
-            <div v-if="uid < 0" style="display: inline; margin: 20px;">
-              <router-link
-                :to="{ name: 'admin' }"
-                class="btn"
-                style=" background-color:#F9F8F3"
-                >데이터 추가하기</router-link
-              >
-            </div>
             <button
               class="btn"
               style="background-color: rgb(256, 256, 256);"
@@ -44,7 +72,7 @@
           </div>
           <b-card no-body class="border-0">
             <div style="width: 100%; display: inline-block;">
-              <Roadmap :roadmapMode="roadmapMode" :roadmapData="roadmapData" />
+              <Roadmap :roadmapMode="roadmapMode" :roadmapData="roadmapData" :roadmapname="roadmapname"/>
             </div>
           </b-card>
         </b-col>
@@ -72,7 +100,8 @@ export default {
       curriculumData: [],
       rmid: 0,
       memotext: "",
-      roadmapMode: 0
+      roadmapMode: 0,
+      roadmapname: "",
     };
   },
   created() {
@@ -106,6 +135,7 @@ export default {
         .then(res => {
           if (res.data.msg == "success") {
             this.roadmapData = JSON.parse(res.data["roadmaps"].tmp);
+            this.roadmapname = res.data["roadmaps"].name
           } else {
             alert("데이터 로드에 실패했습니다.");
           }
@@ -117,8 +147,8 @@ export default {
     },
     goToCreate() {
       this.$router.push({
-        name: "로드맵 수정하기",
-        params: { rmid: this.rmid, CUMode: 0 }
+        name: "로드맵 생성하기",
+        params: { rmid: this.rmid }
       });
     }
   }
@@ -128,5 +158,8 @@ export default {
 <style>
 .bntn {
   background-color: aquamarine;
+}
+#carouselCard:hover {
+  box-shadow: 4px 3px 5px rgba(56, 54, 54, 0.5);
 }
 </style>

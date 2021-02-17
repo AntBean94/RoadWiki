@@ -6,7 +6,6 @@
         variant="info"
         size="xl"
         @click="goBack"
-        style="margin:30px 5%"
         >&lt; go back</b-button
       >
       <div class="px-3 py-2">
@@ -33,14 +32,14 @@ export default {
 </script>
 <style>
 #sidebar-right {
-  position: fixed;
+  /* position: fixed; */
   right: 0;
   top: 260px;
   height: 100%;
   width: 50%;
   min-width: 500px;
   overflow: hidden;
-  background-color: rgb(247, 243, 255);
+  /* background-color: rgb(247, 243, 255); */
   z-index: 1000;
   /* border-left: navy solid 1px; */
 }
