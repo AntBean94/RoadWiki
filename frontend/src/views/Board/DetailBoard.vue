@@ -21,21 +21,17 @@
         <b-container class="mx-9">
           <b-row align-v="center">
             <b-col cols="1" class="pr-0 mb-2 mr-4">
-              <b-img :src="profileUrl" rounded width="50rem" heigth="50rem"/>
+              <b-img :src="profileUrl" rounded width="50rem" heigth="50rem" />
             </b-col>
             <b-col>
               <h3>{{ name }}</h3>
-              <h5>{{oneline}}</h5>
+              <h5>{{ oneline }}</h5>
             </b-col>
           </b-row>
           <hr class="my-2" />
           <Viewer v-if="content != null" :initialValue="content" />
           <b-row class="mr-1 my-3">
-            <b-badge
-              class="mr-2"
-              v-for="(tag, idx) in tags"
-              :key="idx"
-            >
+            <b-badge class="mr-2" v-for="(tag, idx) in tags" :key="idx">
               <!-- class="ml-1 mt-2 mr-1 bg-cornhusk rounded-pill py-1 px-2" -->
               <span class="h5"># {{ tag }}</span>
             </b-badge>
@@ -83,14 +79,14 @@
         </b-container>
       </b-row>
     </b-container>
-    
+
     <b-container class="py-4 mt-4">
       <b-container class="px-9 py-3">
         <b-row>
           <h2 class="ml-3 mb-2">{{ comments.length }}개의 댓글</h2>
         </b-row>
         <!-- 댓글 폼 필요 -->
-        <CommentForm :pid="pid" @sendComment="getPostingInfo"/>
+        <CommentForm :pid="pid" @sendComment="getPostingInfo" />
         <!-- <CommentList :comments="comments" :recomments="recomments"/>       -->
         <b-container v-for="(comment, idx) in comments" :key="idx">
           <CommentList
@@ -138,7 +134,7 @@ export default {
       isWritter: false,
       comments: [],
       recomments: [],
-      profileUrl: '',
+      profileUrl: ""
     };
   },
   created() {
@@ -150,9 +146,11 @@ export default {
         this.uid = res.data.posting.uid;
 
         // 해당 계정의 프로필 사진 가져오는 걸로 해야함
-        axios.get(`${this.$store.getters.getUserServer}/user/image/${this.uid}`).then(res => {
-          this.profileUrl = res.data.path;
-        });
+        axios
+          .get(`${this.$store.getters.getUserServer}/user/image/${this.uid}`)
+          .then(res => {
+            this.profileUrl = res.data.path;
+          });
 
         this.tags = res.data.posting.tags;
         if (this.uid === this.$store.getters.getUid) {

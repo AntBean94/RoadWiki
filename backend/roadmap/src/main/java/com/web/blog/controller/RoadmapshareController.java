@@ -245,4 +245,22 @@ public class RoadmapshareController {
 		}
 		return new ResponseEntity<Map<String, Object>>(result, status);
 	}
+	
+	@GetMapping("/main")
+	public Object getLikeHigh() {
+		logger.trace("getLikeHigh");
+		Map<String, Object> result = new HashMap<>();
+		int cnt = 5; //프론트에서 받을 수 있음
+		HttpStatus status = HttpStatus.OK;
+		try {
+			result = (Map<String, Object>) roadmapshareservice.getLikeHigh(cnt);
+			result.put("msg", SUCCESS);
+		} catch(Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+			result.put("msg", FAIL);
+			result.put("errorMsg", e.getMessage());
+		}
+		return new ResponseEntity<Map<String, Object>>(result, status);
+	}
 }
