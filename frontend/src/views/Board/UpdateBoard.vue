@@ -102,12 +102,20 @@ export default {
     },
     datachange() {
       const content = this.$refs.toastuiEditor.invoke("getMarkdown");
+      const pid = this.$route.query.pid;
+      console.log('###################')
+      console.log(content)
+      let posting = {
+        title: this.title,
+        content: content,
+        pid: pid,
+      }
       axios
-        .post(`${this.$store.getters.getBoardServer}/freeboard/posting`, {
-          title: this.title,
-          content: content
-        })
-        .then(() => {});
+        .put(`${this.$store.getters.getBoardServer}/freeboard/posting`, posting)
+        .then(() => {
+          alert('글 작성이 완료되었습니다.')
+          this.$router.push({name: '게시글', query: { pid: pid }})
+        });
     },
     tagEnter() {
       if (this.tagInput) {

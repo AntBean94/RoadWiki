@@ -88,7 +88,7 @@ public class FreeBoardController {
 			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
 				put("errorMsg", e.getMessage());
 				put("msg", FAIL);
-			}}, HttpStatus.NO_CONTENT);
+			}}, HttpStatus.OK);
 		}
 	}
 	
@@ -104,7 +104,7 @@ public class FreeBoardController {
 			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
 				put("errorMsg", e.getMessage());
 				put("msg", FAIL);
-			}}, HttpStatus.NO_CONTENT);
+			}}, HttpStatus.OK);
 		}
 	}
 	
@@ -121,16 +121,16 @@ public class FreeBoardController {
 			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
 				put("errorMsg", e.getMessage());
 				put("msg", FAIL);
-			}}, HttpStatus.NO_CONTENT);
+			}}, HttpStatus.OK);
 		}
 	}
 	
 	@PutMapping("/posting")
-	public Object editPosting(@RequestBody Map<String, Object> map, HttpServletRequest request) {
+	public Object editPosting(@RequestBody Posting posting, HttpServletRequest request) {
 		try {
 			Map<String, Object> result;
 			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
-			result = (Map<String, Object>) fBoardServ.editPosting((Posting)map.get("posting"), uid);
+			result = (Map<String, Object>) fBoardServ.editPosting(posting, uid);
 			result.put("msg", SUCCESS);
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		} catch(Exception e) {
@@ -138,7 +138,7 @@ public class FreeBoardController {
 			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
 				put("errorMsg", e.getMessage());
 				put("msg", FAIL);
-			}}, HttpStatus.NO_CONTENT);
+			}}, HttpStatus.OK);
 		}
 	}
 	
@@ -155,7 +155,7 @@ public class FreeBoardController {
 			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
 				put("errorMsg", e.getMessage());
 				put("msg", FAIL);
-			}}, HttpStatus.NO_CONTENT);
+			}}, HttpStatus.OK);
 		}
 	}
 	
@@ -172,7 +172,7 @@ public class FreeBoardController {
 			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
 				put("errorMsg", e.getMessage());
 				put("msg", FAIL);
-			}}, HttpStatus.NO_CONTENT);
+			}}, HttpStatus.OK);
 		}
 	}
 	
@@ -189,7 +189,7 @@ public class FreeBoardController {
 			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
 				put("errorMsg", e.getMessage());
 				put("msg", FAIL);
-			}}, HttpStatus.NO_CONTENT);
+			}}, HttpStatus.OK);
 		}
 	}
 	
@@ -206,7 +206,7 @@ public class FreeBoardController {
 			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
 				put("errorMsg", e.getMessage());
 				put("msg", FAIL);
-			}}, HttpStatus.NO_CONTENT);
+			}}, HttpStatus.OK);
 		}
 	}
 	
@@ -224,7 +224,7 @@ public class FreeBoardController {
 			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
 				put("errorMsg", e.getMessage());
 				put("msg", FAIL);
-			}}, HttpStatus.NO_CONTENT);
+			}}, HttpStatus.OK);
 		}
 	}
 	
@@ -242,7 +242,7 @@ public class FreeBoardController {
 			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
 				put("errorMsg", e.getMessage());
 				put("msg", FAIL);
-			}}, HttpStatus.NO_CONTENT);
+			}}, HttpStatus.OK);
 		}
 	}
 	
@@ -259,7 +259,7 @@ public class FreeBoardController {
 			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
 				put("errorMsg", e.getMessage());
 				put("msg", FAIL);
-			}}, HttpStatus.NO_CONTENT);
+			}}, HttpStatus.OK);
 		}
 	}
 	
@@ -275,7 +275,7 @@ public class FreeBoardController {
 			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
 				put("errorMsg", e.getMessage());
 				put("msg", FAIL);
-			}}, HttpStatus.NO_CONTENT);
+			}}, HttpStatus.OK);
 		}
 	}
 	
@@ -292,7 +292,7 @@ public class FreeBoardController {
 			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
 				put("errorMsg", e.getMessage());
 				put("msg", FAIL);
-			}}, HttpStatus.NO_CONTENT);
+			}}, HttpStatus.OK);
 		}
 	}
 	
@@ -309,7 +309,7 @@ public class FreeBoardController {
 			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
 				put("errorMsg", e.getMessage());
 				put("msg", FAIL);
-			}}, HttpStatus.NO_CONTENT);
+			}}, HttpStatus.OK);
 		}
 	}
 	
@@ -325,7 +325,7 @@ public class FreeBoardController {
 			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
 				put("errorMsg", e.getMessage());
 				put("msg", FAIL);
-			}}, HttpStatus.NO_CONTENT);
+			}}, HttpStatus.OK);
 		}
 	}
 	
@@ -341,7 +341,7 @@ public class FreeBoardController {
 			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
 				put("errorMsg", e.getMessage());
 				put("msg", FAIL);
-			}}, HttpStatus.NO_CONTENT);
+			}}, HttpStatus.OK);
 		}
 	}
 	
@@ -358,7 +358,7 @@ public class FreeBoardController {
 			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
 				put("errorMsg", e.getMessage());
 				put("msg", FAIL);
-			}}, HttpStatus.NO_CONTENT);
+			}}, HttpStatus.OK);
 		}
 	}
 	
@@ -374,7 +374,7 @@ public class FreeBoardController {
 			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
 				put("errorMsg", e.getMessage());
 				put("msg", FAIL);
-			}}, HttpStatus.NO_CONTENT);
+			}}, HttpStatus.OK);
 		}
 	}
 }
