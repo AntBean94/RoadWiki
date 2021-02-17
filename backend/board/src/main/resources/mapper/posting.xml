@@ -106,7 +106,7 @@
     
     <update id="update" parameterType="Posting">
         update posting
-        set  title=#{title}, content=#{content}, modifyDate=#{modifyDate}, image=#{image} <!-- tag=#{tag}, -->
+        set  title=#{title}, content=#{content}, modifyDate=#{modifyDate}
         where pid=#{pid}
     </update>
     

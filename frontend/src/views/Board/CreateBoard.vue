@@ -83,7 +83,7 @@ export default {
       const content = this.$refs.toastuiEditor.invoke("getMarkdown");
       // console.log(typeof(content))
       axios
-        .post(`${this.$store.getters.getBoardServer}/freeboard/posting`, {
+        .put(`${this.$store.getters.getBoardServer}/freeboard/posting`, {
           uid: this.$store.getters.getUid,
           classifier: "자유게시판",
           title: this.title,
