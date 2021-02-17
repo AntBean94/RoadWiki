@@ -55,6 +55,9 @@ public class UserServiceImpl implements UserService {
 			result.put("email", tmp.getEmail());
 			result.put("name", tmp.getName());
 			result.put("createDate", tmp.getCreateDate());
+			result.put("address", tmp.getAddress());
+			result.put("oneline", tmp.getOneline());
+			result.put("major", tmp.getMajor());
 			result.put("msg", "success");
 			result.put("keywords", userRepo.selectkeyword(tmp.getUid()));
 			result.put("keywordtexts", userRepo.selectkeywordtext(tmp.getUid()));
@@ -119,8 +122,18 @@ public class UserServiceImpl implements UserService {
 	public Object modify(User user) {
 		try {
 			Map<String, Object> result = new HashMap<String, Object>();
-			if (userRepo.update(user) == 1)
+			if (userRepo.update(user) == 1) {
+				logger.info("user update end");
+				userRepo.deletekeyword(user.getUid());
+				for (int i = 0; i < user.getKeyword().length; i++) {
+					Map<String, String> map = new HashMap<String, String>();
+					map.put("uid", Integer.toString(user.getUid()));
+					map.put("kwid", user.getKeyword()[i]);
+					map.put("priority", Integer.toString(i + 1));
+					userRepo.insertkeyword(map);
+				}
 				result.put("msg", "success");
+			}
 			else
 				result.put("msg", "Non-existent user");
 			return result;
@@ -160,6 +173,9 @@ public class UserServiceImpl implements UserService {
 			result.put("email", cur.getEmail());
 			result.put("name", cur.getName());
 			result.put("createDate", cur.getCreateDate());
+			result.put("address", cur.getAddress());
+			result.put("oneline", cur.getOneline());
+			result.put("major", cur.getMajor());
 			result.put("msg", "SUCCESS");
 			return result;
 		} catch (Exception e) {

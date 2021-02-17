@@ -1,12 +1,5 @@
 package com.web.blog.controller;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,14 +7,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,17 +24,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.databind.ser.std.FileSerializer;
 import com.web.blog.model.dto.User;
 import com.web.blog.model.service.FileService;
 import com.web.blog.model.service.LoginServiceImpl;
 import com.web.blog.model.service.UserService;
 
-import io.jsonwebtoken.lang.Assert;
-
 @RestController
 @RequestMapping("/user")
-@CrossOrigin(origins = { "*" }, maxAge = 6000)
 public class UserController {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
@@ -188,10 +174,21 @@ public class UserController {
 	@PostMapping("/pic")
 	public Object getImg(@RequestPart(value = "file", required = true) MultipartFile file, HttpServletRequest request)
 			throws Exception {
+		logger.info("image upload start");
 		int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
-		// System.out.println("uploaduid : " + uid);
+		try {
 		Map<String, Object> result = (Map<String, Object>) fileService.uploadImg(file, request, uid);
+		logger.info("image upload end");
 		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		}catch (Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>() {
+				{
+					put("errorMsg", e.getMessage());
+					put("msg", FAIL);
+				}
+			}, HttpStatus.NO_CONTENT);
+		}
 	}
 
 	@GetMapping(value = "/image")
@@ -200,11 +197,6 @@ public class UserController {
 		Map<String, Object> result = (Map<String, Object>) fileService.showImage(uid, request);
 		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 	}
-//	@GetMapping(value = "/image/{uid}")
-//	public @ResponseBody byte[] getImage(@PathVariable String uid, HttpServletRequest request) throws Exception {
-//		//System.out.println("image uid : " + uid);
-//		return fileService.showImg(uid, request);
-//	}
 
 	@PostMapping("/bgpic")
 	public Object getbgImg(@RequestPart(value = "file", required = true) MultipartFile file, HttpServletRequest request)
