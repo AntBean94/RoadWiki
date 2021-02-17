@@ -36,7 +36,7 @@
                   <img
                     alt="Image placeholder"
                     :src="
-                      `${this.$store.getters.getServer}/user/image/${this.uid}`
+                      `${this.$store.getters.getUserServer}/user/image/${this.uid}`
                     "
                   />
                 </span>

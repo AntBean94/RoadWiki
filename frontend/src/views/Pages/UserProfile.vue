@@ -243,7 +243,7 @@ export default {
     this.uid = this.$store.getters.getUid;
 
     // 해당 계정의 프로필 사진 가져오는 걸로 해야함
-    axios.get(`${this.$store.getters.getServer}/user/image`).then(res => {
+    axios.get(`${this.$store.getters.getUserServer}/user/image`).then(res => {
       this.profileUrl = res.data.path;
     });
 
@@ -255,7 +255,7 @@ export default {
     }
 
     axios
-      .get(`${this.$store.getters.getServer}/user/info/${this.profileuid}`)
+      .get(`${this.$store.getters.getUserServer}/user/info/${this.profileuid}`)
       .then(res => {
         console.log(res.data);
         if (res.data.isEqual) {
@@ -279,7 +279,9 @@ export default {
 
     // 본인 로드맵 가져오기
     axios
-      .get(`${this.$store.getters.getServer}/roadmap/list/${this.profileuid}`)
+      .get(
+        `${this.$store.getters.getRoadmapServer}/roadmap/list/${this.profileuid}`
+      )
       .then(res => {
         this.roadmaps = res.data.roadmaps;
       })
@@ -287,7 +289,9 @@ export default {
 
     // 본인 게시글 가져오기
     axios
-      .get(`${this.$store.getters.getServer}/freeboard/list/${this.profileuid}`)
+      .get(
+        `${this.$store.getters.getBoardServer}/freeboard/list/${this.profileuid}`
+      )
       .then(res => {
         this.postings = res.data.postings;
         this.commentCnt = res.data.commentCnt;
@@ -297,7 +301,7 @@ export default {
     // 본인 좋아요 게시글 가져오기
     axios
       .get(
-        `${this.$store.getters.getServer}/freeboard/likelist/${this.profileuid}`
+        `${this.$store.getters.getBoardServer}/freeboard/likelist/${this.profileuid}`
       )
       .then(res => {
         this.likepostings = res.data.likepostings;
@@ -307,7 +311,7 @@ export default {
     // 본인 댓글 게시글 가져오기
     axios
       .get(
-        `${this.$store.getters.getServer}/freeboard/commentlist/${this.profileuid}`
+        `${this.$store.getters.getBoardServer}/freeboard/commentlist/${this.profileuid}`
       )
       .then(res => {
         this.commentpostings = res.data.commentpostings;
@@ -317,7 +321,7 @@ export default {
     // 본인 팔로워 리스트 가져오기
     axios
       .get(
-        `${this.$store.getters.getServer}/follow/followerlist/${this.profileuid}`
+        `${this.$store.getters.getUserServer}/follow/followerlist/${this.profileuid}`
       )
       .then(res => {
         this.followerlists = res.data.followerlists;
@@ -329,7 +333,7 @@ export default {
     // 본인 팔로우 리스트 가져오기
     axios
       .get(
-        `${this.$store.getters.getServer}/follow/followinglist/${this.profileuid}`
+        `${this.$store.getters.getUserServer}/follow/followinglist/${this.profileuid}`
       )
       .then(res => {
         this.followinglists = res.data.followinglists;
@@ -341,7 +345,9 @@ export default {
   methods: {
     getFollowList() {
       axios
-        .get(`${this.$store.getters.getServer}/follow/list/${this.profileuid}`)
+        .get(
+          `${this.$store.getters.getUserServer}/follow/list/${this.profileuid}`
+        )
         .then(res => {
           this.followerlist = res.data.followers;
           this.followinglist = res.data.followings;
@@ -357,7 +363,7 @@ export default {
         touid: `${this.profileuid}`
       };
       axios
-        .post(`${this.$store.getters.getServer}/follow/userfollow`, follow)
+        .post(`${this.$store.getters.getUserServer}/follow/userfollow`, follow)
         .then(res => {
           if (res.data.msg === "success") {
             this.isFollow = true;
@@ -368,7 +374,7 @@ export default {
     sendUnfollowing() {
       axios
         .delete(
-          `${this.$store.getters.getServer}/follow/userunfollow/${this.profileuid}`
+          `${this.$store.getters.getUserServer}/follow/userunfollow/${this.profileuid}`
         )
         .then(res => {
           if (res.data.msg === "success") {
