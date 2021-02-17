@@ -18,11 +18,12 @@
       v-if="!isroadback"
       title="Curriculum Information"
       style="width: 252px;"
+      class="text-center"
     >
       <hr />
       <h3>{{ headertext }}</h3>
-      <hr />
-      <b-card-text>
+      <hr v-show="headertext.length > 0"/>
+      <b-card-text v-if="roadmapMode">
         <base-input label="시작날짜-종료날짜">
           <flat-pickr
             slot-scope="{ focus, blur }"
@@ -36,15 +37,22 @@
           </flat-pickr>
         </base-input>
       </b-card-text>
+      <b-card-text v-else>
+        <h3>시작날짜-종료날짜</h3>
+        <p>{{ dates }}</p>
+      </b-card-text>
       <hr />
       <span>{{ descript }}</span>
-      <hr />
-      <b-card-text>
+      <hr v-show="descript.length > 0"/>
+
+      <b-card-text v-if="roadmapMode">
         <b-form-input
           v-model="memotext"
           placeholder="Enter your memo"
-          :readonly="!roadmapMode"
         ></b-form-input>
+      </b-card-text>
+      <b-card-text v-else>
+        <p>{{ memotext }}</p>
       </b-card-text>
     </b-card>
     <!-- 커리큘럼 데이터 출력 카드/end -->
@@ -85,8 +93,9 @@ export default {
   data() {
     return {
       headertext: "",
-      dates: "",
-      memotext: "",
+      // 빈 값으로 바꾸고 주석 해제
+      dates: "2020-12-12 ~ 2021-12-12",
+      memotext: "임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다임의로 넣어봤습니다",
       descript: "",
 
       // Get more form https://flatpickr.js.org/options/
@@ -521,13 +530,17 @@ export default {
       });
 
       myDiagram.addDiagramListener("SelectionMoved", e => {
-        e.subject.each(p => { this.updateComment(p.part.data); });
+        e.subject.each(p => {
+          this.updateComment(p.part.data);
+        });
       });
       myDiagram.addDiagramListener("TextEdited", e => {
         this.updateComment(e.subject.part.data);
       });
       myDiagram.addDiagramListener("SelectionDeleted", e => {
-        e.subject.each(p => { this.deleteComment(p.part.data); });
+        e.subject.each(p => {
+          this.deleteComment(p.part.data);
+        });
       });
     }
 
@@ -568,7 +581,7 @@ export default {
       myDiagram.isReadOnly = true;
     }
     //-----------------------------------------------------------------------------------|
-      this.readRoadmap();
+    this.readRoadmap();
     // // 수정로그 가져오기
     // update쪽으로 옮기기
     // this.readRoadmapLog();
@@ -695,7 +708,7 @@ export default {
       if (curriculumData.category == "comment") return;
       this.headertext = curriculumData.text;
       if (curriculumData.category)
-        this.dates = curriculumData.startdate + " to " + curriculumData.enddate;
+        this.dates = curriculumData.startdate + " ~ " + curriculumData.enddate;
       this.memotext = curriculumData.memo;
       this.descript = curriculumData.content;
     },
@@ -704,13 +717,13 @@ export default {
       let color;
       let url;
       if (curriculumData == -1 || !curriculumData.category) {
-        url = `${this.$store.getters.getServer}/curriculum/suggest`;
+        url = `${this.$store.getters.getRoadmapServer}/curriculum/suggest`;
         color = "blue";
       } else if (curriculumData.mdid != 0) {
-        url = `${this.$store.getters.getServer}/curriculum/suggest/${curriculumData.bdid}/${curriculumData.mdid}`;
+        url = `${this.$store.getters.getRoadmapServer}/curriculum/suggest/${curriculumData.bdid}/${curriculumData.mdid}`;
         color = "green";
       } else if (curriculumData.bdid != 0) {
-        url = `${this.$store.getters.getServer}/curriculum/suggest/${curriculumData.bdid}`;
+        url = `${this.$store.getters.getRoadmapServer}/curriculum/suggest/${curriculumData.bdid}`;
         color = "black";
       }
       axios
@@ -740,7 +753,7 @@ export default {
         });
     },
     getSearchCur() {
-      let url = `${this.$store.getters.getServer}/curriculum/search/${this.inputText}`;
+      let url = `${this.$store.getters.getRoadmapServer}/curriculum/search/${this.inputText}`;
       let color = "";
       axios
         .get(url)
@@ -775,7 +788,7 @@ export default {
         ) {
           return;
         }
-        let url = `${this.$store.getters.getServer}/roadmap/get/comment/${this.rmid}`;
+        let url = `${this.$store.getters.getRoadmapServer}/roadmap/get/comment/${this.rmid}`;
         axios
           .get(url)
           .then(res => {
@@ -789,7 +802,7 @@ export default {
     saveComment(data) {
       data.rmid = this.rmid;
       axios
-        .put(`${this.$store.getters.getServer}/roadcomment/insert`, data)
+        .put(`${this.$store.getters.getRoadmapServer}/roadcomment/insert`, data)
         .then(res => {
           if (res.data.msg != "success") alert("통신 오류");
         })
@@ -799,7 +812,7 @@ export default {
     },
     updateComment(data) {
       axios
-        .put(`${this.$store.getters.getServer}/roadcomment/update`, data)
+        .put(`${this.$store.getters.getRoadmapServer}/roadcomment/update`, data)
         .then(res => {
           if (res.data.msg != "success") alert("통신 오류");
         })
@@ -807,9 +820,12 @@ export default {
           console.error(err);
         });
     },
-    deleteComment(data){
+    deleteComment(data) {
       axios
-        .post(`${this.$store.getters.getServer}/roadcomment/delete`, data)
+        .post(
+          `${this.$store.getters.getRoadmapServer}/roadcomment/delete`,
+          data
+        )
         .then(res => {
           if (res.data.msg != "success") alert("통신 오류");
         })

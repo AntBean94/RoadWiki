@@ -8,11 +8,14 @@
           <b-row class="justify-content-center">
             <b-col xl="5" lg="6" md="8" class="px-5 py-5">
               <router-link to="/main">
-                <img src="/img/brand/logo_blue.png" alt="roadwiki" width="250rem;">
+                <img
+                  src="/img/brand/logo_blue.png"
+                  alt="roadwiki"
+                  width="250rem;"
+                />
               </router-link>
             </b-col>
           </b-row>
-
         </div>
       </b-container>
     </div>
@@ -36,27 +39,32 @@
               >
                 <b-form role="form" @submit.prevent="handleSubmit(onSubmit)">
                   <!-- required속성이 true이면 The Name field is required라는 창이 뜸 -->
-                  <base-input alternative
-                              class="mb-3"
-                              prepend-icon="ni ni-hat-3"
-                              placeholder="닉네임"
-                              name="닉네임"
-                              :rules="{required: true}"
-                              v-model="name"
-                              @blur="canUseNickName">
+                  <base-input
+                    alternative
+                    class="mb-3"
+                    label="닉네임*"
+                    prepend-icon="ni ni-hat-3"
+                    placeholder="닉네임"
+                    name="닉네임"
+                    :rules="{ required: true }"
+                    v-model="name"
+                    @blur="canUseNickName"
+                  >
                   </base-input>
 
                   <div class="row">
                     <div class="col-9">
-                      <base-input alternative
-                                  class="mb-3"
-                                  prepend-icon="ni ni-email-83"
-                                  placeholder="example123@ssafy.com"
-                                  name="이메일"
-                                  :rules="{required: true, email: true}"
-                                  v-model="email"
-                                  v-if="!confirmEmail"
-                                  >
+                      <base-input
+                        alternative
+                        label="이메일*"
+                        class="mb-3"
+                        prepend-icon="ni ni-email-83"
+                        placeholder="example123@ssafy.com"
+                        name="이메일"
+                        :rules="{ required: true, email: true }"
+                        v-model="email"
+                        v-if="!confirmEmail"
+                      >
                       </base-input>
                       <base-input
                         alternative
@@ -70,38 +78,57 @@
                     </div>
                     <div class="col-3 pl-0">
                       <!-- 만약 기존에 계정이 존재하는 이메일이라면 this email is already taken 보여주기 -->
-                      <b-button variant = "provence" v-if="!confirmEmail" @click="emailNumSend" class="mr-0 ml-0 source-han-serif-k-light" size="md">인증하기</b-button>
-                      <ModalEmailValidation :isEmailModal="isEmailModal" :userEmail="email" @close="closeModal"/>
+                      <b-button
+                        variant="provence"
+                        v-if="!confirmEmail"
+                        @click="emailNumSend"
+                        class="mr-0 ml-0 source-han-serif-k-light"
+                        size="md"
+                        >인증하기</b-button
+                      >
+                      <ModalEmailValidation
+                        :isEmailModal="isEmailModal"
+                        :userEmail="email"
+                        @close="closeModal"
+                      />
                       <!-- <ModalEmailValidation/> -->
                       <b-button v-if="confirmEmail" disabled>인증완료</b-button>
                     </div>
                   </div>
 
-                  <base-input alternative
-                              class="mb-3"
-                              prepend-icon="ni ni-lock-circle-open"
-                              placeholder="비밀번호"
-                              type="password"
-                              name="비밀번호"
-                              vid="password"
-                              :rules="{required: true, min: 8}"
-                              v-model="password">
+                  <base-input
+                    alternative
+                    label="비밀번호*"
+                    class="mb-3"
+                    prepend-icon="ni ni-lock-circle-open"
+                    placeholder="비밀번호"
+                    type="password"
+                    name="비밀번호"
+                    vid="password"
+                    :rules="{ required: true, min: 8 }"
+                    v-model="password"
+                  >
                   </base-input>
 
-                  <base-input alternative
-                              class="mb-3"
-                              prepend-icon="ni ni-lock-circle-open"
-                              placeholder="비밀번호 확인"
-                              type="password"
-                              name="비밀번호 확인"
-                              :rules="{required: true, min: 8, password: password}"
-                              v-model="rePassword">
+                  <base-input
+                    alternative
+                    label="비밀번호 확인*"
+                    class="mb-3"
+                    prepend-icon="ni ni-lock-circle-open"
+                    placeholder="비밀번호 확인"
+                    type="password"
+                    name="비밀번호 확인"
+                    :rules="{ required: true, min: 8, password: password }"
+                    v-model="rePassword"
+                  >
                   </base-input>
                   <hr class="my-4" />
                   <div>
                     <b-form-group v-slot="{ ariaDescribedby }">
                       <div class="form-control-label">관심 개발 분야*</div>
-                      <div class="form-control-label my-1">(1순위부터 3순위까지 순서대로 체크해주세요.)</div>
+                      <div class="form-control-label my-1">
+                        (1순위부터 3순위까지 순서대로 체크해주세요.)
+                      </div>
                       <!-- <p>1순위부터 체크해주세요</p> -->
                       <b-container class="mt-2 bg-white rounded py-2 shadow-sm">
                         <b-form-checkbox
@@ -118,7 +145,7 @@
                       </b-container>
                     </b-form-group>
                   </div>
-                  <hr class="my-4">
+                  <hr class="my-4" />
                   <b-row class="my-4">
                     <b-col cols="12">
                       <base-input
@@ -127,12 +154,15 @@
                         Policy
                       >
                         <b-form-checkbox v-model="agree">
-                          <span class="text-muted source-han-serif-k-extralight">
-                            <b-link 
-                              v-b-modal.modal-scrollable 
-                              variant="link" 
-                              class="m-0 p-0 source-han-serif-k-extralight" 
-                              @click="isPolicyModal = true">
+                          <span
+                            class="text-muted source-han-serif-k-extralight"
+                          >
+                            <b-link
+                              v-b-modal.modal-scrollable
+                              variant="link"
+                              class="m-0 p-0 source-han-serif-k-extralight"
+                              @click="isPolicyModal = true"
+                            >
                               회원 약관
                             </b-link>
                             에 동의합니다.
@@ -147,10 +177,16 @@
                     </b-col>
                   </b-row>
                   <div class="text-center">
-                    <b-button block type="submit" variant="provence" class="mt-4 source-han-serif-k-extralight" @click="signUp">가입하기</b-button>
+                    <b-button
+                      block
+                      type="submit"
+                      variant="provence"
+                      class="mt-4 source-han-serif-k-extralight"
+                      @click="signUp"
+                      >가입하기</b-button
+                    >
                   </div>
-                  <div class="text-center">
-                  </div>
+                  <div class="text-center"></div>
                   <div class="text-center"></div>
                 </b-form>
               </validation-observer>
@@ -198,7 +234,7 @@ export default {
     };
   },
   created() {
-    axios.get(`${this.$store.getters.getServer}/keyword/list`).then(res => {
+    axios.get(`${this.$store.getters.getUserServer}/keyword/list`).then(res => {
       this.options = res.data.keywords;
     });
   },
@@ -206,7 +242,7 @@ export default {
     // 닉네임 입력창에서 포커싱8이 사라지는 순간 -> 닉네임 사용가능한지 확인 (이미 있는 닉네임인지)
     canUseNickName() {
       axios
-        .get(`${this.$store.getters.getServer}/user/existname/${this.name}`)
+        .get(`${this.$store.getters.getUserServer}/user/existname/${this.name}`)
         .then(res => {
           console.log(res.data);
           //msg == fail 이면 중복
@@ -233,11 +269,11 @@ export default {
     emailNumSend() {
       // 이미 존재하는 이메일인 경우, 존재하는 이메일 경고창 -> 이메일 인증 막기
       axios
-        .get(`${this.$store.getters.getServer}/user/canjoin/${this.email}`)
+        .get(`${this.$store.getters.getUserServer}/user/canjoin/${this.email}`)
         .then(res => {
           if (res.data.msg === "success") {
             axios
-              .get(`${this.$store.getters.getServer}/email/${this.email}`)
+              .get(`${this.$store.getters.getUserServer}/email/${this.email}`)
               .then(res => {
                 console.log(res.data.msg);
                 if (res.data.msg === "success") {
@@ -274,7 +310,7 @@ export default {
         this.agree === true
       ) {
         axios
-          .post(`${this.$store.getters.getServer}/user/join`, user)
+          .post(`${this.$store.getters.getUserServer}/user/join`, user)
           .then(res => {
             console.log("##############################");
             console.log(res.data);

@@ -953,7 +953,7 @@ $pagination-disabled-border-color:  $gray-300 !default;
 // Cards
 
 $card-spacer-y:                     1.25rem !default;
-$card-spacer-x:                     1.5rem !default;
+$card-spacer-x:                     1.25rem !default;
 $card-border-width:                 $border-width !default;
 $card-border-radius:                $border-radius !default;
 $card-border-color:                 rgba($black, .05) !default;
@@ -968,7 +968,7 @@ $card-img-overlay-padding:          1.25rem !default;
 
 $card-columns-count:                3 !default;
 $card-columns-gap:                  1.25rem !default;
-$card-columns-margin:               $card-spacer-y !default;
+// $card-columns-margin:               $card-spacer-y !default;
 
 // Tooltips
 

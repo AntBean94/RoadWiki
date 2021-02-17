@@ -24,20 +24,20 @@ const router = new VueRouter({
 
 export default router;
 
-// router.beforeEach((to, from, next) => {
-//   if (store.getters.getAccessToken === null)
-//     if (localStorage.getItem('auth-token') !== null)
-//       store.commit('LOADUSERTOKEN');
-//   if (to.name === 'intro') {
-//     if (store.getters.getAccessToken !== null)
-//     next({ name: '나의 로드맵' })
-//   }
-//   else if (to.name !== 'main' && to.name !== 'register' && to.name !== '게시판') { 
-//     if (store.getters.getAccessToken === null) { 
-//       next({name:'intro'})
-//       alert('로그인이 필요한 서비스입니다.')
-//     }
-//   }
-//   next()
-// })
+router.beforeEach((to, from, next) => {
+  if (store.getters.getAccessToken === null)
+    if (sessionStorage.getItem('auth-token') !== null)
+      store.commit('LOADUSERTOKEN');
+  if (to.name === 'intro') {
+    if (store.getters.getAccessToken !== null)
+    next({ name: '나의 로드맵' })
+  }
+  else if (to.name !== 'main' && to.name !== 'register' && to.name !== '게시판') { 
+    if (store.getters.getAccessToken === null) { 
+      next({name:'intro'})
+      alert('로그인이 필요한 서비스입니다.')
+    }
+  }
+  next()
+})
 

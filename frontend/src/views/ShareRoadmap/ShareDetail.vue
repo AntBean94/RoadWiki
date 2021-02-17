@@ -29,7 +29,7 @@
           </h5>
         </b-col>
         <button
-          v-if="useRoadback  && !toggleFeedback"
+          v-if="useRoadback && !toggleFeedback"
           class="btn"
           style="background-color: rgb(256, 256, 256);"
           @click="previewRoadback"
@@ -45,7 +45,7 @@
           로드백 다 지울래요
         </button>
         <button
-          v-if="useRoadback  && toggleFeedback"
+          v-if="useRoadback && toggleFeedback"
           class="btn"
           style="background-color: rgb(256, 256, 256);"
           @click="previewRoadmap"
@@ -127,7 +127,7 @@ export default {
       isWriter: false,
       rmid: "",
       useRoadback: "",
-      toggleFeedback : false,
+      toggleFeedback: false
     };
   },
   created() {},
@@ -137,8 +137,8 @@ export default {
       this.previewRoadmap();
       this.likecheck();
     } else {
-      this.$router.push({ name: '공유로드맵\'s' })
-      return
+      this.$router.push({ name: "공유로드맵's" });
+      return;
     }
   },
   methods: {
@@ -158,7 +158,7 @@ export default {
     },
     previewRoadmap() {
       axios
-        .get(`${this.$store.getters.getServer}/roadmap/get/${this.rmid}`)
+        .get(`${this.$store.getters.getRoadmapServer}/roadmap/get/${this.rmid}`)
         .then(res => {
           if (res.data.msg == "success") {
             this.roadmapData = JSON.parse(res.data["roadmaps"].tmp);
@@ -172,9 +172,11 @@ export default {
           alert("axios 오류");
         });
     },
-    previewRoadback(){
-        axios
-        .get(`${this.$store.getters.getServer}/roadmap/get/comment/${this.rmid}`)
+    previewRoadback() {
+      axios
+        .get(
+          `${this.$store.getters.getRoadmapServer}/roadmap/get/comment/${this.rmid}`
+        )
         .then(res => {
           if (res.data.msg == "success") {
             this.roadmapData = JSON.parse(res.data["roadmaps"].tmp);
@@ -188,9 +190,11 @@ export default {
           alert("axios 오류");
         });
     },
-    deleteRoadback(){
-        axios
-        .delete(`${this.$store.getters.getServer}/roadcomment/deleteall/${this.rmid}`)
+    deleteRoadback() {
+      axios
+        .delete(
+          `${this.$store.getters.getRoadmapServer}/roadcomment/deleteall/${this.rmid}`
+        )
         .then(res => {
           if (res.data.msg == "success") {
             this.previewRoadback();
@@ -205,7 +209,9 @@ export default {
     },
     likecheck() {
       axios
-        .get(`${this.$store.getters.getServer}/roadmapshare/islike/${this.pid}`)
+        .get(
+          `${this.$store.getters.getRoadmapServer}/roadmapshare/islike/${this.pid}`
+        )
         .then(res => {
           if (res.data.msg == "success") {
             this.like = res.data.islike;
@@ -223,7 +229,7 @@ export default {
       // this.$router.push({name: 'update_board', query: { pid }})
     },
     deleteBoard() {
-      // axios.delete(`${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`)
+      // axios.delete(`${this.$store.getters.getRoadmapServer}/freeboard/posting/${this.$route.query.pid}`)
       // .then(() => {
       //   alert('삭제가 정상적으로 완료되었습니다.')
       //   this.$router.push('/tmp_board')
@@ -232,7 +238,7 @@ export default {
     clickLike() {
       axios
         .put(
-          `${this.$store.getters.getServer}/roadmapshare/like/${this.$store.getters.getUid}/${this.pid}`
+          `${this.$store.getters.getRoadmapServer}/roadmapshare/like/${this.$store.getters.getUid}/${this.pid}`
         )
         .then(res => {
           if (res.data.msg == "success") {
@@ -249,7 +255,7 @@ export default {
     cancelLike() {
       axios
         .put(
-          `${this.$store.getters.getServer}/roadmapshare/dislike/${this.$store.getters.getUid}/${this.pid}`
+          `${this.$store.getters.getRoadmapServer}/roadmapshare/dislike/${this.$store.getters.getUid}/${this.pid}`
         )
         .then(res => {})
         .catch(e => {
@@ -260,7 +266,10 @@ export default {
       this.likeCnt--;
     },
     goToCreate() {
-      this.$router.push({ name : '로드맵 수정하기', params: { rmid: this.rmid, CUMode: 0 }})
+      this.$router.push({
+        name: "로드맵 수정하기",
+        params: { rmid: this.rmid, CUMode: 0 }
+      });
     },
     goToRoadBack() {
       this.$router.push({ name: "roadback", params: { rmid: this.rmid } });
