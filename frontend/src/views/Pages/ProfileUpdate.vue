@@ -71,7 +71,7 @@
                 </h2>
               </b-col>
               <b-col>
-                <b-form-input value="기계공학"></b-form-input>
+                <b-form-input :value="major" v-model="major"></b-form-input>
               </b-col>
             </b-row>
             <b-row class="mb-3">
@@ -83,7 +83,7 @@
               </b-col>
               <b-col>
                 <!-- address 수정 -->
-                <b-form-input :value="address"></b-form-input>
+                <b-form-input :value="address" v-model="address"></b-form-input>
               </b-col>
             </b-row>
             <b-row class="mb-3">
@@ -94,11 +94,7 @@
                 </h2>
               </b-col>
               <b-col>
-                <b-form-textarea
-                  :value="introduction"
-                  v-model="introduction"
-                  rows="5"
-                >
+                <b-form-textarea :value="oneline" v-model="oneline" rows="5">
                 </b-form-textarea>
               </b-col>
             </b-row>
@@ -261,7 +257,6 @@ export default {
       nickname: "",
       introduction:
         "술잔을 들자하니 천하가 내발아래 있고 6팀 친구들 또한 옆에 있으니 염라대왕 두렵지 않구나",
-      address: "https://github.com",
       profileImg: "",
       backImg: "",
       keywords: [],
@@ -271,29 +266,34 @@ export default {
       following: "",
       boards: "",
       comments: "",
-      major: "",
       email: "",
       modalShow: false,
       file1: null,
       files: [],
       uid: "",
-      profileUrl: ""
+      profileUrl: "",
+      address: "https://github.com",
+      oneline: "",
+      major: ""
     };
   },
   created() {
     this.uid = this.$store.getters.getUid;
 
-    axios.get(`${this.$store.getters.getServer}/user/image`).then(res => {
+    axios.get(`${this.$store.getters.getUserServer}/user/image`).then(res => {
       this.profileUrl = res.data.path;
     });
 
     axios
-      .get(`${this.$store.getters.getServer}/user/info/${this.uid}`)
+      .get(`${this.$store.getters.getUserServer}/user/info/${this.uid}`)
       .then(res => {
         this.nickname = res.data.name;
         this.email = res.data.email;
         this.keywords = res.data.keywords;
         this.keywordtexts = res.data.keywordtexts;
+        this.address = res.data.address;
+        this.major = res.data.major;
+        this.oneline = res.data.oneline;
       })
       .catch(() => {
         alert("로그인이 필요한 서비스입니다.");
@@ -301,7 +301,7 @@ export default {
           this.$router.replace("/");
         });
       });
-    axios.get(`${this.$store.getters.getServer}/keyword/list`).then(res => {
+    axios.get(`${this.$store.getters.getUserServer}/keyword/list`).then(res => {
       this.options = res.data.keywords;
     });
   },
@@ -311,7 +311,7 @@ export default {
     },
     withDrawal() {
       axios
-        .delete(`${this.$store.getters.getServer}/user/withdraw`)
+        .delete(`${this.$store.getters.getUserServer}/user/withdraw`)
         .then(() => {
           alert("회원 탈퇴가 완료되었습니다.");
           this.$store.dispatch("LOGOUT").then(() => {
@@ -334,16 +334,15 @@ export default {
     updateHandler() {
       // 보낼때 명명이 중요함
       let user = {
+        uid: this.uid,
         name: this.nickname,
         address: this.address,
         major: this.major,
-        keyword: this.keywords,
-        introduction: this.introduction,
-        file: this.file1
+        oneline: this.oneline,
+        keyword: this.keywords
       };
-
       axios
-        .put(`${this.$store.getters.getServer}/user/modify`, user)
+        .put(`${this.$store.getters.getUserServer}/user/modify`, user)
         .then(res => {
           if (res.data.msg == "success") {
             alert("회원 수정이 완료되었습니다.");
@@ -361,7 +360,7 @@ export default {
       // this.modalShow = false;
 
       await axios
-        .post(`${this.$store.getters.getServer}/user/pic`, formData, {
+        .post(`${this.$store.getters.getUserServer}/user/pic`, formData, {
           headers: { "content-type": "multipart/form-data" }
         })
         .then(res => {

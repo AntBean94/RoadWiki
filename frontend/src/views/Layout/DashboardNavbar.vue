@@ -56,7 +56,7 @@
           <div v-if="isHoverB">
             <i
               @mouseover="checkHoverB"
-              class="btn ni ni-bullet-list-67 text-red"
+              class="btn ni ni-bullet-list-67 text-black"
             ></i>
           </div>
           <div v-else>
@@ -72,7 +72,8 @@
           <div v-if="isHoverS">
             <i
               @mouseover="checkHoverS"
-              class="btn ni ni-bullet-list-67 text-black"
+              class="fas fa-share-alt
+            "
             ></i>
           </div>
           <div v-else>
@@ -210,7 +211,7 @@
       <content-footer v-if="!$route.meta.hideFooter"></content-footer>
     </div>
     <div>
-      <Chatting v-on:remove="removeChatting" v-if="chattingOn" />
+      <chatting-bg v-on:remove="removeChatting" v-if="chattingOn" />
       <button id="chat" class="btn" @click="createChatting" v-else>
         chatting
       </button>
@@ -222,6 +223,7 @@ import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import LoginContent from "@/components/Login/LoginContent.vue";
 import LogoutContent from "@/components/Logout/LogoutContent.vue";
+import ChattingBg from "@/components/Chatting/ChattingBg";
 
 function hasElement(className) {
   return document.getElementsByClassName(className).length > 0;
@@ -242,8 +244,6 @@ import ContentFooter from "./ContentFooter.vue";
 import DashboardContent from "./Content.vue";
 import { FadeTransition } from "vue2-transitions";
 import { mapGetters } from "vuex";
-import Chatting from "@/components/Chatting/Chatting";
-
 import { CollapseTransition } from "vue2-transitions";
 import { BaseNav, Modal } from "@/components";
 
@@ -257,7 +257,7 @@ export default {
     FadeTransition,
     LoginContent,
     LogoutContent,
-    Chatting
+    ChattingBg
   },
   props: {
     type: {
@@ -291,7 +291,7 @@ export default {
     this.checkUrl(url);
     this.url = url;
 
-    axios.get(`${this.$store.getters.getServer}/user/image`).then(res => {
+    axios.get(`${this.$store.getters.getUserServer}/user/image`).then(res => {
       this.profileUrl = res.data.path;
       console.log(this.profileUrl);
     });

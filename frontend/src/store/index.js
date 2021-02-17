@@ -5,15 +5,24 @@ import Vuex from "vuex";
 
 Vue.use(Vuex);
 
-const SERVER_URL = process.env.VUE_APP_SERVER_URL;
-// console.log(SERVER_URL)
+// const SERVER_URL = [
+//   process.env.VUE_APP_SERVER_URL,
+//   process.env.VUE_APP_SERVER_URL,
+//   process.env.VUE_APP_SERVER_URL,
+//   process.env.VUE_APP_SERVER_URL,
+// ]
+const SERVER_URL = [
+process.env.VUE_APP_SERVER_URL_BOARD,
+process.env.VUE_APP_SERVER_URL_CHATTING,
+process.env.VUE_APP_SERVER_URL_ROADMAP,
+process.env.VUE_APP_SERVER_URL_USER,
+]
 
 export default new Vuex.Store({
   state: {
     server: SERVER_URL,
     accessToken: null,
     user: {
-      uid: "",
       uid: "",
       email: "",
       name: "",
@@ -23,8 +32,17 @@ export default new Vuex.Store({
     pid: ""
   },
   getters: {
-    getServer(state) {
-      return state.server;
+    getBoardServer(state) {
+      return state.server[0];
+    },
+    getChattingServer(state) {
+      return state.server[1];
+    },
+    getRoadmapServer(state) {
+      return state.server[2];
+    },
+    getUserServer(state) {
+      return state.server[3];
     },
     getAccessToken(state) {
       return state.accessToken;
@@ -54,8 +72,8 @@ export default new Vuex.Store({
   mutations: {
     LOADUSERTOKEN(state) {
       console.log("set token");
-      state.accessToken = localStorage.getItem("auth-token");
-      state.user = JSON.parse(localStorage.getItem("user"));
+      state.accessToken = sessionStorage.getItem("auth-token");
+      state.user = JSON.parse(sessionStorage.getItem("user"));
       console.log("load : " + state.user);
       axios.defaults.headers.common["auth-token"] = state.accessToken;
     },
@@ -90,7 +108,7 @@ export default new Vuex.Store({
   actions: {
     LOGIN(context, user) {
       return axios
-        .post(`${SERVER_URL}/user/login`, user)
+        .post(`${SERVER_URL[3]}/user/login`, user)
         .then(response => {
           console.log(response.data);
           context.commit("LOGIN", response.data);
@@ -98,11 +116,11 @@ export default new Vuex.Store({
           axios.defaults.headers.common[
             "auth-token"
           ] = `${response.data["authorizationToken"]}`;
-          localStorage.setItem(
+          sessionStorage.setItem(
             "auth-token",
             `${response.data["authorizationToken"]}`
           );
-          localStorage.setItem("user", JSON.stringify(this.getters.getUser));
+          sessionStorage.setItem("user", JSON.stringify(this.getters.getUser));
         })
         .catch(() => {
           reject();
@@ -111,7 +129,7 @@ export default new Vuex.Store({
     LOGOUT(context) {
       context.commit("LOGOUT");
       axios.defaults.headers.common["auth-token"] = null;
-      localStorage.removeItem("auth-token");
+      sessionStorage.removeItem("auth-token");
     },
     SETINFO(context, user) {
       context.commit("SETINFO", user);

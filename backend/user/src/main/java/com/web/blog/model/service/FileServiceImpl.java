@@ -26,14 +26,15 @@ public class FileServiceImpl implements FileService {
 	
 	@Override
 	public Object uploadImg(MultipartFile file, HttpServletRequest request, int uid) throws Exception {
+		logger.info("upload service start");
 		// 파일이 존재하면 삭제
 		String filename ="";
 		try {
 			filename = fileSearch("../../frontend/public/statics/upload/" + uid, 1);
 		} catch (Exception e) {
-			logger.error("no folder");
+			logger.error("no search folder");
 		}
-		Thread.sleep(1500);// 삭제가 쓰레드형태로 같이 진행되는거같아서 임시로 슬립
+		
 		// parent directory를 찾는다.
 		Path directory = Paths.get("..\\..\\frontend\\public\\statics\\upload\\" + uid + "\\").toAbsolutePath().normalize();
 
@@ -58,7 +59,8 @@ public class FileServiceImpl implements FileService {
 		result.put("msg", "sucess");
 		filename = fileSearch("../../frontend/public/statics/upload/" + uid, 0);
 		result.put("path", "/statics/upload/" + uid + "/" + filename);
-		Thread.sleep(2000);
+		
+		logger.info("upload service end");
 		return result;
 	}
 
@@ -106,45 +108,6 @@ public class FileServiceImpl implements FileService {
 		}
 		return map;
 	}
-	
-	@Override
-	public byte[] showImg(String uid, HttpServletRequest request) throws Exception {
-		String filename = "";
-		try {
-			filename = fileSearch("../../frontend/public/statics/upload/" + uid, 0);
-		} catch (Exception e) {
-			logger.error("no search folder");
-		}
-		InputStream in = null;
-		try {
-			in = getClass().getResourceAsStream("/statics/upload/" + uid + "/" + filename);
-			if (in == null) {
-				in = getClass().getResourceAsStream("/default.png");
-			}
-		} catch (Exception e) {
-			in = getClass().getResourceAsStream("/default.png");
-		}
-		return IOUtils.toByteArray(in);
-	}
-	
-//	@GetMapping(value = "image")
-//	public Object userSearch() throws IOException {
-//		Path file = Paths.get(".\\src\\main\\resources\\statics\\upload\\" + 1 + "\\").resolve("1.jpg");
-//		Resource resource = new UrlResource(file.toUri());
-//		if (resource.exists() || resource.isReadable()) {
-//			System.out.println("파일 리소스 나오긴 함 @@@@@@@@@@@@@@@@@@");
-//		}
-//
-//		InputStream imageStream = new FileInputStream(
-//				".\\src\\main\\resources\\statics\\upload\\" + 1 + "\\" + "1.jpg");
-//		System.out.println("File null? : " + imageStream);
-//		byte[] imageByteArray = IOUtils.toByteArray(imageStream);
-//		imageStream.close();
-//
-//		Map<String, Object> result = new HashMap<String, Object>();
-//		result.put("image", imageByteArray);
-//		return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
-//	}
 
 	@Override
 	public Object uploadbgImg(MultipartFile file, HttpServletRequest request, int uid) throws Exception {

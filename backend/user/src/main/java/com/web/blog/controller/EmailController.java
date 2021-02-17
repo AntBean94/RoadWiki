@@ -61,7 +61,7 @@ public class EmailController {
 			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
 				put("errorMsg", e.getMessage());
 				put("msg", "fail");
-			}}, HttpStatus.NO_CONTENT);
+			}}, HttpStatus.OK);
 		}
 	}
 	
@@ -78,7 +78,7 @@ public class EmailController {
 			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
 				put("errorMsg", e.getMessage());
 				put("msg", "fail");
-			}}, HttpStatus.NO_CONTENT);
+			}}, HttpStatus.OK);
 		}
 	}
 
