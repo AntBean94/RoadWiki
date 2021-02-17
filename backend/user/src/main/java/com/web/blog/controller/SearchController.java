@@ -39,7 +39,7 @@ public class SearchController {
 			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
 				put("errorMsg", e.getMessage());
 				put("msg", FAIL);
-			}}, HttpStatus.NO_CONTENT);
+			}}, HttpStatus.OK);
 		}
 	}
 }

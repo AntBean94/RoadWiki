@@ -51,7 +51,7 @@ public class FollowController {
 					put("errorMsg", e.getMessage());
 					put("msg", FAIL);
 				}
-			}, HttpStatus.NO_CONTENT);
+			}, HttpStatus.OK);
 		}
 	}
 	
@@ -68,7 +68,7 @@ public class FollowController {
 					put("errorMsg", e.getMessage());
 					put("msg", FAIL);
 				}
-			}, HttpStatus.NO_CONTENT);
+			}, HttpStatus.OK);
 		}
 	}
 	
@@ -85,7 +85,7 @@ public class FollowController {
 					put("errorMsg", e.getMessage());
 					put("msg", FAIL);
 				}
-			}, HttpStatus.NO_CONTENT);
+			}, HttpStatus.OK);
 		}
 	}
 	
@@ -104,7 +104,7 @@ public class FollowController {
 					put("errorMsg", e.getMessage());
 					put("msg", FAIL);
 				}
-			}, HttpStatus.NO_CONTENT);
+			}, HttpStatus.OK);
 		}
 	}
 	
@@ -121,7 +121,7 @@ public class FollowController {
 					put("errorMsg", e.getMessage());
 					put("msg", FAIL);
 				}
-			}, HttpStatus.NO_CONTENT);
+			}, HttpStatus.OK);
 		}
 	}
 
