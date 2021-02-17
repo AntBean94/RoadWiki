@@ -1,8 +1,8 @@
 <template>
   <div>
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue">
+    <base-header class="pb-8 pt-5 pt-md-8 bg-baby-blue">
     </base-header>
-    <b-container>
+    <b-container class="p-1">
       <b-row align-h="end">
         <!-- <b-button variant="primary" class="mt-2" @click="detailBoard">detail board</b-button> -->
         <b-button variant="peach-quartz" class="mt-2 mr-4" @click="createBoard"

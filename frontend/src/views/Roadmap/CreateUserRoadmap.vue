@@ -3,6 +3,9 @@
     <base-header class="pb-2 pt-2 pt-md-2 bg-baby-blue">
       <!-- Card stats -->
       <b-container>
+        <b-row class="pt-2">
+          <i class="fas fa-arrow-left fa-2x text-classic-blue" @click="goToBack"></i>
+        </b-row>
         <b-row class="pt-4">
           <!-- 장기 중기 단기 선택 라디오 -->
           <b-form-group v-slot="{ ariaDescribedby }" class="mb-0">
@@ -40,12 +43,12 @@
         </b-row>
 
         <b-row align-h="end" class="mt-3">
-          <b-button
+          <!-- <b-button
             @click="goToBack"
             variant="peach-quartz"
           >
             돌아가기
-          </b-button>
+          </b-button> -->
 
           <b-button
             @click="createRoadmap"
