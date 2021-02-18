@@ -270,13 +270,26 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	public Object editPosting(Posting posting, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-
 			if (postingRepo.select(posting.getPid()).getUid() != uid)
 				throw new RuntimeException("wrong user");
-			if (postingRepo.update(posting) == 1)
+			if (postingRepo.update(posting) == 1) {
+				String[] tags = posting.getTags();
+				int pid = postingRepo.selectPid()[0].getPid();
+				// 먼저 지우고
+				postingRepo.deleteTags(pid);
+				// tag 재삽입
+				for (int i = 0; i < tags.length; i++) {
+					Map<String, Object> postingTagMap = new HashMap<String, Object>();
+					postingTagMap.put("pid", pid);
+					postingTagMap.put("tagid", i + 1);
+					postingTagMap.put("tagname", tags[i]);
+					postingRepo.insertTag(postingTagMap);
+				}
 				result.put("msg", "success");
+			}
 			else
 				result.put("msg", "fail");
+			
 		} catch (NumberFormatException e) {
 			throw new RuntimeException("input data type error");
 		} catch (Exception e) {

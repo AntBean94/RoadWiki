@@ -1,7 +1,6 @@
 <template>
   <div class="d-flex flex-column">
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue">
-    </base-header>
+    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue"> </base-header>
 
     <div class="p-4 bg-apple-bg">
       <b-input
@@ -61,13 +60,6 @@
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "codemirror/lib/codemirror.css";
 import { Editor } from "@toast-ui/vue-editor";
-import store from "@/store";
-import routes from "@/routes/routes";
-
-// local 이 아니라 this.$store.getters.getBoardServer 73이아니라 파람으로 받아온거$route.param
-// axios.get(`http://localhost:8085/freeboard/posting/73`)
-
-// console.log(routes.query.pid)
 
 export default {
   name: "Editor",
@@ -82,7 +74,12 @@ export default {
       },
       tags: [],
       tagInput: "",
-      title: ""
+      title: "",
+      name: "",
+      oneline: "",
+      classifier: "",
+      uid: "",
+      pid: ""
     };
   },
   methods: {
@@ -92,29 +89,35 @@ export default {
           `${this.$store.getters.getBoardServer}/freeboard/posting/${this.$route.query.pid}`
         )
         .then(res => {
-          console.log("origin data");
-          console.log(res.data);
-          this.content = res.data.posting.content;
+          this.name = res.data.user.name;
+          this.oneline = res.data.user.oneline;
+          this.classifier = res.data.posting.classifier;
           this.title = res.data.posting.title;
-          console.log("여기는 title");
-          console.log(this.title);
+          this.content = res.data.posting.content;
+          this.createDate = res.data.posting.createDate;
+          this.modifyDate = res.data.posting.modifyDate;
+          this.uid = res.data.posting.uid;
+          this.pid = res.data.posting.pid;
+          this.comments = res.data.comments;
+          this.recomments = res.data.recomments;
+          this.tags = res.data.posting.tags;
         });
     },
     datachange() {
       const content = this.$refs.toastuiEditor.invoke("getMarkdown");
       const pid = this.$route.query.pid;
-      console.log('###################')
-      console.log(content)
+
       let posting = {
         title: this.title,
         content: content,
         pid: pid,
-      }
+        tags: this.tags
+      };
       axios
         .put(`${this.$store.getters.getBoardServer}/freeboard/posting`, posting)
         .then(() => {
-          alert('글 작성이 완료되었습니다.')
-          this.$router.push({name: '게시글', query: { pid: pid }})
+          alert("글 작성이 완료되었습니다.");
+          this.$router.push({ name: "게시글", query: { pid: pid } });
         });
     },
     tagEnter() {
@@ -154,30 +157,8 @@ export default {
         })
         .finally(() => {});
     }
-    // onEditorLoad() {
-    //   axios.get(`${this.$store.getters.getBoardServer}/freeboard/posting/${this.$route.query.pid}`)
-    //   .then((res) => {
-    //     console.log(res.data.posting)
-    //     this.name = res.data.name
-    //     this.classifier = res.data.posting.classifier
-    //     this.title = res.data.posting.title
-    //     this.content = res.data.posting.content
-    //     this.createDate = res.data.posting.createDate
-    //     this.modifyDate = res.data.posting.modifyDate
-    //     this.uid = res.data.posting.uid
-    //     this.likeCnt = res.data.posting.likeCnt
-    //   })
-    // },
-  },
-  watch: {
-    content: function() {
-      console.log("바뀌는중...");
-    }
   },
   created() {
-    console.log(
-      `${this.$store.getters.getBoardServer}/freeboard/posting/${this.$route.query.pid}`
-    );
     this.getOriginPosting();
     this.editorLoading();
   }

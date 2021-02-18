@@ -30,4 +30,5 @@ public interface PostingRepo {
 	public Posting[] selectLikeHigh(int cnt);
 	public Posting[] postingListUid(int uid);
 	public Posting[] selectList(int uid);
+	public int deleteTags(int pid) throws SQLException;
 }
