@@ -25,30 +25,30 @@
         />
       </div>
 
-      <b-container class="mt-3">
-        <b-row class="mx-2">
-          <div
-            class="ml-1 mt-2 mr-1 bg-warning rounded-pill py-1 px-2"
-            v-for="(tag, idx) in tags"
-            :key="idx"
-          >
-            <span class="h5"># {{ tag }}</span>
-            <span class="ml-2 h5" style="color:black" @click="delTag(idx)">
-              <i class="fas fa-times"></i>
-            </span>
-          </div>
-        </b-row>
-      </b-container>
+    <b-container class="mt-3">
+      <b-row class="mx-2">
+        <div
+          class="ml-1 mt-2 mr-1 py-1 px-2"
+          v-for="(tag, idx) in tags"
+          :key="idx"
+        >
+          <span class="h5"># {{ tag }}</span>
+          <span class="ml-2 h5" style="color:black" @click="delTag(idx)">
+            <i class="fas fa-times"></i>
+          </span>
+        </div>
+      </b-row>
+    </b-container>
 
-      <div class="p-4 bg-apple-bg">
-        <b-input
-          placeholder="태그를 추가해주세요"
-          class="form-control-alternative"
-          @keydown.enter="tagEnter"
-          @blur="tagEnterBlur"
-          v-model="tagInput"
-        />
-      </div>
+    <div class="p-4 bg-apple-bg">
+      <b-input
+        placeholder="태그를 추가해주세요"
+        class="form-control-alternative"
+        @keydown.enter="tagEnter"
+        @blur="tagEnterBlur"
+        v-model="tagInput"
+      />
+    </div>
 
       <b-button @click="datachange" class="mt-3 mx-4" variant="default">
         저장
@@ -85,7 +85,7 @@ export default {
       const content = this.$refs.toastuiEditor.invoke("getMarkdown");
       // console.log(typeof(content))
       axios
-        .put(`${this.$store.getters.getBoardServer}/freeboard/posting`, {
+        .post(`${this.$store.getters.getBoardServer}/freeboard/posting`, {
           uid: this.$store.getters.getUid,
           classifier: "자유게시판",
           title: this.title,

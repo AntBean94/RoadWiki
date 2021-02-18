@@ -16,6 +16,7 @@ import com.web.blog.model.dto.Comment;
 import com.web.blog.model.dto.Posting;
 import com.web.blog.model.dto.Recomment;
 import com.web.blog.model.repo.CommentRepo;
+import com.web.blog.model.repo.PostingLikeUserRepo;
 import com.web.blog.model.repo.PostingRepo;
 import com.web.blog.model.repo.RecommentRepo;
 import com.web.blog.model.repo.UserRepo;
@@ -33,7 +34,10 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
 	@Autowired
 	RecommentRepo recommentRepo;
-
+	
+	@Autowired
+	PostingLikeUserRepo postingLikeUserRepo;
+	
 	@Autowired
 	UserRepo userRepo;
 
@@ -266,13 +270,26 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	public Object editPosting(Posting posting, int uid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-
 			if (postingRepo.select(posting.getPid()).getUid() != uid)
 				throw new RuntimeException("wrong user");
-			if (postingRepo.update(posting) == 1)
+			if (postingRepo.update(posting) == 1) {
+				String[] tags = posting.getTags();
+				int pid = postingRepo.selectPid()[0].getPid();
+				// 먼저 지우고
+				postingRepo.deleteTags(pid);
+				// tag 재삽입
+				for (int i = 0; i < tags.length; i++) {
+					Map<String, Object> postingTagMap = new HashMap<String, Object>();
+					postingTagMap.put("pid", pid);
+					postingTagMap.put("tagid", i + 1);
+					postingTagMap.put("tagname", tags[i]);
+					postingRepo.insertTag(postingTagMap);
+				}
 				result.put("msg", "success");
+			}
 			else
 				result.put("msg", "fail");
+			
 		} catch (NumberFormatException e) {
 			throw new RuntimeException("input data type error");
 		} catch (Exception e) {
@@ -451,4 +468,39 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		return result;
 	}
 
+	@Override
+	public Object postingListUid(int uid) throws Exception{
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			result.put("postings" , postingRepo.postingListUid(uid));
+		} catch (Exception e) {
+			logger.error("postingListUid sql error");
+			throw e;
+		}
+		return result;
+	}
+	
+	@Override
+	public Object getPostingLikeListUid(int uid) throws Exception{
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			result.put("likepostings" , postingLikeUserRepo.selectList(uid));
+		} catch (Exception e) {
+			logger.error("postingListUid sql error");
+			throw e;
+		}
+		return result;
+	}
+	
+	@Override
+	public Object getPostingCommentListUid(int uid) throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			result.put("commentpostings" , commentRepo.selectList(uid));
+		} catch (Exception e) {
+			logger.error("postingListUid sql error");
+			throw e;
+		}
+		return result;
+	}
 }
