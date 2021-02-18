@@ -19,9 +19,8 @@
       <b-container class="pt-6">
         <b-row align-h="end">
           <!-- <b-button variant="primary" class="mt-2" @click="detailBoard">detail board</b-button> -->
-          <b-button variant="classic-blue" class="mt-2 mr-5 nanum-extra-bold" @click="createBoard"
-            >새 글 작성</b-button
-          >
+          <b-button variant="classic-blue" class="mt-2 mr-5 nanum-extra-bold" @click="createBoard">새 글 작성
+            </b-button>
         </b-row>
       </b-container>
     </base-header>
@@ -34,7 +33,7 @@
           >새 글 작성</b-button
         >
       </b-row> -->
-      <light-table @clickRow="clickOn" />
+      <light-table v-bind="inputtext" @clickRow="clickOn" />
     </b-container>
 
 
