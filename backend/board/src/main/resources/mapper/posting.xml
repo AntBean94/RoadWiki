@@ -133,5 +133,8 @@
 		where uid=#{uid}
 	</select>
 
-
+	<delete id="deleteTags" parameterType="Integer">
+		delete from postingtag
+		where pid=#{pid}
+	</delete>
 </mapper>

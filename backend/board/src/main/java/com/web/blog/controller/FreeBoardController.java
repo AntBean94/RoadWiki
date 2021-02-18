@@ -128,6 +128,7 @@ public class FreeBoardController {
 	@PutMapping("/posting")
 	public Object editPosting(@RequestBody Posting posting, HttpServletRequest request) {
 		try {
+			System.out.println(posting);
 			Map<String, Object> result;
 			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) fBoardServ.editPosting(posting, uid);
