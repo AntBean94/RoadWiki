@@ -32,18 +32,18 @@
             <!-- v-if 해서 uid랑 해당 계정의 id가 같을 때만 수정하기 버튼 활성화 -->
             <router-link
               :to="{ name: 'profile-update' }"
-              class="btn btn-cornhusk opacity-8"
+              class="btn btn-classic-blue opacity-8"
               v-if="!isSearch"
               >수정하기</router-link
             >
             <b-button
-              variant="classic-blue"
+              variant="traffic-blue"
               v-show="isSearch && !isFollow"
               @click="sendFollowing"
               >팔로우 하기</b-button
             >
             <b-button
-              variant="danger"
+              variant="traffic-red"
               v-show="isSearch && isFollow"
               @click="sendUnfollowing"
               >팔로우 취소</b-button
@@ -55,7 +55,7 @@
     </base-header>
 
     <b-container fluid class="mt--6">
-      <b-card no-body class="card-profile" alt="Image placeholder" img-top>
+      <b-card no-body class="card-profile mx-5" alt="Image placeholder" img-top>
         <b-row class="justify-content-center">
           <b-col lg="3" class="order-lg-2">
             <div class="card-profile-image">
@@ -130,19 +130,20 @@
               {{ nickname }}
             </h1> -->
 
-            <div class="mb-2 h5">
+            <!-- <div class="mb-2 h5">
               <i class="ni ni-hat-3 mr-2"></i> {{ major }}
-            </div>
+            </div> -->
             <div class="h3 font-weight-300">
-              <b-badge
-                variant="warning"
-                class="mx-1"
+              <b-button
+                variant="peach-quartz"
+                class="mx-2"
                 v-for="(keywordtext, idx) in keywordtexts"
                 :key="idx"
+                pill
               >
                 {{ keywordtext }}
                 <!-- 네 너가 다시 수정하세요 -->
-              </b-badge>
+              </b-button>
             </div>
             <hr class="my-4 mx-9" />
             <b-container>
@@ -160,7 +161,7 @@
                 </b-link>
               </b-row>
             </b-container>
-            <hr class="my-4" />
+            <hr class="my-4 mx-9" />
             <b-container>
               <b-row class="h3 justify-content-center">
                 <!-- <i class="ni ni-palette mr-2"></i> -->
@@ -176,10 +177,9 @@
                 </b-link>
               </b-row>
             </b-container>
-            <hr class="my-4" />
+            <hr class="my-4 mx-9" />
             <b-container>
               <b-row class="h3 justify-content-center">
-                <!-- <i class="ni ni-palette mr-2"></i> -->
                 {{ nickname }}님이 좋아요한 게시글 ({{ likepostings.length }})
               </b-row>
               <b-row
@@ -192,10 +192,9 @@
                 </b-link>
               </b-row>
             </b-container>
-            <hr class="my-4" />
+            <hr class="my-4 mx-9" />
             <b-container>
               <b-row class="h3 justify-content-center">
-                <!-- <i class="ni ni-palette mr-2"></i> -->
                 {{ nickname }}님이 댓글단 게시글 ({{ commentpostings.length }})
               </b-row>
               <b-row
@@ -208,7 +207,7 @@
                 </b-link>
               </b-row>
             </b-container>
-            <hr class="my-4" />
+            <hr class="my-4 mx-9" />
           </div>
         </b-card-body>
       </b-card>
@@ -307,6 +306,7 @@ export default {
         `${this.$store.getters.getBoardServer}/freeboard/list/${this.profileuid}`
       )
       .then(res => {
+        console.log(res)
         this.postings = res.data.postings;
         this.commentCnt = res.data.commentCnt;
       })
@@ -382,6 +382,7 @@ export default {
         .then(res => {
           this.followinglists = res.data.followinglists;
         });
+      this.makePeopleList();
     },
     sendFollowing() {
       let follow = {
@@ -398,16 +399,62 @@ export default {
     },
     sendUnfollowing() {
       axios
-        .delete(
-          `${this.$store.getters.getUserServer}/follow/userunfollow/${this.profileuid}`
-        )
+      .delete(
+        `${this.$store.getters.getUserServer}/follow/userunfollow/${this.profileuid}`
+      )
+      .then(res => {
+        if (res.data.msg === "success") {
+          this.isFollow = false;
+        }
+        this.getFollowList();
+      });
+    },
+    makePeopleList() {
+      console.log('makePeopleList')
+      console.log(this.followerUidList)
+      console.log(this.followingUidList)
+      for (let i = 0; i < this.followerUidList.length; i++) {
+        let uid = this.followerUidList[i]
+        let user = {
+          uid: uid,
+          username: '',
+        }
+        axios.get(`${this.$store.getters.getUserServer}/user/info/${uid}`)
         .then(res => {
-          if (res.data.msg === "success") {
-            this.isFollow = false;
-          }
-          this.getFollowList();
-        });
-    }
+          user.username = res.data.name;
+        })
+        .catch(err => {
+          console.log(err)
+        })
+        .finally(() => {
+          this.followerList.push(user)
+        })
+      }
+
+      for (let i = 0; i < this.followingUidList.length; i++) {
+        let uid = this.followingUidList[i]
+        let user = {
+          uid: uid,
+          username: '',
+        }
+        console.log('uid')
+        console.log(uid)
+        axios.get(`${this.$store.getters.getUserServer}/user/info/${uid}`)
+        .then(res => {
+          console.log(res)
+          user.username = res.data.name;
+        })
+        .catch(err => {
+          console.log(err)
+        })
+        .finally(() => {
+          this.followingList.push(user)
+        })
+      }
+      console.log('#######')
+      console.log(this.followerList)
+      console.log(this.followingList)
+    },
   }
 };
 </script>

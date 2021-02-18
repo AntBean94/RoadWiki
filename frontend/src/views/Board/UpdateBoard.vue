@@ -1,9 +1,9 @@
 <template>
   <div class="d-flex flex-column">
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-default">
+    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue">
     </base-header>
 
-    <div class="p-4 bg-secondary">
+    <div class="p-4 bg-apple-bg">
       <b-input
         v-if="title"
         placeholder="제목"
@@ -29,7 +29,7 @@
     <b-container class="mt-3">
       <b-row class="mx-2">
         <div
-          class="ml-1 mt-2 mr-1 bg-warning rounded-pill py-1 px-2"
+          class="ml-1 mt-2 mr-1 py-1 px-2"
           v-for="(tag, idx) in tags"
           :key="idx"
         >
@@ -41,12 +41,12 @@
       </b-row>
     </b-container>
 
-    <div class="p-4 bg-secondary">
+    <div class="p-4 bg-apple-bg">
       <b-input
         placeholder="태그를 추가해주세요"
         class="form-control-alternative"
         @keydown.enter="tagEnter"
-        @blur="tagEnter"
+        @blur="tagEnterBlur"
         v-model="tagInput"
       />
     </div>
@@ -80,7 +80,7 @@ export default {
       editorOptions: {
         hideModeSwitch: false
       },
-      tags: ["첫번째 태그", "두번째 태그", "세번째 태그", "네번째 태그"],
+      tags: [],
       tagInput: "",
       title: ""
     };
@@ -118,9 +118,27 @@ export default {
         });
     },
     tagEnter() {
-      if (this.tagInput) {
-        this.tags.push(this.tagInput);
+      if (this.tags.length < 5) {
+        if (this.tagInput) {
+          this.tags.push(this.tagInput);
+          this.tagInput = "";
+        }
+      } else {
+        alert("태그는 최대 5개까지 가능합니다.");
         this.tagInput = "";
+      }
+    },
+    tagEnterBlur() {
+      if (this.tagInput.length > 0) {
+        if (this.tags.length < 5) {
+          if (this.tagInput) {
+            this.tags.push(this.tagInput);
+            this.tagInput = "";
+          }
+        } else {
+          alert("태그는 최대 5개까지 가능합니다.");
+          this.tagInput = "";
+        }
       }
     },
     delTag(idx) {
