@@ -1,5 +1,5 @@
 <template>
-  <div class ="d-flex justify-content-center">
+  <div class ="d-flex justify-content-center nanum-bold">
       <RoadmapListItem 
         v-for="(rm, idx) in rmlist" 
         :key="idx"

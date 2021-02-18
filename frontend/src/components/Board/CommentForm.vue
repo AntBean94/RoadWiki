@@ -1,15 +1,15 @@
 <template>
-  <div class="">
+  <div class="nanum-bold">
     <base-input>
       <textarea
-        class="form-control"
+        class="form-control nanum-bold"
         rows="3"
         placeholder="댓글을 입력해주세요"
         v-model="content"
       >
       </textarea>
       <b-row align-h="end" class="mt-1">
-        <b-button variant="provence" class="mt-2 mr-3" @click="sendComment"
+        <b-button variant="provence" class="mt-2 mr-3 nanum-bold" @click="sendComment"
           >댓글 작성</b-button
         >
       </b-row>

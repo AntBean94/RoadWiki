@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nanum-bold">
       <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue"></base-header> 
           <ChattingList v-if="showChattingList === true" @get-roominfo="getRoomid"/>
           <Chatting v-else :roomid="roomid" :name="name" />   

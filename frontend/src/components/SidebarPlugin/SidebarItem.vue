@@ -2,7 +2,7 @@
   <b-nav-item
     :is="baseComponent"
     :to="link.path ? link.path : '/'"
-    class="nav-item"
+    class="nav-item nanum-bold"
     :class="{ active: isActive }"
   >
     <a

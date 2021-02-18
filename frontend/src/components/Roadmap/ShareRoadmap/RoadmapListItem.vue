@@ -1,5 +1,5 @@
 <template>
-  <div @click="goDetail">
+  <div @click="goDetail" class="nanum-bold">
     <b-card class="mb-1 btn p-0 mx-0">
       <b-card-title id="overviewCardTitle">{{ roadmap.title }}</b-card-title>  
       <b-card-title v-if="roadmap.name" id="overviewCardTitle">{{ roadmap.name }}</b-card-title>  

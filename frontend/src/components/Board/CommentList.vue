@@ -1,17 +1,14 @@
 <template>
-  <div class="p-2">
+  <div class="p-2 nanum-bold">
     <hr class="my-2" v-if="idx != 0" />
     <b-row>
       <b-col cols="8" align-self="center">
-        [img] 작성자 : {{ comment.userName }}
+        <b-img :src="profileUrl" height="50px" width="50px;" rounded="circle"> </b-img> {{ comment.userName }}
       </b-col>
       <b-col v-if="!isUpdate">
         <h5>
           {{ comment.createDate }}
         </h5>
-        <!-- <h5 v-if="comment.modifyDate !== null">
-          {{ comment.modifyDate }}
-        </h5> -->
       </b-col>
     </b-row>
     <b-row v-if="!isUpdate">
@@ -20,20 +17,6 @@
           {{ comment.content }}
         </p>
       </b-col>
-      <!-- <b-col align-h="end" class="my-2">
-        <i
-          class="far fa-thumbs-up fa-2x ml-3 text-peach-quartz"
-          v-if="!like"
-          @click="clickLike"
-          ><span class="h3 ml-1">{{ comment.likeCnt }}</span></i
-        >
-        <i
-          class="fas fa-thumbs-up fa-2x ml-3 text-peach-quartz"
-          v-if="like"
-          @click="cancelLike"
-          ><span class="h3 ml-1">{{ comment.likeCnt }}</span></i
-        >
-      </b-col> -->
     </b-row>
     <b-row v-if="isUpdate">
       <base-input class="mx-3">
@@ -108,11 +91,21 @@ export default {
       uid: "",
       nickname: "",
       // likeCnt: "",
-      isUpdate: false
+      isUpdate: false,
+      profileUrl: "",
     };
   },
   props: ["comment", "recomments", "idx"],
   created() {
+    // 댓글 이미지
+    // 해당 계정의 프로필 사진 가져오는 걸로 해야함
+    axios
+      .get(`${this.$store.getters.getUserServer}/user/image/${this.comment.uid}`)
+      .then(res => {
+        this.profileUrl = res.data.path;
+      });
+
+
     axios
       .get(`${this.$store.getters.getUserServer}/user/name/${this.comment.uid}`)
       .then(res => {

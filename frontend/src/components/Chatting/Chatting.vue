@@ -1,7 +1,7 @@
 <template>
   <b-container 
     id="chatting" 
-    class="rounded border border-0" 
+    class="rounded border border-0 nanum-bold" 
   >
     <header>
       <b-container>

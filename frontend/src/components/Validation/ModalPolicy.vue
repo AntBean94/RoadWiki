@@ -1,4 +1,4 @@
-<template>
+<template class="nanum-bold">
   <SlideYUpTransition :duration="animationDuration">
     <b-modal id="modal-scrollable" scrollable>
       <template v-slot:modal-header>

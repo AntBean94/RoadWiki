@@ -1,35 +1,35 @@
 <template>
-  <div class="source-han-serif-k-medium">
-    <base-header class="pt-md-5 pb-2 bg-baby-blue">
-      <b-container>
+  <div class="source-han-serif-k-medium nanum-bold">
+    <base-header class="pt-md-5 pb-2 bg-baby-blue" style="height: 350px;">
+      <b-container>	
         <b-container class="px-9 py-3">
           <b-row class="py-5">
-            <h1 class="text-white">{{ title }}</h1>
+            <h1 class="display-3 text-white nanum-extra-bold">{{ title }}</h1>
           </b-row>
           <b-row>
-            <p class="text-white">{{ createDate }}</p>
+            <p class="text-white nanum-bold">{{ createDate }}</p>
           </b-row>
           <b-row v-if="modifyDate">
-            <p class="text-white">{{ modifyDate }}</p>
+            <p class="text-white nanum-bold">{{ modifyDate }}</p>
           </b-row>
         </b-container>
       </b-container>
     </base-header>
 
     <b-container class="py-4 mt-4">
-      <b-row>
+      <b-row></b-row>
         <b-container class="mx-9">
           <b-row align-v="center">
-            <b-col cols="1" class="pr-0 mb-2 mr-4">
-              <b-img :src="profileUrl" rounded width="50rem" heigth="50rem" />
+            <b-col cols="1" class="pr-0 mb-2">
+              <b-img :src="profileUrl" rounded="circle" width="50px" heigth="50px" />
             </b-col>
-            <b-col>
-              <h3>{{ name }}</h3>
-              <h5>{{ oneline }}</h5>
+            <b-col class="ml--3">
+              <h3 class="nanum-extra-bold">{{ name }}</h3>
+              <h5 class="nanum-bold">{{ oneline }}</h5>
             </b-col>
           </b-row>
-          <hr class="my-3" />
-          <Viewer v-if="content != null" :initialValue="content" />
+          <hr class="my-3 mr-9 ml--3" />
+          <Viewer v-if="content != null" :initialValue="content" class="nanum-regular" />
           <b-row class="ml-1 mr-1 my-3">
             <b-button
               size="sm"
@@ -58,39 +58,39 @@
           </b-row>
           <b-row>
             <i
-              class="far fa-thumbs-up fa-2x ml-3 text-peach-quartz"
+              class="far fa-thumbs-up fa-2x ml-3 text-traffic-blue"
               v-if="!like"
               @click="clickLike"
-              ><span class="h3 ml-1">{{ likeCnt }}</span></i
+              ><span class="h3 ml-1 nanum-bold">{{ likeCnt }}</span></i
             >
             <i
-              class="fas fa-thumbs-up fa-2x ml-3 text-peach-quartz"
+              class="fas fa-thumbs-up fa-2x ml-3 text-traffic-blue"
               v-if="like"
               @click="cancelLike"
-              ><span class="h3 ml-1">{{ likeCnt }}</span></i
+              ><span class="h3 ml-1 nanum-bold">{{ likeCnt }}</span></i
             >
             <i
-              class="far fa-thumbs-down fa-2x ml-3 text-provence"
+              class="far fa-thumbs-down fa-2x ml-3 text-traffic-red"
               v-if="!dislike"
               @click="clickDislike"
-              ><span class="h3 ml-1">{{ dislikeCnt }}</span></i
+              ><span class="h3 ml-1 nanum-bold">{{ dislikeCnt }}</span></i
             >
             <i
-              class="fas fa-thumbs-down fa-2x ml-3 text-provence"
+              class="fas fa-thumbs-down fa-2x ml-3 text-traffic-red"
               v-if="dislike"
               @click="cancelDislike"
-              ><span class="h3 ml-1">{{ dislikeCnt }}</span></i
+              ><span class="h3 ml-1 nanum-bold">{{ dislikeCnt }}</span></i
             >
           </b-row>
           <!-- <hr class="my-2" /> -->
         </b-container>
-      </b-row>
+      <!-- </b-row> -->
     </b-container>
 
     <b-container class="py-4 mt-4">
       <b-container class="px-9 py-3">
         <b-row>
-          <h2 class="ml-3 mb-2">{{ comments.length }}개의 댓글</h2>
+          <h2 class="ml-3 mb-2 nanum-bold">{{ comments.length }}개의 댓글</h2>
         </b-row>
         <!-- 댓글 폼 필요 -->
         <CommentForm :pid="pid" @sendComment="getPostingInfo" />
@@ -187,6 +187,7 @@ export default {
           this.dislike = true;
         }
         this.dislikeCnt = res.data.dislikeCnt;
+        console.log(this.dislikeCnt);
       });
   },
   mounted() {

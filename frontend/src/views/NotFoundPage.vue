@@ -1,6 +1,6 @@
 <!-- 없는 페이지로 접근 했을 때 -->
 <template>
-  <div>
+  <div class="nanum-bold">
     <!-- Header -->
     <div class="header py-7 py-lg-8 pt-lg-9">
       <b-container>

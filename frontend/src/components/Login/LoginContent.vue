@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nanum-bold">
     <b-button @click="modalShow = !modalShow" variant="classic-blue"
       >로그인</b-button
     >

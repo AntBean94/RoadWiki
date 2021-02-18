@@ -1,5 +1,5 @@
   <template>
-  <div>
+  <div class="nanum-bold">
     <base-header class="pb-2 pt-2 pt-md-2 bg-baby-blue">
       <!-- Card stats -->
       <b-container>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nanum-bold">
     <base-header class="pb-9 pt-9 bg-baby-blue">
     </base-header>
     <!-- <b-container class="align-items-center"> -->
@@ -16,6 +16,9 @@
                 <b-img
                   :src="profileUrl"
                   @click="modalShow = !modalShow"
+                  rounded="circle"
+                  height="200px"
+                  width="200px"
                 />
               </b-row>
               <b-row class="justify-content-end"> </b-row>
@@ -53,17 +56,16 @@
                 ></b-form-input>
               </b-col>
             </b-row>
-            <b-row class="mb-3">
+            <!-- <b-row class="mb-3">
               <b-col cols="3" class="text-center" align-self="center">
                 <h2>
-                  <!-- <i class="ni ni-hat-3 mr-2"></i> -->
                   전공
                 </h2>
               </b-col>
               <b-col>
                 <b-form-input :value="major" v-model="major"></b-form-input>
               </b-col>
-            </b-row>
+            </b-row> -->
             <b-row class="mb-3">
               <b-col cols="3" class="text-center" align-self="center">
                 <h2>
