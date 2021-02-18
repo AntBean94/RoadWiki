@@ -215,7 +215,7 @@
       <content-footer v-if="!$route.meta.hideFooter"></content-footer>
     </div>
     <div>
-      <chatting-bg v-on:remove="removeChatting" v-if="chattingOn" />
+      <chatting v-on:remove="removeChatting" v-if="chattingOn" />
       <b-button
         id="chat"
         @click="createChatting"
@@ -235,7 +235,7 @@ import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import LoginContent from "@/components/Login/LoginContent.vue";
 import LogoutContent from "@/components/Logout/LogoutContent.vue";
-import ChattingBg from "@/components/Chatting/ChattingBg";
+import Chatting from "@/components/Chatting/Chatting";
 
 function hasElement(className) {
   return document.getElementsByClassName(className).length > 0;
@@ -269,7 +269,7 @@ export default {
     FadeTransition,
     LoginContent,
     LogoutContent,
-    ChattingBg
+    Chatting
   },
   props: {
     type: {
