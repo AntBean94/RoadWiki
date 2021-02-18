@@ -21,7 +21,9 @@
       </b-row>
       <hr class="my-2" />
       <b-row>
-        <b-col cols="1" class="pr-0 mb-2">? 무엇 img 들어갈 곳</b-col>
+        <b-col cols="1" class="pr-0 mb-2">
+          <b-img :src="profileUrl" rounded width="50rem" heigth="50rem" />
+        </b-col>
         <b-col>
           <h3>작성자 : {{ uname }}</h3>
           <h5>
@@ -60,7 +62,7 @@
           <b-card no-body class="border-0">
             <div class="inline-block" style="width: 100%;">
               <!-- goJS/start-->
-              <Roadmap :roadmapMode="roadmapMode" :roadmapData="roadmapData" isRoadback="isRoadback" />
+              <Roadmap :roadmapMode="roadmapMode" :roadmapData="roadmapData" :isRoadback="isRoadback" />
               <!--goJs/end -->
             </div>
           </b-card>
@@ -83,10 +85,10 @@
         ></i>
       </b-row>
       <b-row class="mt-3">
-        <i class="far fa-thumbs-up fa-2x ml-3" v-if="!like" @click="clickLike"
+        <i class="btn far fa-thumbs-up fa-2x ml-3" v-if="!like" @click="clickLike"
           ><span class="h3 ml-1">좋아요{{ likeCnt }}</span></i
         >
-        <i class="fas fa-thumbs-up fa-2x ml-3" v-if="like" @click="cancelLike"
+        <i class="btn fas fa-thumbs-up fa-2x ml-3" v-if="like" @click="cancelLike"
           ><span class="h3 ml-1">좋아요{{ likeCnt }}</span></i
         >
         <button
@@ -130,6 +132,7 @@ export default {
       useRoadback: "",
       toggleFeedback: false,
       isRoadback: true,
+      profileUrl: "",
     };
   },
   created() {},
@@ -138,6 +141,7 @@ export default {
       this.getPostingInfo();
       this.previewRoadmap();
       this.likecheck();
+      
     } else {
       this.$router.push({ name: "공유로드맵's" });
       return;
@@ -157,6 +161,11 @@ export default {
       } else {
         this.isWriter = false;
       }
+      axios
+          .get(`${this.$store.getters.getUserServer}/user/image/${this.uid}`)
+          .then(res => {
+            this.profileUrl = res.data.path;
+          });
     },
     previewRoadmap() {
       axios

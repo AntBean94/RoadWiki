@@ -18,7 +18,6 @@ const routes = [
   },
   {
     path: '/',
-
     redirect: 'main',
     component: DashboardNavbar,
 
@@ -26,7 +25,7 @@ const routes = [
       
       {
         path: '/dashboard',
-        redirect: '/main',
+        redirect: '/mainpage',
         name: 'dashboard',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
