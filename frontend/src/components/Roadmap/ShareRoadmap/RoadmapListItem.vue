@@ -60,7 +60,6 @@ export default {
         params: { sidx: this.sidx }
       });
       }
-
     }
   },
   created() {
