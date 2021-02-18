@@ -2,11 +2,12 @@
   <div @click="goDetail">
     <b-card class="mb-1 btn p-0 mx-0">
       <b-card-title id="overviewCardTitle">{{ roadmap.title }}</b-card-title>  
+      <b-card-title v-if="roadmap.name" id="overviewCardTitle">{{ roadmap.name }}</b-card-title>  
       <hr class="mt-1 mb-3" />
       <Overview v-if="roadmapData" :roadmapData="roadmapData" id="overview" />
       <b-card-text class="mb-0 pb-0">
-        {{ username }} |
-        <small class="text-muted">좋아요 : {{ roadmap.likecnt }}</small>
+        {{ username }} 
+        <small v-if="roadmap.likecnt" class="text-muted">| 좋아요 : {{ roadmap.likecnt }}</small>
       </b-card-text>
       <template #footer>
         <small class="text-muted">{{ roadmap.createDate }}</small>
@@ -21,7 +22,7 @@ export default {
   components: {
     Overview
   },
-  props: ["roadmap", "username"],
+  props: ["roadmap", "username","sidx"],
   data() {
     return {
       roadmapData: ""
@@ -47,13 +48,23 @@ export default {
         });
     },
     goDetail() {
+      if(this.roadmap.title){
       this.$router.push({
         name: "공유로드맵",
         params: { roadmap: this.roadmap, uname: this.username }
       });
+      }else{
+        
+          this.$router.push({
+        name: "나의 로드맵",
+        params: { sidx: this.sidx }
+      });
+      }
+
     }
   },
   created() {
+    console.log(this.sidx)
     this.getRoadmapData();
   }
 };

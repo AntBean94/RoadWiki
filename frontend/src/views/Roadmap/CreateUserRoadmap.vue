@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div>
     <base-header class="pb-2 pt-2 pt-md-2 bg-baby-blue">
       <!-- Card stats -->

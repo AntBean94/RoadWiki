@@ -151,17 +151,13 @@
                 <!-- <i class="ni ni-palette mr-2"></i> -->
                 {{ nickname }}님의 로드맵 ({{ roadmaps.length }})
               </b-row>
-              <b-row
-                v-for="(roadmap, idx) in roadmaps"
-                :key="idx"
-                class="justify-content-center"
-              >
-                <router-link
-                  :to="{ name: '나의 로드맵', query: { pid: roadmap.pid } }"
-                >
-                  {{ roadmap.name }}
-                </router-link>
-              </b-row>
+              <RoadmapList
+                class="row m-0 px-0"
+                id="roadmaplist"
+                v-if="roadmaps"
+                :rmlist="roadmaps"
+                :unlist="usernameList"
+              />
             </b-container>
             <hr class="my-4 mx-9" />
             <b-container>
@@ -224,10 +220,12 @@
 </template>
 <script>
 import UserCard from "./UserProfile/UserCard.vue";
+import RoadmapList from "@/components/Roadmap/ShareRoadmap/RoadmapList.vue";
 
 export default {
   components: {
-    UserCard
+    UserCard,
+    RoadmapList
   },
   props: ["youruid"],
   data() {
@@ -250,7 +248,8 @@ export default {
       profileUrl: "",
       profileUid: 0,
       isFollow: false,
-      roadmaps: [],
+      roadmaps: "",
+      usernameList:[],
       postings: [],
       likepostings: [],
       commentpostings: [],
@@ -304,7 +303,10 @@ export default {
         `${this.$store.getters.getRoadmapServer}/roadmap/list/${this.profileuid}`
       )
       .then(res => {
+        for(let i = 0 ; i <  res.data.roadmaps.length; i++)
+          this.usernameList.push("");
         this.roadmaps = res.data.roadmaps;
+        
       })
       .catch(err => {});
 
@@ -342,6 +344,7 @@ export default {
 
     // 본인 팔로워, 팔로잉 명단 가져오기
     this.getFollowList();
+    this.getSharedRoadmap();
   },
   methods: {
     getFollowList() {
@@ -390,14 +393,16 @@ export default {
         .then(res => {
           this.followinglists = res.data.followinglists;
           this.followinglists.forEach(f => {
-            console.log(f.uid)
-          })
-          for (let sky=0; sky < this.followinglists.length; sky++) {
+            console.log(f.uid);
+          });
+          for (let sky = 0; sky < this.followinglists.length; sky++) {
             axios
-            .get(`${this.$store.getters.getUserServer}/user/image/${this.followinglists[sky].uid}`)
-            .then(res => {
-              this.followinglists[sky]["pathUrl"] = res.data.path;
-            });
+              .get(
+                `${this.$store.getters.getUserServer}/user/image/${this.followinglists[sky].uid}`
+              )
+              .then(res => {
+                this.followinglists[sky]["pathUrl"] = res.data.path;
+              });
           }
           console.log(this.followinglists);
         });
@@ -471,7 +476,7 @@ export default {
       const pid = row.pid;
       this.$store.dispatch("SETPID", pid);
       this.$router.push({ name: "게시글", query: { pid } });
-    }
+    },
   }
 };
 </script>
