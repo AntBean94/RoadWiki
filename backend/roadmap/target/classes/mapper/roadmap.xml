@@ -49,7 +49,7 @@
 	<select id="selectOfficialListRoadmap" parameterType="map" resultType="Roadmap">
 		select * from roadmap
 		where uid <![CDATA[ < ]]> 0 and createDate in (select max(createDate) from roadmap group by uid,rmorder)
-		order by rmorder desc
+		order by rmorder
 	</select>	
 
 	<insert id="update" parameterType="Roadmap">
