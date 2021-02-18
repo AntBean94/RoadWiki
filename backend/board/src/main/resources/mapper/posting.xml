@@ -127,5 +127,14 @@
 		order by likeCnt DESC limit 0, #{cnt};
 	</select>
 	
+	<select id="postingListUid" parameterType="Integer" resultType="Posting">
+		select *
+		from posting
+		where uid=#{uid}
+	</select>
 
+	<delete id="deleteTags" parameterType="Integer">
+		delete from postingtag
+		where pid=#{pid}
+	</delete>
 </mapper>

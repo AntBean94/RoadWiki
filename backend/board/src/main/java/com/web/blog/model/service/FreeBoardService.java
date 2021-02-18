@@ -1,5 +1,7 @@
 package com.web.blog.model.service;
 
+import java.util.Map;
+
 import com.web.blog.model.dto.Comment;
 import com.web.blog.model.dto.Posting;
 import com.web.blog.model.dto.Recomment;
@@ -23,5 +25,7 @@ public interface FreeBoardService {
 	public Object totalCount() throws Exception;
 	public Object getPostingByCommentUid(int uid) throws Exception;	
 	public Object getLikeHigh(int cnt) throws Exception;
-
+	public Object postingListUid(int uid) throws Exception;
+	public Object getPostingLikeListUid(int uid) throws Exception;
+	public Object getPostingCommentListUid(int uid) throws Exception;
 }
