@@ -86,13 +86,37 @@
                     {{ followerlists.length }}
                   </b-button>
                   <span class="description">follower</span>
-                  <b-modal id="modal-follower" hide-footer>
-                    <ul v-for="(follower, idx) in followerlists" :key="idx">
+
+                  <b-modal 
+                    id="modal-follower" 
+                    hide-footer 
+                    centered
+                    title="팔로우를 하는 사람"
+                  >
+                    <div v-for="(follower, idx) in followerlists" :key="idx" class="ml-4">
+                      <br v-if="idx !== 0">
+                      <b-row align-h="start" align-v="center">
+                        <b-col class="px-0" cols="2">
+                          <b-img
+                            :src="follower.pathUrl"
+                            height="60px"
+                            width="60px"
+                            rounded="circle"
+                          >  
+                          </b-img>
+                        </b-col>
+                        <b-col>
+                          <b-row>
+                            <router-link :to="{name: '프로필', query: {profileId: follower.uid}}" class="h2">{{ following.name }}</router-link>
+                          </b-row>
+                          <b-row>
+                            <h3>{{ following.oneline }}</h3>
+                          </b-row>
+                        </b-col>
+                      </b-row>
                       <!-- following 유저 정보 넘겨주기 -->
-                      {{
-                        follower
-                      }}
-                    </ul>
+                      <!-- {{ follower }} -->
+                    </div>
                   </b-modal>
                 </div>
                 <div>
@@ -104,12 +128,37 @@
                     {{ followinglists.length }}
                   </b-button>
                   <span class="description">following</span>
-                  <b-modal id="modal-following" hide-footer>
-                    <ul v-for="(following, idx) in followinglists" :key="idx">
-                      {{
-                        following
-                      }}
-                    </ul>
+
+                  <b-modal 
+                    id="modal-following" 
+                    hide-footer 
+                    centered
+                    title="팔로우 하는 사람"
+                  >
+                    <div v-for="(following, idx) in followinglists" :key="idx" class="ml-4">
+                      <!-- <hr v-if="idx !== 0"> -->
+                      <br v-if="idx !== 0">
+                      <b-row align-h="start" align-v="center">
+                        <b-col class="px-0" cols="2">
+                          <b-img 
+                            :src="following.pathUrl" 
+                            height="60px" 
+                            width="60px" 
+                            rounded="circle"
+                          >
+                          </b-img>
+                        </b-col>
+                        <b-col>
+                          <b-row>
+                            <router-link :to="{name: '프로필', query: {profileId: following.uid}}" class="h2">{{ following.name }}</router-link>
+                          </b-row>
+                          <b-row>
+                            <h3>{{ following.oneline }}</h3>
+                          </b-row>
+                        </b-col>
+                        <!-- {{ following }} -->
+                      </b-row>
+                    </div>
                   </b-modal>
                 </div>
                 <!-- <div>

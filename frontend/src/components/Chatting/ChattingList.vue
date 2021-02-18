@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-form-select v-model="selected" :options="rooms"></b-form-select>
+    <b-form-select v-model="selected" :options="rooms" size="sm" class="b-inline-block"></b-form-select>
     <!-- <div class="mt-3">Selected: <strong>{{ selected }}</strong></div> -->
   </div>
 </template>
@@ -40,7 +40,7 @@ export default {
         });
     },
     sendRoom: function (roomid) {
-      this.$emit("selectRoom", roomid);
+      this.$emit("selectRoom", roomid, this.selected, this.rooms);
     },
   },
   created() {
