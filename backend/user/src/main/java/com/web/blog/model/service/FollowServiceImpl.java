@@ -34,8 +34,6 @@ public class FollowServiceImpl implements FollowService {
 					result.put("isFollow", false);
 				}
 			}
-			result.put("followers", followerList);
-			result.put("followings", followRepo.selectFollowings(touid));
 		} catch (Exception e) {
 			throw e;
 		}

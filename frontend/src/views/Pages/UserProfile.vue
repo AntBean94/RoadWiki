@@ -11,7 +11,7 @@
               {{ nickname }}
             </h1>
           </b-row>
-          <br>
+          <br />
           <b-row>
             <!-- 한줄 소개 들어갈 부분 -->
             <h4 class="text-monument mt-0 mb-3">
@@ -22,15 +22,12 @@
           <b-row align-v="center">
             <div>
               <i class="fas fa-home"></i>
-              <b-link
-                :href="address"
-                class="text-classic-blue opacity-8"
-              >
+              <b-link :href="address" class="text-classic-blue opacity-8">
                 {{ address }}
               </b-link>
             </div>
           </b-row>
-          <br>
+          <br />
           <b-row>
             <!-- v-if 해서 uid랑 해당 계정의 id가 같을 때만 수정하기 버튼 활성화 -->
             <router-link
@@ -54,9 +51,8 @@
           </b-row>
         </b-container>
       </b-container>
-    <!-- </div> -->
+      <!-- </div> -->
     </base-header>
-
 
     <b-container fluid class="mt--6">
       <b-card no-body class="card-profile" alt="Image placeholder" img-top>
@@ -64,7 +60,7 @@
           <b-col lg="3" class="order-lg-2">
             <div class="card-profile-image">
               <a href="#">
-                <b-img src="img/theme/team-4.jpg" rounded="circle" />
+                <b-img :src="profileUrl" rounded="circle" />
                 <!-- <b-img :src="profileUrl" rounded="circle" /> -->
               </a>
             </div>
@@ -82,25 +78,37 @@
                 class="card-profile-stats d-flex justify-content-center mt-md-5"
               >
                 <div>
-                  <b-button variant="link" v-b-modal.modal-follower class="heading">
-                    {{ followerlist.length }}
+                  <b-button
+                    variant="link"
+                    v-b-modal.modal-follower
+                    class="heading"
+                  >
+                    {{ followerlists.length }}
                   </b-button>
                   <span class="description">follower</span>
                   <b-modal id="modal-follower" hide-footer>
-                    <ul v-for="(follower, idx) in followerlist" :key="idx">
+                    <ul v-for="(follower, idx) in followerlists" :key="idx">
                       <!-- following 유저 정보 넘겨주기 -->
-                      {{follower}}
+                      {{
+                        follower
+                      }}
                     </ul>
                   </b-modal>
                 </div>
                 <div>
-                  <b-button variant="link" v-b-modal.modal-following class="heading">
-                    {{ followinglist.length }}
+                  <b-button
+                    variant="link"
+                    v-b-modal.modal-following
+                    class="heading"
+                  >
+                    {{ followinglists.length }}
                   </b-button>
                   <span class="description">following</span>
                   <b-modal id="modal-following" hide-footer>
-                    <ul v-for="(following, idx) in followinglist" :key="idx">
-                      {{ following }}
+                    <ul v-for="(following, idx) in followinglists" :key="idx">
+                      {{
+                        following
+                      }}
                     </ul>
                   </b-modal>
                 </div>
@@ -223,8 +231,8 @@ export default {
       profileImg: "",
       backImg: "",
       keywordtexts: [],
-      followerlist: [],
-      followinglist: [],
+      followerlists: [],
+      followinglists: [],
       boards: "",
       comments: "",
       major: "",
@@ -239,13 +247,12 @@ export default {
       postings: [],
       likepostings: [],
       commentpostings: [],
-      commentCnt: 0,
+      commentCnt: 0
     };
   },
   created() {
     // 현재 로그인 된 계정
     this.uid = this.$store.getters.getUid;
-    console.log(this.$store.getters.getUid)
 
     // params로 uid를 받아오지 못했다면 (자기 프로필이니까)
     if (this.$route.query.profileId === undefined) {
@@ -255,10 +262,11 @@ export default {
     }
 
     // 해당 계정의 프로필 사진 가져오는 걸로 해야함
-    axios.get(`${this.$store.getters.getUserServer}/user/image/${this.profileuid}`)
-    .then(res => {
-      this.profileUrl = res.data.path;
-    });
+    axios
+      .get(`${this.$store.getters.getUserServer}/user/image/${this.profileuid}`)
+      .then(res => {
+        this.profileUrl = res.data.path;
+      });
 
     axios
       .get(`${this.$store.getters.getUserServer}/user/info/${this.profileuid}`)
@@ -275,8 +283,6 @@ export default {
         this.address = res.data.address;
         this.major = res.data.major;
         this.oneline = res.data.oneline;
-        console.log('정보들')
-        console.log(res.data)
       })
       .catch(err => {
         alert("로그인이 필요한 서비스입니다.");
@@ -331,26 +337,50 @@ export default {
   },
   methods: {
     getFollowList() {
+      //나와 저사람이 팔로우 상태인지 확인
       axios
         .get(
           `${this.$store.getters.getUserServer}/follow/list/${this.profileuid}`
         )
         .then(res => {
-          res.data.followers.forEach(follower => {
-            if (follower.touid == this.profileuid) {
-              this.followerlist.push(follower.fromuid)
-            }
-          })
-          res.data.followings.forEach(following => {
-            if (following.fromuid == this.profileuid) {
-              this.followinglist.push(following.touid)
-            }
-          })
-          if (res.data.isFollow) {
-            this.isFollow = true;
-          } else {
-            this.isFollow = false;
-          }
+          this.isFollow = res.data.isFollow;
+        });
+
+      //나의 팔로워 리스트확인
+      axios
+        .get(
+          `${this.$store.getters.getUserServer}/follow/followerlist/${this.profileuid}`
+        )
+        .then(res => {
+          this.followerlists = res.data.followerlists;
+          // 여기 followerlists 안에 uid가있어요 그러면 이친구를 가지구
+          //`${this.$store.getters.getUserServer}/user/image/${followerlists안에있는 uid}`
+          //##################################################
+
+          // res.data.followers.forEach(follower => {
+          //   if (follower.touid == this.profileuid) {
+          //     this.followerlist.push(follower.fromuid);
+          //   }
+          // });
+          // res.data.followings.forEach(following => {
+          //   if (following.fromuid == this.profileuid) {
+          //     this.followinglist.push(following.touid);
+          //   }
+          // });
+          // if (res.data.isFollow) {
+          //   this.isFollow = true;
+          // } else {
+          //   this.isFollow = false;
+          // }
+        });
+
+      //나의 팔로잉잉이이이잉 리스트확인
+      axios
+        .get(
+          `${this.$store.getters.getUserServer}/follow/followinglist/${this.profileuid}`
+        )
+        .then(res => {
+          this.followinglists = res.data.followinglists;
         });
     },
     sendFollowing() {

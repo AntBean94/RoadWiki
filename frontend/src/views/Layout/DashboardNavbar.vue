@@ -121,7 +121,7 @@
                   placeholder="Search"
                   type="text"
                   v-model="searchQuery"
-                  @keydown.enter="clickSearch"
+                  @keydown.enter.prevent="clickSearch"
                 >
                 </b-form-input>
 
