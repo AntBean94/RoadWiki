@@ -240,7 +240,7 @@
         pill
         v-else
         size="lg"
-        class="px-5"
+        class="px-3"
       >
         <!-- chatting -->
         <i class="far fa-comment-dots fa-2x"></i>

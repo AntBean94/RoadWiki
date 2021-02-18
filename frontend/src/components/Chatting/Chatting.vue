@@ -1,45 +1,124 @@
 <template>
-  <div id="chatting">
-    <header style="height: 10%">
-      <p style="display: inline-block">채팅방</p>
-      <chatting-list
-        v-on:selectRoom="changeRoom"
-        style="display: inline-block"
-      />
-      <button
-        @click="close"
-        style="display: inline-block; float: right; height: 100%"
-      >
-        X
-      </button>
+  <b-container 
+    id="chatting" 
+    class="rounded border border-0" 
+  >
+    <header>
+      <b-container>
+        <b-row class="mt-3">
+          <b-col cols="6" v-if="selected !== null && selected !== '선택하세요'">
+            <h2>{{ selected }}</h2>
+          </b-col>
+          <b-col cols="6" v-if="selected === null">
+            <h3>채팅방을 선택해주세요</h3>
+          </b-col>
+          <b-col cols="6" v-if="selected === '선택하세요'">
+            <h3>채팅방을 선택해주세요</h3>
+          </b-col>
+          <b-col cols="5">
+            <chatting-list
+              @selectRoom="changeRoom"
+              class="mb-2"
+            />
+          </b-col>
+          <b-col cols="1">
+            <i 
+              class="fas fa-times"
+              @click="close"
+            >
+            </i>
+          </b-col>
+        </b-row>
+      </b-container>
     </header>
-    <div
-      style="height: 83%; border: black 1px solid; overflow-y: scroll"
+
+    <b-container
       id="content"
+      class="mt-2"
     >
-      <!-- <ul style="margin:0px"> -->
-      <li
+      <div
         v-for="(message, idx) in messages"
         v-bind:key="idx"
-        style="margin: 0px; font-size: 14px"
+        class="mx-2"
       >
-        {{ message.sender }} >> {{ message.message }}
-      </li>
-      <!-- </ul> -->
-    </div>
-    <footer style="height: 7%">
-      <input type="text" v-model="sender" style="width: 20%; height: 100%" />
-      <input
-        type="textarea"
-        v-model="message"
-        v-on:keypress.enter="sendMsg"
-        style="width: 60%; height: 100%"
-      />
-      <button type="button" @click="sendMsg" style="width: 20%; height: 100%">
-        전송
-      </button>
+        <!-- join이라면 -->
+        <b-container v-if="message.type === 'JOIN'">
+          <b-row align-v="center" align-h="center">
+            <b-badge 
+              variant="traffic-blue"
+              class="rounded text-classic-blue px-7">
+              <strong>
+                <!-- {{message.sender}} -->
+                {{message.message}}
+              </strong>
+            </b-badge>
+          </b-row>
+        </b-container>
+        <!-- chat, 타인 -->
+        <b-container v-if="message.type === 'TALK' && message.isMe === false" class="mt-2">
+          <b-row class="h5 mb-0">
+            {{message.sender}}
+          </b-row>
+          <b-row align-v="center">
+            <b-badge 
+              pill
+              variant="traffic-yellow" 
+              size="md"
+              class="p-2 mt-0">
+              {{message.message}}
+            </b-badge>
+            <h6 class="m-0">
+                {{message.time}}
+            </h6>
+          </b-row>
+        </b-container>
+
+        <!-- chat, 나 -->
+        <b-container 
+          v-if="message.type === 'TALK' && message.isMe === true" 
+          class="mt-2"
+        >
+          <b-row align-h="end" align-v="center">
+            <h6 class="mr-2 mb-0">
+              {{message.time}}
+            </h6>
+            <b-badge 
+              pill
+              variant="traffic-green" 
+              size="md"
+              class="p-2 mt-0">
+              {{message.message}}
+            </b-badge>
+          </b-row>
+        </b-container>
+      </div>
+    </b-container>
+
+    <footer>
+      <b-container>
+        <b-row>
+          <b-col cols="9">
+            <b-form-input
+              placeholder="채팅을 입력해주세요"
+              v-model="message"
+              @keypress.enter="sendMsg"
+              size="sm"
+            >
+            </b-form-input>
+          </b-col>
+          <b-col cols="3">
+            <b-button 
+              @click="sendMsg"
+              variant="provence"
+              class="py-1 px-3"
+            >
+              전송
+            </b-button>
+          </b-col>
+        </b-row>
+      </b-container>
     </footer>
-  </div>
+  </b-container>
 </template>
 <script>
 import SockJS from "sockjs-client";
@@ -56,10 +135,12 @@ export default {
   },
   data() {
     return {
-      sender: "익명",
+      sender: store.getters.getName,
       message: "",
       messages: [],
       roomid: null,
+      selected: null,
+      img: '',
     };
   },
   created() {
@@ -69,7 +150,7 @@ export default {
     this.disconnect();
   },
   methods: {
-    sendMsg: function () {
+    sendMsg() {
       if (this.roomid == null || this.roomid.length < 1) {
         alert("채팅방을 선택해주세요");
       } else if (this.message.length < 1) {
@@ -85,12 +166,12 @@ export default {
         this.message = "";
       }
     },
-    disconnect: function () {
+    disconnect() {
       if (this.stompClient !== undefined && this.stompClient !== null) {
         this.stompClient.disconnect();
       }
     },
-    connect: function () {
+    connect() {
       if (this.roomid == null || this.roomid.length < 1) return;
       var reconnect = 0;
       let socket = new SockJS(SERVER_URL + "/ws");
@@ -100,16 +181,23 @@ export default {
         (frame) => {
           this.stompClient.subscribe("/sub/chat/room/" + this.roomid, (res) => {
             let jsonBody = JSON.parse(res.body);
+            let time = new Date();
+            
             let m = {
               type: jsonBody.type,
               sender: jsonBody.sender,
               message: jsonBody.msg,
+              isMe: (jsonBody.sender==this.sender) ? true : false,
+              time: this.nowTime(time),
             };
             this.messages.push(m);
+            console.log('##########')
+            console.log(m)
+            console.log('##########')
 
             var container = this.$el.querySelector("#content");
 
-            setTimeout(function () {
+            setTimeout(() => {
               container.scrollTop = container.scrollHeight;
             }, 1);
           });
@@ -135,16 +223,33 @@ export default {
         }
       );
     },
-    close: function () {
+    close() {
       this.disconnect();
       this.$emit("remove");
     },
-    changeRoom: function (roomid) {
+    changeRoom(roomid, selected, rooms) {
       this.roomid = roomid;
+      rooms.forEach(room => {
+        if (room.value === selected) {
+          this.selected = room.text
+        }
+      });
       this.disconnect();
       this.message = "";
       this.messages = [];
       this.connect();
+    },
+    nowTime(time) {
+           return (
+             (time.getHours() < 10)?"0":"") + 
+             time.getHours() +
+             ":"+ 
+             ((time.getMinutes() < 10)?"0":"") + 
+             time.getMinutes() 
+            //  +
+            //  ":"+
+            // ((time.getSeconds() < 10)?"0":"") +
+            // time.getSeconds();
     },
   },
 };
@@ -154,10 +259,15 @@ export default {
   position: fixed;
   bottom: 5px;
   right: 5px;
-  width: 500px;
+  width: 450px;
   height: 500px;
-  background-color: whitesmoke;
-  border: 1px black solid;
+  background-color: rgba(256, 256, 256, 0.8);
   z-index: 1000;
+}
+
+#content {
+  height: 78%; 
+  /* border: black 1px solid;  */
+  overflow-y: scroll
 }
 </style>

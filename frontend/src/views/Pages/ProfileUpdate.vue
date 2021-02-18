@@ -1,19 +1,11 @@
 <template>
   <div>
-    <div
-      class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center profile-header"
-      style="
-        min-height: 600px;
-        background-image: url(img/theme/profile-cover.jpg);
-        background-size: cover;
-        background-position: center top;
-      "
-    >
-      <b-container class="align-items-center">
-        <span class="mask bg-gradient-default opacity-5"></span>
-        <!-- <b-row class="justify-content-end"><BackgroundImg /></b-row> -->
-      </b-container>
-    </div>
+    <base-header class="pb-9 pt-9 bg-baby-blue">
+    </base-header>
+    <!-- <b-container class="align-items-center"> -->
+      <!-- <span class="bg-baby-blue"></span> -->
+      <!-- <b-row class="justify-content-end"><BackgroundImg /></b-row> -->
+    <!-- </b-container> -->
     
     <b-container fluid class="mt--6">
       <b-card no-body class="card-profile" alt="Image placeholder" img-top>
@@ -23,6 +15,7 @@
               <b-row>
                 <b-img
                   :src="profileUrl"
+                  @click="modalShow = !modalShow"
                 />
               </b-row>
               <b-row class="justify-content-end"> </b-row>
@@ -103,14 +96,16 @@
                 </h2>
               </b-col>
               <b-col cols="7" align-self="center">
-                <b-badge
-                  variant="warning"
+                <b-button
+                  variant="peach-quartz"
+                  size="sm"
+                  pill
                   class="mx-1"
                   v-for="(keyword, idx) in keywordtexts"
                   :key="idx"
                 >
                   {{ keyword }}
-                </b-badge>
+                </b-button>
               </b-col>
               <FlavourContent
                 class="col align-self-center pl-5 ml-5"
@@ -118,22 +113,20 @@
                 :keywords="keywords"
               />
             </b-row>
-            <b-row class="mb-3">
+            <!-- <b-row class="mb-3">
               <b-col cols="3" class="text-center" align-self="center">
                 <h2>
-                  <!-- <i class="ni ni-hat-3 mr-2"></i> -->
                   프로필 사진
                 </h2>
               </b-col>
               <b-col>
                 <h3>여기에 프로필 사진 파일 명</h3>
-                <!-- <ProfileImg/> -->
               </b-col>
               <b-col>
                 <div>
                   <b-button size="sm" @click="modalShow = !modalShow"
                     >사진📷</b-button
-                  >
+                  > -->
 
                   <b-modal v-model="modalShow" hide-footer>
                     <template #modal-title>
@@ -159,14 +152,14 @@
                       >
                     </div>
                   </b-modal>
-                </div>
+                <!-- </div>
               </b-col>
-            </b-row>
+            </b-row> -->
 
             <hr class="my-4" />
             <b-row class="justify-content-end">
               <b-button
-                variant="danger"
+                variant="traffic-red"
                 class="mt-4 mr-4"
                 @click="withDrawal"
                 size="sm"
@@ -175,8 +168,9 @@
             </b-row>
             <b-row class="justify-content-center">
               <b-button
-                variant="primary"
-                class="mt-4"
+                pill
+                variant="classic-blue"
+                class="mt-4 px-5"
                 size="lg"
                 @click="updateHandler"
                 >정보수정</b-button
