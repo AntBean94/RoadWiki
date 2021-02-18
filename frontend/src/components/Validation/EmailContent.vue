@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nanum-bold">
     <b-container id="validationKey" class="text-center">
       <b-row align-h="center">
         <img

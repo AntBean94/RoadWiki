@@ -18,7 +18,7 @@ const routes = [
   },
   {
     path: '/',
-    redirect: 'main',
+    redirect: 'mainpage',
     component: DashboardNavbar,
 
     children: [
@@ -156,7 +156,7 @@ const routes = [
       },
       {
         path: '/mainpage',
-        name: "MAINPAGE",
+        name: "",
         component: () => import('../views/Mainpage/Mainpage.vue'),
       },
     ]

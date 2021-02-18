@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nanum-bold">
     <!-- register -->
     <!-- Header -->
     <div class="header pb-7">

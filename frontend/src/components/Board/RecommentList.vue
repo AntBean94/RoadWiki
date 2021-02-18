@@ -1,9 +1,9 @@
 <template>
-  <div class="px-4 pb-3 pt-2">
+  <div class="px-4 pb-3 pt-2 nanum-bold">
     <hr class="my-2" />
     <b-row>
       <b-col cols="8" align-self="center">
-        [img] 작성자 : {{ recomment.userName }}
+        <b-img :src="profileUrl" height="50px" width="50px" rounded="circle"></b-img> {{ recomment.userName }}
       </b-col>
       <b-col v-if="!isUpdate">
         <h5>
@@ -83,7 +83,8 @@ export default {
     return {
       // like: false,
       nickname: "",
-      isUpdate: false
+      isUpdate: false,
+      profileUrl:"",
     };
   },
   props: ["recomment"],
@@ -126,6 +127,14 @@ export default {
     }
   },
   created() {
+    // 이미지
+    // 해당 계정의 프로필 사진 가져오는 걸로 해야함
+    axios
+      .get(`${this.$store.getters.getUserServer}/user/image/${this.recomment.uid}`)
+      .then(res => {
+        this.profileUrl = res.data.path;
+      });
+
     axios
       .get(
         `${this.$store.getters.getUserServer}/user/name/${this.recomment.uid}`

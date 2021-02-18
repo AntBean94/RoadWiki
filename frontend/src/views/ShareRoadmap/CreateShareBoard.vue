@@ -1,6 +1,6 @@
 <template>
-  <div class="d-flex flex-column">
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue">
+  <div class="d-flex flex-column nanum-bold">
+    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue" style="height: 350px;">
     </base-header>
 
     <b-container>
@@ -43,7 +43,7 @@
           <b-card no-body class="border-0">
             <div class="inline-block" style="width: 100%;">
               <!-- goJS/start-->
-              <Roadmap :roadmapMode="roadmapMode" :roadmapData="roadmapData" :roadmapname="roadmapname" :isRoadback="isRoadback" />
+              <Roadmap :roadmapMode="roadmapMode" :roadmapData="roadmapData" :roadmapname="selectedRoadmapName"/>
               <!--goJs/end -->
             </div>
           </b-card>
@@ -80,11 +80,18 @@ export default {
       initialText: "내용을 입력해주세요",
       title: "",
       userRoadmapList: [],
-      roadmapData: "",
+      roadmapData: { 
+        class: "go.GraphLinksModel",
+        linkFromPortIdProperty: "fromPort",
+        linkToPortIdProperty: "toPort",
+        nodeDataArray: [
+        ],
+        linkDataArray: [
+        ]},
+      roadmapMode: 0,
       rmid: "",
       selectedRoadmapName: "로드맵 선택하기",
       isActiveRoadback: true,
-      isRoadback: true,
     };
   },
   mounted() {

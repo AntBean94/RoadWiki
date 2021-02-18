@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="nanum-bold">
     <!-- header 시작 -->
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue">
+    <base-header class="pb-6 pb-8 pt-2 bg-baby-blue" style="height: 350px;">
     <!-- carousel도 컴포넌트화 필요 -->
       <!-- Card stats -->
       <br>

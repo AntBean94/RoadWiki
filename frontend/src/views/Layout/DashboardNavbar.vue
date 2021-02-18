@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nanum-bold">
     <base-nav
       id="mainNav"
       container-classes="container-fluid"
@@ -7,9 +7,10 @@
       :class="{ 'navbar-dark': type === 'default' }"
       v-if="isHeader"
     >
+    <b-col>
       <a
         @click="goToMain(url)"
-        class="h1 mb-0 mr-2 text-black text-uppercase d-none d-lg-inline-block active router-link-active"
+        class="h1 mb-0 mr-2 text-black text-uppercase d-none d-lg-inline-block active router-link-active nanum-extra-bold"
       >
         <img src="/img/brand/logo_word.png" alt="roadwiki" width="200rem;" />
       </a>
@@ -17,206 +18,185 @@
       <a
         href="#"
         aria-current="page"
-        class="h4 mb-0 mt-2 d-none d-lg-inline-block active router-link-active"
+        class="h4 mb-0 mt-2 d-none d-lg-inline-block active router-link-active nanum-extra-bold"
         id="routeName"
       >
         {{ $route.name }}
       </a>
+    </b-col>
 
-      <b-navbar-nav class="align-items-center ml-md-auto">
-        <!-- This item dont have <b-nav-item> because item have data-action/data-target on tag <a>, wich we cant add -->
-        <li class="nav-item d-sm-none">
-          <a
-            class="nav-link"
-            href="#"
-            data-action="search-show"
-            data-target="#navbar-search-main"
+    <!-- 나누기 -->
+    <b-navbar-nav class="ml-auto ml-md-0">
+      <div v-if="isSearch" id="menu">
+        <b-row align-v="center">
+          <!-- 로드맵으로 가기 -->
+          <b-col 
+            cols="2"
+            @click="goToMyRoadmap(url)"
+            align-h="center"
           >
-            <i class="ni ni-zoom-split-in"></i>
-          </a>
-        </li>
-      </b-navbar-nav>
+            <b-row class="justify-content-center">
+              <i
+                class="btn ni ni-map-big text-black nav-btn"
+              ></i>
+            </b-row>
+            <b-row class="justify-content-center">
+              <h6 class="mb-0 nanum-extra-bold">로드맵</h6>
+            </b-row>
+          </b-col>
 
-      <!-- 나누기 -->
-      <b-navbar-nav class="align-items-center ml-auto ml-md-0">
-        <div v-if="isSearch" class="row" id="menu">
-          <div v-if="isHoverM">
-            <i
-              @mouseover="checkHoverM"
-              class="btn ni ni-map-big text-black nav-btn"
-            ></i>
-          </div>
-          <div v-else>
-            <h1
-              @mouseleave="checkHoverM"
-              @click="goToMyRoadmap(url)"
-              class="btn m-0 p-1 nav-btn"
-              style="font-size: 10px"
-            >
-              Roadmap
-            </h1>
-          </div>
+          <!-- 오피셜 로드맵으로 가기 -->
+          <b-col
+            cols="3"
+            @click="goToOfficial(url)"
+          >
+            <b-row class="justify-content-center">
+              <i class="btn ni ni-paper-diploma text-black nav-btn"></i>
+            </b-row>
+            <b-row class="justify-content-center">
+              <h6 class="mb-0 nanum-extra-bold">공식로드맵</h6>
+            </b-row>
+          </b-col>
 
-          <div v-if="isHoverO">
-            <i
-              @mouseover="checkHoverO"
-              class="btn ni ni-paper-diploma text-black nav-btn"
-            ></i>
-          </div>
-          <div v-else>
-            <h1
-              @mouseleave="checkHoverO"
-              @click="goToOfficial(url)"
-              class="btn m-0 p-1 nav-btn"
-            >
-              Official
-            </h1>
-          </div>
+          <!-- 게시판으로 가기 -->
+          <b-col
+            cols="2"
+            @click="goToBoard(url)"
+          >
+            <b-row class="justify-content-center">
+              <i
+                class="btn ni ni-bullet-list-67 text-black nav-btn"
+              ></i>
+            </b-row>
+            <b-row class="justify-content-center">
+              <h6 class="mb-0 nanum-extra-bold">게시판</h6>
+            </b-row>
+          </b-col>
 
-          <div v-if="isHoverB">
-            <i
-              @mouseover="checkHoverB"
-              class="btn ni ni-bullet-list-67 text-black nav-btn"
-            ></i>
-          </div>
-          <div v-else>
-            <h1
-              @mouseleave="checkHoverB"
-              @click="goToBoard(url)"
-              class="btn m-0 p-1 nav-btn"
-            >
-              Board
-            </h1>
-          </div>
+          <!-- 로드맵 쉐어 게시판으로 가기 -->
+          <b-col
+            cols="3"
+            @click="goToShare(url)"
+          >
+            <b-row class="justify-content-center">
+              <i
+                class="btn fas fa-share-alt nav-btn"
+              ></i>
+            </b-row>
+            <b-row class="justify-content-center">
+              <h6 class="mb-0 nanum-extra-bold">로드맵 공유</h6>
+            </b-row>
+          </b-col>
 
-          <div v-if="isHoverS">
-            <i
-              @mouseover="checkHoverS"
-              class="btn fas fa-share-alt nav-btn"
-            ></i>
-          </div>
-          <div v-else>
-            <h1
-              @mouseleave="checkHoverS"
-              @click="goToShare(url)"
-              class="btn m-0 p-1 nav-btn"
-            >
-              Share
-            </h1>
-          </div>
+          <b-col
+            cols="2"
+          >
+            <b-row class="justify-content-center">
+              <i @click="activeSearch" class="btn fas fa-search text-black border-0"></i>
+            </b-row>
+            <b-row class="justify-content-center">
+              <h6 class="mb-0 nanum-extra-bold">검색</h6>
+            </b-row>
+          </b-col>
 
-          <div v-if="isHoverC">
-            <i class="btn far fa-comments nav-btn" @mouseover="checkHoverC">
+          <!-- 채팅 게시판으로 가기 -->
+          <!-- <div
+            @click="goToChat(url)"  
+          >
+            <i class="btn far fa-comments nav-btn">
             </i>
-          </div>
-          <div v-else>
-            <h1
-              @mouseleave="checkHoverC"
-              @click="goToChat(url)"
-              class="btn m-0 p-1 nav-btn"
-            >
-              Chat
-            </h1>
-          </div>
-        </div>
+            <h6></h6>
+          </div> -->
+        </b-row>
+      </div>
 
-        <div v-else>
-          <b-form
-            class="navbar-search form-inline mr-sm-3"
-            :class="{
-              'navbar-search-dark': type === 'default',
-              'navbar-search-light': type === 'light'
-            }"
-            id="navbar-search-main"
-          >
-            <b-form-group class="mb-0">
-              <b-input-group
-                class="input-group-alternative input-group-merge"
-                id="searchBlock"
-              >
-                <b-form-input
-                  placeholder="Search"
-                  type="text"
-                  class="text-default"
-                  v-model="searchQuery"
-                  @keydown.enter.prevent="clickSearch"
-                >
-                </b-form-input>
-
-                <div class="input-group-append">
-                  <span class="input-group-text" @click="clickSearch">
-                    <i class="fas fa-search"></i>
-                  </span>
-                </div>
-              </b-input-group>
-            </b-form-group>
-          </b-form>
-        </div>
-
-        <div>
-          <i @click="activeSearch" class="btn fas fa-search text-black"></i>
-        </div>
-        <!-- 여기부터 이미지, 드롭다운 리스트 -->
-
-        <base-dropdown
-          menu-on-right
-          class="nav-item"
-          tag="li"
-          title-tag="a"
-          title-classes="nav-link pr-0"
+      <div v-else>
+        <b-form
+          class="navbar-search form-inline mr-sm-3"
+          :class="{
+            'navbar-search-dark': type === 'default',
+            'navbar-search-light': type === 'light'
+          }"
+          id="navbar-search-main"
         >
-          <a
-            href="#"
-            class="nav-link pr-0"
-            @click.prevent
-            slot="title-container"
-          >
-            <b-media no-body class="align-items-center">
-              <span class="avatar avatar-sm rounded-circle">
-                <b-avatar
-                  alt="Image placeholder"
-                  :src="profileUrl"
-                  v-model="profileUrl"
-                ></b-avatar>
-              </span>
-              <b-media-body class="ml-2 d-none d-lg-block">
-                <!-- <span class="mb-0 text-sm  font-weight-bold">John Snow</span> -->
-                <span class="mb-0 text-sm  font-weight-bold">{{
-                  this.$store.getters.getName
-                }}</span>
-              </b-media-body>
-            </b-media>
-          </a>
+          <b-form-group class="my-1">
+            <b-input-group
+              class="input-group-alternative input-group-merge"
+              id="searchBlock"
+            >
+              <b-form-input
+                placeholder="Search"
+                type="text"
+                class="text-default"
+                v-model="searchQuery"
+                @keydown.enter.prevent="clickSearch"
+              >
+              </b-form-input>
 
-          <template>
-            <b-dropdown-header class="noti-title">
-              <h6 class="text-overflow m-0">Welcome!</h6>
-            </b-dropdown-header>
-            <b-dropdown-item @click="myProfile">
-              <i class="ni ni-single-02"></i>
-              <span>나의 프로필</span>
-            </b-dropdown-item>
-            <!-- <b-dropdown-item href="#!">
-              <i class="ni ni-settings-gear-65"></i>
-              <span>Settings</span>
-            </b-dropdown-item> -->
-            <b-dropdown-item @click="goToCalendar">
-              <i class="ni ni-calendar-grid-58"></i>
-              <span>캘린더</span>
-            </b-dropdown-item>
-            <!-- <b-dropdown-item href="#!">
-              <i class="ni ni-support-16"></i>
-              <span>Support</span>
-            </b-dropdown-item> -->
-            <div class="dropdown-divider"></div>
-            <b-dropdown-item @click="logOut">
-              <i class="ni ni-user-run"></i>
-              <span>Logout</span>
-            </b-dropdown-item>
-          </template>
-        </base-dropdown>
-      </b-navbar-nav>
-    </base-nav>
+              <div class="input-group-append">
+                <span class="input-group-text" @click="clickSearch">
+                  <i class="fas fa-search"></i>
+                </span>
+              </div>
+            </b-input-group>
+          </b-form-group>
+        </b-form>
+      </div>
+      <!-- 여기부터 이미지, 드롭다운 리스트 -->
+
+      <base-dropdown
+        menu-on-right
+        class="nav-item"
+        tag="li"
+        title-tag="a"
+        title-classes="nav-link pr-0"
+      >
+        <a
+          href="#"
+          class="nav-link pr-5"
+          @click.prevent
+          slot="title-container"
+        >
+          <b-media no-body class="align-items-center">
+            <span class="avatar avatar-sm rounded-circle ml-2">
+              <b-avatar
+                alt="Image placeholder"
+                :src="profileUrl"
+                v-model="profileUrl"
+              ></b-avatar>
+            </span>
+            <b-row>
+              <b-media-body class="ml-2 d-none d-lg-block">
+                <h6 class="mb-0 text-sm font-weight-bold">
+                  <!-- {{ this.$store.getters.getName }} -->
+                </h6>
+              </b-media-body>
+            </b-row>
+          </b-media>
+        </a>
+
+        <!-- 프로필 이미지 눌렀을 때 -->
+        <template>
+          <b-dropdown-header class="noti-title">
+            <h6 class="text-overflow m-0">Welcome!</h6>
+          </b-dropdown-header>
+          <b-dropdown-item @click="myProfile">
+            <i class="ni ni-single-02"></i>
+            <span>나의 프로필</span>
+          </b-dropdown-item>
+          <b-dropdown-item @click="goToCalendar">
+            <i class="ni ni-calendar-grid-58"></i>
+            <span>캘린더</span>
+          </b-dropdown-item>
+          <div class="dropdown-divider"></div>
+          <b-dropdown-item @click="logOut">
+            <i class="ni ni-user-run"></i>
+            <span>Logout</span>
+          </b-dropdown-item>
+        </template>
+      </base-dropdown>
+    </b-navbar-nav>
+  </base-nav>
 
     <!-- 여기까지가 nav 입니다. -->
 
@@ -372,6 +352,7 @@ export default {
         if (url === path) isHeader = false;
       });
       this.isHeader = isHeader;
+      
     },
     myProfile() {
       this.$router.push({

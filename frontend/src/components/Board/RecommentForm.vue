@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 mx-3">
+  <div class="p-4 mx-3 nanum-bold">
     <!-- <hr class="my-2"> -->
     <base-input>
       <textarea

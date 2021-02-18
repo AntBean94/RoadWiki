@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nanum-bold">
     <b-button @click="logOut">로그아웃</b-button>
   </div>
 </template>
