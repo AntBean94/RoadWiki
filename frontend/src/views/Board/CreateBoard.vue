@@ -1,6 +1,6 @@
 <template>
-  <div class="d-flex flex-column">
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue">
+  <div class="d-flex flex-column nanum-bold">
+    <base-header class="pb-6 pb-8 pt-0 bg-baby-blue" style="height: 350px;">
     </base-header>
 
     <b-container>
@@ -135,4 +135,13 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.img-container {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+img {
+}
+</style>

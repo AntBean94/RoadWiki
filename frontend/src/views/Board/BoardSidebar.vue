@@ -1,5 +1,5 @@
 <template>
-  <div title="Sidebar" id="sidebar-right" right shadow>
+  <div title="Sidebar" id="sidebar-right" right shadow class="nanum-bold">
     <div id="barSpace">
       <b-button
         class="xl-2"

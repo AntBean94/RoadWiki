@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nanum-bold">
     <b-button size="sm" @click="modalShow = !modalShow">사진📷</b-button>
 
     <b-modal v-model="modalShow" hide-footer>

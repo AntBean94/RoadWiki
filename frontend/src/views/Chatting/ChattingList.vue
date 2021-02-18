@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nanum-bold">
     <div
       class="chatting-list"
       v-for="(chatInfo, index) in chattingList"

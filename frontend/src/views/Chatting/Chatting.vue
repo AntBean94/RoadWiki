@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nanum-bold">
     <div id="chatting">
       <header style="height:10% ; text-align: center;">
         <h1 style="display:inline-block; margin-top: 2rem;">

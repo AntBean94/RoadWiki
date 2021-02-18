@@ -1,5 +1,5 @@
 <template>
-  <div class="main-content">
+  <div class="main-content nanum-bold">
     <div class="main-content">
       <zoom-center-transition
         :duration="pageTransitionDuration"

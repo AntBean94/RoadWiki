@@ -2,6 +2,7 @@
   <!--goJS/start-->
   <div
     style="width: 100%; display: flex; justify-content: space-between; z-index:1;"
+    class="nanum-bold"
   >
     <div
       v-show="roadmapMode && !isroadback"
@@ -38,7 +39,7 @@
       <hr>
 
 
-      <b-card-text v-if="roadmapMode && i">
+      <b-card-text v-if="roadmapMode && !isroadback">
         <base-input label="시작날짜-종료날짜">
           <flat-pickr
             slot-scope="{ focus, blur }"
@@ -108,7 +109,6 @@ export default {
     rmid: Number,
     roadmapname: String,
     checkName: Boolean,
-    isRoadback: Boolean,
   },
   data() {
     return {

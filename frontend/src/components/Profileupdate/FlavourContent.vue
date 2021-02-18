@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nanum-bold">
     <b-button variant="default" size="sm" @click="clickBtn">수정하기</b-button>
 
     <b-modal v-model="modalShow" hide-footer>
@@ -40,9 +40,9 @@
       </div>
       <div class="text-center">
         <base-button
-          type="primary"
+          type="classic-blue"
           native-type="submit"
-          class="my-4"
+          class="my-4 px-5"
           @click="sendFlavour"
           >확인</base-button
         >

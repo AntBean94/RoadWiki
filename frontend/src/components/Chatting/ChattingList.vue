@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nanum-bold">
     <b-form-select v-model="selected" :options="rooms" size="sm" class="b-inline-block"></b-form-select>
     <!-- <div class="mt-3">Selected: <strong>{{ selected }}</strong></div> -->
   </div>

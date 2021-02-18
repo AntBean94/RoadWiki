@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <base-header class="pb-10 pt-5 pt-md-2 bg-baby-blue">
+  <div class="nanum-bold">
+    <base-header class="pb-10 pt-5 pt-md-2 bg-baby-blue" style="height: 100px;">
       <button
         @click="goToBack"
         class="btn"

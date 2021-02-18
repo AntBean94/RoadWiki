@@ -1,25 +1,28 @@
 <template>
-  <div>
+  <div class="nanum-bold">
     <base-header
-      class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue"
+      class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue" style="height: 350px;"
     ></base-header>
-    <b-container fluid class="mt--7">
+    <!-- <b-container fluid class="mt--7"> -->
       <!-- 캘린더 CURD -->
-      <b-card no-body class="border-0">
-        <div id="calendar">
-          <div class="calendar-parent mx-9 justify-content-center">
+      <!-- <b-card no-body class="border-0"> -->
+        <div id="calendar" style="width: 100% !important; margin-top: -61px !important;">
+          <div 
+            class="calendar-parent mx-9 justify-content-center"
+            style="border-radius: 20px 20px 20px 20px !important;"
+            >
             <calendar-view
               :items="items"
               :show-date="showDate"
               :time-format-options="{ hour: 'numeric', minute: '2-digit' }"
-              :enable-drag-drop="true"
+              :enable-drag-drop="false"
               :disable-past="disablePast"
               :disable-future="disableFuture"
               :class="themeClasses"
               :period-changed-callback="periodChanged"
               :current-period-label="useTodayIcons ? 'icons' : ''"
               :displayWeekNumbers="displayWeekNumbers"
-              :enable-date-selection="true"
+              :enable-date-selection="false"
               :selection-start="selectionStart"
               :selection-end="selectionEnd"
               @date-selection-start="setSelection"
@@ -28,19 +31,22 @@
               @drop-on-date="onDrop"
               @click-date="onClickDay"
               @click-item="onClickItem"
-              class="mr-9"
             >
               <calendar-view-header
                 slot="header"
                 slot-scope="{ headerProps }"
                 :header-props="headerProps"
                 @input="setShowDate"
-              />
+                style="
+                  width: 100% !important;
+                  z-index: 100 !important; 
+                  background-color: rgba(255, 255, 255, 0) !important;"
+                />  
             </calendar-view>
           </div>
         </div>
-      </b-card>
-    </b-container>
+      <!-- </b-card> -->
+    <!-- </b-container> -->
 
     <b-modal 
       ref = "calendar-modal" 
@@ -371,7 +377,7 @@ export default {
 }
 .calendar-controls {
   /* margin-left : 0.1rem; */
-  margin-right: 3%;
+  /* margin-right: 3%; */
   min-width: 12rem;
   max-width: 12rem;
 }
@@ -394,6 +400,7 @@ export default {
 /* The following classes style the classes computed in myDateClasses and passed to the component's dateClasses prop. */
 .theme-default .cv-day.ides {
   background-color: #dbdbdb;
+  /* background-color: rgb(245, 185, 149); */
 }
 .ides .cv-day-number::before {
   content: "\271D";
@@ -402,7 +409,7 @@ export default {
   content: "\1F30D\1F32C\1F525";
 }
 .notification.is-success {
-  background-color: lemonchiffon;
+  background-color: rgb(245, 185, 149);
   border-radius: 6px;
   box-shadow: 0 2px 3px rgb(10 10 10 / 10%), 0 0 0 1px rgb(10 10 10 / 10%);
   color: #443600;
@@ -441,7 +448,8 @@ export default {
 
 /* 스케쥴 색상 */
 .theme-default .cv-item.big {
-  background-color: lemonchiffon;
+  /* background-color: lemonchiffon; */
+  background-color: rgb(245, 185, 149);
 }
 .theme-default .cv-item.middle {
   background-color: paleturquoise;
@@ -453,38 +461,68 @@ export default {
   border-color: rgb(229, 157, 229);
 }
 .theme-default .cv-item.now { /*현재*/
-  border-color: rgb(226, 238, 175);
+  /* border-color: rgb(226, 238, 175); */
+  border-color: rgb(245, 185, 149);
 }
 .theme-default .cv-item.future { /* 미래*/
   border-color: rgb(38, 0, 253);
 }
 /* 지난 날 */
 .theme-default .cv-day.past {
-  background-color: rgb(253, 251, 251);
+  /* background-color: rgb(253, 251, 251); */
+  background-color: white;
 }
 .theme-default .cv-header-day {
   background-color: white;
 }
 /* 다가올 날 */
 .theme-default .cv-day.outsideOfMonth {
-  background-color: rgb(253, 251, 251);
+  /* background-color: rgb(253, 251, 251); */
+  background-color: rgba(132, 137, 140, 0.3);
+  /* background-color: rgba(242, 214, 174, 0.3); */
 }
 
 .theme-default .cv-header,
 .theme-default .cv-header-day {
-  background-color: white;
+  /* background-color: white; */
+  /* background-color: rgba(15, 76, 129, 0.5); */
+  background-color: rgba(245, 185, 149, 0.5);
 	border-width: 0px 0px 1px 0px;
 }
+
+.cv-header .previousYear,
+.cv-header .nextYear {
+  display: none;
+}
+
+.cv-header .currentPeriod {
+  /* display: none; */
+  background-color: rgba(181, 199, 211) !important;
+}
+
 /* 헤더 속성 */
 .cv-header button {
   box-sizing: border-box;
   line-height: 1em;
-  font-size: 1em;
-  border-width: 1px;
-  background-color: white;
+  font-size: 2em;
+  border-width: 0px;
+  /* border-width: 1px; */
+  border-radius: 50% 50% 50% 50%;
+  /* background-color: white; */
+  background-color: rgba(255, 255 ,255, 0.8);
+  color: rgba(15, 76, 129) !important;
 }
+
+.cv-header .periodLabel {
+  margin: 0 0 0 550px;
+  padding: 0 0 15px 0 !important;
+  font-weight: bolder;
+  font-size: 40px !important;
+}
+
 /* 오늘 날짜에표시 */
 .theme-default .cv-day.today {
-  background-color: white;
+  /* background-color: white; */
+  background-color: rgba(242, 214, 174, 0.3);
 }
 </style>

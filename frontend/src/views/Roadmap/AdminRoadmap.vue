@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nanum-bold">
     <!-- header 시작 -->
     <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-default">
     </base-header>

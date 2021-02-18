@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nanum-bold">
     <b-modal
       class="modal fade"
       v-model="isEmailModal"

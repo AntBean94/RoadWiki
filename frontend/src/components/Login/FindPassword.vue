@@ -1,5 +1,5 @@
 <template>
-  <div class="header pb-7">
+  <div class="header pb-7 nanum-bold">
     <b-container class="container">
       <div class="header-body text-center mb-4">
         <b-row class="justify-content-center">

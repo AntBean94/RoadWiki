@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper nanum-bold">
     <notifications></notifications>
     <side-bar v-if="isHeader">
       <template slot="links">
