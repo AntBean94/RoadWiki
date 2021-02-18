@@ -34,6 +34,11 @@ export default {
   props: ["cid"],
   methods: {
     sendRecomment() {
+      if(this.$store.getters.getAccessToken == null){
+         alert("로그인 하셔야 해요");
+         return;
+       }
+
       let recomment = {
         cid: this.cid,
         content: this.content

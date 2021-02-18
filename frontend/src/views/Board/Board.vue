@@ -11,7 +11,7 @@
             ></b-form-input>
           </b-col>
           <b-col cols="1">
-            <b-button size="lg" class="fas fa-search px-5" @click="searchSharedRoadmap" variant="peach-quartz"></b-button>
+            <b-button size="lg" class="fas fa-search px-5" @keydown.enter="search" @click="search" variant="peach-quartz"></b-button>
           </b-col>
           <b-col cols="1"></b-col>
         </b-row>
@@ -33,7 +33,7 @@
           >새 글 작성</b-button
         >
       </b-row> -->
-      <light-table v-bind="inputtext" @clickRow="clickOn" />
+      <light-table @clickRow="clickOn" ref="lightTable"/>
     </b-container>
 
 
@@ -72,6 +72,7 @@ export default {
       isSelected: false,
       tWidth: "550px",
       selPid: "",
+      inputtext :"",
     };
   },
   methods: {
@@ -84,6 +85,11 @@ export default {
     },
     createBoard() {
       this.$router.push({name: '글쓰기' })
+    },
+    search(){
+      console.log(this.inputtext)
+      var word = this.inputtext;
+      this.$refs.lightTable.getList(word);
     },
     // detailBoard() {
     //   this.$router.push({name: 'detail_board', query: { pid: pid }})

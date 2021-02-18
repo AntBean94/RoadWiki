@@ -28,6 +28,11 @@ export default {
   props: ["pid"],
   methods: {
     sendComment() {
+      if(this.$store.getters.getAccessToken == null){
+         alert("로그인 하셔야 해요");
+         return;
+       }
+
       let posting = {
         pid: this.pid,
         uid: this.$store.getters.getUid,
