@@ -35,18 +35,18 @@
             <!-- v-if 해서 uid랑 해당 계정의 id가 같을 때만 수정하기 버튼 활성화 -->
             <router-link
               :to="{ name: 'profile-update' }"
-              class="btn btn-cornhusk opacity-8"
+              class="btn btn-classic-blue opacity-8"
               v-if="!isSearch"
               >수정하기</router-link
             >
             <b-button
-              variant="classic-blue"
+              variant="traffic-blue"
               v-show="isSearch && !isFollow"
               @click="sendFollowing"
               >팔로우 하기</b-button
             >
             <b-button
-              variant="danger"
+              variant="traffic-red"
               v-show="isSearch && isFollow"
               @click="sendUnfollowing"
               >팔로우 취소</b-button
@@ -59,13 +59,13 @@
 
 
     <b-container fluid class="mt--6">
-      <b-card no-body class="card-profile" alt="Image placeholder" img-top>
+      <b-card no-body class="card-profile mx-5" alt="Image placeholder" img-top>
         <b-row class="justify-content-center">
           <b-col lg="3" class="order-lg-2">
             <div class="card-profile-image">
               <a href="#">
-                <b-img src="img/theme/team-4.jpg" rounded="circle" />
-                <!-- <b-img :src="profileUrl" rounded="circle" /> -->
+                <!-- <b-img src="img/theme/team-4.jpg" rounded="circle" /> -->
+                <b-img :src="profileUrl" rounded="circle" />
               </a>
             </div>
           </b-col>
@@ -83,11 +83,11 @@
               >
                 <div>
                   <b-button variant="link" v-b-modal.modal-follower class="heading">
-                    {{ followerlist.length }}
+                    {{ followerList.length }}
                   </b-button>
                   <span class="description">follower</span>
                   <b-modal id="modal-follower" hide-footer>
-                    <ul v-for="(follower, idx) in followerlist" :key="idx">
+                    <ul v-for="(follower, idx) in followerList" :key="idx">
                       <!-- following 유저 정보 넘겨주기 -->
                       {{follower}}
                     </ul>
@@ -95,11 +95,11 @@
                 </div>
                 <div>
                   <b-button variant="link" v-b-modal.modal-following class="heading">
-                    {{ followinglist.length }}
+                    {{ followingList.length }}
                   </b-button>
                   <span class="description">following</span>
                   <b-modal id="modal-following" hide-footer>
-                    <ul v-for="(following, idx) in followinglist" :key="idx">
+                    <ul v-for="(following, idx) in followingList" :key="idx">
                       {{ following }}
                     </ul>
                   </b-modal>
@@ -122,19 +122,20 @@
               {{ nickname }}
             </h1> -->
 
-            <div class="mb-2 h5">
+            <!-- <div class="mb-2 h5">
               <i class="ni ni-hat-3 mr-2"></i> {{ major }}
-            </div>
+            </div> -->
             <div class="h3 font-weight-300">
-              <b-badge
-                variant="warning"
-                class="mx-1"
+              <b-button
+                variant="peach-quartz"
+                class="mx-2"
                 v-for="(keywordtext, idx) in keywordtexts"
                 :key="idx"
+                pill
               >
                 {{ keywordtext }}
                 <!-- 네 너가 다시 수정하세요 -->
-              </b-badge>
+              </b-button>
             </div>
             <hr class="my-4 mx-9" />
             <b-container>
@@ -152,7 +153,7 @@
                 </b-link>
               </b-row>
             </b-container>
-            <hr class="my-4" />
+            <hr class="my-4 mx-9" />
             <b-container>
               <b-row class="h3 justify-content-center">
                 <!-- <i class="ni ni-palette mr-2"></i> -->
@@ -168,10 +169,9 @@
                 </b-link>
               </b-row>
             </b-container>
-            <hr class="my-4" />
+            <hr class="my-4 mx-9" />
             <b-container>
               <b-row class="h3 justify-content-center">
-                <!-- <i class="ni ni-palette mr-2"></i> -->
                 {{ nickname }}님이 좋아요한 게시글 ({{ likepostings.length }})
               </b-row>
               <b-row
@@ -184,10 +184,9 @@
                 </b-link>
               </b-row>
             </b-container>
-            <hr class="my-4" />
+            <hr class="my-4 mx-9" />
             <b-container>
               <b-row class="h3 justify-content-center">
-                <!-- <i class="ni ni-palette mr-2"></i> -->
                 {{ nickname }}님이 댓글단 게시글 ({{ commentpostings.length }})
               </b-row>
               <b-row
@@ -200,7 +199,7 @@
                 </b-link>
               </b-row>
             </b-container>
-            <hr class="my-4" />
+            <hr class="my-4 mx-9" />
           </div>
         </b-card-body>
       </b-card>
@@ -223,8 +222,10 @@ export default {
       profileImg: "",
       backImg: "",
       keywordtexts: [],
-      followerlist: [],
-      followinglist: [],
+      followerUidList: [],
+      followingUidList: [],
+      followerList: [],
+      followingList: [],
       boards: "",
       comments: "",
       major: "",
@@ -245,7 +246,6 @@ export default {
   created() {
     // 현재 로그인 된 계정
     this.uid = this.$store.getters.getUid;
-    console.log(this.$store.getters.getUid)
 
     // params로 uid를 받아오지 못했다면 (자기 프로필이니까)
     if (this.$route.query.profileId === undefined) {
@@ -275,8 +275,6 @@ export default {
         this.address = res.data.address;
         this.major = res.data.major;
         this.oneline = res.data.oneline;
-        console.log('정보들')
-        console.log(res.data)
       })
       .catch(err => {
         alert("로그인이 필요한 서비스입니다.");
@@ -301,6 +299,7 @@ export default {
         `${this.$store.getters.getBoardServer}/freeboard/list/${this.profileuid}`
       )
       .then(res => {
+        console.log(res)
         this.postings = res.data.postings;
         this.commentCnt = res.data.commentCnt;
       })
@@ -338,12 +337,12 @@ export default {
         .then(res => {
           res.data.followers.forEach(follower => {
             if (follower.touid == this.profileuid) {
-              this.followerlist.push(follower.fromuid)
+              this.followerUidList.push(follower.fromuid)
             }
           })
           res.data.followings.forEach(following => {
             if (following.fromuid == this.profileuid) {
-              this.followinglist.push(following.touid)
+              this.followingUidList.push(following.touid)
             }
           })
           if (res.data.isFollow) {
@@ -352,6 +351,7 @@ export default {
             this.isFollow = false;
           }
         });
+      this.makePeopleList();
     },
     sendFollowing() {
       let follow = {
@@ -368,16 +368,62 @@ export default {
     },
     sendUnfollowing() {
       axios
-        .delete(
-          `${this.$store.getters.getUserServer}/follow/userunfollow/${this.profileuid}`
-        )
+      .delete(
+        `${this.$store.getters.getUserServer}/follow/userunfollow/${this.profileuid}`
+      )
+      .then(res => {
+        if (res.data.msg === "success") {
+          this.isFollow = false;
+        }
+        this.getFollowList();
+      });
+    },
+    makePeopleList() {
+      console.log('makePeopleList')
+      console.log(this.followerUidList)
+      console.log(this.followingUidList)
+      for (let i = 0; i < this.followerUidList.length; i++) {
+        let uid = this.followerUidList[i]
+        let user = {
+          uid: uid,
+          username: '',
+        }
+        axios.get(`${this.$store.getters.getUserServer}/user/info/${uid}`)
         .then(res => {
-          if (res.data.msg === "success") {
-            this.isFollow = false;
-          }
-          this.getFollowList();
-        });
-    }
+          user.username = res.data.name;
+        })
+        .catch(err => {
+          console.log(err)
+        })
+        .finally(() => {
+          this.followerList.push(user)
+        })
+      }
+
+      for (let i = 0; i < this.followingUidList.length; i++) {
+        let uid = this.followingUidList[i]
+        let user = {
+          uid: uid,
+          username: '',
+        }
+        console.log('uid')
+        console.log(uid)
+        axios.get(`${this.$store.getters.getUserServer}/user/info/${uid}`)
+        .then(res => {
+          console.log(res)
+          user.username = res.data.name;
+        })
+        .catch(err => {
+          console.log(err)
+        })
+        .finally(() => {
+          this.followingList.push(user)
+        })
+      }
+      console.log('#######')
+      console.log(this.followerList)
+      console.log(this.followingList)
+    },
   }
 };
 </script>

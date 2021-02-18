@@ -120,6 +120,7 @@
                 <b-form-input
                   placeholder="Search"
                   type="text"
+                  class="text-default"
                   v-model="searchQuery"
                   @keydown.enter="clickSearch"
                 >
