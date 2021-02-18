@@ -35,20 +35,21 @@ public class RoadmapController {
 
 	@Autowired
 	LoginServiceImpl loginServ;
-	
-	
-	
+
 	@GetMapping("/list/{uid}")
-	public Object listRoadmap(@PathVariable int uid,HttpServletRequest request) {
+	public Object listRoadmap(@PathVariable int uid, HttpServletRequest request) {
 		logger.trace("listRoadmap start");
 		Map<String, Object> result = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		try {
 			logger.info("uid : " + uid);
-			logger.info(request.getHeader("auth-token"));
-			logger.info("nowuid : " + loginServ.getData(request.getHeader("auth-token")).get("uid"));
-			int nowuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
-			result = (Map<String, Object>) roadmapservice.getRoadmapListByUid( nowuid, uid);
+			int nowuid = 0;
+			if (request.getHeader("auth-token") != null) {
+				logger.info(request.getHeader("auth-token"));
+				logger.info("nowuid : " + loginServ.getData(request.getHeader("auth-token")).get("uid"));
+				nowuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			}
+			result = (Map<String, Object>) roadmapservice.getRoadmapListByUid(nowuid, uid);
 			result.put("msg", SUCCESS);
 		} catch (NumberFormatException e) {
 			logger.error("input data type error");
@@ -61,9 +62,9 @@ public class RoadmapController {
 		}
 		return new ResponseEntity<Map<String, Object>>(result, status);
 	}
-	
+
 	@GetMapping("/Official")
-	public Object listOfficialRoadmap(HttpServletRequest request) {
+	public Object listOfficialRoadmap() {
 		logger.trace("listOfficialRoadmap start");
 		Map<String, Object> result = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
@@ -81,10 +82,9 @@ public class RoadmapController {
 		}
 		return new ResponseEntity<Map<String, Object>>(result, status);
 	}
-	
+
 	@GetMapping("/log/{uid}/{rmorder}")
-	public Object listLog(@PathVariable int uid,  @PathVariable int rmorder,
-			HttpServletRequest request) {
+	public Object listLog(@PathVariable int uid, @PathVariable int rmorder, HttpServletRequest request) {
 		logger.trace("listLog start");
 		Map<String, Object> result = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
@@ -113,7 +113,9 @@ public class RoadmapController {
 		try {
 
 			logger.info("rmid : " + rmid);
-			int nowuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			// int nowuid = (int)
+			// loginServ.getData(request.getHeader("auth-token")).get("uid");
+			int nowuid = 0;
 			result = (Map<String, Object>) roadmapservice.getRoadmap(nowuid, rmid);
 			result.put("msg", SUCCESS);
 		} catch (NumberFormatException e) {
@@ -127,9 +129,9 @@ public class RoadmapController {
 		}
 		return new ResponseEntity<Map<String, Object>>(result, status);
 	}
-	
+
 	@GetMapping("/get/comment/{rmid}")
-	public Object getRoadmapComment(@PathVariable int rmid, HttpServletRequest request) {
+	public Object getRoadmapComment(@PathVariable int rmid) {
 		logger.trace("getRoadmapComment start");
 		Map<String, Object> result = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
