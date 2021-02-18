@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.web.blog.model.dto.FileInfoDto;
 import com.web.blog.model.dto.User;
 import com.web.blog.model.repo.UserRepo;
+import com.web.blog.util.SecurityUtil;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -78,6 +79,7 @@ public class UserServiceImpl implements UserService {
         Map<String, Object> result = new HashMap<String, Object>();
         try {
             if (userRepo.insert(user) == 1) {
+            	user.setPassword(SecurityUtil.encryptSHA256(user.getPassword()));
                 int uid = userRepo.select(user.getEmail()).getUid();
                 for (int i = 0; i < user.getKeyword().length; i++) {
                     Map<String, String> map = new HashMap<String, String>();
@@ -160,7 +162,7 @@ public class UserServiceImpl implements UserService {
     public Object login(User user) {
         try {
             User cur = userRepo.select(user.getEmail());
-            if (!user.getPassword().equals(cur.getPassword())) {
+            if (!SecurityUtil.encryptSHA256(user.getPassword()).equals(cur.getPassword())) {
                 Map<String, Object> result = new HashMap<String, Object>();
                 result.put("msg", "login fail");
                 logger.error("error msg");
@@ -227,7 +229,7 @@ public class UserServiceImpl implements UserService {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
             map.put("email", email);
-            map.put("password", password);
+            map.put("password", SecurityUtil.encryptSHA256(password));
             userRepo.updatepassword(map);
             result.put("msg", "success");
         } catch (Exception e) {
