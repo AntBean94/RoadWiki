@@ -28,13 +28,20 @@
               <h5>{{ oneline }}</h5>
             </b-col>
           </b-row>
-          <hr class="my-2" />
+          <hr class="my-3" />
           <Viewer v-if="content != null" :initialValue="content" />
-          <b-row class="mr-1 my-3">
-            <b-badge class="mr-2" v-for="(tag, idx) in tags" :key="idx">
+          <b-row class="ml-1 mr-1 my-3">
+            <b-button
+              size="sm"
+              variant="cornhusk"
+              pill
+              class="mr-2"
+              v-for="(tag, idx) in tags"
+              :key="idx"
+            >
               <!-- class="ml-1 mt-2 mr-1 bg-cornhusk rounded-pill py-1 px-2" -->
-              <span class="h5"># {{ tag }}</span>
-            </b-badge>
+              <span class="p"># {{ tag }}</span>
+            </b-button>
           </b-row>
           <b-row align-h="end" class="my-2" v-if="isWritter">
             <!-- 게시물의 uid와 현재 uid가 동일 할 때 보여줄 내용 -->
@@ -75,7 +82,7 @@
               ><span class="h3 ml-1">{{ dislikeCnt }}</span></i
             >
           </b-row>
-          <hr class="my-2" />
+          <!-- <hr class="my-2" /> -->
         </b-container>
       </b-row>
     </b-container>
@@ -281,7 +288,6 @@ export default {
                 axios.delete(
                   `${this.$store.getters.getBoardServer}/freeboard/postinglikecancel/${this.$route.query.pid}`
                 );
-                this.likeCnt--;
               }
             });
         });
