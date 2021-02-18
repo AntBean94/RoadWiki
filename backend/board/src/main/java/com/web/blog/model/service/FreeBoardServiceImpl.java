@@ -16,6 +16,7 @@ import com.web.blog.model.dto.Comment;
 import com.web.blog.model.dto.Posting;
 import com.web.blog.model.dto.Recomment;
 import com.web.blog.model.repo.CommentRepo;
+import com.web.blog.model.repo.PostingLikeUserRepo;
 import com.web.blog.model.repo.PostingRepo;
 import com.web.blog.model.repo.RecommentRepo;
 import com.web.blog.model.repo.UserRepo;
@@ -33,7 +34,10 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
 	@Autowired
 	RecommentRepo recommentRepo;
-
+	
+	@Autowired
+	PostingLikeUserRepo postingLikeUserRepo;
+	
 	@Autowired
 	UserRepo userRepo;
 
@@ -451,4 +455,39 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 		return result;
 	}
 
+	@Override
+	public Object postingListUid(int uid) throws Exception{
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			result.put("postings" , postingRepo.postingListUid(uid));
+		} catch (Exception e) {
+			logger.error("postingListUid sql error");
+			throw e;
+		}
+		return result;
+	}
+	
+	@Override
+	public Object getPostingLikeListUid(int uid) throws Exception{
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			result.put("likepostings" , postingLikeUserRepo.selectList(uid));
+		} catch (Exception e) {
+			logger.error("postingListUid sql error");
+			throw e;
+		}
+		return result;
+	}
+	
+	@Override
+	public Object getPostingCommentListUid(int uid) throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			result.put("commentpostings" , commentRepo.selectList(uid));
+		} catch (Exception e) {
+			logger.error("postingListUid sql error");
+			throw e;
+		}
+		return result;
+	}
 }

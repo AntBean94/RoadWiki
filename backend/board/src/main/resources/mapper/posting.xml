@@ -127,5 +127,11 @@
 		order by likeCnt DESC limit 0, #{cnt};
 	</select>
 	
+	<select id="postingListUid" parameterType="Integer" resultType="Posting">
+		select *
+		from posting
+		where uid=#{uid}
+	</select>
+
 
 </mapper>
