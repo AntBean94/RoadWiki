@@ -150,6 +150,7 @@
         tag="li"
         title-tag="a"
         title-classes="nav-link pr-0"
+        v-if="this.$store.getters.getAccessToken"
       >
         <a
           href="#"
@@ -176,7 +177,7 @@
         </a>
 
         <!-- 프로필 이미지 눌렀을 때 -->
-        <template>
+        <template >
           <b-dropdown-header class="noti-title">
             <h6 class="text-overflow m-0">Welcome!</h6>
           </b-dropdown-header>
@@ -195,6 +196,9 @@
           </b-dropdown-item>
         </template>
       </base-dropdown>
+      
+      <Login-content 
+        v-else/>
     </b-navbar-nav>
   </base-nav>
 
@@ -294,15 +298,15 @@ export default {
       isHoverS: true,
       isHoverC: true,
       isSearch: true,
-      url: ""
-    };
+      url: "",
+      
+    }; 
   },
   created() {
     this.uid = this.$store.getters.getUid;
     let url = this.$route.name;
     this.url = url;
     this.checkUrl(url);
-
     axios
       .get(`${this.$store.getters.getUserServer}/user/image/${this.uid}`)
       .then(res => {
@@ -310,10 +314,10 @@ export default {
       });
   },
   computed: {
-    routeName() {
+    routeName: function() {
       const { name } = this.$route;
       return this.capitalizeFirstLetter(name);
-    }
+    },
   },
   watch: {
     $route(to) {
@@ -364,7 +368,7 @@ export default {
       this.$store
         .dispatch("LOGOUT")
         .then(() => {
-          this.$router.push("/");
+          // this.$router.push("/");
         })
         .catch(() => {
           alert("로그아웃에 실패했습니다.");

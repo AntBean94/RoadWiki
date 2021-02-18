@@ -6,36 +6,26 @@ import NotFound from '@/views/NotFoundPage.vue';
 
 const routes = [
   // 도입부 페이지
-  {
-    path: '/intro',
-    name: 'intro',
-    component: () => import(/* webpackChunkName: "demo" */ '../views/Intro/Intro.vue')
-  },
-  {
-    path: '/main',
-    name: 'main',
-    component: NothingMain,
-  },
+  // {
+  //   path: '/intro',
+  //   name: 'intro',
+  //   component: () => import(/* webpackChunkName: "demo" */ '../views/Intro/Intro.vue')
+  // },
+  // {
+  //   path: '/main',
+  //   name: 'main',
+  //   component: NothingMain,
+  // },
   {
     path: '/',
-    redirect: 'mainpage',
+    // redirect: 'mainpage',
     component: DashboardNavbar,
     children: [
-      
-      {
-        path: '/dashboard',
-        redirect: '/mainpage',
-        name: 'dashboard',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "demo" */ '../views/Dashboard.vue')
-      },
-      {
-        path: '/icons',
-        name: 'icons',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/Icons.vue')
-      },
+      // {
+      //   path: '/icons',
+      //   name: 'icons',
+      //   component: () => import(/* webpackChunkName: "demo" */ '../views/Icons.vue')
+      // },
       {
         path: '/profile/',
         name: '프로필',

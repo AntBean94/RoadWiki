@@ -117,17 +117,16 @@
     <br>
     <!-- 로드맵 리스트 -->
     <b-container>
-      
-      <!-- <RoadmapList 
+      <h3 label="roadmaplist" class="ml-2">인기로드맵</h3>
+      <RoadmapList 
         class="row m-0 px-0"
         id="roadmaplist"
         v-if="roadmapshareList"
         :rmlist="roadmapshareList"
         :unlist="usernameList"
-      /> -->
+      />
       
     </b-container> 
-    <br>  
     <!-- 게시판 -->
     <b-container class="mt-4 p-1">
       
@@ -188,10 +187,11 @@ export default {
           this.roadmapsharesF = res.data["roadmapshares"][0]
           this.roadmapsharesS = res.data["roadmapshares"][1]
           this.roadmapshareList = res.data["roadmapshares"]
-          this.roadmapshareList.map(item => {
-            this.username.push(this.getUserName(item.uid))
-          })
-          console.log(this.usernameList)
+          // this.roadmapshareList.map((item) => {
+          //   this.usernameList.push(getUsernameList(item.uid))
+          // })
+          this.getUserNameList();
+          this.getPostings(); 
         })
         .catch(res => {
           console.log(res);
@@ -206,7 +206,6 @@ export default {
             this.postF.content = "이미지가 포함된 게시글입니다."
             } else {
               this.postF = res.data["postings"][0]
-              console.log(this.postF)
             }
           if (res.data["postings"][1]["content"].includes("[image]")) {
             this.postS = res.data["postings"][1]
@@ -227,7 +226,6 @@ export default {
         if (res.data.msg == "success") {
           if (res.data["roadmaps"].length) {
             this.officials = res.data["roadmaps"].slice(0, 2);
-            // this.previewRoadmap(this.curriculumData[0].rmid);
           }
         } else {
           alert("데이터 로드에 실패했습니다.");
@@ -238,6 +236,7 @@ export default {
         alert("axios 오류");
       });
     },
+    // 수정 ㄴ
     getUserName(roadmap) {
       axios.get(`${this.$store.getters.getUserServer}/user/name/${roadmap.uid}`)
       .then(res => {
@@ -247,6 +246,18 @@ export default {
       .catch(err => {
         console.error(err)
       })
+    },
+    getUserNameList() {
+      console.log(this.roadmapshareList);
+      for(var i = 0; i < this.roadmapshareList.length; i++){
+        axios.get(`${this.$store.getters.getUserServer}/user/name/${this.roadmapshareList[i].uid}`)
+        .then(res => {
+          this.usernameList.push(res.data.name);
+        })
+        .catch(err => {
+          console.error(err)
+        })
+      }
     },
     goToShare(roadmap, username) {
       this.$router.push({ name: "공유로드맵" , params: { "roadmap": roadmap, "uname": username }})
@@ -264,7 +275,6 @@ export default {
   },
   created() {
     this.getRoadmapshares();
-    this.getPostings();
     this.getOfficial();
   }
 };

@@ -72,7 +72,7 @@ export default {
       this.$store
         .dispatch("LOGIN", this.user)
         .then(() => {
-          this.$router.push({ name: "MAINPAGE" });
+          // this.$router.push({ name: "MAINPAGE" });
         })
         .catch(() => {
           alert("아이디 비밀번호를 확인해주세요.");
