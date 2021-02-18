@@ -26,7 +26,7 @@ const routes = [
       
       {
         path: '/dashboard',
-        redirect: '/read-user-roadmap',
+        redirect: '/main',
         name: 'dashboard',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
@@ -86,10 +86,6 @@ const routes = [
         name: "나의 로드맵",
         component: () => import(/* webpackChunkName: "demo" */ '../views/Roadmap/ReadUserRoadmap.vue')
       },
-      //명희님 힘내요 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 로드맵 다 빨리 해주세요 ^^^^^^^^^^^^^^^^^^^^^^
-      //빠이
-      //
-
       {
         path: '/create-user-roadmap',
         name: '로드맵 생성하기',
@@ -161,7 +157,7 @@ const routes = [
       },
       {
         path: '/mainpage',
-        name: "mainpage",
+        name: "MAINPAGE",
         component: () => import('../views/Mainpage/Mainpage.vue'),
       },
     ]

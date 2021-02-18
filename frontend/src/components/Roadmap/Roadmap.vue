@@ -37,7 +37,8 @@
       </div>
       <hr>
 
-      <b-card-text v-if="roadmapMode">
+
+      <b-card-text v-if="roadmapMode && !isRoadback">
         <base-input label="시작날짜-종료날짜">
           <flat-pickr
             slot-scope="{ focus, blur }"
@@ -52,12 +53,12 @@
         </base-input>
       </b-card-text>
 
-      <b-card-text v-else>
+      <b-card-text v-else-if="dates && !isRoadback">
         <h3>시작날짜-종료날짜</h3>
         <p>{{ dates }}</p>
+      <hr />
       </b-card-text>
 
-      <hr />
       <span>{{ descript }}</span>
       <hr v-show="descript.length > 0"/>
 
@@ -107,10 +108,12 @@ export default {
     rmid: Number,
     roadmapname: String,
     checkName: Boolean,
+    isRoadback: Boolean,
   },
   data() {
     return {
       headertext: "",
+      isworking: false,
       dates: "",
       memotext: "",
       descript: "",
@@ -208,7 +211,7 @@ export default {
             {
               fill: "rgb(255, 255 ,255)",
               stroke: "rgb(15, 76, 129)",
-              strokeWidth: 3,
+              strokeWidth: 0.5,
               strokeJoin: "round",
               strokeCap: "square"
             },
@@ -218,7 +221,7 @@ export default {
             go.TextBlock,
             this.textStyle(),
             {
-              margin: 8,
+              margin: 10,
               maxSize: new go.Size(160, NaN),
               wrap: go.TextBlock.WrapFit,
               editable: false
@@ -251,7 +254,7 @@ export default {
             {
               fill: "rgb(255, 255, 255)",
               stroke: "rgb(137, 119, 173)",
-              strokeWidth: 2.5,
+              strokeWidth: 0.5,
               strokeJoin: "round",
               strokeCap: "square"
             },
@@ -261,7 +264,7 @@ export default {
             go.TextBlock,
             this.textStyle(),
             {
-              margin: 8,
+              margin: 10,
               maxSize: new go.Size(160, NaN),
               wrap: go.TextBlock.WrapFit,
               editable: false
@@ -294,7 +297,7 @@ export default {
             {
               fill: "rgb(255, 255, 255)",
               stroke: "#307363",
-              strokeWidth: 2,
+              strokeWidth: 0.5,
               strokeJoin: "round",
               strokeCap: "square"
             },
@@ -304,7 +307,7 @@ export default {
             go.TextBlock,
             this.textStyle(),
             {
-              margin: 8,
+              margin: 10,
               maxSize: new go.Size(160, NaN),
               wrap: go.TextBlock.WrapFit,
               editable: false
@@ -334,7 +337,7 @@ export default {
             desiredSize: new go.Size(70, 70),
             fill: "#ffffff",
             stroke: "#F04A5E",
-            strokeWidth: 3.5
+            strokeWidth: 1
           }),
           $(go.TextBlock, "Start", this.textStyle(), new go.Binding("text"))
         ),
@@ -364,7 +367,7 @@ export default {
             desiredSize: new go.Size(70, 70),
             fill: "#F9F8F3",
             stroke: "#F9F8F3",
-            strokeWidth: 3.5
+            strokeWidth: 1
           }),
           $(go.TextBlock, "Start", this.textStyle(), new go.Binding("text"))
         ),
@@ -391,7 +394,7 @@ export default {
             {
               fill: "rgb(255, 255, 255)",
               stroke: "rgb(234, 218, 79)",
-              strokeWidth: 2.5,
+              strokeWidth: 0.5,
               strokeJoin: "round",
               strokeCap: "square"
             },
@@ -401,7 +404,7 @@ export default {
             go.TextBlock,
             this.textStyle(),
             {
-              margin: 8,
+              margin: 10,
               maxSize: new go.Size(160, NaN),
               wrap: go.TextBlock.WrapFit,
               editable: iseditable
@@ -523,18 +526,18 @@ export default {
       ),
       $(
         go.Shape, // 화살표 바디 모양
-        { isPanelMain: true, stroke: "#1B443C", strokeWidth: 2.5 },
+        { isPanelMain: true, stroke: "#2a446f", strokeWidth: 1.5 },
         new go.Binding("stroke", "isSelected", function(sel) {
-          return sel ? "#1B443C" : "#1B443C";
+          return sel ? "#2a446f" : "#2a446f";
         }).ofObject()
       ),
       $(
         go.Shape, // 화살표 모양
         {
           toArrow: "Triangle",
-          strokeWidth: 1.5,
-          stroke: "#1B443C",
-          fill: "#307362"
+          strokeWidth: 1,
+          stroke: "#2a446f",
+          fill: "#2a446f"
         }
       ),
       $(
@@ -728,7 +731,7 @@ export default {
     // 글씨체, 스타일 수정 필요(프론트 집중기간)
     textStyle() {
       return {
-        font: "bold 11pt Lato, Helvetica, Arial, sans-serif",
+        font: "12pt Lato, Helvetica, Arial, sans-serif",
         stroke: "#000000"
       };
     },
@@ -855,7 +858,8 @@ export default {
       roadbacktimer = setInterval(() => {
         if (
           myDiagram.toolManager.textEditingTool.isActive ||
-          myDiagram.toolManager.draggingTool.Wc
+          myDiagram.toolManager.draggingTool.Wc ||
+          this.isworking
         ) {
           return;
         }
@@ -872,6 +876,7 @@ export default {
     },
     saveComment(data) {
       data.rmid = this.rmid;
+      this.isworking = true;
       axios
         .put(`${this.$store.getters.getRoadmapServer}/roadcomment/insert`, data)
         .then(res => {
@@ -880,8 +885,10 @@ export default {
         .catch(err => {
           console.error(err);
         });
+      this.isworking = false;
     },
     updateComment(data) {
+      this.isworking = true;
       axios
         .put(`${this.$store.getters.getRoadmapServer}/roadcomment/update`, data)
         .then(res => {
@@ -890,8 +897,10 @@ export default {
         .catch(err => {
           console.error(err);
         });
+        this.isworking = false;
     },
     deleteComment(data) {
+      this.isworking = true;
       axios
         .post(
           `${this.$store.getters.getRoadmapServer}/roadcomment/delete`,
@@ -903,6 +912,7 @@ export default {
         .catch(err => {
           console.error(err);
         });
+        this.isworking = false;
     },
     get_recommend(){
       this.$emit('get_recommend',this.recommend);

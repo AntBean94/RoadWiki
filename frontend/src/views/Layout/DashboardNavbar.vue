@@ -40,10 +40,27 @@
       <!-- 나누기 -->
       <b-navbar-nav class="align-items-center ml-auto ml-md-0">
         <div v-if="isSearch" class="row" id="menu">
+          <div v-if="isHoverM">
+            <i
+              @mouseover="checkHoverM"
+              class="btn ni ni-map-big text-black nav-btn"
+            ></i>
+          </div>
+          <div v-else>
+            <h1
+              @mouseleave="checkHoverM"
+              @click="goToMyRoadmap(url)"
+              class="btn m-0 p-1 nav-btn"
+              style="font-size: 10px"
+            >
+              Roadmap
+            </h1>
+          </div>
+
           <div v-if="isHoverO">
             <i
               @mouseover="checkHoverO"
-              class="btn ni ni-tv-2 text-black nav-btn"
+              class="btn ni ni-paper-diploma text-black nav-btn"
             ></i>
           </div>
           <div v-else>
@@ -291,15 +308,12 @@ export default {
       profileUrl: "",
       chattingOn: false,
       urlNow: "",
+      isHoverM: true,
       isHoverO: true,
       isHoverB: true,
       isHoverS: true,
       isHoverC: true,
       isSearch: true,
-      locR: true,
-      locO: true,
-      locB: true,
-      locS: true,
       url: ""
     };
   },
@@ -376,8 +390,13 @@ export default {
         });
     },
     goToMain(url) {
+      if (url != "MAINPAGE") {
+        this.$router.push({ name: "MAINPAGE" });
+      }
+    },
+    goToMyRoadmap(url) {
       if (url != "나의 로드맵") {
-        this.$router.push({ name: "mainpage" });
+        this.$router.push({ name: "나의 로드맵" });
       }
     },
     clickSearch() {
@@ -385,6 +404,13 @@ export default {
         name: "검색결과",
         query: { searchKeyword: `${this.searchQuery}` }
       });
+    },
+    checkHoverM() {
+      if (this.isHoverM) {
+        this.isHoverM = false;
+      } else {
+        this.isHoverM = true;
+      }
     },
     checkHoverO() {
       if (this.isHoverO) {

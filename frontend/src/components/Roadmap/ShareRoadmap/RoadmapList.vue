@@ -31,7 +31,7 @@ export default {
 #rmli {
   width: 250px;
   height: 400px;
-  margin: 25px; 
+  margin: 10px; 
   overflow: hidden;
 }
 </style>

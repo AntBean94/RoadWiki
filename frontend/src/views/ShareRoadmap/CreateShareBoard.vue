@@ -1,19 +1,19 @@
 <template>
   <div class="d-flex flex-column">
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-default">
+    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue">
     </base-header>
 
-    <div class="p-4 bg-secondary">
-      <b-input
-        placeholder="제목"
-        class="form-control-alternative"
-        v-model="title"
-      />
-    </div>
+    <b-container>
+      <div class="p-4">
+        <b-input
+          placeholder="제목"
+          class="form-control-alternative"
+          v-model="title"
+        />
+      </div>
 
-    <!--부트스트랩 드롭다운-->
-    <div>
-      <b-dropdown id="dropdown-1" :text="selectedRoadmapName" class="m-md-2">
+      <!--부트스트랩 드롭다운-->
+      <b-dropdown id="dropdown-1" :text="selectedRoadmapName" class="m-md-2" style="padding-left: 15px;">
         <b-dropdown-item
           @click="checkRoadmapToShare(item.rmid, item.name)"
           v-for="(item, index) in userRoadmapList"
@@ -21,30 +21,59 @@
           >{{ item.name }} | {{ item.createDate }}
         </b-dropdown-item>
       </b-dropdown>
-    </div>
 
-    <div v-if="isActiveRoadback">
-      <h4>로드백이 활성화 상태입니다.</h4>
-      <button @click="changeIsActive" id="deAct">로드백 비활성화</button>
-    </div>
-    <div v-else>
-      <h4>로드백이 비활성화 상태입니다.</h4>
-      <button @click="changeIsActive" id="Act">로드백 활성화</button>
-    </div>
+      <div v-if="isActiveRoadback" style="display: inline-block;">
+        <b-button @click="changeIsActive" id="deAct">로드백 비활성화</b-button>
+      </div>
+      <div v-else style="display: inline-block;">
+        <b-button @click="changeIsActive" id="Act">로드백 활성화</b-button>
+      </div>
 
-    <b-button
-      @click="createRoadmapToShare()"
-      class="mt-3 mx-4"
-      variant="default"
-    >
-      저장
-    </b-button>
+      <div v-if="isActiveRoadback" style="display: inline-block; margin-left: 5px;">
+        <h4>로드백이 <span style="color: rgb(245, 184, 149);">활성화</span> 상태입니다.</h4>
+      </div>
+      <div v-else style="display: inline-block; margin-left: 5px;">
+        <h4>로드백이 <span style="color: grey;">비활성화</span> 상태입니다.</h4>
+      </div>
+
+    <!-- 다이어그램 container -->
+    <b-container fluid class="mt-3">
+      <b-row>
+        <b-col class="p-0">
+          <b-card no-body class="border-0">
+            <div class="inline-block" style="width: 100%;">
+              <!-- goJS/start-->
+              <Roadmap :roadmapMode="roadmapMode" :roadmapData="roadmapData" :roadmapname="roadmapname" :isRoadback="isRoadback" />
+              <!--goJs/end -->
+            </div>
+          </b-card>
+        </b-col>
+      </b-row>
+    </b-container>
+    <!-- 다이어그램 container -->
+
+      <div>
+        <b-button
+          @click="createRoadmapToShare()"
+          class="mt-3 mx-4"
+          variant="default"
+        >
+          저장
+        </b-button>
+      </div>
+    </b-container>
+
   </div>
 </template>
 
 <script>
+import Roadmap from "@/components/Roadmap/Roadmap.vue";
+
 export default {
   name: "Editor",
+  components: {
+    Roadmap,
+  },
   props: {},
   data() {
     return {
@@ -53,8 +82,9 @@ export default {
       userRoadmapList: [],
       roadmapData: "",
       rmid: "",
-      selectedRoadmapName: "선택해 로드맵!",
-      isActiveRoadback: true
+      selectedRoadmapName: "로드맵 선택하기",
+      isActiveRoadback: true,
+      isRoadback: true,
     };
   },
   mounted() {
