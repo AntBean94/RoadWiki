@@ -4,7 +4,7 @@
     <b-container>
       <b-row class="pt-2">
           <i class="fas fa-arrow-left fa-2x text-classic-blue" @click="goToBack"></i>
-        </b-row>
+      </b-row>
       <b-row class="pt-4">
         <!-- 장기 중기 단기 선택 라디오 -->
         <b-form-group v-slot="{ ariaDescribedby }" class="mb-0">
@@ -16,10 +16,11 @@
             name="radios-btn-default"
             buttons
             :button-variant="btnColors[term-1]"
-            class="mr-2 mb-0"
+            class="mr-2"
           ></b-form-radio-group>
+        </b-form-group>
         <i 
-          class="far fa-question-circle fa-2x"
+          class="far fa-question-circle fa-2x mt-3"
           @click="showInfo"
           id="tooltip-info"
         ></i>
@@ -30,7 +31,6 @@
         >
           로드맵 사용법
         </b-tooltip>
-        </b-form-group>
       </b-row>
       <b-row align-h="end">
         <!-- 커리큘럼 히스토리 보여주기 -->

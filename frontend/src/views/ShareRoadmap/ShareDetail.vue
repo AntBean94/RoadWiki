@@ -1,6 +1,6 @@
 <template>
   <div>
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-default">
+    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue">
     </base-header>
 
     <b-container
@@ -16,7 +16,7 @@
           style="background-color: rgb(256, 256, 256);"
           @click="goToRoadBack"
         >
-          로드백 달러가기
+          로드백 하기
         </button>
       </b-row>
       <hr class="my-2" />
@@ -54,12 +54,13 @@
         </button>
       </b-row>
       <hr class="my-2" />
+
       <b-row>
         <b-container>
           <b-card no-body class="border-0">
             <div class="inline-block" style="width: 100%;">
               <!-- goJS/start-->
-              <Roadmap :roadmapMode="roadmapMode" :roadmapData="roadmapData" />
+              <Roadmap :roadmapMode="roadmapMode" :roadmapData="roadmapData" isRoadback="isRoadback" />
               <!--goJs/end -->
             </div>
           </b-card>
@@ -81,7 +82,7 @@
           @click="updateBoard"
         ></i>
       </b-row>
-      <b-row>
+      <b-row class="mt-3">
         <i class="far fa-thumbs-up fa-2x ml-3" v-if="!like" @click="clickLike"
           ><span class="h3 ml-1">좋아요{{ likeCnt }}</span></i
         >
@@ -127,7 +128,8 @@ export default {
       isWriter: false,
       rmid: "",
       useRoadback: "",
-      toggleFeedback: false
+      toggleFeedback: false,
+      isRoadback: true,
     };
   },
   created() {},
