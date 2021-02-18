@@ -118,6 +118,7 @@ export default {
   methods: {
     // 대댓글 작성 이후 recomment다시 false로 바꿔주기
     makeRecomment() {
+      
       if (this.recomment) {
         this.recomment = false;
         // 하하하 하이 하하이 하늘 하이라는뜻ヾ(•ω•`)o
@@ -134,9 +135,17 @@ export default {
     //   this.comment.likeCnt--;
     // },
     sendRecomment() {
+        if(this.$store.getters.getAccessToken == null){
+         alert("로그인 하셔야 해요");
+         return;
+       }
       this.$emit("sendRecomment");
     },
     deleteComment() {
+        if(this.$store.getters.getAccessToken == null){
+         alert("로그인 하셔야 해요");
+         return;
+       }
       axios
         .delete(
           `${this.$store.getters.getBoardServer}/freeboard/comment/${this.comment.cid}`
@@ -147,6 +156,10 @@ export default {
         });
     },
     sendComment() {
+        if(this.$store.getters.getAccessToken == null){
+         alert("로그인 하셔야 해요");
+         return;
+       }
       let comment = {
         cid: this.comment.cid,
         content: this.comment.content

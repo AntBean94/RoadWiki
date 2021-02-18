@@ -98,6 +98,11 @@ export default {
     //   this.recomment.likeCnt--;
     // },
     deleteRecomment() {
+      if(this.$store.getters.getAccessToken == null){
+         alert("로그인 하셔야 해요");
+         return;
+       }
+
       axios
         .delete(
           `${this.$store.getters.getBoardServer}/freeboard/recomment/${this.recomment.rcid}`
@@ -107,6 +112,12 @@ export default {
         });
     },
     sendRecomment() {
+      if(this.$store.getters.getAccessToken == null){
+         alert("로그인 하셔야 해요");
+         return;
+       }
+
+
       let recomment = {
         rcid: this.recomment.rcid,
         content: this.recomment.content

@@ -1,9 +1,11 @@
 <template>
   <div class="nanum-bold">
+
     <b-button 
       @click="modalShow = !modalShow" 
-      variant="classic-blue"
-      class="avatar avatar-sm rounded-circle ml-2"
+      variant="white"
+      style="color: black; border: 0; outline: 0;"
+      class="p-2 ml-3 mt-1"
     >Login</b-button>
 
     <b-modal v-model="modalShow" hide-footer hide-header centered>
@@ -39,7 +41,9 @@
       <div>
         <!-- 근데 이거 왜 필요한거지 -->
         <!-- <a href="">비밀번호를 잊으셨나요</a> -->
-        <router-link to="/find-password">비밀번호를 잊으셨나요</router-link>
+        <router-link to="/find-password">비밀번호를 잊으셨나요?</router-link>
+        <br>
+        <router-link to="/register">회원가입하기</router-link>
       </div>
       <div class="text-center">
         <base-button

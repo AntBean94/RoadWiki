@@ -109,14 +109,14 @@ export default {
   components: {
     [Table.name]: Table,
     //   [TableColumn.name]: TableColumn
-    [TableColumn.name]: TableColumn
+    [TableColumn.name]: TableColumn,
   },
   data() {
     return {
       currentPage: 1,
       currentPosts: "",
-      word: "",
-      selector: "none",
+      // word: "",
+      selector: "title",
       tag: "",
       postings: [],
       names: [],
@@ -127,10 +127,11 @@ export default {
     };
   },
   methods: {
-    getList() {
+    getList(word) {
+      console.log(word)
       let adr = `${this.$store.getters.getBoardServer}/freeboard/list/board/${this.selector}`;
-      if (this.word === "") adr += "/ ";
-      else adr + `/${this.word}`;
+      if (word.length < 1) adr += "/ ";
+      else adr += `/${word}`;
       adr += `/${this.currentPage}`;
       if (this.tag != "") adr += `${this.tag}`;
 
@@ -178,12 +179,12 @@ export default {
     }
   },
   created() {
-    this.getList();
+    this.getList("");
     this.getTotalNum();
   },
   watch: {
     currentPage() {
-      this.getList();
+      this.getList("");
     }
   }
 };

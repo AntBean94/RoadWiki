@@ -98,7 +98,6 @@
               <h6 class="mb-0 nanum-extra-bold">검색</h6>
             </b-row>
           </b-col>
-
           <!-- 채팅 게시판으로 가기 -->
           <!-- <div
             @click="goToChat(url)"  
@@ -109,6 +108,7 @@
           </div> -->
         </b-row>
       </div>
+
 
       <div v-else>
         <b-form
@@ -135,12 +135,22 @@
 
               <div class="input-group-append">
                 <span class="input-group-text" @click="clickSearch">
-                  <i class="fas fa-search"></i>
                 </span>
               </div>
             </b-input-group>
           </b-form-group>
+        <b-col 
+          style="margin-right: -33.5px; margin-left: 10px;"
+        >
+          <b-row class="justify-content-center">
+            <i @click="clickSearch" class="btn fas fa-search text-black border-0"></i>
+          </b-row>
+          <b-row class="justify-content-center">
+            <h6 class="mb-0 nanum-extra-bold">검색</h6>
+          </b-row>
+        </b-col>
         </b-form>
+
       </div>
       <!-- 여기부터 이미지, 드롭다운 리스트 -->
 
@@ -387,6 +397,9 @@ export default {
       }
     },
     clickSearch() {
+      this.activeSearch();
+      if(this.searchQuery == "")
+        return;
       this.$router.push({
         name: "검색결과",
         query: { searchKeyword: `${this.searchQuery}` }

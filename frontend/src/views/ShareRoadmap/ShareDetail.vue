@@ -219,6 +219,9 @@ export default {
         });
     },
     likecheck() {
+        if(this.$store.getters.getAccessToken == null){
+         return;
+       }
       axios
         .get(
           `${this.$store.getters.getRoadmapServer}/roadmapshare/islike/${this.pid}`
@@ -247,6 +250,10 @@ export default {
       // })
     },
     clickLike() {
+        if(this.$store.getters.getAccessToken == null){
+         alert("로그인 하셔야 해요");
+         return;
+       }
       axios
         .put(
           `${this.$store.getters.getRoadmapServer}/roadmapshare/like/${this.$store.getters.getUid}/${this.pid}`
@@ -264,6 +271,11 @@ export default {
       this.likeCnt++;
     },
     cancelLike() {
+      if(this.$store.getters.getAccessToken == null){
+         alert("로그인 하셔야 해요");
+         return;
+       }
+
       axios
         .put(
           `${this.$store.getters.getRoadmapServer}/roadmapshare/dislike/${this.$store.getters.getUid}/${this.pid}`
@@ -283,6 +295,10 @@ export default {
       });
     },
     goToRoadBack() {
+        if(this.$store.getters.getAccessToken == null){
+         alert("로그인 하셔야 해요");
+         return;
+       }
       this.$router.push({ name: "roadback", params: { rmid: this.rmid } });
     }
   }

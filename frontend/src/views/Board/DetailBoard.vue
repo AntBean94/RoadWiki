@@ -166,7 +166,7 @@ export default {
           this.isWritter = false;
         }
       });
-
+    if(this.$store.getters.getAccessToken){
     axios
       .get(
         `${this.$store.getters.getBoardServer}/freeboard/postinglike/${this.$route.query.pid}`
@@ -189,6 +189,7 @@ export default {
         this.dislikeCnt = res.data.dislikeCnt;
         console.log(this.dislikeCnt);
       });
+    }
   },
   mounted() {
     this.getPostingInfo();
@@ -230,6 +231,11 @@ export default {
         });
     },
     clickLike() {
+
+       if(this.$store.getters.getAccessToken == null){
+         alert("로그인 하셔야 해요");
+         return;
+       }
       const postingLikeUser = {
         pid: this.$route.query.pid
       };
@@ -260,6 +266,10 @@ export default {
       this.like = true;
     },
     cancelLike() {
+      if(this.$store.getters.getAccessToken == null){
+         alert("로그인 하셔야 해요");
+         return;
+       }
       axios
         .delete(
           `${this.$store.getters.getBoardServer}/freeboard/postinglikecancel/${this.$route.query.pid}`
@@ -270,6 +280,10 @@ export default {
       this.likeCnt--;
     },
     clickDislike() {
+      if(this.$store.getters.getAccessToken == null){
+         alert("로그인 하셔야 해요");
+         return;
+       }
       const postingLikeUser = {
         pid: this.$route.query.pid
       };
@@ -299,6 +313,10 @@ export default {
       this.dislike = true;
     },
     cancelDislike() {
+      if(this.$store.getters.getAccessToken == null){
+         alert("로그인 하셔야 해요");
+         return;
+       }
       axios
         .delete(
           `${this.$store.getters.getBoardServer}/freeboard/postinghatecancel/${this.$route.query.pid}`

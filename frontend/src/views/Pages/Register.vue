@@ -321,7 +321,7 @@ export default {
               password: this.password
             };
             this.$store.dispatch("LOGIN", userinfo).then(() => {
-              this.$router.push("/dashboard");
+              this.$router.push("/mainpage");
             });
           });
         // this.$router.replace('/dashboard')
