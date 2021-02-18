@@ -307,11 +307,13 @@ export default {
     let url = this.$route.name;
     this.url = url;
     this.checkUrl(url);
+    if(this.uid){
     axios
       .get(`${this.$store.getters.getUserServer}/user/image/${this.uid}`)
       .then(res => {
         this.profileUrl = res.data.path;
       });
+    }
   },
   computed: {
     routeName: function() {

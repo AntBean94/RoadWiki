@@ -637,7 +637,8 @@ export default {
     // // 수정로그 가져오기
     // update쪽으로 옮기기
     // this.readRoadmapLog();
-    this.getRecommendCur();
+    if(this.roadmapMode == 1)
+      this.getRecommendCur();
     // 팔레트 초기화
     this.curriculumData = -1;
 
