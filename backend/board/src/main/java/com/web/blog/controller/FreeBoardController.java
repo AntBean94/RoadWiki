@@ -128,6 +128,7 @@ public class FreeBoardController {
 	@PutMapping("/posting")
 	public Object editPosting(@RequestBody Posting posting, HttpServletRequest request) {
 		try {
+			System.out.println(posting);
 			Map<String, Object> result;
 			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) fBoardServ.editPosting(posting, uid);
@@ -303,6 +304,7 @@ public class FreeBoardController {
 			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			postingLikeUser.setUid(uid);
 			result = (Map<String, Object>) boardlikeService.registPostingLike(postingLikeUser);
+			result = (Map<String, Object>) boardlikeService.postingLikeUp(postingLikeUser.getPid());
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		} catch(Exception e) {
 			logger.error(e.getMessage());
@@ -318,6 +320,7 @@ public class FreeBoardController {
 		try {
 			Map<String, Object> result;
 			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
+			result = (Map<String, Object>) boardlikeService.postingLikeDown(pid);
 			result = (Map<String, Object>) boardlikeService.deletePostingLike(new PostingLikeUser(uid, pid));
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		} catch(Exception e) {
@@ -368,6 +371,99 @@ public class FreeBoardController {
 			Map<String, Object> result;
 			int uid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
 			result = (Map<String, Object>) boardlikeService.deletePostingHate(new PostingHateUser(uid, pid));
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping("/main")
+	public Object getLikeHigh() {
+		logger.trace("getLikeHigh");
+		Map<String, Object> result = new HashMap<>();
+		int cnt = 5; //프론트에서 받을 수 있음
+		HttpStatus status = HttpStatus.OK;
+		try {
+			result = (Map<String, Object>) fBoardServ.getLikeHigh(cnt);
+			result.put("msg", SUCCESS);
+		} catch(Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+			result.put("msg", FAIL);
+			result.put("errorMsg", e.getMessage());
+		}
+		return new ResponseEntity<Map<String, Object>>(result, status);
+	}
+
+	@PutMapping("/postinglikeUp/{pid}")
+	public Object postingLikeUp(@PathVariable int pid, HttpServletRequest request) {
+		try {
+			Map<String, Object> result;
+			result = (Map<String, Object>) boardlikeService.postingLikeUp(pid);
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.OK);
+		}
+	}
+	
+	@PutMapping("/postinglikeDown/{pid}")
+	public Object postingLikeDown(@PathVariable int pid, HttpServletRequest request) {
+		try {
+			Map<String, Object> result;
+			result = (Map<String, Object>) boardlikeService.postingLikeDown(pid);
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping("/list/{uid}")
+	public Object postingListUid(@PathVariable int uid) {
+		try {
+			Map<String, Object> result;
+			result = (Map<String, Object>) fBoardServ.getPostingListUid(uid);
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping("/likelist/{uid}")
+	public Object postingLikeListUid(@PathVariable int uid) {
+		try {
+			Map<String, Object> result;
+			result = (Map<String, Object>) fBoardServ.getPostingLikeListUid(uid);
+			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(new HashMap<String, Object>(){{
+				put("errorMsg", e.getMessage());
+				put("msg", FAIL);
+			}}, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping("/commentlist/{uid}")
+	public Object postingCommentListUid(@PathVariable int uid) {
+		try {
+			Map<String, Object> result;
+			result = (Map<String, Object>) fBoardServ.getPostingCommentListUid(uid);
 			return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
 		} catch(Exception e) {
 			logger.error(e.getMessage());

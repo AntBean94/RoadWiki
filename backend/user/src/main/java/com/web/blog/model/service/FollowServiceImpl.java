@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.web.blog.model.dto.Follow;
 import com.web.blog.model.dto.User;
@@ -33,8 +34,6 @@ public class FollowServiceImpl implements FollowService {
 					result.put("isFollow", false);
 				}
 			}
-			result.put("followers", followerList);
-			result.put("followings", followRepo.selectFollowings(touid));
 		} catch (Exception e) {
 			throw e;
 		}
@@ -47,8 +46,9 @@ public class FollowServiceImpl implements FollowService {
 		try {
 			Follow[] followerList = followRepo.selectFollowers(touid);
 			User[] users = new User[followerList.length];
+			
 			for (int i = 0; i < followerList.length; i++) {
-				int uid = followerList[i].getTouid();
+				int uid = followerList[i].getFromuid();
 				User[] u = followRepo.selectFollowerUid(uid);
 				users[i] = u[0];
 			}
@@ -65,13 +65,12 @@ public class FollowServiceImpl implements FollowService {
 		try {
 			Follow[] followerList = followRepo.selectFollowings(fromuid);
 			User[] users = new User[followerList.length];
+
 			for (int i = 0; i < followerList.length; i++) {
-				int uid = followerList[i].getFromuid();
+				int uid = followerList[i].getTouid();
 				User[] u = followRepo.selectFollowerUid(uid);
 				users[i] = u[0];
 			}
-			for(User u: users)
-				System.out.println(u);
 			result.put("followinglists", users);
 		} catch (Exception e) {
 			throw e;
@@ -80,6 +79,7 @@ public class FollowServiceImpl implements FollowService {
 	}
 	
 	@Override
+	@Transactional
 	public Object userFollow(Follow follow) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -92,6 +92,7 @@ public class FollowServiceImpl implements FollowService {
 	}
 
 	@Override
+	@Transactional
 	public Object userUnfollow(Follow follow) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {

@@ -36,7 +36,8 @@
       </base-input>
       <div>
         <!-- 근데 이거 왜 필요한거지 -->
-        <a href="">로그인이 안되시나요?</a>
+        <!-- <a href="">비밀번호를 잊으셨나요</a> -->
+        <router-link to="/find-password">비밀번호를 잊으셨나요</router-link>
       </div>
       <div class="text-center">
         <base-button
@@ -71,7 +72,7 @@ export default {
       this.$store
         .dispatch("LOGIN", this.user)
         .then(() => {
-          this.$router.push("/dashboard");
+          this.$router.push({ name: "MAINPAGE" });
         })
         .catch(() => {
           alert("아이디 비밀번호를 확인해주세요.");

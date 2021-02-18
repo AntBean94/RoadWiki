@@ -1,4 +1,4 @@
-p<template>
+<template>
   <!--goJS/start-->
   <div
     style="width: 100%; display: flex; justify-content: space-between; z-index:1;"
@@ -6,7 +6,7 @@ p<template>
     <div
       v-show="roadmapMode && !isroadback"
       ref="myPaletteDiv"
-      style="width: 150px; margin-right: 2px; background-color: #F9F8F3;"
+      style="width: 170px; margin-right: 2px; background-color: #F9F8F3;"
     ></div>
     <div
       ref="myDiagramDiv"
@@ -21,7 +21,7 @@ p<template>
     >
       <!-- 헤더텍스트 색 구분 blue, black, green (대, 중, 소) -->
       <div v-if="curriculumData === -1">
-        <h3>Curriculum Information</h3>
+        <h1 class="bold">{{ roadmapname }}</h1>
       </div>
       <div v-else-if="curriculumData.category === 'blue'" class="bigCur">
         <h2>{{ headertext }}</h2>
@@ -37,7 +37,8 @@ p<template>
       </div>
       <hr>
 
-      <b-card-text v-if="roadmapMode">
+
+      <b-card-text v-if="roadmapMode && i">
         <base-input label="시작날짜-종료날짜">
           <flat-pickr
             slot-scope="{ focus, blur }"
@@ -51,11 +52,13 @@ p<template>
           </flat-pickr>
         </base-input>
       </b-card-text>
-      <b-card-text v-else>
+
+      <b-card-text v-else-if="dates">
         <h3>시작날짜-종료날짜</h3>
         <p>{{ dates }}</p>
-      </b-card-text>
       <hr />
+      </b-card-text>
+
       <span>{{ descript }}</span>
       <hr v-show="descript.length > 0"/>
 
@@ -102,11 +105,15 @@ export default {
     roadmapData: Object, // 변수 하나를 줘가지고 그러네
     inputText: String,
     isroadback: Boolean,
-    rmid: Number
+    rmid: Number,
+    roadmapname: String,
+    checkName: Boolean,
+    isRoadback: Boolean,
   },
   data() {
     return {
       headertext: "",
+      isworking: false,
       dates: "",
       memotext: "",
       descript: "",
@@ -165,6 +172,7 @@ export default {
       myDiagram = $(go.Diagram, this.$refs.myDiagramDiv, {
         initialContentAlignment: go.Spot.Center,
         initialAutoScale: go.Diagram.Uniform,
+        
         "undoManager.isEnabled": true
       });
     }
@@ -203,7 +211,7 @@ export default {
             {
               fill: "rgb(255, 255 ,255)",
               stroke: "rgb(15, 76, 129)",
-              strokeWidth: 3,
+              strokeWidth: 0.5,
               strokeJoin: "round",
               strokeCap: "square"
             },
@@ -213,7 +221,7 @@ export default {
             go.TextBlock,
             this.textStyle(),
             {
-              margin: 8,
+              margin: 10,
               maxSize: new go.Size(160, NaN),
               wrap: go.TextBlock.WrapFit,
               editable: false
@@ -246,7 +254,7 @@ export default {
             {
               fill: "rgb(255, 255, 255)",
               stroke: "rgb(137, 119, 173)",
-              strokeWidth: 2.5,
+              strokeWidth: 0.5,
               strokeJoin: "round",
               strokeCap: "square"
             },
@@ -256,7 +264,7 @@ export default {
             go.TextBlock,
             this.textStyle(),
             {
-              margin: 8,
+              margin: 10,
               maxSize: new go.Size(160, NaN),
               wrap: go.TextBlock.WrapFit,
               editable: false
@@ -289,7 +297,7 @@ export default {
             {
               fill: "rgb(255, 255, 255)",
               stroke: "#307363",
-              strokeWidth: 2,
+              strokeWidth: 0.5,
               strokeJoin: "round",
               strokeCap: "square"
             },
@@ -299,7 +307,7 @@ export default {
             go.TextBlock,
             this.textStyle(),
             {
-              margin: 8,
+              margin: 10,
               maxSize: new go.Size(160, NaN),
               wrap: go.TextBlock.WrapFit,
               editable: false
@@ -329,7 +337,7 @@ export default {
             desiredSize: new go.Size(70, 70),
             fill: "#ffffff",
             stroke: "#F04A5E",
-            strokeWidth: 3.5
+            strokeWidth: 1
           }),
           $(go.TextBlock, "Start", this.textStyle(), new go.Binding("text"))
         ),
@@ -359,7 +367,7 @@ export default {
             desiredSize: new go.Size(70, 70),
             fill: "#F9F8F3",
             stroke: "#F9F8F3",
-            strokeWidth: 3.5
+            strokeWidth: 1
           }),
           $(go.TextBlock, "Start", this.textStyle(), new go.Binding("text"))
         ),
@@ -386,7 +394,7 @@ export default {
             {
               fill: "rgb(255, 255, 255)",
               stroke: "rgb(234, 218, 79)",
-              strokeWidth: 2.5,
+              strokeWidth: 0.5,
               strokeJoin: "round",
               strokeCap: "square"
             },
@@ -396,7 +404,7 @@ export default {
             go.TextBlock,
             this.textStyle(),
             {
-              margin: 8,
+              margin: 10,
               maxSize: new go.Size(160, NaN),
               wrap: go.TextBlock.WrapFit,
               editable: iseditable
@@ -405,10 +413,10 @@ export default {
           )
         ),
         // four named ports, one on each side: node의 가지 옵션
-        this.makePort("T", go.Spot.Top, go.Spot.TopSide, false, true),
+        this.makePort("T", go.Spot.Top, go.Spot.TopSide, true, true),
         this.makePort("L", go.Spot.Left, go.Spot.LeftSide, true, true),
         this.makePort("R", go.Spot.Right, go.Spot.RightSide, true, true),
-        this.makePort("B", go.Spot.Bottom, go.Spot.BottomSide, true, false)
+        this.makePort("B", go.Spot.Bottom, go.Spot.BottomSide, true, true)
       )
     );
 
@@ -518,18 +526,18 @@ export default {
       ),
       $(
         go.Shape, // 화살표 바디 모양
-        { isPanelMain: true, stroke: "#1B443C", strokeWidth: 2.5 },
+        { isPanelMain: true, stroke: "#2a446f", strokeWidth: 1.5 },
         new go.Binding("stroke", "isSelected", function(sel) {
-          return sel ? "#1B443C" : "#1B443C";
+          return sel ? "#2a446f" : "#2a446f";
         }).ofObject()
       ),
       $(
         go.Shape, // 화살표 모양
         {
           toArrow: "Triangle",
-          strokeWidth: 1.5,
-          stroke: "#1B443C",
-          fill: "#307362"
+          strokeWidth: 1,
+          stroke: "#2a446f",
+          fill: "#2a446f"
         }
       ),
       $(
@@ -607,7 +615,7 @@ export default {
           // 추천 커리큘럼 전역변수로 저장되어있음
           recommendCurData
         ),
-        autoScale: go.Diagram.UniformToFill,
+        autoScale: go.Diagram.UniformToFill
       }
     );
 
@@ -672,6 +680,9 @@ export default {
       // 검색메서드 실행
       if (this.inputText != "") this.getSearchCur();
       else this.getRecommendCur();
+    },
+    roadmapname: function() {
+      this.curriculumData = -1
     }
   },
   computed: {},
@@ -720,7 +731,7 @@ export default {
     // 글씨체, 스타일 수정 필요(프론트 집중기간)
     textStyle() {
       return {
-        font: "bold 11pt Lato, Helvetica, Arial, sans-serif",
+        font: "12pt Lato, Helvetica, Arial, sans-serif",
         stroke: "#000000"
       };
     },
@@ -749,18 +760,21 @@ export default {
     },
     checkCur(e) {
       // 차후에 DB에 요청을 보낸다음 DB정보로 반영
-      if (curriculumData.category == "comment" || curriculumData == -1) {
+      if (this.curriculumData.category == "comment" || this.curriculumData == -1) {
         this.headertext = "";
         this.dates = "";
       this.memotext = "";
       this.descript = "";  
         return;
       }
-      this.headertext = curriculumData.text;
-      if (curriculumData.dates)
-        this.dates = curriculumData.startdate + " ~ " + curriculumData.enddate;
-      this.memotext = curriculumData.memo;
-      this.descript = curriculumData.content;
+      this.headertext = this.curriculumData.text;
+
+      if (this.curriculumData.startdate)
+        this.dates = this.curriculumData.startdate + " to " + this.curriculumData.enddate;
+      else
+        this.dates = ""
+      this.memotext = this.curriculumData.memo;
+      this.descript = this.curriculumData.content;
     },
     getRecommendCur() {
       const _ = require("lodash");
@@ -791,11 +805,11 @@ export default {
             let custom = _.cloneDeep(this.curData);
             custom.category = "Custom";
             custom.text = "User Custom";
-            res.data["suggest"].push(custom);
+            res.data["suggest"].unshift(custom);
             let start = _.cloneDeep(this.curData);
             start.category = "Start";
             start.text = "시작";
-            res.data["suggest"].push(start);
+            res.data["suggest"].unshift(start);
           }
           let blank = _.cloneDeep(this.curData);
           blank.category = "Blank";
@@ -805,7 +819,6 @@ export default {
           myPalette.model.nodeDataArray = recommendCurData;
         })
         .catch(e => {
-          console.log(res);
           console.error(e);
         });
     },
@@ -832,7 +845,6 @@ export default {
           myPalette.model.nodeDataArray = recommendCurData;
         })
         .catch(err => {
-          console.log(res);
           console.error(err);
         });
     },
@@ -846,7 +858,8 @@ export default {
       roadbacktimer = setInterval(() => {
         if (
           myDiagram.toolManager.textEditingTool.isActive ||
-          myDiagram.toolManager.draggingTool.Wc
+          myDiagram.toolManager.draggingTool.Wc ||
+          this.isworking
         ) {
           return;
         }
@@ -863,6 +876,7 @@ export default {
     },
     saveComment(data) {
       data.rmid = this.rmid;
+      this.isworking = true;
       axios
         .put(`${this.$store.getters.getRoadmapServer}/roadcomment/insert`, data)
         .then(res => {
@@ -871,8 +885,10 @@ export default {
         .catch(err => {
           console.error(err);
         });
+      this.isworking = false;
     },
     updateComment(data) {
+      this.isworking = true;
       axios
         .put(`${this.$store.getters.getRoadmapServer}/roadcomment/update`, data)
         .then(res => {
@@ -881,8 +897,10 @@ export default {
         .catch(err => {
           console.error(err);
         });
+        this.isworking = false;
     },
     deleteComment(data) {
+      this.isworking = true;
       axios
         .post(
           `${this.$store.getters.getRoadmapServer}/roadcomment/delete`,
@@ -894,6 +912,7 @@ export default {
         .catch(err => {
           console.error(err);
         });
+        this.isworking = false;
     },
     get_recommend(){
       this.$emit('get_recommend',this.recommend);

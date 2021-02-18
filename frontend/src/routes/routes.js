@@ -18,7 +18,6 @@ const routes = [
   },
   {
     path: '/',
-
     redirect: 'main',
     component: DashboardNavbar,
 
@@ -26,7 +25,7 @@ const routes = [
       
       {
         path: '/dashboard',
-        redirect: '/read-user-roadmap',
+        redirect: '/mainpage',
         name: 'dashboard',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
@@ -86,10 +85,6 @@ const routes = [
         name: "나의 로드맵",
         component: () => import(/* webpackChunkName: "demo" */ '../views/Roadmap/ReadUserRoadmap.vue')
       },
-      //명희님 힘내요 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 로드맵 다 빨리 해주세요 ^^^^^^^^^^^^^^^^^^^^^^
-      //빠이
-      //
-
       {
         path: '/create-user-roadmap',
         name: '로드맵 생성하기',
@@ -159,6 +154,11 @@ const routes = [
         component: () => import('../views/ShareRoadmap/RoadBack.vue'),
         props: true,
       },
+      {
+        path: '/mainpage',
+        name: "MAINPAGE",
+        component: () => import('../views/Mainpage/Mainpage.vue'),
+      },
     ]
   },
   {
@@ -166,15 +166,25 @@ const routes = [
     // redirect: 'login',
     component: AuthLayout,
     children: [
-      {
-        path: '/login',
-        name: 'login',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/Pages/Login.vue')
-      },
+      // {
+      //   path: '/login',
+      //   name: 'login',
+      //   component: () => import(/* webpackChunkName: "demo" */ '../views/Pages/Login.vue')
+      // },
       {
         path: '/register',
         name: 'register',
         component: () => import(/* webpackChunkName: "demo" */ '../views/Pages/Register.vue')
+      },
+      {
+        path: '/find-password',
+        name: '비밀번호찾기',
+        component: () => import(/* webpackChunkName: "demo" */ '../components/Login/FindPassword.vue')
+      },
+      {
+        path: '/reset-password',
+        name: '비밀번호재설정',
+        component: () => import(/* webpackChunkName: "demo" */ '../components/Login/ResetPassword.vue')
       },
       { path: '*', component: NotFound },
     ]

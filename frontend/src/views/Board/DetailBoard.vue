@@ -20,23 +20,28 @@
       <b-row>
         <b-container class="mx-9">
           <b-row align-v="center">
-            <b-col cols="1" class="pr-0 mb-2 mr-3">img</b-col>
+            <b-col cols="1" class="pr-0 mb-2 mr-4">
+              <b-img :src="profileUrl" rounded width="50rem" heigth="50rem" />
+            </b-col>
             <b-col>
               <h3>{{ name }}</h3>
-              <h5>한줄 내용 넣고싶음</h5>
+              <h5>{{ oneline }}</h5>
             </b-col>
           </b-row>
-          <hr class="my-2" />
+          <hr class="my-3" />
           <Viewer v-if="content != null" :initialValue="content" />
-          <b-row class="mr-1 my-3">
-            <badge
+          <b-row class="ml-1 mr-1 my-3">
+            <b-button
+              size="sm"
+              variant="cornhusk"
+              pill
               class="mr-2"
               v-for="(tag, idx) in tags"
               :key="idx"
             >
               <!-- class="ml-1 mt-2 mr-1 bg-cornhusk rounded-pill py-1 px-2" -->
-              <span class="h5"># {{ tag }}</span>
-            </badge>
+              <span class="p"># {{ tag }}</span>
+            </b-button>
           </b-row>
           <b-row align-h="end" class="my-2" v-if="isWritter">
             <!-- 게시물의 uid와 현재 uid가 동일 할 때 보여줄 내용 -->
@@ -56,32 +61,29 @@
               class="far fa-thumbs-up fa-2x ml-3 text-peach-quartz"
               v-if="!like"
               @click="clickLike"
-              ><span class="h3 ml-1">좋아요{{ likeCnt }}</span></i
+              ><span class="h3 ml-1">{{ likeCnt }}</span></i
             >
             <i
               class="fas fa-thumbs-up fa-2x ml-3 text-peach-quartz"
               v-if="like"
               @click="cancelLike"
-              ><span class="h3 ml-1">좋아요{{ likeCnt }}</span></i
+              ><span class="h3 ml-1">{{ likeCnt }}</span></i
             >
             <i
               class="far fa-thumbs-down fa-2x ml-3 text-provence"
               v-if="!dislike"
               @click="clickDislike"
-              ><span class="h3 ml-1">싫어요{{ dislikeCnt }}</span></i
+              ><span class="h3 ml-1">{{ dislikeCnt }}</span></i
             >
             <i
               class="fas fa-thumbs-down fa-2x ml-3 text-provence"
               v-if="dislike"
               @click="cancelDislike"
-              ><span class="h3 ml-1">싫어요{{ dislikeCnt }}</span></i
+              ><span class="h3 ml-1">{{ dislikeCnt }}</span></i
             >
           </b-row>
-          <hr class="my-2" />
+          <!-- <hr class="my-2" /> -->
         </b-container>
-        <!-- <p class="px-3">
-          {{ content }}
-        </p> -->
       </b-row>
     </b-container>
 
@@ -123,6 +125,7 @@ export default {
   data() {
     return {
       name: "",
+      oneline: "",
       content: null,
       title: "",
       tags: [],
@@ -137,7 +140,8 @@ export default {
       pid: "",
       isWritter: false,
       comments: [],
-      recomments: []
+      recomments: [],
+      profileUrl: ""
     };
   },
   created() {
@@ -147,6 +151,14 @@ export default {
       )
       .then(res => {
         this.uid = res.data.posting.uid;
+
+        // 해당 계정의 프로필 사진 가져오는 걸로 해야함
+        axios
+          .get(`${this.$store.getters.getUserServer}/user/image/${this.uid}`)
+          .then(res => {
+            this.profileUrl = res.data.path;
+          });
+
         this.tags = res.data.posting.tags;
         if (this.uid === this.$store.getters.getUid) {
           this.isWritter = true;
@@ -187,7 +199,8 @@ export default {
           `${this.$store.getters.getBoardServer}/freeboard/posting/${this.$route.query.pid}`
         )
         .then(res => {
-          this.name = res.data.name;
+          this.name = res.data.user.name;
+          this.oneline = res.data.user.oneline;
           this.classifier = res.data.posting.classifier;
           this.title = res.data.posting.title;
           this.content = res.data.posting.content;
@@ -275,7 +288,6 @@ export default {
                 axios.delete(
                   `${this.$store.getters.getBoardServer}/freeboard/postinglikecancel/${this.$route.query.pid}`
                 );
-                this.likeCnt--;
               }
             });
         });

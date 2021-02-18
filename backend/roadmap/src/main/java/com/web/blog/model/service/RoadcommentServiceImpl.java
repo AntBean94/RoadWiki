@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.web.blog.model.dto.Curriculum;
 import com.web.blog.model.repo.RoadcommentRepo;
@@ -29,6 +30,7 @@ public class RoadcommentServiceImpl implements RoadcommentService {
 	RoadmapRepo roadmaprepo;
 
 	@Override
+	@Transactional
 	public Object insert(Curriculum curriculum) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -44,6 +46,7 @@ public class RoadcommentServiceImpl implements RoadcommentService {
 	}
 
 	@Override
+	@Transactional
 	public Object delete(int nowuid, int key, int rmid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -60,6 +63,7 @@ public class RoadcommentServiceImpl implements RoadcommentService {
 	}
 
 	@Override
+	@Transactional
 	public Object deleteAll(int nowuid, int rmid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -75,6 +79,7 @@ public class RoadcommentServiceImpl implements RoadcommentService {
 	}
 	
 	@Override
+	@Transactional
 	public Object update(Curriculum curriculum) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {

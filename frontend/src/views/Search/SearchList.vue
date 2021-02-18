@@ -1,7 +1,6 @@
 <template>
   <div>
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-default">
-    </base-header>
+    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue"> </base-header>
 
     <b-container
       style="background: white; border-radius: 1rem;"
@@ -12,7 +11,7 @@
       <h2>유저</h2>
       <ul v-for="(user, idx) in userlist" :key="idx">
         <router-link
-          :to="{ name: 'profile', query: { profileId: `${user.uid}` } }"
+          :to="{ name: '프로필', query: { profileId: `${user.uid}` } }"
         >
           {{ user.name }}
         </router-link>
@@ -50,10 +49,9 @@ export default {
   methods: {
     sendWord() {
       axios
-        .get(
-          `${this.$store.getters.getRoadmapServer}/search/list/${this.content}`
-        )
+        .get(`${this.$store.getters.getUserServer}/search/list/${this.content}`)
         .then(res => {
+          console.log(res.data);
           this.content = "";
           this.userlist = res.data.user;
           this.postinglist = res.data.posting;

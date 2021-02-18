@@ -1,6 +1,6 @@
 <template>
   <div>
-    <base-header class="pb-10 pt-5 pt-md-2 bg-gradient-default">
+    <base-header class="pb-10 pt-5 pt-md-2 bg-baby-blue">
       <button
         @click="goToBack"
         class="btn"
@@ -200,7 +200,7 @@ export default {
         });
     },
     goToBack() {
-      this.$router.push({ name: "shareboard" });
+      this.$router.push({ name: "공유로드맵" });
     }
   }
 };

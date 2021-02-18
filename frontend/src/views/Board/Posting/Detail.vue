@@ -88,3 +88,15 @@ export default {
   /* border-right: 1px black solid; */
 }
 </style>
+113d genconsole.log(res);
+            t
+      if (this.rmid === undefined) {
+        console.log("확인");
+        this.$router.push({ name: "나의 로드맵" });
+        reurn;    }
+  () {
+      if this.CUMode == 1                                
+    }console.log('####################')
+      console.log(ths.roadmapname.length)
+      i
+      console.log(recommend);

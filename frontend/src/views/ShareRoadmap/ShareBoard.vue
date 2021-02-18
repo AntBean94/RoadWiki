@@ -1,42 +1,49 @@
 <template>
   <div>
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-default">
+    <base-header class="pb-3 pt-5 pt-md-8 bg-baby-blue"> 
+      <b-container class="pl-5 pr-2">
+        <b-row align-h="around">
+          <b-col cols="10">
+            <b-form-input form-input
+              v-model="inputtext"
+              placeholder="검색어를 입력해주세요."
+              size="lg"
+            ></b-form-input>
+          </b-col>
+          <b-col cols="1">
+            <b-button size="lg" class="fas fa-search px-5" @click="searchSharedRoadmap" variant="peach-quartz"></b-button>
+          </b-col>
+          <b-col cols="1"></b-col>
+        </b-row>
+      </b-container>
+    
+      <b-container class="pt-6">
+        <b-row align-h="end">
+          <!-- <b-button variant="primary" class="mt-2" @click="detailBoard">detail board</b-button> -->
+          <b-button variant="classic-blue" class="mt-2 mr-5" @click="createBoard"
+            >새 글 작성</b-button
+          >
+        </b-row>
+      </b-container>
+
+    
     </base-header>
-    <div>
-      <b-button variant="primary" class="mt-2" @click="createBoard"
-        >새 글 작성</b-button
-      >
-
-      <b-dropdown id="dropdown-1" :text="category" class="m-md-2">
-        <b-dropdown-item
-          v-for="(item, idx) in searchCategory"
-          :key="idx"
-          @click="selectCategory(item)"
-          >{{ item }}</b-dropdown-item
-        >
-      </b-dropdown>
-      <b-form-input
-        v-model="inputtext"
-        placeholder="검색어를 입력해주세요."
-      ></b-form-input>
-      <b-button @click="searchSharedRoadmap">검색하기</b-button>
-
+    <b-container>
       <RoadmapList
-        class="row"
+        class="row m-0 px-0"
         id="roadmaplist"
         v-if="shareList"
         :rmlist="viewShareList"
         :unlist="usernameList"
       />
-    </div>
-
-    <b-pagination
-      v-model="currentPage"
-      :per-page="10"
-      :total-rows="totalPageNum"
-      aria-controls="mhtable"
-      align="center"
-    ></b-pagination>
+      <b-pagination
+        v-model="currentPage"
+        :per-page="10"
+        :total-rows="totalPageNum"
+        aria-controls="mhtable"
+        align="center"
+      ></b-pagination>
+    </b-container>
   </div>
 </template>
 
@@ -100,9 +107,6 @@ export default {
           console.log(e);
         });
     },
-    selectCategory(item) {
-      this.category = item;
-    }
   }
 };
 </script>

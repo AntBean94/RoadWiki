@@ -1,20 +1,12 @@
 <template>
   <div>
-    <div
-      class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center profile-header"
-      style="
-        min-height: 600px;
-        background-image: url(img/theme/profile-cover.jpg);
-        background-size: cover;
-        background-position: center top;
-      "
-    >
-      <b-container class="align-items-center">
-        <span class="mask bg-gradient-default opacity-5"></span>
-        <!-- <b-row class="justify-content-end"><BackgroundImg /></b-row> -->
-      </b-container>
-    </div>
-
+    <base-header class="pb-9 pt-9 bg-baby-blue">
+    </base-header>
+    <!-- <b-container class="align-items-center"> -->
+      <!-- <span class="bg-baby-blue"></span> -->
+      <!-- <b-row class="justify-content-end"><BackgroundImg /></b-row> -->
+    <!-- </b-container> -->
+    
     <b-container fluid class="mt--6">
       <b-card no-body class="card-profile" alt="Image placeholder" img-top>
         <b-row class="justify-content-start">
@@ -23,21 +15,19 @@
               <b-row>
                 <b-img
                   :src="profileUrl"
-                  v-model="profileUrl"
-                  rounded="circle"
+                  @click="modalShow = !modalShow"
                 />
               </b-row>
               <b-row class="justify-content-end"> </b-row>
             </b-container>
           </b-col>
         </b-row>
-
         <b-card-header
           class="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4 mb-4"
         >
-          <h1 class="display-1">
-            <!-- email.com -->
-          </h1>
+          <!-- <h1 class="display-1">
+            email.com
+          </h1> -->
         </b-card-header>
         <b-card-body class="pt-0">
           <b-row>
@@ -106,14 +96,16 @@
                 </h2>
               </b-col>
               <b-col cols="7" align-self="center">
-                <b-badge
-                  variant="warning"
+                <b-button
+                  variant="peach-quartz"
+                  size="sm"
+                  pill
                   class="mx-1"
                   v-for="(keyword, idx) in keywordtexts"
                   :key="idx"
                 >
                   {{ keyword }}
-                </b-badge>
+                </b-button>
               </b-col>
               <FlavourContent
                 class="col align-self-center pl-5 ml-5"
@@ -121,22 +113,20 @@
                 :keywords="keywords"
               />
             </b-row>
-            <b-row class="mb-3">
+            <!-- <b-row class="mb-3">
               <b-col cols="3" class="text-center" align-self="center">
                 <h2>
-                  <!-- <i class="ni ni-hat-3 mr-2"></i> -->
                   프로필 사진
                 </h2>
               </b-col>
               <b-col>
                 <h3>여기에 프로필 사진 파일 명</h3>
-                <!-- <ProfileImg/> -->
               </b-col>
               <b-col>
                 <div>
                   <b-button size="sm" @click="modalShow = !modalShow"
                     >사진📷</b-button
-                  >
+                  > -->
 
                   <b-modal v-model="modalShow" hide-footer>
                     <template #modal-title>
@@ -162,58 +152,14 @@
                       >
                     </div>
                   </b-modal>
-                </div>
+                <!-- </div>
               </b-col>
-            </b-row>
-            <b-row class="mb-3">
-              <b-col cols="3" class="text-center" align-self="center">
-                <h2>
-                  <!-- <i class="ni ni-hat-3 mr-2"></i> -->
-                  배경 사진
-                </h2>
-              </b-col>
-              <b-col>
-                <h3>여기에 배경 사진 파일 명</h3>
-                <!-- <ProfileImg/> -->
-              </b-col>
-              <b-col>
-                <div>
-                  <b-button size="sm" @click="modalShow = !modalShow"
-                    >사진📷</b-button
-                  >
-
-                  <b-modal v-model="modalShow" hide-footer>
-                    <template #modal-title>
-                      <h1>프로필 업로드</h1>
-                    </template>
-                    <div>
-                      <b-form-file
-                        v-model="file1"
-                        placeholder="Choose a file or drop it here..."
-                        drop-placeholder="Drop file here..."
-                      ></b-form-file>
-                      <div class="mt-3">
-                        Selected file: {{ file1 ? file1.name : "" }}
-                      </div>
-                    </div>
-                    <div class="text-center">
-                      <base-button
-                        type="primary"
-                        native-type="submit"
-                        class="my-4"
-                        @click="uploadHandler"
-                        >확인</base-button
-                      >
-                    </div>
-                  </b-modal>
-                </div>
-              </b-col>
-            </b-row>
+            </b-row> -->
 
             <hr class="my-4" />
             <b-row class="justify-content-end">
               <b-button
-                variant="danger"
+                variant="traffic-red"
                 class="mt-4 mr-4"
                 @click="withDrawal"
                 size="sm"
@@ -222,8 +168,9 @@
             </b-row>
             <b-row class="justify-content-center">
               <b-button
-                variant="primary"
-                class="mt-4"
+                pill
+                variant="classic-blue"
+                class="mt-4 px-5"
                 size="lg"
                 @click="updateHandler"
                 >정보수정</b-button
@@ -280,8 +227,11 @@ export default {
   created() {
     this.uid = this.$store.getters.getUid;
 
-    axios.get(`${this.$store.getters.getUserServer}/user/image`).then(res => {
+    axios.get(`${this.$store.getters.getUserServer}/user/image/${this.uid}`).then(res => {
       this.profileUrl = res.data.path;
+      console.log('##########')
+      console.log(this.profileUrl)
+      console.log('##########')
     });
 
     axios

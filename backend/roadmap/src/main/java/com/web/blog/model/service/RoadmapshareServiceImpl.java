@@ -118,6 +118,7 @@ public class RoadmapshareServiceImpl implements RoadmapshareService {
 	}
 
 	@Override
+	@Transactional
 	public Object insert(RoadmapShare roadmapshare,int nowuid) throws Exception {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -134,6 +135,7 @@ public class RoadmapshareServiceImpl implements RoadmapshareService {
 	}
 
 	@Override
+	@Transactional
 	public Object delete(int nowuid, int pid) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -196,6 +198,19 @@ public class RoadmapshareServiceImpl implements RoadmapshareService {
 			
 		} catch (Exception e) {
 			logger.error("Service like : Something wrong");
+			throw e;
+		}
+		return result;
+	}
+	
+	@Override
+	@Transactional
+	public Object getLikeHigh(int cnt) throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			result.put("roadmapshares" , roadmapshareRepo.selectLikeHigh(cnt));
+		} catch (Exception e) {
+			logger.error("Service getLikeHigh : Something wrong");
 			throw e;
 		}
 		return result;

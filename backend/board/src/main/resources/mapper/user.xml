@@ -60,11 +60,17 @@
 		where email=#{email}
 	</delete>
 	
-	<select id="getName" parameterType="Integer" resultType="String">
-		select name 
+	<select id="getName" parameterType="Integer" resultType="User">
+		select name, oneline
 		from user 
 		where uid=#{uid}
 	</select>
+	
+	<!-- <select id="getOneline" parameterType="Integer" resultType="String">
+		select oneline
+		from user 
+		where uid=#{uid}
+	</select> -->
 
 </mapper>
 	
