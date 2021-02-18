@@ -5,12 +5,14 @@ import Vuex from "vuex";
 
 Vue.use(Vuex);
 
+// 서버
 // const SERVER_URL = [
 //   process.env.VUE_APP_SERVER_URL,
 //   process.env.VUE_APP_SERVER_URL,
 //   process.env.VUE_APP_SERVER_URL,
 //   process.env.VUE_APP_SERVER_URL,
 // ]
+// 로컬
 const SERVER_URL = [
   process.env.VUE_APP_SERVER_URL_BOARD,
   process.env.VUE_APP_SERVER_URL_CHATTING,

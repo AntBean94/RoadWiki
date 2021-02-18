@@ -128,7 +128,6 @@ export default {
           if (res.data.msg == "success") {
             this.roadmapData = JSON.parse(res.data["roadmaps"].tmp);
             this.roadmapname = res.data["roadmaps"].name
-            console.log(this.roadmapname)
             this.load();
           } else {
             alert("데이터 로드에 실패했습니다.");
@@ -140,8 +139,6 @@ export default {
         });
     },
     deleteRoadmap(clickrmorder){
-      console.log(clickrmorder)
-      console.log('잘찍히나요?')
       axios
         .delete(`${this.$store.getters.getRoadmapServer}/roadmap/delete/${this.$store.getters.getUid}/${clickrmorder}`)
         .then(res => {
@@ -189,9 +186,13 @@ export default {
           if (res.data["roadmaps"].length) {
             this.userRoadmapList = res.data["roadmaps"];
             // 시작페이지에서 클릭없이 첫 번째 로드맵을 보여줄 수 있도록 저장
+            let idx = this.$route.params.sidx
+
+            if(!idx)
+              idx = 0;
             this.previewRoadmap(
-              this.userRoadmapList[0].rmorder,
-              this.userRoadmapList[0].rmid
+              this.userRoadmapList[idx].rmorder,
+              this.userRoadmapList[idx].rmid
             );
           }else{
             this.userRoadmapList = [];
@@ -213,7 +214,8 @@ export default {
 
 <style>
 #carouselCard:hover {
-  box-shadow: 4px 3px 5px rgba(56, 54, 54, 0.5);
+  box-shadow: 4px 3px 7px rgba(56, 54, 54, 0.5);
+  transition: 0.5s;
 }
 /* .roadmap {
   width: 175px;

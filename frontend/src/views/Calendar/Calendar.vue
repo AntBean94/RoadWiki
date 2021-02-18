@@ -1,109 +1,112 @@
 <template>
   <div>
     <base-header
-      class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-default"
+      class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue"
     ></base-header>
     <b-container fluid class="mt--7">
       <!-- 캘린더 CURD -->
-      <b-row>
-        <b-col>
-          <b-card no-body class="border-0">
-            <div id="calendar">
-              <div>
-                <!-- 모달관련 -->
-                <div>
-                  <b-modal ref = "calendar-modal" id="modal-scrollable" scrollable title="로드위키">
-                    <!-- 일정상세정보 -->
-                    <div class="field">
-                      <label class="label">일정</label>
-                      <div class="control my-2">
-                        {{ this.showTitle }}
-                      </div>
-                    </div>
-										<div class="field">
-                      <label class="label">메모</label>
-                      <div class="control my-2">
-                        {{ this.items.memo }}
-                      </div>
-                    </div>
-                    <div class="field">
-                      <label class="label">시작 날짜</label>
-                      <div class="control">
-                        <input
-                          v-model="newItemStartDate"
-                          class="input"
-                          type="date"
-                        />
-                      </div>
-                    </div>
-                    <div class="field">
-                      <label class="label">종료 날짜</label>
-                      <div class="control">
-                        <input
-                          v-model="newItemEndDate"
-                          class="input"
-                          type="date"
-                        />
-                      </div>
-                    </div>
-                    <template #modal-footer="{cancel}">
-                      <!-- Emulate built in modal footer ok and cancel button actions -->
-                      <b-button
-                        size="lm"
-                        variant="success"
-                        @click="clickUpdateItem"
-                      >
-                        일정업데이트
-                      </b-button>
-                      <b-button
-                        size="lm"
-                        variant="danger"
-                        @click="clickDeleteItem"
-                      >
-                        일정삭제하기
-                      </b-button>
-                      <b-button size="lm" variant="danger" @click="cancel()">
-                        Cancel
-                      </b-button>
-                    </template>
-                  </b-modal>
-                </div>
-              </div>
-              <div class="calendar-parent">
-                <calendar-view
-                  :items="items"
-                  :show-date="showDate"
-                  :time-format-options="{ hour: 'numeric', minute: '2-digit' }"
-                  :enable-drag-drop="true"
-                  :disable-past="disablePast"
-                  :disable-future="disableFuture"
-                  :class="themeClasses"
-                  :period-changed-callback="periodChanged"
-                  :current-period-label="useTodayIcons ? 'icons' : ''"
-                  :displayWeekNumbers="displayWeekNumbers"
-                  :enable-date-selection="true"
-                  :selection-start="selectionStart"
-                  :selection-end="selectionEnd"
-                  @date-selection-start="setSelection"
-                  @date-selection="setSelection"
-                  @date-selection-finish="finishSelection"
-                  @drop-on-date="onDrop"
-                  @click-date="onClickDay"
-                  @click-item="onClickItem"
-                >
-                  <calendar-view-header
-                    slot="header"
-                    slot-scope="{ headerProps }"
-                    :header-props="headerProps"
-                    @input="setShowDate"
-                  />
-                </calendar-view>
-              </div>
-            </div>
-          </b-card>
-        </b-col>
-      </b-row>
+      <b-card no-body class="border-0">
+        <div id="calendar">
+          <div class="calendar-parent mx-9 justify-content-center">
+            <calendar-view
+              :items="items"
+              :show-date="showDate"
+              :time-format-options="{ hour: 'numeric', minute: '2-digit' }"
+              :enable-drag-drop="true"
+              :disable-past="disablePast"
+              :disable-future="disableFuture"
+              :class="themeClasses"
+              :period-changed-callback="periodChanged"
+              :current-period-label="useTodayIcons ? 'icons' : ''"
+              :displayWeekNumbers="displayWeekNumbers"
+              :enable-date-selection="true"
+              :selection-start="selectionStart"
+              :selection-end="selectionEnd"
+              @date-selection-start="setSelection"
+              @date-selection="setSelection"
+              @date-selection-finish="finishSelection"
+              @drop-on-date="onDrop"
+              @click-date="onClickDay"
+              @click-item="onClickItem"
+              class="mr-9"
+            >
+              <calendar-view-header
+                slot="header"
+                slot-scope="{ headerProps }"
+                :header-props="headerProps"
+                @input="setShowDate"
+              />
+            </calendar-view>
+          </div>
+        </div>
+      </b-card>
     </b-container>
+
+    <b-modal 
+      ref = "calendar-modal" 
+      id="modal-scrollable" 
+      centered
+      hide-header
+    >
+      <b-container>
+        <b-row align-h="center">
+          <h1>{{ showTitle }}</h1>
+        </b-row>
+        <hr class="mt-1 mb-4">
+        <b-container class="ml-4">
+
+          <b-row>
+            <h3>시작 날짜</h3>
+          </b-row>
+
+          <b-row class="form-group">
+            <!-- <label for="start-date-input" class="col-md-2 col-form-label form-control-label">시작날짜</label> -->
+            <b-col md="10">
+              <base-input type="date" v-model="newItemStartDate" id="start-date-input"/>
+            </b-col>
+          </b-row>
+
+          <b-row>
+            <h3>종료 날짜</h3>
+          </b-row>
+
+          <b-row class="form-group">
+            <!-- <label for="start-date-input" class="col-md-2 col-form-label form-control-label">시작날짜</label> -->
+            <b-col md="10">
+              <base-input type="date" v-model="newItemEndDate" id="end-date-input"/>
+            </b-col>
+          </b-row>
+
+          <b-row>
+            <h3>메모</h3>
+          </b-row>
+          <b-row 
+            style="background-color: rgba(255, 215, 0, 0.3);" 
+            class="mr-5 rounded"
+            v-show="items.memo"
+          >
+            <p>{{ items.memo }}</p>
+          </b-row>
+        </b-container>
+      </b-container>
+      <template #modal-footer="{}">
+        <!-- Emulate built in modal footer ok and cancel button actions -->
+        <b-button
+          size="lm"
+          variant="traffic-blue"
+          @click="clickUpdateItem"
+        >
+          일정업데이트
+        </b-button>
+        <b-button
+          size="lm"
+          variant="traffic-red"
+          @click="clickDeleteItem"
+        >
+          일정삭제하기
+        </b-button>
+      </template>
+    </b-modal>
   </div>
 </template>
 
@@ -353,11 +356,6 @@ export default {
 </script>
 
 <style>
-.label{
-	margin: 0.5rem;
-	font-size: 1rem;
-}
-
 #calendar {
 	display: flex;
 	flex-direction: row;

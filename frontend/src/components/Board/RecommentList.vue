@@ -20,7 +20,7 @@
           {{ recomment.content }}
         </p>
       </b-col>
-      <b-col align-h="end" class="my-2">
+      <!-- <b-col align-h="end" class="my-2">
         <i
           class="far fa-thumbs-up fa-2x ml-3 text-peach-quartz"
           v-if="!like"
@@ -33,7 +33,7 @@
           @click="cancelLike"
           ><span class="h3 ml-1">{{ recomment.likeCnt }}</span></i
         >
-      </b-col>
+      </b-col> -->
     </b-row>
     <b-row v-if="isUpdate">
       <base-input class="mx-3">
@@ -81,21 +81,21 @@ export default {
   components: {},
   data() {
     return {
-      like: false,
+      // like: false,
       nickname: "",
       isUpdate: false
     };
   },
   props: ["recomment"],
   methods: {
-    clickLike() {
-      this.like = true;
-      this.recomment.likeCnt++;
-    },
-    cancelLike() {
-      this.like = false;
-      this.recomment.likeCnt--;
-    },
+    // clickLike() {
+    //   this.like = true;
+    //   this.recomment.likeCnt++;
+    // },
+    // cancelLike() {
+    //   this.like = false;
+    //   this.recomment.likeCnt--;
+    // },
     deleteRecomment() {
       axios
         .delete(

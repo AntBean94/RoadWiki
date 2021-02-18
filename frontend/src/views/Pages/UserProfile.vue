@@ -11,7 +11,7 @@
               {{ nickname }}
             </h1>
           </b-row>
-          <br>
+          <br />
           <b-row>
             <!-- 한줄 소개 들어갈 부분 -->
             <h4 class="text-monument mt-0 mb-3">
@@ -22,31 +22,28 @@
           <b-row align-v="center">
             <div>
               <i class="fas fa-home"></i>
-              <b-link
-                :href="address"
-                class="text-classic-blue opacity-8"
-              >
+              <b-link :href="address" class="text-classic-blue opacity-8">
                 {{ address }}
               </b-link>
             </div>
           </b-row>
-          <br>
+          <br />
           <b-row>
             <!-- v-if 해서 uid랑 해당 계정의 id가 같을 때만 수정하기 버튼 활성화 -->
             <router-link
               :to="{ name: 'profile-update' }"
-              class="btn btn-cornhusk opacity-8"
+              class="btn btn-classic-blue opacity-8"
               v-if="!isSearch"
               >수정하기</router-link
             >
             <b-button
-              variant="classic-blue"
+              variant="traffic-blue"
               v-show="isSearch && !isFollow"
               @click="sendFollowing"
               >팔로우 하기</b-button
             >
             <b-button
-              variant="danger"
+              variant="traffic-red"
               v-show="isSearch && isFollow"
               @click="sendUnfollowing"
               >팔로우 취소</b-button
@@ -54,17 +51,16 @@
           </b-row>
         </b-container>
       </b-container>
-    <!-- </div> -->
+      <!-- </div> -->
     </base-header>
 
-
     <b-container fluid class="mt--6">
-      <b-card no-body class="card-profile" alt="Image placeholder" img-top>
+      <b-card no-body class="card-profile mx-5" alt="Image placeholder" img-top>
         <b-row class="justify-content-center">
           <b-col lg="3" class="order-lg-2">
             <div class="card-profile-image">
               <a href="#">
-                <b-img src="img/theme/team-4.jpg" rounded="circle" />
+                <b-img :src="profileUrl" rounded="circle" />
                 <!-- <b-img :src="profileUrl" rounded="circle" /> -->
               </a>
             </div>
@@ -82,26 +78,87 @@
                 class="card-profile-stats d-flex justify-content-center mt-md-5"
               >
                 <div>
-                  <b-button variant="link" v-b-modal.modal-follower class="heading">
-                    {{ followerlist.length }}
+                  <b-button
+                    variant="link"
+                    v-b-modal.modal-follower
+                    class="heading"
+                  >
+                    {{ followerlists.length }}
                   </b-button>
                   <span class="description">follower</span>
-                  <b-modal id="modal-follower" hide-footer>
-                    <ul v-for="(follower, idx) in followerlist" :key="idx">
+
+                  <b-modal 
+                    id="modal-follower" 
+                    hide-footer 
+                    centered
+                    title="팔로우를 하는 사람"
+                  >
+                    <div v-for="(follower, idx) in followerlists" :key="idx" class="ml-4">
+                      <br v-if="idx !== 0">
+                      <b-row align-h="start" align-v="center">
+                        <b-col class="px-0" cols="2">
+                          <b-img
+                            :src="follower.pathUrl"
+                            height="60px"
+                            width="60px"
+                            rounded="circle"
+                          >  
+                          </b-img>
+                        </b-col>
+                        <b-col>
+                          <b-row>
+                            <router-link :to="{name: '프로필', query: {profileId: follower.uid}}" class="h2">{{ following.name }}</router-link>
+                          </b-row>
+                          <b-row>
+                            <h3>{{ following.oneline }}</h3>
+                          </b-row>
+                        </b-col>
+                      </b-row>
                       <!-- following 유저 정보 넘겨주기 -->
-                      {{follower}}
-                    </ul>
+                      <!-- {{ follower }} -->
+                    </div>
                   </b-modal>
                 </div>
                 <div>
-                  <b-button variant="link" v-b-modal.modal-following class="heading">
-                    {{ followinglist.length }}
+                  <b-button
+                    variant="link"
+                    v-b-modal.modal-following
+                    class="heading"
+                  >
+                    {{ followinglists.length }}
                   </b-button>
                   <span class="description">following</span>
-                  <b-modal id="modal-following" hide-footer>
-                    <ul v-for="(following, idx) in followinglist" :key="idx">
-                      {{ following }}
-                    </ul>
+
+                  <b-modal 
+                    id="modal-following" 
+                    hide-footer 
+                    centered
+                    title="팔로우 하는 사람"
+                  >
+                    <div v-for="(following, idx) in followinglists" :key="idx" class="ml-4">
+                      <!-- <hr v-if="idx !== 0"> -->
+                      <br v-if="idx !== 0">
+                      <b-row align-h="start" align-v="center">
+                        <b-col class="px-0" cols="2">
+                          <b-img 
+                            :src="following.pathUrl" 
+                            height="60px" 
+                            width="60px" 
+                            rounded="circle"
+                          >
+                          </b-img>
+                        </b-col>
+                        <b-col>
+                          <b-row>
+                            <router-link :to="{name: '프로필', query: {profileId: following.uid}}" class="h2">{{ following.name }}</router-link>
+                          </b-row>
+                          <b-row>
+                            <h3>{{ following.oneline }}</h3>
+                          </b-row>
+                        </b-col>
+                        <!-- {{ following }} -->
+                      </b-row>
+                    </div>
                   </b-modal>
                 </div>
                 <!-- <div>
@@ -122,19 +179,20 @@
               {{ nickname }}
             </h1> -->
 
-            <div class="mb-2 h5">
+            <!-- <div class="mb-2 h5">
               <i class="ni ni-hat-3 mr-2"></i> {{ major }}
-            </div>
+            </div> -->
             <div class="h3 font-weight-300">
-              <b-badge
-                variant="warning"
-                class="mx-1"
+              <b-button
+                variant="peach-quartz"
+                class="mx-2"
                 v-for="(keywordtext, idx) in keywordtexts"
                 :key="idx"
+                pill
               >
                 {{ keywordtext }}
                 <!-- 네 너가 다시 수정하세요 -->
-              </b-badge>
+              </b-button>
             </div>
             <hr class="my-4 mx-9" />
             <b-container>
@@ -142,17 +200,15 @@
                 <!-- <i class="ni ni-palette mr-2"></i> -->
                 {{ nickname }}님의 로드맵 ({{ roadmaps.length }})
               </b-row>
-              <b-row
-                v-for="(roadmap, idx) in roadmaps"
-                :key="idx"
-                class="justify-content-center"
-              >
-                <b-link href="" class="opacity-8">
-                  {{ roadmap.name }}
-                </b-link>
-              </b-row>
+              <RoadmapList
+                class="row m-0 px-0"
+                id="roadmaplist"
+                v-if="roadmaps"
+                :rmlist="roadmaps"
+                :unlist="usernameList"
+              />
             </b-container>
-            <hr class="my-4" />
+            <hr class="my-4 mx-9" />
             <b-container>
               <b-row class="h3 justify-content-center">
                 <!-- <i class="ni ni-palette mr-2"></i> -->
@@ -163,15 +219,16 @@
                 :key="idx"
                 class="justify-content-center"
               >
-                <b-link href="" class="opacity-8">
+                <router-link
+                  :to="{ name: '게시글', query: { pid: posting.pid } }"
+                >
                   {{ posting.title }}
-                </b-link>
+                </router-link>
               </b-row>
             </b-container>
-            <hr class="my-4" />
+            <hr class="my-4 mx-9" />
             <b-container>
               <b-row class="h3 justify-content-center">
-                <!-- <i class="ni ni-palette mr-2"></i> -->
                 {{ nickname }}님이 좋아요한 게시글 ({{ likepostings.length }})
               </b-row>
               <b-row
@@ -179,15 +236,16 @@
                 :key="idx"
                 class="justify-content-center"
               >
-                <b-link href="" class="opacity-8">
+                <router-link
+                  :to="{ name: '게시글', query: { pid: likeposting.pid } }"
+                >
                   {{ likeposting.title }}
-                </b-link>
+                </router-link>
               </b-row>
             </b-container>
-            <hr class="my-4" />
+            <hr class="my-4 mx-9" />
             <b-container>
               <b-row class="h3 justify-content-center">
-                <!-- <i class="ni ni-palette mr-2"></i> -->
                 {{ nickname }}님이 댓글단 게시글 ({{ commentpostings.length }})
               </b-row>
               <b-row
@@ -195,12 +253,14 @@
                 :key="idx"
                 class="justify-content-center"
               >
-                <b-link href="" class="opacity-8">
+                <router-link
+                  :to="{ name: '게시글', query: { pid: commentposting.pid } }"
+                >
                   {{ commentposting.title }}
-                </b-link>
+                </router-link>
               </b-row>
             </b-container>
-            <hr class="my-4" />
+            <hr class="my-4 mx-9" />
           </div>
         </b-card-body>
       </b-card>
@@ -209,10 +269,12 @@
 </template>
 <script>
 import UserCard from "./UserProfile/UserCard.vue";
+import RoadmapList from "@/components/Roadmap/ShareRoadmap/RoadmapList.vue";
 
 export default {
   components: {
-    UserCard
+    UserCard,
+    RoadmapList
   },
   props: ["youruid"],
   data() {
@@ -223,8 +285,8 @@ export default {
       profileImg: "",
       backImg: "",
       keywordtexts: [],
-      followerlist: [],
-      followinglist: [],
+      followerlists: [],
+      followinglists: [],
       boards: "",
       comments: "",
       major: "",
@@ -235,17 +297,17 @@ export default {
       profileUrl: "",
       profileUid: 0,
       isFollow: false,
-      roadmaps: [],
+      roadmaps: "",
+      usernameList:[],
       postings: [],
       likepostings: [],
       commentpostings: [],
-      commentCnt: 0,
+      commentCnt: 0
     };
   },
   created() {
     // 현재 로그인 된 계정
     this.uid = this.$store.getters.getUid;
-    console.log(this.$store.getters.getUid)
 
     // params로 uid를 받아오지 못했다면 (자기 프로필이니까)
     if (this.$route.query.profileId === undefined) {
@@ -255,10 +317,11 @@ export default {
     }
 
     // 해당 계정의 프로필 사진 가져오는 걸로 해야함
-    axios.get(`${this.$store.getters.getUserServer}/user/image/${this.profileuid}`)
-    .then(res => {
-      this.profileUrl = res.data.path;
-    });
+    axios
+      .get(`${this.$store.getters.getUserServer}/user/image/${this.profileuid}`)
+      .then(res => {
+        this.profileUrl = res.data.path;
+      });
 
     axios
       .get(`${this.$store.getters.getUserServer}/user/info/${this.profileuid}`)
@@ -275,8 +338,6 @@ export default {
         this.address = res.data.address;
         this.major = res.data.major;
         this.oneline = res.data.oneline;
-        console.log('정보들')
-        console.log(res.data)
       })
       .catch(err => {
         alert("로그인이 필요한 서비스입니다.");
@@ -291,7 +352,10 @@ export default {
         `${this.$store.getters.getRoadmapServer}/roadmap/list/${this.profileuid}`
       )
       .then(res => {
+        for(let i = 0 ; i <  res.data.roadmaps.length; i++)
+          this.usernameList.push("");
         this.roadmaps = res.data.roadmaps;
+        
       })
       .catch(err => {});
 
@@ -301,6 +365,7 @@ export default {
         `${this.$store.getters.getBoardServer}/freeboard/list/${this.profileuid}`
       )
       .then(res => {
+        console.log(res);
         this.postings = res.data.postings;
         this.commentCnt = res.data.commentCnt;
       })
@@ -328,30 +393,69 @@ export default {
 
     // 본인 팔로워, 팔로잉 명단 가져오기
     this.getFollowList();
+    this.getSharedRoadmap();
   },
   methods: {
     getFollowList() {
+      //나와 저사람이 팔로우 상태인지 확인
       axios
         .get(
           `${this.$store.getters.getUserServer}/follow/list/${this.profileuid}`
         )
         .then(res => {
-          res.data.followers.forEach(follower => {
-            if (follower.touid == this.profileuid) {
-              this.followerlist.push(follower.fromuid)
-            }
-          })
-          res.data.followings.forEach(following => {
-            if (following.fromuid == this.profileuid) {
-              this.followinglist.push(following.touid)
-            }
-          })
-          if (res.data.isFollow) {
-            this.isFollow = true;
-          } else {
-            this.isFollow = false;
-          }
+          this.isFollow = res.data.isFollow;
         });
+
+      //나의 팔로워 리스트확인
+      axios
+        .get(
+          `${this.$store.getters.getUserServer}/follow/followerlist/${this.profileuid}`
+        )
+        .then(res => {
+          this.followerlists = res.data.followerlists;
+          // 여기 followerlists 안에 uid가있어요 그러면 이친구를 가지구
+          //`${this.$store.getters.getUserServer}/user/image/${followerlists안에있는 uid}`
+          //##################################################
+
+          // res.data.followers.forEach(follower => {
+          //   if (follower.touid == this.profileuid) {
+          //     this.followerlist.push(follower.fromuid);
+          //   }
+          // });
+          // res.data.followings.forEach(following => {
+          //   if (following.fromuid == this.profileuid) {
+          //     this.followinglist.push(following.touid);
+          //   }
+          // });
+          // if (res.data.isFollow) {
+          //   this.isFollow = true;
+          // } else {
+          //   this.isFollow = false;
+          // }
+        });
+
+      //나의 팔로잉잉이이이잉 리스트확인
+      axios
+        .get(
+          `${this.$store.getters.getUserServer}/follow/followinglist/${this.profileuid}`
+        )
+        .then(res => {
+          this.followinglists = res.data.followinglists;
+          this.followinglists.forEach(f => {
+            console.log(f.uid);
+          });
+          for (let sky = 0; sky < this.followinglists.length; sky++) {
+            axios
+              .get(
+                `${this.$store.getters.getUserServer}/user/image/${this.followinglists[sky].uid}`
+              )
+              .then(res => {
+                this.followinglists[sky]["pathUrl"] = res.data.path;
+              });
+          }
+          console.log(this.followinglists);
+        });
+      this.makePeopleList();
     },
     sendFollowing() {
       let follow = {
@@ -377,7 +481,51 @@ export default {
           }
           this.getFollowList();
         });
-    }
+    },
+    makePeopleList() {
+      for (let i = 0; i < this.followerUidList.length; i++) {
+        let uid = this.followerUidList[i];
+        let user = {
+          uid: uid,
+          username: ""
+        };
+        axios
+          .get(`${this.$store.getters.getUserServer}/user/info/${uid}`)
+          .then(res => {
+            user.username = res.data.name;
+          })
+          .catch(err => {
+            console.log(err);
+          })
+          .finally(() => {
+            this.followerList.push(user);
+          });
+      }
+
+      for (let i = 0; i < this.followingUidList.length; i++) {
+        let uid = this.followingUidList[i];
+        let user = {
+          uid: uid,
+          username: ""
+        };
+        axios
+          .get(`${this.$store.getters.getUserServer}/user/info/${uid}`)
+          .then(res => {
+            user.username = res.data.name;
+          })
+          .catch(err => {
+            console.log(err);
+          })
+          .finally(() => {
+            this.followingList.push(user);
+          });
+      }
+    },
+    openDetail(row) {
+      const pid = row.pid;
+      this.$store.dispatch("SETPID", pid);
+      this.$router.push({ name: "게시글", query: { pid } });
+    },
   }
 };
 </script>

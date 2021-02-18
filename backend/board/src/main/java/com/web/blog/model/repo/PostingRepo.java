@@ -28,5 +28,7 @@ public interface PostingRepo {
 	public int delete(int pid) throws SQLException;
 	public int totalCount() throws SQLException;	
 	public Posting[] selectLikeHigh(int cnt);
-
+	public Posting[] postingListUid(int uid);
+	public Posting[] selectList(int uid);
+	public int deleteTags(int pid) throws SQLException;
 }

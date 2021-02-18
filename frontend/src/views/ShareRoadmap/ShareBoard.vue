@@ -1,44 +1,49 @@
 <template>
   <div>
-    <!-- <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue"> </base-header> -->
-    <b-container class="p-1">
-      <b-row align-h="end">
-        <!-- <b-button variant="primary" class="mt-2" @click="detailBoard">detail board</b-button> -->
-        <b-button variant="peach-quartz" class="mt-2 mr-4" @click="createBoard"
-          >새 글 작성</b-button
-        >
-      </b-row>
-    </b-container>
-
-    <b-container class="p-1 mt-2">
-      <b-row align-h="end">
-        <b-form-input form-input
-          class="mr-1"
-          v-model="inputtext"
-          placeholder="검색어를 입력해주세요."
-          style="width: 20%"
-        ></b-form-input>
-        <b-button class="ml-1 fas fa-search mr-4" @click="searchSharedRoadmap" variant="peach-quartz"></b-button>
-      </b-row>
-    </b-container>
+    <base-header class="pb-3 pt-5 pt-md-8 bg-baby-blue"> 
+      <b-container class="pl-5 pr-2">
+        <b-row align-h="around">
+          <b-col cols="10">
+            <b-form-input form-input
+              v-model="inputtext"
+              placeholder="검색어를 입력해주세요."
+              size="lg"
+            ></b-form-input>
+          </b-col>
+          <b-col cols="1">
+            <b-button size="lg" class="fas fa-search px-5" @click="searchSharedRoadmap" variant="peach-quartz"></b-button>
+          </b-col>
+          <b-col cols="1"></b-col>
+        </b-row>
+      </b-container>
     
-    <div style="width: 70%; margin-left: auto; margin-right: auto;">
+      <b-container class="pt-6">
+        <b-row align-h="end">
+          <!-- <b-button variant="primary" class="mt-2" @click="detailBoard">detail board</b-button> -->
+          <b-button variant="classic-blue" class="mt-2 mr-5" @click="createBoard"
+            >새 글 작성</b-button
+          >
+        </b-row>
+      </b-container>
 
+    
+    </base-header>
+    <b-container>
       <RoadmapList
-        class="row"
+        class="row m-0 px-0"
         id="roadmaplist"
         v-if="shareList"
         :rmlist="viewShareList"
         :unlist="usernameList"
       />
-    </div>
-    <b-pagination
-      v-model="currentPage"
-      :per-page="10"
-      :total-rows="totalPageNum"
-      aria-controls="mhtable"
-      align="center"
-    ></b-pagination>
+      <b-pagination
+        v-model="currentPage"
+        :per-page="10"
+        :total-rows="totalPageNum"
+        aria-controls="mhtable"
+        align="center"
+      ></b-pagination>
+    </b-container>
   </div>
 </template>
 

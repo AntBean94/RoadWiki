@@ -40,10 +40,27 @@
       <!-- 나누기 -->
       <b-navbar-nav class="align-items-center ml-auto ml-md-0">
         <div v-if="isSearch" class="row" id="menu">
+          <div v-if="isHoverM">
+            <i
+              @mouseover="checkHoverM"
+              class="btn ni ni-map-big text-black nav-btn"
+            ></i>
+          </div>
+          <div v-else>
+            <h1
+              @mouseleave="checkHoverM"
+              @click="goToMyRoadmap(url)"
+              class="btn m-0 p-1 nav-btn"
+              style="font-size: 10px"
+            >
+              Roadmap
+            </h1>
+          </div>
+
           <div v-if="isHoverO">
             <i
               @mouseover="checkHoverO"
-              class="btn ni ni-tv-2 text-black nav-btn"
+              class="btn ni ni-paper-diploma text-black nav-btn"
             ></i>
           </div>
           <div v-else>
@@ -120,8 +137,9 @@
                 <b-form-input
                   placeholder="Search"
                   type="text"
+                  class="text-default"
                   v-model="searchQuery"
-                  @keydown.enter="clickSearch"
+                  @keydown.enter.prevent="clickSearch"
                 >
                 </b-form-input>
 
@@ -215,14 +233,14 @@
       <content-footer v-if="!$route.meta.hideFooter"></content-footer>
     </div>
     <div>
-      <chatting-bg v-on:remove="removeChatting" v-if="chattingOn" />
+      <chatting v-on:remove="removeChatting" v-if="chattingOn" />
       <b-button
         id="chat"
         @click="createChatting"
         pill
         v-else
         size="lg"
-        class="px-5"
+        class="px-3"
       >
         <!-- chatting -->
         <i class="far fa-comment-dots fa-2x"></i>
@@ -235,7 +253,7 @@ import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import LoginContent from "@/components/Login/LoginContent.vue";
 import LogoutContent from "@/components/Logout/LogoutContent.vue";
-import ChattingBg from "@/components/Chatting/ChattingBg";
+import Chatting from "@/components/Chatting/Chatting";
 
 function hasElement(className) {
   return document.getElementsByClassName(className).length > 0;
@@ -269,7 +287,7 @@ export default {
     FadeTransition,
     LoginContent,
     LogoutContent,
-    ChattingBg
+    Chatting
   },
   props: {
     type: {
@@ -290,15 +308,12 @@ export default {
       profileUrl: "",
       chattingOn: false,
       urlNow: "",
+      isHoverM: true,
       isHoverO: true,
       isHoverB: true,
       isHoverS: true,
       isHoverC: true,
       isSearch: true,
-      locR: true,
-      locO: true,
-      locB: true,
-      locS: true,
       url: ""
     };
   },
@@ -375,8 +390,13 @@ export default {
         });
     },
     goToMain(url) {
+      if (url != "MAINPAGE") {
+        this.$router.push({ name: "MAINPAGE" });
+      }
+    },
+    goToMyRoadmap(url) {
       if (url != "나의 로드맵") {
-        this.$router.push({ name: "mainpage" });
+        this.$router.push({ name: "나의 로드맵" });
       }
     },
     clickSearch() {
@@ -384,6 +404,13 @@ export default {
         name: "검색결과",
         query: { searchKeyword: `${this.searchQuery}` }
       });
+    },
+    checkHoverM() {
+      if (this.isHoverM) {
+        this.isHoverM = false;
+      } else {
+        this.isHoverM = true;
+      }
     },
     checkHoverO() {
       if (this.isHoverO) {

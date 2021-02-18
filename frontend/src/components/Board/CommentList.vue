@@ -20,7 +20,7 @@
           {{ comment.content }}
         </p>
       </b-col>
-      <b-col align-h="end" class="my-2">
+      <!-- <b-col align-h="end" class="my-2">
         <i
           class="far fa-thumbs-up fa-2x ml-3 text-peach-quartz"
           v-if="!like"
@@ -33,7 +33,7 @@
           @click="cancelLike"
           ><span class="h3 ml-1">{{ comment.likeCnt }}</span></i
         >
-      </b-col>
+      </b-col> -->
     </b-row>
     <b-row v-if="isUpdate">
       <base-input class="mx-3">
@@ -107,7 +107,7 @@ export default {
       like: false,
       uid: "",
       nickname: "",
-      likeCnt: "",
+      // likeCnt: "",
       isUpdate: false
     };
   },
@@ -132,14 +132,14 @@ export default {
         this.recomment = true;
       }
     },
-    clickLike() {
-      this.like = true;
-      this.comment.likeCnt++;
-    },
-    cancelLike() {
-      this.like = false;
-      this.comment.likeCnt--;
-    },
+    // clickLike() {
+    //   this.like = true;
+    //   this.comment.likeCnt++;
+    // },
+    // cancelLike() {
+    //   this.like = false;
+    //   this.comment.likeCnt--;
+    // },
     sendRecomment() {
       this.$emit("sendRecomment");
     },
