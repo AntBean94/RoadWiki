@@ -20,7 +20,6 @@ const routes = [
     path: '/',
     redirect: 'mainpage',
     component: DashboardNavbar,
-
     children: [
       
       {
@@ -156,7 +155,7 @@ const routes = [
       },
       {
         path: '/mainpage',
-        name: "",
+        name: "MAINPAGE",
         component: () => import('../views/Mainpage/Mainpage.vue'),
       },
     ]
