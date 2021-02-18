@@ -19,10 +19,10 @@
               :button-variant="btnColors[term-1]"
               class="mr-2"
             ></b-form-radio-group>
-          <!-- 사용법 modal창 아이콘 -->
           </b-form-group>
+          <!-- 사용법 modal창 아이콘 -->
           <i 
-            class="far fa-question-circle fa-2x"
+            class="far fa-question-circle fa-2x mt-3"
             @click="showInfo"
             id="tooltip-info"
           ></i>

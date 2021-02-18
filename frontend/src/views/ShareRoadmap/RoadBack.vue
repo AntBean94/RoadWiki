@@ -1,6 +1,6 @@
 <template>
   <div>
-    <base-header class="pb-10 pt-5 pt-md-2 bg-gradient-default">
+    <base-header class="pb-10 pt-5 pt-md-2 bg-baby-blue">
       <button
         @click="goToBack"
         class="btn"

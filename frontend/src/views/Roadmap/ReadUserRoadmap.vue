@@ -210,7 +210,8 @@ export default {
 
 <style>
 #carouselCard:hover {
-  box-shadow: 4px 3px 5px rgba(56, 54, 54, 0.5);
+  box-shadow: 4px 3px 7px rgba(56, 54, 54, 0.5);
+  transition: 0.5s;
 }
 /* .roadmap {
   width: 175px;

@@ -3,26 +3,27 @@
     <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue">
     </base-header>
 
-    <div class="p-4 bg-apple-bg">
-      <b-input
-        placeholder="제목"
-        class="form-control-alternative"
-        v-model="title"
-      />
-    </div>
+    <b-container>
+      <div class="p-4 bg-apple-bg">
+        <b-input
+          placeholder="제목"
+          class="form-control-alternative"
+          v-model="title"
+        />
+      </div>
 
-    <div>
-      <editor
-        ref="toastuiEditor"
-        :options="editorOptions"
-        height="500px"
-        initialEditType="wysiwyg"
-        previewStyle="vertical"
-        class="mx-4"
-        v-model="editorText"
-        placeholder="내용을 입력해주세요"
-      />
-    </div>
+      <div>
+        <editor
+          ref="toastuiEditor"
+          :options="editorOptions"
+          height="500px"
+          initialEditType="wysiwyg"
+          previewStyle="vertical"
+          class="mx-4"
+          v-model="editorText"
+          placeholder="내용을 입력해주세요"
+        />
+      </div>
 
     <b-container class="mt-3">
       <b-row class="mx-2">
@@ -49,9 +50,10 @@
       />
     </div>
 
-    <b-button @click="datachange" class="mt-3 mx-4" variant="default">
-      저장
-    </b-button>
+      <b-button @click="datachange" class="mt-3 mx-4" variant="default">
+        저장
+      </b-button>
+    </b-container>
   </div>
 </template>
 
