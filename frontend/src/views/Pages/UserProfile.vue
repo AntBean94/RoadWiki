@@ -156,9 +156,11 @@
                 :key="idx"
                 class="justify-content-center"
               >
-                <b-link href="" class="opacity-8">
+                <router-link
+                  :to="{ name: '나의 로드맵', query: { pid: roadmap.pid } }"
+                >
                   {{ roadmap.name }}
-                </b-link>
+                </router-link>
               </b-row>
             </b-container>
             <hr class="my-4 mx-9" />
@@ -172,9 +174,11 @@
                 :key="idx"
                 class="justify-content-center"
               >
-                <b-link href="" class="opacity-8">
+                <router-link
+                  :to="{ name: '게시글', query: { pid: posting.pid } }"
+                >
                   {{ posting.title }}
-                </b-link>
+                </router-link>
               </b-row>
             </b-container>
             <hr class="my-4 mx-9" />
@@ -187,9 +191,11 @@
                 :key="idx"
                 class="justify-content-center"
               >
-                <b-link href="" class="opacity-8">
+                <router-link
+                  :to="{ name: '게시글', query: { pid: likeposting.pid } }"
+                >
                   {{ likeposting.title }}
-                </b-link>
+                </router-link>
               </b-row>
             </b-container>
             <hr class="my-4 mx-9" />
@@ -202,9 +208,11 @@
                 :key="idx"
                 class="justify-content-center"
               >
-                <b-link href="" class="opacity-8">
+                <router-link
+                  :to="{ name: '게시글', query: { pid: commentposting.pid } }"
+                >
                   {{ commentposting.title }}
-                </b-link>
+                </router-link>
               </b-row>
             </b-container>
             <hr class="my-4 mx-9" />
@@ -381,7 +389,6 @@ export default {
         )
         .then(res => {
           this.followinglists = res.data.followinglists;
-          console.log(this.followinglists);
         });
       this.makePeopleList();
     },
@@ -436,12 +443,9 @@ export default {
           uid: uid,
           username: ""
         };
-        console.log("uid");
-        console.log(uid);
         axios
           .get(`${this.$store.getters.getUserServer}/user/info/${uid}`)
           .then(res => {
-            console.log(res);
             user.username = res.data.name;
           })
           .catch(err => {
@@ -451,9 +455,11 @@ export default {
             this.followingList.push(user);
           });
       }
-      console.log("#######");
-      console.log(this.followerList);
-      console.log(this.followingList);
+    },
+    openDetail(row) {
+      const pid = row.pid;
+      this.$store.dispatch("SETPID", pid);
+      this.$router.push({ name: "게시글", query: { pid } });
     }
   }
 };
