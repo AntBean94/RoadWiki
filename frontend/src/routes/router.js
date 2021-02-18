@@ -30,11 +30,11 @@ router.beforeEach((to, from, next) => {
       store.commit('LOADUSERTOKEN');
   if (to.name === 'intro') {
     if (store.getters.getAccessToken !== null)
-    next({ name: '나의 로드맵' })
+    next({ name: 'MAINPAGE' })
   }
   else if (to.name !== 'main' && to.name !== 'register' && to.name !== '게시판' && to.name !== '비밀번호찾기' && to.name !== '비밀번호재설정') { 
     if (store.getters.getAccessToken === null) { 
-      next({name:'intro'})
+      next({ name: 'intro' })
       alert('로그인이 필요한 서비스입니다.')
     }
   }

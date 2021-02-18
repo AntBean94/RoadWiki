@@ -38,7 +38,7 @@
       <hr>
 
 
-      <b-card-text v-if="roadmapMode && !isRoadback">
+      <b-card-text v-if="roadmapMode && i">
         <base-input label="시작날짜-종료날짜">
           <flat-pickr
             slot-scope="{ focus, blur }"
@@ -53,7 +53,7 @@
         </base-input>
       </b-card-text>
 
-      <b-card-text v-else-if="dates && !isRoadback">
+      <b-card-text v-else-if="dates">
         <h3>시작날짜-종료날짜</h3>
         <p>{{ dates }}</p>
       <hr />

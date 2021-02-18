@@ -14,59 +14,56 @@
         @sliding-start="onSlideStart"
         @sliding-end="onSlideEnd"
       >
-        <!-- Text slides with image -->
-        <b-carousel-slide
-          caption="First slide"
-          text="Nulla vitae elit libero, a pharetra augue mollis interdum."
-          img-src="https://picsum.photos/1024/480/?image=52"
-        ></b-carousel-slide>
+        <!-- 인기 로드맵 -->
+        <b-carousel-slide>
+          <template #img>
+            <div style="background-color: black">
 
-        <!-- Slides with custom text -->
-        <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=54">
-          <h1 style="color: white;">Hello world!</h1>
+
+            <img
+              class="d-block img-fluid w-100"
+              width="1024"
+              height="480"
+              src="https://picsum.photos/1024/480/?image=183"
+              alt="image slot"
+            >
+            </div>
+          </template>
+          <h1 style="color: white;">Highly mentioned Roadmap</h1>
         </b-carousel-slide>
 
-        <!-- Slides with image only -->
-        <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=58"></b-carousel-slide>
-
-        <!-- Slides with img slot -->
-        <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
+        <!-- 인기 게시글 -->
         <b-carousel-slide>
           <template #img>
             <img
               class="d-block img-fluid w-100"
               width="1024"
               height="480"
-              src="https://picsum.photos/1024/480/?image=55"
+              src="https://picsum.photos/1024/480/?image=186"
               alt="image slot"
             >
           </template>
+          <h1 style="color: white;">Popular post</h1>
         </b-carousel-slide>
 
-        <!-- Slide with blank fluid image to maintain slide aspect ratio -->
-        <b-carousel-slide caption="Blank Image" img-blank img-alt="Blank image">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eros felis, tincidunt
-            a tincidunt eget, convallis vel est. Ut pellentesque ut lacus vel interdum.
-          </p>
+        <!-- 오피셜 로드맵(싸피, 개발자) -->
+        <b-carousel-slide v-for="(roadmap, idx) in roadmapshares" :key="idx">
+          <template #img>
+            <img
+              class="d-block img-fluid w-100"
+              width="1024"
+              height="480"
+              :src=pictureList[idx]
+              alt="image slot"
+            >
+          </template>
+          <h1 style="color: white;">{{ roadmap.title }}</h1>
         </b-carousel-slide>
       </b-carousel>
 
     </b-container>
 
 
-
-
-    <div>
-      <li v-for="(roadmapshare, idx) in roadmapshares" :key="idx">
-        {{ roadmapshare.title }}
-      </li>
-    </div>
-    <div>
-      <li v-for="(posting, idx) in postings" :key="idx">
-        {{ positng.title }}
-      </li>
-    </div>
   </div>
 </template>
 <script>
@@ -77,6 +74,13 @@ export default {
       postings: [],
       slide: 0,
       sliding: null,
+      pictureList: [
+        "https://picsum.photos/1024/480/?image=183",
+        "https://picsum.photos/1024/480/?image=186",
+        "https://picsum.photos/1024/480/?image=223",
+        "https://picsum.photos/1024/480/?image=244",
+        "https://picsum.photos/1024/480/?image=349",
+      ],
     };
   },
   methods: {
@@ -91,6 +95,7 @@ export default {
         .get(`${this.$store.getters.getRoadmapServer}/roadmapshare/main`)
         .then(res => {
           console.log(res);
+          this.roadmapshares = res.data["roadmapshares"]
         })
         .catch(res => {
           console.log(res);
@@ -101,6 +106,7 @@ export default {
         .get(`${this.$store.getters.getBoardServer}/freeboard/main`)
         .then(res => {
           console.log(res);
+          this.postings = res.data["postings"]
         })
         .catch(res => {
           console.log(res);

@@ -84,7 +84,7 @@ public class RoadmapServiceImpl implements RoadmapService {
 			if (nowuid != uid)
 				throw new RuntimeException("wrong user");
 
-			if (roadmaprepo.delete(rmorder, uid) != 1)
+			if (roadmaprepo.delete(rmorder, uid) == 0)
 				throw new RuntimeException("Query wrong");
 
 		} catch (Exception e) {
