@@ -6,19 +6,19 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 // 서버
-const SERVER_URL = [
-  process.env.VUE_APP_SERVER_URL,
-  process.env.VUE_APP_SERVER_URL,
-  process.env.VUE_APP_SERVER_URL,
-  process.env.VUE_APP_SERVER_URL,
-]
-// 로컬
 // const SERVER_URL = [
-//   process.env.VUE_APP_SERVER_URL_BOARD,
-//   process.env.VUE_APP_SERVER_URL_CHATTING,
-//   process.env.VUE_APP_SERVER_URL_ROADMAP,
-//   process.env.VUE_APP_SERVER_URL_USER,
+//   process.env.VUE_APP_SERVER_URL,
+//   process.env.VUE_APP_SERVER_URL,
+//   process.env.VUE_APP_SERVER_URL,
+//   process.env.VUE_APP_SERVER_URL,
 // ]
+// 로컬
+const SERVER_URL = [
+  process.env.VUE_APP_SERVER_URL_BOARD,
+  process.env.VUE_APP_SERVER_URL_CHATTING,
+  process.env.VUE_APP_SERVER_URL_ROADMAP,
+  process.env.VUE_APP_SERVER_URL_USER,
+]
 
 export default new Vuex.Store({
   state: {
