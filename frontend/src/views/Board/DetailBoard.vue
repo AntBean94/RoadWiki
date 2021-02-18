@@ -281,7 +281,6 @@ export default {
                 axios.delete(
                   `${this.$store.getters.getBoardServer}/freeboard/postinglikecancel/${this.$route.query.pid}`
                 );
-                this.likeCnt--;
               }
             });
         });

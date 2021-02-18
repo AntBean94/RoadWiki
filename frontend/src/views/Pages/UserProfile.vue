@@ -381,6 +381,16 @@ export default {
         )
         .then(res => {
           this.followinglists = res.data.followinglists;
+          this.followinglists.forEach(f => {
+            console.log(f.uid)
+          })
+          for (let sky=0; sky < this.followinglists.length; sky++) {
+            axios
+            .get(`${this.$store.getters.getUserServer}/user/image/${this.followinglists[sky].uid}`)
+            .then(res => {
+              this.followinglists[sky]["pathUrl"] = res.data.path;
+            });
+          }
           console.log(this.followinglists);
         });
       this.makePeopleList();
