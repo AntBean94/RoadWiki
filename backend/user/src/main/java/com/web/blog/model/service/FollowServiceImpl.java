@@ -46,8 +46,9 @@ public class FollowServiceImpl implements FollowService {
 		try {
 			Follow[] followerList = followRepo.selectFollowers(touid);
 			User[] users = new User[followerList.length];
+			
 			for (int i = 0; i < followerList.length; i++) {
-				int uid = followerList[i].getTouid();
+				int uid = followerList[i].getFromuid();
 				User[] u = followRepo.selectFollowerUid(uid);
 				users[i] = u[0];
 			}
@@ -64,8 +65,9 @@ public class FollowServiceImpl implements FollowService {
 		try {
 			Follow[] followerList = followRepo.selectFollowings(fromuid);
 			User[] users = new User[followerList.length];
+
 			for (int i = 0; i < followerList.length; i++) {
-				int uid = followerList[i].getFromuid();
+				int uid = followerList[i].getTouid();
 				User[] u = followRepo.selectFollowerUid(uid);
 				users[i] = u[0];
 			}
