@@ -30,7 +30,6 @@ export default {
         "undoManager.isEnabled": true,
         isReadOnly: true,
         allowSelect: false,
-        
       });
 
     // 로드맵 모델 설정
@@ -153,21 +152,46 @@ export default {
       )
     );
 
-    // 종료 모델
-    myDiagram.nodeTemplateMap.add("End",
-      $(go.Node, "Table", this.nodeStyle(),
-        $(go.Panel, "Spot",
-          $(go.Shape, "Circle", {
-            desiredSize: new go.Size(60, 60),
-            fill: "#ffffff",
-            stroke: "#8D2040",
-            strokeWidth: 3.5
-          }),
-          $(go.TextBlock, "End", this.textStyle(), new go.Binding("text"))
+    // custom 모델
+    myDiagram.nodeTemplateMap.add(
+      "Custom",
+      $(
+        go.Node,
+        "Table",
+        this.nodeStyle(),
+        // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
+        $(
+          go.Panel,
+          "Auto",
+          $(
+            go.Shape,
+            "RoundedRectangle",
+            {
+              fill: "rgb(255, 255, 255)",
+              stroke: "rgb(234, 218, 79)",
+              strokeWidth: 2.5,
+              strokeJoin: "round",
+              strokeCap: "square",
+            },
+            new go.Binding("figure", "figure")
+          ),
+          $(
+            
+            go.TextBlock,
+            this.textStyle(),
+            {
+              margin: 8,
+              maxSize: new go.Size(160, NaN),
+              wrap: go.TextBlock.WrapFit,
+            },
+            new go.Binding("text").makeTwoWay()
+          ),
         ),
-        this.makePort("T", go.Spot.Top, go.Spot.Top, false, true),
-        this.makePort("L", go.Spot.Left, go.Spot.Left, false, true),
-        this.makePort("R", go.Spot.Right, go.Spot.Right, false, true)
+        // four named ports, one on each side: node의 가지 옵션
+        this.makePort("T", go.Spot.Top, go.Spot.TopSide, false, true),
+        this.makePort("L", go.Spot.Left, go.Spot.LeftSide, true, true),
+        this.makePort("R", go.Spot.Right, go.Spot.RightSide, true, true),
+        this.makePort("B", go.Spot.Bottom, go.Spot.BottomSide, true, false)
       )
     );
 

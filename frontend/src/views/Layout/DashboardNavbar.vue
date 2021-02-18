@@ -7,12 +7,11 @@
       :class="{ 'navbar-dark': type === 'default' }"
       v-if="isHeader"
     >
-
       <a
-        @click="goToMain"
+        @click="goToMain(url)"
         class="h1 mb-0 mr-2 text-black text-uppercase d-none d-lg-inline-block active router-link-active"
       >
-        <img src="/img/brand/logo_word.png" alt="roadwiki" width="200rem;">
+        <img src="/img/brand/logo_word.png" alt="roadwiki" width="200rem;" />
       </a>
 
       <a
@@ -38,49 +37,71 @@
         </li>
       </b-navbar-nav>
 
-
       <!-- 나누기 -->
       <b-navbar-nav class="align-items-center ml-auto ml-md-0">
-
         <div v-if="isSearch" class="row" id="menu">
           <div v-if="isHoverO">
-            <i @mouseover="checkHoverO" class="btn ni ni-tv-2 text-black"></i>
+            <i
+              @mouseover="checkHoverO"
+              class="btn ni ni-tv-2 text-black nav-btn"
+            ></i>
           </div>
           <div v-else>
-            <h1 @mouseleave="checkHoverO" @click="goToOfficial" class="btn m-0 p-1">
+            <h1
+              @mouseleave="checkHoverO"
+              @click="goToOfficial(url)"
+              class="btn m-0 p-1 nav-btn"
+            >
               Official
             </h1>
           </div>
 
           <div v-if="isHoverB">
-            <i @mouseover="checkHoverB" class="btn ni ni-bullet-list-67 text-red"></i>
+            <i
+              @mouseover="checkHoverB"
+              class="btn ni ni-bullet-list-67 text-black nav-btn"
+            ></i>
           </div>
           <div v-else>
-            <h1 @mouseleave="checkHoverB" @click="goToBoard" class="btn m-0 p-1">
+            <h1
+              @mouseleave="checkHoverB"
+              @click="goToBoard(url)"
+              class="btn m-0 p-1 nav-btn"
+            >
               Board
             </h1>
           </div>
 
           <div v-if="isHoverS">
-            <i @mouseover="checkHoverS" class="btn ni ni-bullet-list-67 text-black"></i>
+            <i
+              @mouseover="checkHoverS"
+              class="btn fas fa-share-alt nav-btn"
+            ></i>
           </div>
           <div v-else>
-            <h1 @mouseleave="checkHoverS" @click="goToShare" class="btn m-0 p-1">
+            <h1
+              @mouseleave="checkHoverS"
+              @click="goToShare(url)"
+              class="btn m-0 p-1 nav-btn"
+            >
               Share
             </h1>
           </div>
 
           <div v-if="isHoverC">
-            <i @mouseover="checkHoverC" class="btn ni ni-bullet-list-67 text-black"></i>
+            <i class="btn far fa-comments nav-btn" @mouseover="checkHoverC">
+            </i>
           </div>
           <div v-else>
-            <h1 @mouseleave="checkHoverC" @click="goToChat" class="btn m-0 p-1">
+            <h1
+              @mouseleave="checkHoverC"
+              @click="goToChat(url)"
+              class="btn m-0 p-1 nav-btn"
+            >
               Chat
             </h1>
           </div>
-
         </div>
-
 
         <div v-else>
           <b-form
@@ -92,19 +113,20 @@
             id="navbar-search-main"
           >
             <b-form-group class="mb-0">
-              <b-input-group class="input-group-alternative input-group-merge" id="searchBlock">
+              <b-input-group
+                class="input-group-alternative input-group-merge"
+                id="searchBlock"
+              >
                 <b-form-input
-                  placeholder="Search" 
+                  placeholder="Search"
                   type="text"
                   v-model="searchQuery"
-                  @keydown.enter="clickSearch"
-                > 
+                  @keydown.enter.prevent="clickSearch"
+                >
                 </b-form-input>
 
                 <div class="input-group-append">
-                  <span class="input-group-text" 
-                    @click="clickSearch"
-                  >
+                  <span class="input-group-text" @click="clickSearch">
                     <i class="fas fa-search"></i>
                   </span>
                 </div>
@@ -125,14 +147,19 @@
           title-tag="a"
           title-classes="nav-link pr-0"
         >
-          <a href="#" class="nav-link pr-0" @click.prevent slot="title-container">
+          <a
+            href="#"
+            class="nav-link pr-0"
+            @click.prevent
+            slot="title-container"
+          >
             <b-media no-body class="align-items-center">
               <span class="avatar avatar-sm rounded-circle">
-                <b-img
+                <b-avatar
                   alt="Image placeholder"
                   :src="profileUrl"
                   v-model="profileUrl"
-                />
+                ></b-avatar>
               </span>
               <b-media-body class="ml-2 d-none d-lg-block">
                 <!-- <span class="mb-0 text-sm  font-weight-bold">John Snow</span> -->
@@ -171,11 +198,9 @@
           </template>
         </base-dropdown>
       </b-navbar-nav>
-
-
     </base-nav>
 
-<!-- 여기까지가 nav 입니다. -->
+    <!-- 여기까지가 nav 입니다. -->
 
     <div class="main-content">
       <!-- <dashboard-navbar :type="$route.meta.navbarType"></dashboard-navbar> -->
@@ -190,8 +215,18 @@
       <content-footer v-if="!$route.meta.hideFooter"></content-footer>
     </div>
     <div>
-      <Chatting v-on:remove="removeChatting" v-if="chattingOn" />
-      <button id="chat" class="btn" @click="createChatting" v-else>chatting</button>
+      <chatting-bg v-on:remove="removeChatting" v-if="chattingOn" />
+      <b-button
+        id="chat"
+        @click="createChatting"
+        pill
+        v-else
+        size="lg"
+        class="px-5"
+      >
+        <!-- chatting -->
+        <i class="far fa-comment-dots fa-2x"></i>
+      </b-button>
     </div>
   </div>
 </template>
@@ -200,6 +235,7 @@ import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import LoginContent from "@/components/Login/LoginContent.vue";
 import LogoutContent from "@/components/Logout/LogoutContent.vue";
+import ChattingBg from "@/components/Chatting/ChattingBg";
 
 function hasElement(className) {
   return document.getElementsByClassName(className).length > 0;
@@ -220,9 +256,6 @@ import ContentFooter from "./ContentFooter.vue";
 import DashboardContent from "./Content.vue";
 import { FadeTransition } from "vue2-transitions";
 import { mapGetters } from "vuex";
-import Chatting from "@/components/Chatting/Chatting";
-
-
 import { CollapseTransition } from "vue2-transitions";
 import { BaseNav, Modal } from "@/components";
 
@@ -236,7 +269,7 @@ export default {
     FadeTransition,
     LoginContent,
     LogoutContent,
-    Chatting
+    ChattingBg
   },
   props: {
     type: {
@@ -262,17 +295,24 @@ export default {
       isHoverS: true,
       isHoverC: true,
       isSearch: true,
+      locR: true,
+      locO: true,
+      locB: true,
+      locS: true,
+      url: ""
     };
   },
   created() {
     this.uid = this.$store.getters.getUid;
     let url = this.$route.name;
+    this.url = url;
     this.checkUrl(url);
-    this.url = url
 
-    axios.get(`${this.$store.getters.getServer}/user/image`).then(res => {
-      this.profileUrl = res.data.path;
-    });
+    axios
+      .get(`${this.$store.getters.getUserServer}/user/image/${this.uid}`)
+      .then(res => {
+        this.profileUrl = res.data.path;
+      });
   },
   computed: {
     routeName() {
@@ -283,7 +323,6 @@ export default {
   watch: {
     $route(to) {
       this.checkUrl(to.name);
-      this.url = to.name
     }
   },
   mounted() {
@@ -312,7 +351,7 @@ export default {
       this.activeNotifications = false;
     },
     checkUrl(url) {
-      let array = ["roadmap", "update_user_roamdap"];
+      let array = ["로드맵 생성하기", "로드맵 수정하기", "roadback"];
       let isHeader = true;
       array.map(path => {
         if (url === path) isHeader = false;
@@ -320,79 +359,91 @@ export default {
       this.isHeader = isHeader;
     },
     myProfile() {
-      this.$router.push({name: '프로필', query: {profileId: this.$store.getters.getUid}})
+      this.$router.push({
+        name: "프로필",
+        query: { profileId: this.$store.getters.getUid }
+      });
     },
     logOut() {
-      this.$store.dispatch("LOGOUT").then(() => {
-        this.$router.push('/')
-      })
-      .catch(() => {
-        alert('로그아웃에 실패했습니다.')
-      })
+      this.$store
+        .dispatch("LOGOUT")
+        .then(() => {
+          this.$router.push("/");
+        })
+        .catch(() => {
+          alert("로그아웃에 실패했습니다.");
+        });
+    },
+    goToMain(url) {
+      if (url != "나의 로드맵") {
+        this.$router.push({ name: "mainpage" });
+      }
     },
     clickSearch() {
-      console.log(this.searchQuery);
-      this.$router.push({ name: '검색결과', query: {searchKeyword: `${this.searchQuery}`}})
-    },
-    goToMain() {
-      if (this.url!="read_user_roadmap") {
-        this.$router.push({ name: 'dashboard' })
-      }
+      this.$router.push({
+        name: "검색결과",
+        query: { searchKeyword: `${this.searchQuery}` }
+      });
     },
     checkHoverO() {
       if (this.isHoverO) {
-        this.isHoverO = false
+        this.isHoverO = false;
       } else {
-        this.isHoverO = true
+        this.isHoverO = true;
       }
     },
     checkHoverB() {
       if (this.isHoverB) {
-        this.isHoverB = false
+        this.isHoverB = false;
       } else {
-        this.isHoverB = true
+        this.isHoverB = true;
       }
     },
     checkHoverS() {
       if (this.isHoverS) {
-        this.isHoverS = false
+        this.isHoverS = false;
       } else {
-        this.isHoverS = true
+        this.isHoverS = true;
       }
     },
     checkHoverC() {
       if (this.isHoverC) {
-        this.isHoverC = false
+        this.isHoverC = false;
       } else {
-        this.isHoverC = true
-      }    
+        this.isHoverC = true;
+      }
     },
-    goToOfficial() {
-      this.$router.push({ name: "공식 로드맵"})
+    goToOfficial(url) {
+      if (url != "공식 로드맵") {
+        this.$router.push({ name: "공식 로드맵" });
+      }
     },
-    goToBoard() {
-      this.$router.push({ name: "게시판" })
+    goToBoard(url) {
+      if (url != "게시판") {
+        this.$router.push({ name: "게시판" });
+      }
     },
-    goToShare() {
-      this.$router.push({ name: "공유로드맵\'s"})
+    goToShare(url) {
+      if (url != "공유로드맵's") {
+        this.$router.push({ name: "공유로드맵's" });
+      }
     },
-    goToCalendar() {
-      this.$router.push({ name: "캘린더" })
+    goToCalendar(url) {
+      if (url != "캘린더") {
+        this.$router.push({ name: "캘린더" });
+      }
     },
-    goToChat() {
-      this.$router.push({ name: "채팅" })
+    goToChat(url) {
+      if (url != "채팅카테고리") {
+        this.$router.push({ name: "채팅카테고리" });
+      }
     },
     activeSearch() {
       if (this.isSearch) {
-        this.isSearch = false
+        this.isSearch = false;
       } else {
-        this.isSearch = true
+        this.isSearch = true;
       }
-    },
-  },
-  watch: {
-    $route(to) {
-      this.checkUrl(to.name);
     }
   },
   computed: {
@@ -404,21 +455,17 @@ export default {
 <style>
 #chat {
   position: fixed;
-  right: 5px;
-  bottom: 5px;
+  right: 30px;
+  bottom: 30px;
   background-color: skyblue;
 }
 #mainNav {
   background-color: white;
   padding: 10px;
-  box-shadow: 2px 2px blur ;
+  box-shadow: 2px 2px blur;
 }
 #routeName {
   color: #84898c;
-}
-#btnNav {
-  height: 20px;
-  width: 55px;
 }
 #searchBlock {
   color: black;
@@ -426,6 +473,10 @@ export default {
 }
 #menu {
   margin: auto;
+}
+.nav-btn {
+  height: 40px;
+  width: 60px;
 }
 /* #testdiv {
   position: fixed;

@@ -1,17 +1,19 @@
 <template>
   <div>
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-default">
-    </base-header>
+    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue"> </base-header>
 
-    <b-container style="background: white; border-radius: 1rem;" class="py-4 mt-4">
-      <h1>
-        "{{ $route.query.searchKeyword }}"검색 결과 페이지입니다.
-      </h1>
-      <hr class="my-2">
+    <b-container
+      style="background: white; border-radius: 1rem;"
+      class="py-4 mt-4"
+    >
+      <h1>"{{ $route.query.searchKeyword }}"검색 결과 페이지입니다.</h1>
+      <hr class="my-2" />
       <h2>유저</h2>
       <ul v-for="(user, idx) in userlist" :key="idx">
-        <router-link :to="{name: 'profile', query: {profileId: `${user.uid}`}}">
-          {{user.name}}
+        <router-link
+          :to="{ name: '프로필', query: { profileId: `${user.uid}` } }"
+        >
+          {{ user.name }}
         </router-link>
       </ul>
 
@@ -47,8 +49,9 @@ export default {
   methods: {
     sendWord() {
       axios
-        .get(`${this.$store.getters.getServer}/search/list/${this.content}`)
+        .get(`${this.$store.getters.getUserServer}/search/list/${this.content}`)
         .then(res => {
+          console.log(res.data);
           this.content = "";
           this.userlist = res.data.user;
           this.postinglist = res.data.posting;
@@ -59,7 +62,7 @@ export default {
 
       axios
         .get(
-          `${this.$store.getters.getServer}/roadmapshare/get/title/${this.content}`
+          `${this.$store.getters.getRoadmapServer}/roadmapshare/get/title/${this.content}`
         )
         .then(res => {
           this.content = "";

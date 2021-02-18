@@ -86,6 +86,16 @@ const routes = [
         name: "나의 로드맵",
         component: () => import(/* webpackChunkName: "demo" */ '../views/Roadmap/ReadUserRoadmap.vue')
       },
+      //명희님 힘내요 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 로드맵 다 빨리 해주세요 ^^^^^^^^^^^^^^^^^^^^^^
+      //빠이
+      //
+
+      {
+        path: '/create-user-roadmap',
+        name: '로드맵 생성하기',
+        component: () => import('../views/Roadmap/CreateUserRoadmap.vue'),
+        props: true
+      },
       {
         path: '/update-user-roadmap',
         name: '로드맵 수정하기',
@@ -117,12 +127,12 @@ const routes = [
       // chatting 
       {
         path: '/chatting-main',
-        name: '채팅 카테고리',
+        name: '채팅카테고리',
         component: () => import('../views/Chatting/ChattingMain.vue'),
       },
       {
       path: '/chatting',
-      name: 'chatting',
+      name: '채팅',
       props: true,
       component: () => import('../views/Chatting/Chatting.vue'),
       },
@@ -130,6 +140,7 @@ const routes = [
         path: '/sharedetail',
         name: '공유로드맵',
         component: () => import('../views/ShareRoadmap/ShareDetail.vue'),
+        props: true,
       },
       {
         path: '/searchlist',
@@ -142,6 +153,17 @@ const routes = [
         component: () => import('../views/ShareRoadmap/CreateShareBoard.vue'),
         props: true,
       },
+      {
+        path: '/roadback',
+        name: 'roadback',
+        component: () => import('../views/ShareRoadmap/RoadBack.vue'),
+        props: true,
+      },
+      {
+        path: '/mainpage',
+        name: "mainpage",
+        component: () => import('../views/Mainpage/Mainpage.vue'),
+      },
     ]
   },
   {
@@ -149,15 +171,25 @@ const routes = [
     // redirect: 'login',
     component: AuthLayout,
     children: [
-      {
-        path: '/login',
-        name: 'login',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/Pages/Login.vue')
-      },
+      // {
+      //   path: '/login',
+      //   name: 'login',
+      //   component: () => import(/* webpackChunkName: "demo" */ '../views/Pages/Login.vue')
+      // },
       {
         path: '/register',
         name: 'register',
         component: () => import(/* webpackChunkName: "demo" */ '../views/Pages/Register.vue')
+      },
+      {
+        path: '/find-password',
+        name: '비밀번호찾기',
+        component: () => import(/* webpackChunkName: "demo" */ '../components/Login/FindPassword.vue')
+      },
+      {
+        path: '/reset-password',
+        name: '비밀번호재설정',
+        component: () => import(/* webpackChunkName: "demo" */ '../components/Login/ResetPassword.vue')
       },
       { path: '*', component: NotFound },
     ]

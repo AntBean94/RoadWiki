@@ -14,7 +14,7 @@
            src="img/intro/roadmap.png"
            class="animate__animated animate__backInRight animate__slow	1s"/>
       <h1 class="title-left animate__animated animate__backInLeft animate__slow	1s" >나만의 로드맵을 만들어 보세요.</h1>
-       <pre class="animate__animated animate__backInLeft animate__slow	1s" style="text-align: left; padding-left: 200px;"> 
+       <pre class="animate__animated animate__backInLeft animate__slow	1s" style="text-align: left; padding-left: 300px;"> 
         천릿길도 한 걸음 부터
         세상에 하나뿐인 나만의 로드맵을 만들어보세요.
       </pre>
@@ -24,10 +24,10 @@
       <img src="img/intro/worry.png" 
            alt=""
            width="200px"
-           style="float: left; margin-left: 400px;"
+           style="float: left; margin-left: 500px;"
            class="animate__animated animate__flipInX">
-      <p class="title-right"> 고민을 털어 놓으세요</p>
-      <pre class="animate__animated animate__fadeIn animate__delay-1s" style="text-align: right; padding-right: 250px;">
+      <h1 class="title-right"> 고민을 털어 놓으세요</h1>
+      <pre class="animate__animated animate__fadeIn animate__delay-1s" style="text-align: right; padding-right: 400px;">
         로드맵 생성에 대한 고민을 털어 놓으세요. 
         내가 하는 고민이 모두가 하는 고민이라고 생각하고 
         편하게 고민을 털어 놓으세요.
@@ -122,24 +122,22 @@ pre{
 }
 #rightPic{
   position: relative;
-  padding-right: 200px;
+  padding-right: 250px;
   float: right;
 }
-.title {
-  font-size: 36px;
-}
+
 .title-center {
   text-align: center;
   font-size: 36px;
   animation-duration: 1s; 
 }
 .title-left {
-  padding-left: 260px;
+  padding-left: 360px;
   text-align: left;
   font-size: 36px;
 }
 .title-right{
-  padding-right: 250px;
+  padding-right: 400px;
   text-align: right;
   font-size: 36px;
 }

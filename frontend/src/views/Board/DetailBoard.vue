@@ -16,28 +16,25 @@
       </b-container>
     </base-header>
 
-    <b-container
-      class="py-4 mt-4"
-    >
+    <b-container class="py-4 mt-4">
       <b-row>
         <b-container class="mx-9">
           <b-row align-v="center">
-            <b-col cols="1" class="pr-0 mb-2 mr-3">img</b-col>
+            <b-col cols="1" class="pr-0 mb-2 mr-4">
+              <b-img :src="profileUrl" rounded width="50rem" heigth="50rem" />
+            </b-col>
             <b-col>
               <h3>{{ name }}</h3>
-              <h5>한줄 내용 넣고싶음</h5>
+              <h5>{{ oneline }}</h5>
             </b-col>
           </b-row>
           <hr class="my-2" />
           <Viewer v-if="content != null" :initialValue="content" />
           <b-row class="mr-1 my-3">
-            <div
-              class="ml-1 mt-2 mr-1 bg-cornhusk rounded-pill py-1 px-2"
-              v-for="(tag, idx) in tags"
-              :key="idx"
-            >
+            <b-badge class="mr-2" v-for="(tag, idx) in tags" :key="idx">
+              <!-- class="ml-1 mt-2 mr-1 bg-cornhusk rounded-pill py-1 px-2" -->
               <span class="h5"># {{ tag }}</span>
-            </div>
+            </b-badge>
           </b-row>
           <b-row align-h="end" class="my-2" v-if="isWritter">
             <!-- 게시물의 uid와 현재 uid가 동일 할 때 보여줄 내용 -->
@@ -53,36 +50,37 @@
             ></i>
           </b-row>
           <b-row>
-            <i class="far fa-thumbs-up fa-2x ml-3 text-peach-quartz" v-if="!like" @click="clickLike"
-              ><span class="h3 ml-1">좋아요{{ likeCnt }}</span></i
+            <i
+              class="far fa-thumbs-up fa-2x ml-3 text-peach-quartz"
+              v-if="!like"
+              @click="clickLike"
+              ><span class="h3 ml-1">{{ likeCnt }}</span></i
             >
-            <i class="fas fa-thumbs-up fa-2x ml-3 text-peach-quartz" v-if="like" @click="cancelLike"
-              ><span class="h3 ml-1">좋아요{{ likeCnt }}</span></i
+            <i
+              class="fas fa-thumbs-up fa-2x ml-3 text-peach-quartz"
+              v-if="like"
+              @click="cancelLike"
+              ><span class="h3 ml-1">{{ likeCnt }}</span></i
             >
             <i
               class="far fa-thumbs-down fa-2x ml-3 text-provence"
               v-if="!dislike"
               @click="clickDislike"
-              ><span class="h3 ml-1">싫어요{{ dislikeCnt }}</span></i
+              ><span class="h3 ml-1">{{ dislikeCnt }}</span></i
             >
             <i
               class="fas fa-thumbs-down fa-2x ml-3 text-provence"
               v-if="dislike"
               @click="cancelDislike"
-              ><span class="h3 ml-1">싫어요{{ dislikeCnt }}</span></i
+              ><span class="h3 ml-1">{{ dislikeCnt }}</span></i
             >
           </b-row>
           <hr class="my-2" />
         </b-container>
-        <!-- <p class="px-3">
-          {{ content }}
-        </p> -->
       </b-row>
     </b-container>
 
-    <b-container
-      class="py-4 mt-4"
-    >
+    <b-container class="py-4 mt-4">
       <b-container class="px-9 py-3">
         <b-row>
           <h2 class="ml-3 mb-2">{{ comments.length }}개의 댓글</h2>
@@ -120,6 +118,7 @@ export default {
   data() {
     return {
       name: "",
+      oneline: "",
       content: null,
       title: "",
       tags: [],
@@ -134,16 +133,25 @@ export default {
       pid: "",
       isWritter: false,
       comments: [],
-      recomments: []
+      recomments: [],
+      profileUrl: ""
     };
   },
   created() {
     axios
       .get(
-        `${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`
+        `${this.$store.getters.getBoardServer}/freeboard/posting/${this.$route.query.pid}`
       )
       .then(res => {
         this.uid = res.data.posting.uid;
+
+        // 해당 계정의 프로필 사진 가져오는 걸로 해야함
+        axios
+          .get(`${this.$store.getters.getUserServer}/user/image/${this.uid}`)
+          .then(res => {
+            this.profileUrl = res.data.path;
+          });
+
         this.tags = res.data.posting.tags;
         if (this.uid === this.$store.getters.getUid) {
           this.isWritter = true;
@@ -154,7 +162,7 @@ export default {
 
     axios
       .get(
-        `${this.$store.getters.getServer}/freeboard/postinglike/${this.$route.query.pid}`
+        `${this.$store.getters.getBoardServer}/freeboard/postinglike/${this.$route.query.pid}`
       )
       .then(res => {
         if (res.data.like !== null) {
@@ -165,7 +173,7 @@ export default {
 
     axios
       .get(
-        `${this.$store.getters.getServer}/freeboard/postinghate/${this.$route.query.pid}`
+        `${this.$store.getters.getBoardServer}/freeboard/postinghate/${this.$route.query.pid}`
       )
       .then(res => {
         if (res.data.like !== null) {
@@ -181,10 +189,11 @@ export default {
     getPostingInfo() {
       axios
         .get(
-          `${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`
+          `${this.$store.getters.getBoardServer}/freeboard/posting/${this.$route.query.pid}`
         )
         .then(res => {
-          this.name = res.data.name;
+          this.name = res.data.user.name;
+          this.oneline = res.data.user.oneline;
           this.classifier = res.data.posting.classifier;
           this.title = res.data.posting.title;
           this.content = res.data.posting.content;
@@ -205,7 +214,7 @@ export default {
     deleteBoard() {
       axios
         .delete(
-          `${this.$store.getters.getServer}/freeboard/posting/${this.$route.query.pid}`
+          `${this.$store.getters.getBoardServer}/freeboard/posting/${this.$route.query.pid}`
         )
         .then(() => {
           alert("삭제가 정상적으로 완료되었습니다.");
@@ -218,19 +227,19 @@ export default {
       };
       axios
         .post(
-          `${this.$store.getters.getServer}/freeboard/postinglike`,
+          `${this.$store.getters.getBoardServer}/freeboard/postinglike`,
           postingLikeUser
         )
         .then(res => {
           this.likeCnt++;
           axios
             .get(
-              `${this.$store.getters.getServer}/freeboard/postinghate/${this.$route.query.pid}`
+              `${this.$store.getters.getBoardServer}/freeboard/postinghate/${this.$route.query.pid}`
             )
             .then(res => {
               if (res.data.like !== null) {
                 axios.delete(
-                  `${this.$store.getters.getServer}/freeboard/postinghatecancel/${this.$route.query.pid}`
+                  `${this.$store.getters.getBoardServer}/freeboard/postinghatecancel/${this.$route.query.pid}`
                 );
                 this.dislikeCnt--;
               }
@@ -245,7 +254,7 @@ export default {
     cancelLike() {
       axios
         .delete(
-          `${this.$store.getters.getServer}/freeboard/postinglikecancel/${this.$route.query.pid}`
+          `${this.$store.getters.getBoardServer}/freeboard/postinglikecancel/${this.$route.query.pid}`
         )
         .then(() => {});
 
@@ -258,19 +267,19 @@ export default {
       };
       axios
         .post(
-          `${this.$store.getters.getServer}/freeboard/postinghate`,
+          `${this.$store.getters.getBoardServer}/freeboard/postinghate`,
           postingLikeUser
         )
         .then(res => {
           this.dislikeCnt++;
           axios
             .get(
-              `${this.$store.getters.getServer}/freeboard/postinglike/${this.$route.query.pid}`
+              `${this.$store.getters.getBoardServer}/freeboard/postinglike/${this.$route.query.pid}`
             )
             .then(res => {
               if (res.data.like !== null) {
                 axios.delete(
-                  `${this.$store.getters.getServer}/freeboard/postinglikecancel/${this.$route.query.pid}`
+                  `${this.$store.getters.getBoardServer}/freeboard/postinglikecancel/${this.$route.query.pid}`
                 );
                 this.likeCnt--;
               }
@@ -285,7 +294,7 @@ export default {
     cancelDislike() {
       axios
         .delete(
-          `${this.$store.getters.getServer}/freeboard/postinghatecancel/${this.$route.query.pid}`
+          `${this.$store.getters.getBoardServer}/freeboard/postinghatecancel/${this.$route.query.pid}`
         )
         .then(() => {});
       this.dislike = false;

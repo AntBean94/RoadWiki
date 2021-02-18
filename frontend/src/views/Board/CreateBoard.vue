@@ -1,9 +1,9 @@
 <template>
   <div class="d-flex flex-column">
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-default">
+    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue">
     </base-header>
 
-    <div class="p-4 bg-secondary">
+    <div class="p-4">
       <b-input
         placeholder="제목"
         class="form-control-alternative"
@@ -49,14 +49,9 @@
       />
     </div>
 
-    <b-button
-      @click="datachange"
-      class="mt-3 mx-4"
-      variant="default"
-    >
+    <b-button @click="datachange" class="mt-3 mx-4" variant="default">
       저장
     </b-button>
-
   </div>
 </template>
 
@@ -70,27 +65,25 @@ export default {
   components: {
     editor: Editor
   },
-  props: {
-  },
+  props: {},
   data() {
     return {
       editorOptions: {
         hideModeSwitch: false
       },
-      editorText: '',
-      tags: ['첫번째 태그', '두번째 태그', '세번째 태그', '네번째 태그'],
-      tagInput: '',
-      title: '',
+      editorText: "",
+      tags: ["첫번째 태그", "두번째 태그", "세번째 태그", "네번째 태그"],
+      tagInput: "",
+      title: ""
     };
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     datachange() {
       const content = this.$refs.toastuiEditor.invoke("getMarkdown");
       // console.log(typeof(content))
       axios
-        .post(`${this.$store.getters.getServer}/freeboard/posting`, {
+        .put(`${this.$store.getters.getBoardServer}/freeboard/posting`, {
           uid: this.$store.getters.getUid,
           classifier: "자유게시판",
           title: this.title,
@@ -104,34 +97,34 @@ export default {
       // this.$refs.toastuiViewer.editor.markdownValue = content
     },
     tagEnter() {
-      console.log('엔터 찍힘')
+      console.log("엔터 찍힘");
       if (this.tags.length < 5) {
         if (this.tagInput) {
-          this.tags.push(this.tagInput)
-          this.tagInput = ''
+          this.tags.push(this.tagInput);
+          this.tagInput = "";
         }
       } else {
-        alert('태그는 최대 5개까지 가능합니다.')
-        this.tagInput = ''
+        alert("태그는 최대 5개까지 가능합니다.");
+        this.tagInput = "";
       }
     },
     tagEnterBlur() {
       if (this.tagInput.length > 0) {
         if (this.tags.length < 5) {
           if (this.tagInput) {
-            this.tags.push(this.tagInput)
-            this.tagInput = ''
+            this.tags.push(this.tagInput);
+            this.tagInput = "";
           }
         } else {
-          alert('태그는 최대 5개까지 가능합니다.')
-          this.tagInput = ''
+          alert("태그는 최대 5개까지 가능합니다.");
+          this.tagInput = "";
         }
       }
     },
     delTag(idx) {
       this.tags.splice(idx, 1);
-    },
-  },
+    }
+  }
   // watch: {
   //   editorText() {
   //     console.log(this.editorText)

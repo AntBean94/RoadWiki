@@ -14,7 +14,7 @@
         <!-- <b-row class="justify-content-end"><BackgroundImg /></b-row> -->
       </b-container>
     </div>
-
+    
     <b-container fluid class="mt--6">
       <b-card no-body class="card-profile" alt="Image placeholder" img-top>
         <b-row class="justify-content-start">
@@ -23,21 +23,18 @@
               <b-row>
                 <b-img
                   :src="profileUrl"
-                  v-model="profileUrl"
-                  rounded="circle"
                 />
               </b-row>
               <b-row class="justify-content-end"> </b-row>
             </b-container>
           </b-col>
         </b-row>
-
         <b-card-header
           class="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4 mb-4"
         >
-          <h1 class="display-1">
-            <!-- email.com -->
-          </h1>
+          <!-- <h1 class="display-1">
+            email.com
+          </h1> -->
         </b-card-header>
         <b-card-body class="pt-0">
           <b-row>
@@ -71,7 +68,7 @@
                 </h2>
               </b-col>
               <b-col>
-                <b-form-input value="기계공학"></b-form-input>
+                <b-form-input :value="major" v-model="major"></b-form-input>
               </b-col>
             </b-row>
             <b-row class="mb-3">
@@ -83,7 +80,7 @@
               </b-col>
               <b-col>
                 <!-- address 수정 -->
-                <b-form-input :value="address"></b-form-input>
+                <b-form-input :value="address" v-model="address"></b-form-input>
               </b-col>
             </b-row>
             <b-row class="mb-3">
@@ -94,11 +91,7 @@
                 </h2>
               </b-col>
               <b-col>
-                <b-form-textarea
-                  :value="introduction"
-                  v-model="introduction"
-                  rows="5"
-                >
+                <b-form-textarea :value="oneline" v-model="oneline" rows="5">
                 </b-form-textarea>
               </b-col>
             </b-row>
@@ -134,50 +127,6 @@
               </b-col>
               <b-col>
                 <h3>여기에 프로필 사진 파일 명</h3>
-                <!-- <ProfileImg/> -->
-              </b-col>
-              <b-col>
-                <div>
-                  <b-button size="sm" @click="modalShow = !modalShow"
-                    >사진📷</b-button
-                  >
-
-                  <b-modal v-model="modalShow" hide-footer>
-                    <template #modal-title>
-                      <h1>프로필 업로드</h1>
-                    </template>
-                    <div>
-                      <b-form-file
-                        v-model="file1"
-                        placeholder="Choose a file or drop it here..."
-                        drop-placeholder="Drop file here..."
-                      ></b-form-file>
-                      <div class="mt-3">
-                        Selected file: {{ file1 ? file1.name : "" }}
-                      </div>
-                    </div>
-                    <div class="text-center">
-                      <base-button
-                        type="primary"
-                        native-type="submit"
-                        class="my-4"
-                        @click="uploadHandler"
-                        >확인</base-button
-                      >
-                    </div>
-                  </b-modal>
-                </div>
-              </b-col>
-            </b-row>
-            <b-row class="mb-3">
-              <b-col cols="3" class="text-center" align-self="center">
-                <h2>
-                  <!-- <i class="ni ni-hat-3 mr-2"></i> -->
-                  배경 사진
-                </h2>
-              </b-col>
-              <b-col>
-                <h3>여기에 배경 사진 파일 명</h3>
                 <!-- <ProfileImg/> -->
               </b-col>
               <b-col>
@@ -261,7 +210,6 @@ export default {
       nickname: "",
       introduction:
         "술잔을 들자하니 천하가 내발아래 있고 6팀 친구들 또한 옆에 있으니 염라대왕 두렵지 않구나",
-      address: "https://github.com",
       profileImg: "",
       backImg: "",
       keywords: [],
@@ -271,29 +219,37 @@ export default {
       following: "",
       boards: "",
       comments: "",
-      major: "",
       email: "",
       modalShow: false,
       file1: null,
       files: [],
       uid: "",
-      profileUrl: ""
+      profileUrl: "",
+      address: "https://github.com",
+      oneline: "",
+      major: ""
     };
   },
   created() {
     this.uid = this.$store.getters.getUid;
 
-    axios.get(`${this.$store.getters.getServer}/user/image`).then(res => {
+    axios.get(`${this.$store.getters.getUserServer}/user/image/${this.uid}`).then(res => {
       this.profileUrl = res.data.path;
+      console.log('##########')
+      console.log(this.profileUrl)
+      console.log('##########')
     });
 
     axios
-      .get(`${this.$store.getters.getServer}/user/info/${this.uid}`)
+      .get(`${this.$store.getters.getUserServer}/user/info/${this.uid}`)
       .then(res => {
         this.nickname = res.data.name;
         this.email = res.data.email;
         this.keywords = res.data.keywords;
         this.keywordtexts = res.data.keywordtexts;
+        this.address = res.data.address;
+        this.major = res.data.major;
+        this.oneline = res.data.oneline;
       })
       .catch(() => {
         alert("로그인이 필요한 서비스입니다.");
@@ -301,7 +257,7 @@ export default {
           this.$router.replace("/");
         });
       });
-    axios.get(`${this.$store.getters.getServer}/keyword/list`).then(res => {
+    axios.get(`${this.$store.getters.getUserServer}/keyword/list`).then(res => {
       this.options = res.data.keywords;
     });
   },
@@ -311,7 +267,7 @@ export default {
     },
     withDrawal() {
       axios
-        .delete(`${this.$store.getters.getServer}/user/withdraw`)
+        .delete(`${this.$store.getters.getUserServer}/user/withdraw`)
         .then(() => {
           alert("회원 탈퇴가 완료되었습니다.");
           this.$store.dispatch("LOGOUT").then(() => {
@@ -334,16 +290,15 @@ export default {
     updateHandler() {
       // 보낼때 명명이 중요함
       let user = {
+        uid: this.uid,
         name: this.nickname,
         address: this.address,
         major: this.major,
-        keyword: this.keywords,
-        introduction: this.introduction,
-        file: this.file1
+        oneline: this.oneline,
+        keyword: this.keywords
       };
-
       axios
-        .put(`${this.$store.getters.getServer}/user/modify`, user)
+        .put(`${this.$store.getters.getUserServer}/user/modify`, user)
         .then(res => {
           if (res.data.msg == "success") {
             alert("회원 수정이 완료되었습니다.");
@@ -361,7 +316,7 @@ export default {
       // this.modalShow = false;
 
       await axios
-        .post(`${this.$store.getters.getServer}/user/pic`, formData, {
+        .post(`${this.$store.getters.getUserServer}/user/pic`, formData, {
           headers: { "content-type": "multipart/form-data" }
         })
         .then(res => {
