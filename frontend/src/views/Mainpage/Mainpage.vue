@@ -118,13 +118,13 @@
     <!-- 로드맵 리스트 -->
     <b-container>
       
-      <RoadmapList 
+      <!-- <RoadmapList 
         class="row m-0 px-0"
         id="roadmaplist"
         v-if="roadmapshareList"
         :rmlist="roadmapshareList"
         :unlist="usernameList"
-      />
+      /> -->
       
     </b-container> 
     <br>  
@@ -191,6 +191,7 @@ export default {
           this.roadmapshareList.map(item => {
             this.username.push(this.getUserName(item.uid))
           })
+          console.log(this.usernameList)
         })
         .catch(res => {
           console.log(res);
