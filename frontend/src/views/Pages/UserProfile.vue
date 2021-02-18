@@ -306,7 +306,7 @@ export default {
         `${this.$store.getters.getBoardServer}/freeboard/list/${this.profileuid}`
       )
       .then(res => {
-        console.log(res)
+        console.log(res);
         this.postings = res.data.postings;
         this.commentCnt = res.data.commentCnt;
       })
@@ -381,6 +381,7 @@ export default {
         )
         .then(res => {
           this.followinglists = res.data.followinglists;
+          console.log(this.followinglists);
         });
       this.makePeopleList();
     },
@@ -399,62 +400,61 @@ export default {
     },
     sendUnfollowing() {
       axios
-      .delete(
-        `${this.$store.getters.getUserServer}/follow/userunfollow/${this.profileuid}`
-      )
-      .then(res => {
-        if (res.data.msg === "success") {
-          this.isFollow = false;
-        }
-        this.getFollowList();
-      });
+        .delete(
+          `${this.$store.getters.getUserServer}/follow/userunfollow/${this.profileuid}`
+        )
+        .then(res => {
+          if (res.data.msg === "success") {
+            this.isFollow = false;
+          }
+          this.getFollowList();
+        });
     },
     makePeopleList() {
-      console.log('makePeopleList')
-      console.log(this.followerUidList)
-      console.log(this.followingUidList)
       for (let i = 0; i < this.followerUidList.length; i++) {
-        let uid = this.followerUidList[i]
+        let uid = this.followerUidList[i];
         let user = {
           uid: uid,
-          username: '',
-        }
-        axios.get(`${this.$store.getters.getUserServer}/user/info/${uid}`)
-        .then(res => {
-          user.username = res.data.name;
-        })
-        .catch(err => {
-          console.log(err)
-        })
-        .finally(() => {
-          this.followerList.push(user)
-        })
+          username: ""
+        };
+        axios
+          .get(`${this.$store.getters.getUserServer}/user/info/${uid}`)
+          .then(res => {
+            user.username = res.data.name;
+          })
+          .catch(err => {
+            console.log(err);
+          })
+          .finally(() => {
+            this.followerList.push(user);
+          });
       }
 
       for (let i = 0; i < this.followingUidList.length; i++) {
-        let uid = this.followingUidList[i]
+        let uid = this.followingUidList[i];
         let user = {
           uid: uid,
-          username: '',
-        }
-        console.log('uid')
-        console.log(uid)
-        axios.get(`${this.$store.getters.getUserServer}/user/info/${uid}`)
-        .then(res => {
-          console.log(res)
-          user.username = res.data.name;
-        })
-        .catch(err => {
-          console.log(err)
-        })
-        .finally(() => {
-          this.followingList.push(user)
-        })
+          username: ""
+        };
+        console.log("uid");
+        console.log(uid);
+        axios
+          .get(`${this.$store.getters.getUserServer}/user/info/${uid}`)
+          .then(res => {
+            console.log(res);
+            user.username = res.data.name;
+          })
+          .catch(err => {
+            console.log(err);
+          })
+          .finally(() => {
+            this.followingList.push(user);
+          });
       }
-      console.log('#######')
-      console.log(this.followerList)
-      console.log(this.followingList)
-    },
+      console.log("#######");
+      console.log(this.followerList);
+      console.log(this.followingList);
+    }
   }
 };
 </script>
