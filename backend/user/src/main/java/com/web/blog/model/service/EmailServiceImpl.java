@@ -31,7 +31,7 @@ public class EmailServiceImpl implements EmailService {
 		Random rand = new Random();
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < 6; i++)
-			sb.append(rand.nextInt(9));
+			sb.append(rand.nextInt(8) + 1);
 
 		int oriText = Integer.parseInt(sb.toString());
 		logger.info("original text : " + oriText);
