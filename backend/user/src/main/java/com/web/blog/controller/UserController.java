@@ -192,7 +192,6 @@ public class UserController {
 
     @GetMapping(value = "/image/{uid}")
     public Object getImage(@PathVariable int uid, HttpServletRequest request) throws Exception {
-        int uuid = (int) loginServ.getData(request.getHeader("auth-token")).get("uid");
         logger.info("get user image uid : " + uid);
         Map<String, Object> result = (Map<String, Object>) fileService.showImage(uid, request);
         return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
