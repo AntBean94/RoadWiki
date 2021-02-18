@@ -1,8 +1,10 @@
 <template>
   <div class="nanum-bold">
-    <b-button @click="modalShow = !modalShow" variant="classic-blue"
-      >로그인</b-button
-    >
+    <b-button 
+      @click="modalShow = !modalShow" 
+      variant="classic-blue"
+      class="avatar avatar-sm rounded-circle ml-2"
+    >Login</b-button>
 
     <b-modal v-model="modalShow" hide-footer hide-header centered>
       <!-- <template #modal-title class="text-center mx-auto">
