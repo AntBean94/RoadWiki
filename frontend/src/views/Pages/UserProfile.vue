@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nanum-bold">
     <!-- <base-header class="pb-2 pt-2 pt-md-2 bg-baby-blue"> -->
     <base-header class="pb-9 pt-9 bg-baby-blue">
       <b-container fluid>
@@ -60,7 +60,7 @@
           <b-col lg="3" class="order-lg-2">
             <div class="card-profile-image">
               <a href="#">
-                <b-img :src="profileUrl" rounded="circle" />
+                <b-img :src="profileUrl" rounded="circle" width="200px" height="200px"/>
                 <!-- <b-img :src="profileUrl" rounded="circle" /> -->
               </a>
             </div>
@@ -107,10 +107,10 @@
                         </b-col>
                         <b-col>
                           <b-row>
-                            <router-link :to="{name: '프로필', query: {profileId: follower.uid}}" class="h2">{{ following.name }}</router-link>
+                            <router-link :to="{name: '프로필', query: {profileId: follower.uid}}" class="h2">{{ follower.name }}</router-link>
                           </b-row>
                           <b-row>
-                            <h3>{{ following.oneline }}</h3>
+                            <h3>{{ follower.oneline }}</h3>
                           </b-row>
                         </b-col>
                       </b-row>
@@ -129,19 +129,21 @@
                   </b-button>
                   <span class="description">following</span>
 
-                  <b-modal 
+                  <b-modal
                     id="modal-following" 
                     hide-footer 
                     centered
                     title="팔로우 하는 사람"
                   >
                     <div v-for="(following, idx) in followinglists" :key="idx" class="ml-4">
-                      <!-- <hr v-if="idx !== 0"> -->
-                      <br v-if="idx !== 0">
+                      <!-- <hr> -->
+                      <hr v-if="idx !== 0">
+                      <!-- <br v-if="idx !== 0"> -->
                       <b-row align-h="start" align-v="center">
                         <b-col class="px-0" cols="2">
                           <b-img 
-                            :src="following.pathUrl" 
+                            :src="profileUrllist[idx]"
+                            :v-model="profileUrllist[idx]"
                             height="60px" 
                             width="60px" 
                             rounded="circle"
@@ -191,7 +193,6 @@
                 pill
               >
                 {{ keywordtext }}
-                <!-- 네 너가 다시 수정하세요 -->
               </b-button>
             </div>
             <hr class="my-4 mx-9" />
@@ -302,7 +303,8 @@ export default {
       postings: [],
       likepostings: [],
       commentpostings: [],
-      commentCnt: 0
+      commentCnt: 0,
+      profileUrllist:[]
     };
   },
   created() {
@@ -346,7 +348,7 @@ export default {
         });
       });
 
-    // 본인 로드맵 가져오기
+    //본인 로드맵 가져오기
     axios
       .get(
         `${this.$store.getters.getRoadmapServer}/roadmap/list/${this.profileuid}`
@@ -365,7 +367,7 @@ export default {
         `${this.$store.getters.getBoardServer}/freeboard/list/${this.profileuid}`
       )
       .then(res => {
-        console.log(res);
+        
         this.postings = res.data.postings;
         this.commentCnt = res.data.commentCnt;
       })
@@ -393,7 +395,7 @@ export default {
 
     // 본인 팔로워, 팔로잉 명단 가져오기
     this.getFollowList();
-    this.getSharedRoadmap();
+    // this.getSharedRoadmap();
   },
   methods: {
     getFollowList() {
@@ -412,38 +414,17 @@ export default {
           `${this.$store.getters.getUserServer}/follow/followerlist/${this.profileuid}`
         )
         .then(res => {
+          
           this.followerlists = res.data.followerlists;
-          // 여기 followerlists 안에 uid가있어요 그러면 이친구를 가지구
-          //`${this.$store.getters.getUserServer}/user/image/${followerlists안에있는 uid}`
-          //##################################################
-
-          // res.data.followers.forEach(follower => {
-          //   if (follower.touid == this.profileuid) {
-          //     this.followerlist.push(follower.fromuid);
-          //   }
-          // });
-          // res.data.followings.forEach(following => {
-          //   if (following.fromuid == this.profileuid) {
-          //     this.followinglist.push(following.touid);
-          //   }
-          // });
-          // if (res.data.isFollow) {
-          //   this.isFollow = true;
-          // } else {
-          //   this.isFollow = false;
-          // }
         });
 
-      //나의 팔로잉잉이이이잉 리스트확인
+      //나의 팔로잉 리스트확인
       axios
         .get(
           `${this.$store.getters.getUserServer}/follow/followinglist/${this.profileuid}`
         )
         .then(res => {
           this.followinglists = res.data.followinglists;
-          this.followinglists.forEach(f => {
-            console.log(f.uid);
-          });
           for (let sky = 0; sky < this.followinglists.length; sky++) {
             axios
               .get(
@@ -451,11 +432,11 @@ export default {
               )
               .then(res => {
                 this.followinglists[sky]["pathUrl"] = res.data.path;
+                this.profileUrllist[sky] = res.data.path;
               });
           }
-          console.log(this.followinglists);
         });
-      this.makePeopleList();
+      //this.makePeopleList();
     },
     sendFollowing() {
       let follow = {
@@ -482,45 +463,45 @@ export default {
           this.getFollowList();
         });
     },
-    makePeopleList() {
-      for (let i = 0; i < this.followerUidList.length; i++) {
-        let uid = this.followerUidList[i];
-        let user = {
-          uid: uid,
-          username: ""
-        };
-        axios
-          .get(`${this.$store.getters.getUserServer}/user/info/${uid}`)
-          .then(res => {
-            user.username = res.data.name;
-          })
-          .catch(err => {
-            console.log(err);
-          })
-          .finally(() => {
-            this.followerList.push(user);
-          });
-      }
+    // makePeopleList() {
+    //   for (let i = 0; i < this.followerUidList.length; i++) {
+    //     let uid = this.followerUidList[i];
+    //     let user = {
+    //       uid: uid,
+    //       username: ""
+    //     };
+    //     axios
+    //       .get(`${this.$store.getters.getUserServer}/user/info/${uid}`)
+    //       .then(res => {
+    //         user.username = res.data.name;
+    //       })
+    //       .catch(err => {
+    //         console.log(err);
+    //       })
+    //       .finally(() => {
+    //         this.followerList.push(user);
+    //       });
+    //   }
 
-      for (let i = 0; i < this.followingUidList.length; i++) {
-        let uid = this.followingUidList[i];
-        let user = {
-          uid: uid,
-          username: ""
-        };
-        axios
-          .get(`${this.$store.getters.getUserServer}/user/info/${uid}`)
-          .then(res => {
-            user.username = res.data.name;
-          })
-          .catch(err => {
-            console.log(err);
-          })
-          .finally(() => {
-            this.followingList.push(user);
-          });
-      }
-    },
+    //   for (let i = 0; i < this.followingUidList.length; i++) {
+    //     let uid = this.followingUidList[i];
+    //     let user = {
+    //       uid: uid,
+    //       username: ""
+    //     };
+    //     axios
+    //       .get(`${this.$store.getters.getUserServer}/user/info/${uid}`)
+    //       .then(res => {
+    //         user.username = res.data.name;
+    //       })
+    //       .catch(err => {
+    //         console.log(err);
+    //       })
+    //       .finally(() => {
+    //         this.followingList.push(user);
+    //       });
+    //   }
+    // },
     openDetail(row) {
       const pid = row.pid;
       this.$store.dispatch("SETPID", pid);

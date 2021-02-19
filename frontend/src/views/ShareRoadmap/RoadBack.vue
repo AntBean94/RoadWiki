@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <base-header class="pb-10 pt-5 pt-md-2 bg-baby-blue">
+  <div class="nanum-bold">
+    <base-header class="pb-10 pt-5 pt-md-2 bg-baby-blue" style="height: 100px;">
       <button
         @click="goToBack"
         class="btn"
@@ -84,7 +84,6 @@ export default {
     readRoadmap() {
       // 페이지 초기화시 rmid여부 확인해서 바탕화면으로 redirect
       if (this.rmid === undefined) {
-        console.log("확인");
         this.$router.push({ name: "read_user_roadmap" });
         return;
       }
@@ -131,7 +130,6 @@ export default {
             if (res.data.msg == "success") {
               this.logData = res.data["roadmaps"];
             } else {
-              console.log(e);
               alert("데이터 로드에 실패했습니다.");
             }
           })
@@ -195,7 +193,6 @@ export default {
           }
         })
         .catch(e => {
-          console.log(e);
           alert("axios 오류 5");
         });
     },

@@ -6,19 +6,19 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 // 서버
-const SERVER_URL = [
-  process.env.VUE_APP_SERVER_URL,
-  process.env.VUE_APP_SERVER_URL,
-  process.env.VUE_APP_SERVER_URL,
-  process.env.VUE_APP_SERVER_URL,
-]
-// 로컬
 // const SERVER_URL = [
-//   process.env.VUE_APP_SERVER_URL_BOARD,
-//   process.env.VUE_APP_SERVER_URL_CHATTING,
-//   process.env.VUE_APP_SERVER_URL_ROADMAP,
-//   process.env.VUE_APP_SERVER_URL_USER,
+//   process.env.VUE_APP_SERVER_URL,
+//   process.env.VUE_APP_SERVER_URL,
+//   process.env.VUE_APP_SERVER_URL,
+//   process.env.VUE_APP_SERVER_URL,
 // ]
+// 로컬
+const SERVER_URL = [
+  process.env.VUE_APP_SERVER_URL_BOARD,
+  process.env.VUE_APP_SERVER_URL_CHATTING,
+  process.env.VUE_APP_SERVER_URL_ROADMAP,
+  process.env.VUE_APP_SERVER_URL_USER,
+]
 
 export default new Vuex.Store({
   state: {
@@ -73,10 +73,8 @@ export default new Vuex.Store({
   },
   mutations: {
     LOADUSERTOKEN(state) {
-      console.log("set token");
       state.accessToken = sessionStorage.getItem("auth-token");
       state.user = JSON.parse(sessionStorage.getItem("user"));
-      console.log("load : " + state.user);
       axios.defaults.headers.common["auth-token"] = state.accessToken;
     },
     LOGIN(state, payload) {
@@ -112,9 +110,8 @@ export default new Vuex.Store({
       return axios
         .post(`${SERVER_URL[3]}/user/login`, user)
         .then(response => {
-          console.log(response.data);
           context.commit("LOGIN", response.data);
-          if (`${response.data["authorizationToken"]}` == "undefined") reject();
+          if (`${response.data["authorizationToken"]}` == "undefined")
           axios.defaults.headers.common[
             "auth-token"
           ] = `${response.data["authorizationToken"]}`;
@@ -124,8 +121,9 @@ export default new Vuex.Store({
           );
           sessionStorage.setItem("user", JSON.stringify(this.getters.getUser));
         })
-        .catch(() => {
-          reject();
+        .catch((err) => {
+          alert("죄송합니다. 문제가 생겼습니다.")
+          //console.error(err)
         });
     },
     LOGOUT(context) {

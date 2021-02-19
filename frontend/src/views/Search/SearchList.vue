@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nanum-bold">
     <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue"> </base-header>
 
     <b-container
@@ -51,13 +51,13 @@ export default {
       axios
         .get(`${this.$store.getters.getUserServer}/search/list/${this.content}`)
         .then(res => {
-          console.log(res.data);
+          //console.log(res.data);
           this.content = "";
           this.userlist = res.data.user;
           this.postinglist = res.data.posting;
         })
         .catch(err => {
-          console.log(err);
+          //console.log(err);
         });
 
       axios
@@ -69,7 +69,8 @@ export default {
           this.roadmapdatalist = res.data.roadmapshares;
         })
         .catch(err => {
-          console.log(err);
+          alert("문제가 생겼습니다. 죄송합니다.")
+          //console.log(err);
         });
     }
   },

@@ -1,13 +1,9 @@
 <template>
   <div class="nanum-bold">
-    <b-card class="m-2" no-body footer-bg-variant="baby-blue" style="border: none;">
-      
-      <!-- <b-card-header class="border-0">
-        <h3 class="mb-0">TMP_BOARD</h3>
-      </b-card-header> -->
+    <b-card class="m-2" no-body style="border: none;">
       <el-table
-        class="table-responsive table"
-        header-row-class-name="thead-light"
+        class="table-responsive table bg-stucco"
+        header-row-class-name="bg-stucco"
         :data="postings"
         @row-click="openDetail"
         id="mhtable"
@@ -16,7 +12,7 @@
           <template v-slot="{ row }">
             <b-media no-body class="align-items-center">
               <b-media-body>
-                <span class=" name mb-0 text-sm nanum-bold">
+                <span class="font-weight-600 name mb-0 text-sm">
                   {{ row.pid }}
                 </span>
               </b-media-body>
@@ -28,7 +24,7 @@
           <template v-slot="{ row }">
             <b-media no-body class="align-items-center">
               <b-media-body>
-                <span class=" name mb-0 text-sm nanum-bold">
+                <span class="font-weight-600 name mb-0 text-sm">
                   {{ row.title }}({{ row.commentCnt }})
                 </span>
               </b-media-body>
@@ -41,7 +37,7 @@
             <b-media no-body class="align-items-center">
               <b-media-body>
                 <span
-                  class="name mb-0 text-sm nanum-bold"
+                  class="font-weight-600 name mb-0 text-sm"
                   @click="clickName(row.uid)"
                 >
                   {{ row.name }}
@@ -55,7 +51,7 @@
           <template v-slot="{ row }">
             <div class="d-flex align-items-center">
               <div>
-                <span class="name mb-0 text-sm nanum-bold">{{
+                <span class="font-weight-600 name mb-0 text-sm">{{
                   row.likeCnt
                 }}</span>
               </div>
@@ -67,56 +63,32 @@
           <template v-slot="{ row }">
             <div class="d-flex align-items-center">
               <div>
-                <span class="font-weight-600 name mb-0 text-sm nanum-bold">
-                  {{ row.createDate }}
-                </span>
+                <span class="font-weight-600 name mb-0 text-sm">{{
+                  row.createDate
+                }}</span>
               </div>
             </div>
           </template>
         </el-table-column>
       </el-table>
-      <b-card-footer class="py-4 d-flex justify-content-center bg-apple-bg">
-        <!-- 
-          selector 종류는 none, name, title, content 중 하나여야 하므로 selectbox 등을 활용해야합니다.
-          검색어는 word입니다.
-          검색 시 selector가 none이면 전체 리스트 출력이고 word는 무시됩니다.
-          getList() 메소드를 실행시키면 현재 조건에 맞춰 테이블이 갱신됩니다.
-        -->
-
-        <!-- 페이지 눌린 숫자를 currentPage로 지정한 후 getList() 메소드 실행시키면 테이블 페이지를 넘길 수 있습니다. -->
-        <b-pagination
-          v-model="currentPage"
-          :per-page="10"
-          :total-rows="totalPageNum"
-          aria-controls="mhtable"
-          first-text="<<"
-          prev-text="<"
-          next-text=">"
-          last-text=">>"
-        ></b-pagination>
-
-        <!-- 글 작성은 uid가 반드시 필요하므로, vuex에 user 정보가 존재할 경우만 작성 가능하고 서버에는 uid도 함께 보내줘야 합니다. -->
-      </b-card-footer>
     </b-card>
   </div>
 </template>
 <script>
 import { Table, TableColumn } from "element-ui";
-// TableColumn.rowKey = ["pid", "uid", "tag", "title", "createDate"];
 
 export default {
   name: "light-table",
   components: {
     [Table.name]: Table,
-    //   [TableColumn.name]: TableColumn
-    [TableColumn.name]: TableColumn,
+    [TableColumn.name]: TableColumn
   },
   data() {
     return {
       currentPage: 1,
       currentPosts: "",
-      // word: "",
-      selector: "title",
+      word: "",
+      selector: "none",
       tag: "",
       postings: [],
       names: [],
@@ -127,10 +99,10 @@ export default {
     };
   },
   methods: {
-    getList(word) {
+    getList() {
       let adr = `${this.$store.getters.getBoardServer}/freeboard/list/board/${this.selector}`;
-      if (word.length < 1) adr += "/ ";
-      else adr += `/${word}`;
+      if (this.word === "") adr += "/ ";
+      else adr + `/${this.word}`;
       adr += `/${this.currentPage}`;
       if (this.tag != "") adr += `${this.tag}`;
 
@@ -152,11 +124,13 @@ export default {
           alert("죄송합니다. 문제가 생겼습니다");
         });
     },
+
     openDetail(row) {
       const pid = row.pid;
       this.$store.dispatch("SETPID", pid);
       this.$router.push({ name: "게시글", query: { pid } });
     },
+
     getTotalNum() {
       axios
         .get(`${this.$store.getters.getBoardServer}/freeboard/totalCount`)
@@ -164,23 +138,32 @@ export default {
           this.totalPageNum = res.data.total;
         });
     },
+
     clickName(uid) {
       this.$router.push({ name: "프로필", query: { profileId: uid } });
     },
+
     getCommentNum() {
       axios.get(
         `${this.$store.getters.getBoardServer}/freeboard/posting/${this.row.pid}`
       );
     }
   },
+  
   created() {
-    this.getList("");
+    this.getList();
     this.getTotalNum();
   },
+  
   watch: {
     currentPage() {
-      this.getList("");
+      this.getList();
     }
   }
 };
 </script>
+
+<style scoped>
+
+
+</style>

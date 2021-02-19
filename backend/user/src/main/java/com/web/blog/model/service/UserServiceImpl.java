@@ -78,8 +78,8 @@ public class UserServiceImpl implements UserService {
     public Object join(User user) throws Exception {
         Map<String, Object> result = new HashMap<String, Object>();
         try {
+        	user.setPassword(SecurityUtil.encryptSHA256(user.getPassword()));
             if (userRepo.insert(user) == 1) {
-            	user.setPassword(SecurityUtil.encryptSHA256(user.getPassword()));
                 int uid = userRepo.select(user.getEmail()).getUid();
                 for (int i = 0; i < user.getKeyword().length; i++) {
                     Map<String, String> map = new HashMap<String, String>();

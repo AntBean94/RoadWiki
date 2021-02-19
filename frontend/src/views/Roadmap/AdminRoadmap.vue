@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nanum-bold">
     <!-- header 시작 -->
     <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-default">
     </base-header>
@@ -148,7 +148,7 @@ export default {
       .get(`${this.$store.getters.getRoadmapServer}/curriculum/suggest`)
       .then(res => {
         // this.curriculumData = res
-        console.log(res);
+        
       })
       .catch(e => {
         alert("axois 오류");

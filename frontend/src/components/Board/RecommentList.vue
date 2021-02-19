@@ -1,9 +1,9 @@
 <template>
-  <div class="px-4 pb-3 pt-2">
+  <div class="px-4 pb-3 pt-2 nanum-bold">
     <hr class="my-2" />
     <b-row>
       <b-col cols="8" align-self="center">
-        [img] 작성자 : {{ recomment.userName }}
+        <b-img :src="profileUrl" height="50px" width="50px" rounded="circle"></b-img> {{ recomment.userName }}
       </b-col>
       <b-col v-if="!isUpdate">
         <h5>
@@ -83,7 +83,8 @@ export default {
     return {
       // like: false,
       nickname: "",
-      isUpdate: false
+      isUpdate: false,
+      profileUrl:"",
     };
   },
   props: ["recomment"],
@@ -97,6 +98,11 @@ export default {
     //   this.recomment.likeCnt--;
     // },
     deleteRecomment() {
+      if(this.$store.getters.getAccessToken == null){
+         alert("로그인 하셔야 해요");
+         return;
+       }
+
       axios
         .delete(
           `${this.$store.getters.getBoardServer}/freeboard/recomment/${this.recomment.rcid}`
@@ -106,6 +112,12 @@ export default {
         });
     },
     sendRecomment() {
+      if(this.$store.getters.getAccessToken == null){
+         alert("로그인 하셔야 해요");
+         return;
+       }
+
+
       let recomment = {
         rcid: this.recomment.rcid,
         content: this.recomment.content
@@ -126,6 +138,14 @@ export default {
     }
   },
   created() {
+    // 이미지
+    // 해당 계정의 프로필 사진 가져오는 걸로 해야함
+    axios
+      .get(`${this.$store.getters.getUserServer}/user/image/${this.recomment.uid}`)
+      .then(res => {
+        this.profileUrl = res.data.path;
+      });
+
     axios
       .get(
         `${this.$store.getters.getUserServer}/user/name/${this.recomment.uid}`
@@ -134,7 +154,8 @@ export default {
         this.nickname = res.data.name;
       })
       .catch(err => {
-        console.log(err);
+        alert("죄송합니다. 문제가 생겼습니다.")
+        // console.log(err);
       });
   }
 };

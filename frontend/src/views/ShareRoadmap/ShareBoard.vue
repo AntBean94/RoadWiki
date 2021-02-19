@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <base-header class="pb-3 pt-5 pt-md-8 bg-baby-blue"> 
+  <div class="nanum-bold">
+    <base-header class="pb-3 pt-5 pt-md-8 bg-baby-blue" style="height: 350px;">
       <b-container class="pl-5 pr-2">
         <b-row align-h="around">
           <b-col cols="10">
@@ -25,8 +25,6 @@
           >
         </b-row>
       </b-container>
-
-    
     </base-header>
     <b-container>
       <RoadmapList
@@ -89,7 +87,7 @@ export default {
           this.currentPage = 1;
         })
         .catch(e => {
-          console.log(e);
+          //console.log(e);
         });
     },
     searchSharedRoadmap() {
@@ -104,7 +102,7 @@ export default {
           this.currentPage = 1;
         })
         .catch(e => {
-          console.log(e);
+          //console.log(e);
         });
     },
   }

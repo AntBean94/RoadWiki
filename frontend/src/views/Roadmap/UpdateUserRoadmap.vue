@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nanum-bold">
     <base-header class="pb-2 pt-2 pt-md-2 bg-baby-blue">
     <b-container>
       <b-row class="pt-2">
@@ -265,7 +265,7 @@ export default {
             `${this.$store.getters.getRoadmapServer}/roadmap/get/${this.rmid}`
           )
           .then(res => {
-            console.log(res);
+            //console.log(res);
             if (res.data.msg == "success") {
               this.roadmapData = JSON.parse(res.data["roadmaps"].tmp);
               if (
@@ -295,7 +295,7 @@ export default {
           if (res.data.msg == "success") {
             this.logData = res.data["roadmaps"];
           } else {
-            console.log(e);
+            //console.log(e);
             alert("데이터 로드에 실패했습니다.");
           }
         })
@@ -345,7 +345,7 @@ export default {
           }
         })
         .catch(e => {
-          console.log(e);
+          //console.log(e);
           alert("axios 오류");
         });
     },

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nanum-bold">
     <div v-show="isview" ref="myDiagramDiv"></div>
     <div ref="myOverviewDiv" id="overviewdiv" style="margin-right: 25px;"></div>
   </div>

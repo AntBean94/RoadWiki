@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nanum-bold">
     <div
       class="chatting-list"
       v-for="(chatInfo, index) in chattingList"
@@ -51,11 +51,10 @@ export default {
       axios
         .get(SERVER_URL + "/chat/open")
         .then(response => {
-          console.log(response);
           this.chattingList = response.data.chatRooms;
+          
         })
         .catch(response => {
-          console.log(response);
         });
     }
   }

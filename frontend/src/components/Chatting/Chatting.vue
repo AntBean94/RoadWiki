@@ -1,7 +1,7 @@
 <template>
   <b-container 
     id="chatting" 
-    class="rounded border border-0" 
+    class="rounded border border-0 nanum-bold" 
   >
     <header>
       <b-container>
@@ -151,7 +151,9 @@ export default {
   },
   methods: {
     sendMsg() {
-      if (this.roomid == null || this.roomid.length < 1) {
+      if(!this.sender || this.sender.length < 1){
+        alert("로그인 후에 이용해주세요");
+      } else if (this.roomid == null || this.roomid.length < 1) {
         alert("채팅방을 선택해주세요");
       } else if (this.message.length < 1) {
         alert("메시지를 입력해주세요");
@@ -191,9 +193,6 @@ export default {
               time: this.nowTime(time),
             };
             this.messages.push(m);
-            console.log('##########')
-            console.log(m)
-            console.log('##########')
 
             var container = this.$el.querySelector("#content");
 
@@ -207,7 +206,9 @@ export default {
             sender: this.sender,
             msg: this.message,
           };
-          this.stompClient.send("/pub/chat/message", JSON.stringify(msg), {});
+          if(this.sender && this.sender.length > 1){
+            this.stompClient.send("/pub/chat/message", JSON.stringify(msg), {});
+          }
         },
         (error) => {
           if (reconnect++ <= 5) {

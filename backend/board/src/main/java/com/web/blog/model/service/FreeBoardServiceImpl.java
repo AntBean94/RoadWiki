@@ -134,9 +134,10 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 	public Object getPostingListByTitle(String page_s, String classifier, String word, String... tags)
 			throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
+		System.out.println(word);
 		try {
 			int cnt = PAGESIZE[0];
-			int page = 1 + (Integer.parseInt(page_s) - 1) * cnt;
+			int page = (Integer.parseInt(page_s) - 1) * cnt;
 			if (tags.length == 0) {
 				result.put("postings", postingRepo.selectListTitle(page, cnt, classifier, word));
 			} else {

@@ -2,6 +2,7 @@
   <!--goJS/start-->
   <div
     style="width: 100%; display: flex; justify-content: space-between; z-index:1;"
+    class="nanum-bold"
   >
     <div
       v-show="roadmapMode && !isroadback"
@@ -38,7 +39,7 @@
       <hr>
 
 
-      <b-card-text v-if="roadmapMode && i">
+      <b-card-text v-if="roadmapMode && !isroadback">
         <base-input label="시작날짜-종료날짜">
           <flat-pickr
             slot-scope="{ focus, blur }"
@@ -108,7 +109,6 @@ export default {
     rmid: Number,
     roadmapname: String,
     checkName: Boolean,
-    isRoadback: Boolean,
   },
   data() {
     return {
@@ -637,7 +637,8 @@ export default {
     // // 수정로그 가져오기
     // update쪽으로 옮기기
     // this.readRoadmapLog();
-    this.getRecommendCur();
+    if(this.roadmapMode == 1)
+      this.getRecommendCur();
     // 팔레트 초기화
     this.curriculumData = -1;
 
@@ -819,7 +820,8 @@ export default {
           myPalette.model.nodeDataArray = recommendCurData;
         })
         .catch(e => {
-          console.error(e);
+          alert("죄송합니다. 문제가 생겼습니다.")
+          //console.error(e);
         });
     },
     getSearchCur() {
@@ -845,7 +847,8 @@ export default {
           myPalette.model.nodeDataArray = recommendCurData;
         })
         .catch(err => {
-          console.error(err);
+          alert("죄송합니다. 문제가 생겼습니다.")
+          //console.error(err);
         });
     },
     readRoadmap() {
@@ -870,7 +873,8 @@ export default {
             myDiagram.model = go.Model.fromJson(res.data["roadmaps"].tmp);
           })
           .catch(err => {
-            console.error(err);
+            alert("죄송합니다. 문제가 생겼습니다.")
+            //console.error(err);
           });
       }, 2000);
     },
@@ -883,7 +887,8 @@ export default {
           if (res.data.msg != "success") alert("통신 오류");
         })
         .catch(err => {
-          console.error(err);
+          alert("죄송합니다. 문제가 생겼습니다.")
+          //console.error(err);
         });
       this.isworking = false;
     },
@@ -895,7 +900,8 @@ export default {
           if (res.data.msg != "success") alert("통신 오류");
         })
         .catch(err => {
-          console.error(err);
+          alert("죄송합니다. 문제가 생겼습니다.")
+          //console.error(err);
         });
         this.isworking = false;
     },
@@ -910,7 +916,8 @@ export default {
           if (res.data.msg != "success") alert("통신 오류");
         })
         .catch(err => {
-          console.error(err);
+          alert("죄송합니다. 문제가 생겼습니다.")
+          //console.error(err);
         });
         this.isworking = false;
     },

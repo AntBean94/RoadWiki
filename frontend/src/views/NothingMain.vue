@@ -1,5 +1,5 @@
 <template>
-  <div class="nothing-main">
+  <div class="nothing-main nanum-bold">
     <b-navbar-brand to="/" class="mt-5 ml-5">
       <img src="img/brand/logo_blue.png" width="250rem;" />
     </b-navbar-brand>

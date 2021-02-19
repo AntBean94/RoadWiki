@@ -1,6 +1,6 @@
 <template>
-  <div class="d-flex flex-column">
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue">
+  <div class="d-flex flex-column nanum-bold">
+    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue" style="height: 350px;">
     </base-header>
 
     <b-container>
@@ -43,7 +43,7 @@
           <b-card no-body class="border-0">
             <div class="inline-block" style="width: 100%;">
               <!-- goJS/start-->
-              <Roadmap :roadmapMode="roadmapMode" :roadmapData="roadmapData" :roadmapname="roadmapname" :isRoadback="isRoadback" />
+              <Roadmap :roadmapMode="roadmapMode" :roadmapData="roadmapData" :roadmapname="selectedRoadmapName"/>
               <!--goJs/end -->
             </div>
           </b-card>
@@ -80,15 +80,22 @@ export default {
       initialText: "내용을 입력해주세요",
       title: "",
       userRoadmapList: [],
-      roadmapData: "",
+      roadmapData: { 
+        class: "go.GraphLinksModel",
+        linkFromPortIdProperty: "fromPort",
+        linkToPortIdProperty: "toPort",
+        nodeDataArray: [
+        ],
+        linkDataArray: [
+        ]},
+      roadmapMode: 0,
       rmid: "",
       selectedRoadmapName: "로드맵 선택하기",
       isActiveRoadback: true,
-      isRoadback: true,
     };
   },
   mounted() {
-    console.log("createMode는 ", this.createMode);
+    
     const uid = String(this.$store.getters.getUid);
     axios
       .get(`${this.$store.getters.getRoadmapServer}/roadmap/list/${uid}`)
@@ -103,7 +110,7 @@ export default {
         }
       })
       .catch(e => {
-        console.log(e);
+        //console.log(e);
         alert("axios 오류");
       });
   },
@@ -122,7 +129,7 @@ export default {
           }
         })
         .catch(e => {
-          console.log(e);
+          // console.log(e);
           alert("axios 오류");
         });
     },
@@ -133,12 +140,10 @@ export default {
           if (res.data.msg == "success") {
             this.roadmapData = JSON.parse(res.data["roadmaps"].tmp);
           } else {
-            console.log(res);
             alert("데이터 로드에 실패했습니다.");
           }
         })
         .catch(e => {
-          console.log(e);
           alert("axios 오류");
         });
       // 2. uid 호출
@@ -161,11 +166,9 @@ export default {
             useroadback: this.isActiveRoadback
           })
           .then(res => {
-            console.log(res);
             this.$router.push({ name: "공유로드맵's" });
           })
           .catch(err => {
-            console.error(err);
           });
       } else if (!this.title) {
         alert("글의 제목을 입력해주세요.");

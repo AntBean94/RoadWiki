@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue">
+  <div class="nanum-bold">
+    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue" style="height: 350px;">
     </base-header>
 
     <b-container
@@ -179,7 +179,7 @@ export default {
           }
         })
         .catch(e => {
-          console.log(e);
+          //console.log(e);
           alert("axios 오류");
         });
     },
@@ -197,7 +197,7 @@ export default {
           }
         })
         .catch(e => {
-          console.log(e);
+          //console.log(e);
           alert("axios 오류");
         });
     },
@@ -214,11 +214,14 @@ export default {
           }
         })
         .catch(e => {
-          console.log(e);
+          //console.log(e);
           alert("axios 오류");
         });
     },
     likecheck() {
+        if(this.$store.getters.getAccessToken == null){
+         return;
+       }
       axios
         .get(
           `${this.$store.getters.getRoadmapServer}/roadmapshare/islike/${this.pid}`
@@ -231,7 +234,7 @@ export default {
           }
         })
         .catch(e => {
-          console.log(e);
+          //console.log(e);
           alert("axios 오류");
         });
     },
@@ -247,6 +250,10 @@ export default {
       // })
     },
     clickLike() {
+        if(this.$store.getters.getAccessToken == null){
+         alert("로그인 하셔야 해요");
+         return;
+       }
       axios
         .put(
           `${this.$store.getters.getRoadmapServer}/roadmapshare/like/${this.$store.getters.getUid}/${this.pid}`
@@ -258,19 +265,24 @@ export default {
           }
         })
         .catch(e => {
-          console.log(encodeURI);
+          //console.log(encodeURI);
         });
       this.like = true;
       this.likeCnt++;
     },
     cancelLike() {
+      if(this.$store.getters.getAccessToken == null){
+         alert("로그인 하셔야 해요");
+         return;
+       }
+
       axios
         .put(
           `${this.$store.getters.getRoadmapServer}/roadmapshare/dislike/${this.$store.getters.getUid}/${this.pid}`
         )
         .then(res => {})
         .catch(e => {
-          console.log(e);
+          //console.log(e);
         });
 
       this.like = false;
@@ -283,6 +295,10 @@ export default {
       });
     },
     goToRoadBack() {
+        if(this.$store.getters.getAccessToken == null){
+         alert("로그인 하셔야 해요");
+         return;
+       }
       this.$router.push({ name: "roadback", params: { rmid: this.rmid } });
     }
   }

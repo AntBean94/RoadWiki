@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue">
+  <div class="nanum-bold">
+    <base-header class="pb-6 pb-8 pt-2 bg-baby-blue" style="height: 350px;">
     <!-- carousel도 컴포넌트화 필요 -->
       <!-- Card stats -->
       <br>
@@ -64,7 +64,7 @@
           <div style="text-align : right;">
             <button
               class="btn"
-              style="background-color: rgb(256, 256, 256);"
+              style="background-color: rgb(256, 256, 256); margin-bottom: 16px;"
               @click="goToCreate"
             >
               내보내기
@@ -93,6 +93,9 @@ export default {
     ReadUserRoadMap,
     Roadmap
   },
+  props: {
+    mainRmid: Number,
+  },
   data() {
     return {
       uid: this.$store.getters.getUid,
@@ -114,14 +117,18 @@ export default {
           if (res.data["roadmaps"].length) {
             this.curriculumData = res.data["roadmaps"];
             // 시작페이지에서 클릭없이 첫 번째 로드맵을 보여줄 수 있도록 저장
-            this.previewRoadmap(this.curriculumData[0].rmid);
+            if (this.mainRmid) {
+              this.previewRoadmap(this.mainRmid)
+            } else {
+              this.previewRoadmap(this.curriculumData[0].rmid);
+            }
           }
         } else {
           alert("데이터 로드에 실패했습니다.");
         }
       })
       .catch(e => {
-        console.log(e);
+        //console.log(e);
         alert("axios 오류");
       });
   },
@@ -141,7 +148,7 @@ export default {
           }
         })
         .catch(e => {
-          console.log(e);
+          //console.log(e);
           alert("axios 오류");
         });
     },

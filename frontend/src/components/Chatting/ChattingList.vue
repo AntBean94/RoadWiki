@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nanum-bold">
     <b-form-select v-model="selected" :options="rooms" size="sm" class="b-inline-block"></b-form-select>
     <!-- <div class="mt-3">Selected: <strong>{{ selected }}</strong></div> -->
   </div>
@@ -36,7 +36,8 @@ export default {
           this.rooms.unshift({ value: null, text: "선택하세요" });
         })
         .catch((response) => {
-          console.log(response);
+          alert("죄송합니다. 문제가 생겼습니다.")
+          //console.log(response);
         });
     },
     sendRoom: function (roomid) {

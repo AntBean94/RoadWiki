@@ -1,5 +1,5 @@
 <template>
-  <card>
+  <card class="nanum-bold">
     <b-row align-v="center" slot="header" >
       <b-col cols="8">
         <h3 class="mb-0">Edit profile </h3>

@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 mx-3">
+  <div class="p-4 mx-3 nanum-bold">
     <!-- <hr class="my-2"> -->
     <base-input>
       <textarea
@@ -34,6 +34,11 @@ export default {
   props: ["cid"],
   methods: {
     sendRecomment() {
+      if(this.$store.getters.getAccessToken == null){
+         alert("로그인 하셔야 해요");
+         return;
+       }
+
       let recomment = {
         cid: this.cid,
         content: this.content
@@ -50,7 +55,8 @@ export default {
             this.$emit("sendRecomment");
           })
           .catch(err => {
-            console.log(err);
+            alert("죄송합니다. 문제가 생겼습니다.")
+            // console.log(err);
           });
       } else {
         alert("대댓글을 작성해주세요");
