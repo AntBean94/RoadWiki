@@ -13,7 +13,7 @@
               </b-row>
               <b-card 
                 id="carouselCard"
-                class="text-center mb-2"
+                class="text-center mb-2 cursor-event"
                 @click="previewRoadmap(item.rmid)"
               >
                 <!-- 장기 -->

@@ -1,6 +1,11 @@
 <template>
   <div class="d-flex flex-column nanum-bold">
     <base-header class="pb-6 pb-8 pt-0 bg-baby-blue" style="height: 350px;">
+      <b-container>
+        <b-row class="pt-5">
+          <i class="fas fa-arrow-left fa-2x text-classic-blue cursor-event" @click="goToBack"></i>
+        </b-row>
+      </b-container>
     </base-header>
 
     <b-container>
@@ -50,9 +55,11 @@
       />
     </div>
 
-      <b-button @click="datachange" class="mt-3 mx-4" variant="default">
-        저장
-      </b-button>
+      <b-row class="justify-content-center">
+        <b-button @click="datachange" class="mt-3 mx-4" block variant="default">
+          저장
+        </b-button>
+      </b-row>
     </b-container>
   </div>
 </template>
@@ -123,6 +130,9 @@ export default {
     },
     delTag(idx) {
       this.tags.splice(idx, 1);
+    },
+    goToBack() {
+      this.$router.push({ name: "게시판" });
     }
   }
   // watch: {
@@ -140,6 +150,5 @@ export default {
   align-items: center;
   justify-content: center;
 }
-img {
-}
+
 </style>

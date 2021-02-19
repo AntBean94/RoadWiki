@@ -354,7 +354,7 @@ export default {
     },
     goToBack() {
       this.$router.push({ name: "나의 로드맵" });
-    }
+    },
   }
 };
 </script>

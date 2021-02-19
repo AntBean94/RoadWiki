@@ -28,7 +28,7 @@
           <template v-slot="{ row }">
             <b-media no-body class="align-items-center">
               <b-media-body>
-                <span class=" name mb-0 text-sm nanum-bold">
+                <span class=" name mb-0 text-sm nanum-bold cursor-event">
                   {{ row.title }}({{ row.commentCnt }})
                 </span>
               </b-media-body>
@@ -41,7 +41,7 @@
             <b-media no-body class="align-items-center">
               <b-media-body>
                 <span
-                  class="name mb-0 text-sm nanum-bold"
+                  class="name mb-0 text-sm nanum-bold cursor-event"
                   @click="clickName(row.uid)"
                 >
                   {{ row.name }}
@@ -152,6 +152,29 @@ export default {
           alert("죄송합니다. 문제가 생겼습니다");
         });
     },
+    getStart() {
+      let adr = `${this.$store.getters.getBoardServer}/freeboard/list/board/none/ /`;
+      adr += `/${this.currentPage}`;
+      if (this.tag != "") adr += `${this.tag}`;
+
+      axios
+        .get(adr)
+        .then(response => {
+          this.postings = response.data.postings;
+          this.names = response.data.names;
+          this.commentCnts = response.data.commentCnts;
+          for (let i = 0; i < this.postings.length; i++) {
+            this.postings[i].createDate = this.$moment(
+              this.postings[i].createDate
+            ).format("MM/DD HH:mm");
+            this.postings[i].name = this.names[i];
+            this.postings[i].commentCnt = this.commentCnts[i];
+          }
+        })
+        .catch(err => {
+          alert("죄송합니다. 문제가 생겼습니다");
+        });
+    },
     openDetail(row) {
       const pid = row.pid;
       this.$store.dispatch("SETPID", pid);
@@ -174,7 +197,7 @@ export default {
     }
   },
   created() {
-    this.getList("");
+    this.getStart();
     this.getTotalNum();
   },
   watch: {
