@@ -6,7 +6,7 @@
           <b-col xl="5" lg="6" md="8" class="px-5 py-5">
             <router-link to="/main">
               <img
-                src="/img/brand/logo_blue.png"
+                src="/img/brand/logo_word.png"
                 alt="roadwiki"
                 width="250rem;"
               />
@@ -60,7 +60,6 @@ export default {
       if (this.inputEmail) {
         axios.get(`${this.$store.getters.getUserServer}/user/checkemail/${this.inputEmail}`)
         .then((res) => {
-          console.log(res)
           if (res.data.msg === 'success') {
             // 1. 이메일 발송
             this.emailNumSend()

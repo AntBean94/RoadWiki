@@ -134,14 +134,12 @@ export default {
                 })
 
         // data에 myDiagram 객체 저장
-        console.log(myPalette)
+        
         this.diagram = myDiagram
         this.updateModel(this.modelData)
     },
     watch: {
         modelData: function (val) {
-            console.log('watch')
-            console.log(val)
             this.updateModel(val)
         }
     },

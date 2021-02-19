@@ -87,7 +87,7 @@ export default {
           this.currentPage = 1;
         })
         .catch(e => {
-          console.log(e);
+          //console.log(e);
         });
     },
     searchSharedRoadmap() {
@@ -102,7 +102,7 @@ export default {
           this.currentPage = 1;
         })
         .catch(e => {
-          console.log(e);
+          //console.log(e);
         });
     },
   }

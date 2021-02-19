@@ -6,7 +6,7 @@
           <b-col xl="5" lg="6" md="8" class="px-5 py-5">
             <router-link to="/main">
               <img
-                src="/img/brand/logo_blue.png"
+                src="/img/brand/logo_word.png"
                 alt="roadwiki"
                 width="250rem;"
               />
@@ -77,15 +77,13 @@ export default {
             email: this.$route.params.email,
             password: this.newPassword,
           }
-          console.log(user.email)
           axios
           .post(`${this.$store.getters.getUserServer}/user/changepassword`, user)
           .then(res => {
-            console.log(res)
-            alert('잘 돼따ㅏ')
+            alert('비밀번호 재설정이 완료되었습니다')
+            this.$router.push({name:'MAINPAGE'})
           }) 
           .catch(err => {
-            console.log(err)
           })
         } else {
           alert('8자리 이상 입력해주세요')

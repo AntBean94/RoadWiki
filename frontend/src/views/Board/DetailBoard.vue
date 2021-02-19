@@ -187,7 +187,6 @@ export default {
           this.dislike = true;
         }
         this.dislikeCnt = res.data.dislikeCnt;
-        console.log(this.dislikeCnt);
       });
     }
   },

@@ -367,7 +367,7 @@ export default {
         `${this.$store.getters.getBoardServer}/freeboard/list/${this.profileuid}`
       )
       .then(res => {
-        console.log(res);
+        
         this.postings = res.data.postings;
         this.commentCnt = res.data.commentCnt;
       })
@@ -414,7 +414,7 @@ export default {
           `${this.$store.getters.getUserServer}/follow/followerlist/${this.profileuid}`
         )
         .then(res => {
-          console.log(res.data)
+          
           this.followerlists = res.data.followerlists;
         });
 

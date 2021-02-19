@@ -179,7 +179,7 @@ export default {
           }
         })
         .catch(e => {
-          console.log(e);
+          //console.log(e);
           alert("axios 오류");
         });
     },
@@ -197,7 +197,7 @@ export default {
           }
         })
         .catch(e => {
-          console.log(e);
+          //console.log(e);
           alert("axios 오류");
         });
     },
@@ -214,7 +214,7 @@ export default {
           }
         })
         .catch(e => {
-          console.log(e);
+          //console.log(e);
           alert("axios 오류");
         });
     },
@@ -234,7 +234,7 @@ export default {
           }
         })
         .catch(e => {
-          console.log(e);
+          //console.log(e);
           alert("axios 오류");
         });
     },
@@ -265,7 +265,7 @@ export default {
           }
         })
         .catch(e => {
-          console.log(encodeURI);
+          //console.log(encodeURI);
         });
       this.like = true;
       this.likeCnt++;
@@ -282,7 +282,7 @@ export default {
         )
         .then(res => {})
         .catch(e => {
-          console.log(e);
+          //console.log(e);
         });
 
       this.like = false;

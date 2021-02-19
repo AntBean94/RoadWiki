@@ -83,7 +83,6 @@ export default {
   methods: {
     datachange() {
       const content = this.$refs.toastuiEditor.invoke("getMarkdown");
-      // console.log(typeof(content))
       axios
         .post(`${this.$store.getters.getBoardServer}/freeboard/posting`, {
           uid: this.$store.getters.getUid,
@@ -99,7 +98,6 @@ export default {
       // this.$refs.toastuiViewer.editor.markdownValue = content
     },
     tagEnter() {
-      console.log("엔터 찍힘");
       if (this.tags.length < 5) {
         if (this.tagInput) {
           this.tags.push(this.tagInput);

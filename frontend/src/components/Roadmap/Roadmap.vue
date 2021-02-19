@@ -820,7 +820,8 @@ export default {
           myPalette.model.nodeDataArray = recommendCurData;
         })
         .catch(e => {
-          console.error(e);
+          alert("죄송합니다. 문제가 생겼습니다.")
+          //console.error(e);
         });
     },
     getSearchCur() {
@@ -846,7 +847,8 @@ export default {
           myPalette.model.nodeDataArray = recommendCurData;
         })
         .catch(err => {
-          console.error(err);
+          alert("죄송합니다. 문제가 생겼습니다.")
+          //console.error(err);
         });
     },
     readRoadmap() {
@@ -871,7 +873,8 @@ export default {
             myDiagram.model = go.Model.fromJson(res.data["roadmaps"].tmp);
           })
           .catch(err => {
-            console.error(err);
+            alert("죄송합니다. 문제가 생겼습니다.")
+            //console.error(err);
           });
       }, 2000);
     },
@@ -884,7 +887,8 @@ export default {
           if (res.data.msg != "success") alert("통신 오류");
         })
         .catch(err => {
-          console.error(err);
+          alert("죄송합니다. 문제가 생겼습니다.")
+          //console.error(err);
         });
       this.isworking = false;
     },
@@ -896,7 +900,8 @@ export default {
           if (res.data.msg != "success") alert("통신 오류");
         })
         .catch(err => {
-          console.error(err);
+          alert("죄송합니다. 문제가 생겼습니다.")
+          //console.error(err);
         });
         this.isworking = false;
     },
@@ -911,7 +916,8 @@ export default {
           if (res.data.msg != "success") alert("통신 오류");
         })
         .catch(err => {
-          console.error(err);
+          alert("죄송합니다. 문제가 생겼습니다.")
+          //console.error(err);
         });
         this.isworking = false;
     },

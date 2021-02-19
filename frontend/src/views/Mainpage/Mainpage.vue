@@ -194,7 +194,7 @@ export default {
           this.getPostings(); 
         })
         .catch(res => {
-          console.log(res);
+          //console.log(res);
         });
     },
     getPostings() {
@@ -216,7 +216,7 @@ export default {
           this.popularTable = res.data["postings"]
         })
         .catch(res => {
-          console.log(res);
+          //console.log(res);
         });
     },
     getOfficial() {
@@ -232,7 +232,7 @@ export default {
         }
       })
       .catch(e => {
-        console.log(e);
+        //console.log(e);
         alert("axios 오류");
       });
     },
@@ -244,7 +244,7 @@ export default {
         this.goToShare(roadmap, username)
       })
       .catch(err => {
-        console.error(err)
+        //console.error(err)
       })
     },
     getUserNameList() {
@@ -255,7 +255,7 @@ export default {
           this.usernameList.push(res.data.name);
         })
         .catch(err => {
-          console.error(err)
+          //console.error(err)
         })
       }
     },

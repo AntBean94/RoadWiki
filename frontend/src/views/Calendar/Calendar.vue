@@ -188,7 +188,6 @@ export default {
           item.memo = curr.memo;
           //날짜,  대중소 에 따른 classes 색 변경
           let classes = ""
-          console.log(curr.startdate);
           var today = new Date();
           var dd = today.getDate();
           var mm = today.getMonth()+1;
@@ -227,7 +226,6 @@ export default {
         });
       })
       .catch(e => {
-        console.log(e);
         alert("axios 통신오류");
       });
   },
@@ -346,7 +344,6 @@ export default {
           this.$refs['calendar-modal'].hide()
         })
         .catch(e => {
-          console.log(e);
         });
       alert("일정을 수정했습니다.");
     },

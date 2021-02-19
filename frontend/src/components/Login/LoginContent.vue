@@ -1,12 +1,26 @@
 <template>
   <div class="nanum-bold">
+    <b-container>
+      <b-col>
+        <b-row class="justify-content-center">
+          <i 
+            class="btn ni ni-single-02 nav-btn"
+            @click="modalShow=!modalShow"
+          >
+          </i>
+        </b-row>
+        <b-row class="justify-content-center">
+          <h6 class="mb-0">로그인</h6>
+        </b-row>
+      </b-col>
+    </b-container>
 
-    <b-button 
+    <!-- <b-button 
       @click="modalShow = !modalShow" 
       variant="white"
       style="color: black; border: 0; outline: 0;"
       class="p-2 ml-3 mt-1"
-    >Login</b-button>
+    >Login</b-button> -->
 
     <b-modal v-model="modalShow" hide-footer hide-header centered>
       <!-- <template #modal-title class="text-center mx-auto">
@@ -14,7 +28,7 @@
       </template> -->
       <div class="h1 text-center display-3 mb-4">
         <!-- <img src="/img/brand/logo_blue.png" alt="roadwiki" width="250rem;"> -->
-        <img src="/img/brand/final_logo.png" alt="roadwiki" width="300rem;" />
+        <img src="/img/brand/logo_word.png" alt="roadwiki" width="300rem;" />
       </div>
       <base-input
         alternative
@@ -38,13 +52,13 @@
         @keydown.enter="signIn"
       >
       </base-input>
-      <div>
+        <b-row align-h="between" class="mx-1">
         <!-- 근데 이거 왜 필요한거지 -->
         <!-- <a href="">비밀번호를 잊으셨나요</a> -->
         <router-link to="/find-password">비밀번호를 잊으셨나요?</router-link>
         <br>
         <router-link to="/register">회원가입하기</router-link>
-      </div>
+      </b-row>
       <div class="text-center">
         <base-button
           block
@@ -74,7 +88,6 @@ export default {
   },
   methods: {
     signIn() {
-      console.log("login req");
       this.$store
         .dispatch("LOGIN", this.user)
         .then(() => {
