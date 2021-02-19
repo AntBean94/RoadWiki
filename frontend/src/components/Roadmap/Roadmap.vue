@@ -812,6 +812,26 @@ export default {
             start.text = "시작";
             res.data["suggest"].unshift(start);
           }
+          if (this.curriculumData == -1) {
+            let custom = _.cloneDeep(this.curData);
+            custom.category = "Custom";
+            custom.text = "인공지능";
+            res.data["suggest"].push(custom);
+            let start = _.cloneDeep(this.curData);
+            start.category = "Custom";
+            start.text = "Big Data";
+            res.data["suggest"].push(start);
+          }
+                    if (this.curriculumData == -1) {
+            let custom = _.cloneDeep(this.curData);
+            custom.category = "Custom";
+            custom.text = "블록체인";
+            res.data["suggest"].push(custom);
+            let start = _.cloneDeep(this.curData);
+            start.category = "Custom";
+            start.text = "IoT";
+            res.data["suggest"].push(start);
+          }
           let blank = _.cloneDeep(this.curData);
           blank.category = "Blank";
            blank.text = "";

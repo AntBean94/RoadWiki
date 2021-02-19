@@ -28,7 +28,7 @@
             >
           </template>
           <h2 style="color: rgba(255, 255, 255, 0.8)">Highly mentioned Roadmap</h2>
-          <h3 style="color: white;">
+          <h3 style="color: white;" class="cursor-event">
             <span style="font-size: 25px;">{{ roadmapsharesF.title }} |</span> {{ roadmapsharesF.createDate }}
           </h3>
           <h4 class="mainContent" style="color: white;">추천수: {{ roadmapsharesF.likecnt }}</h4>
@@ -130,7 +130,7 @@
     <!-- 게시판 -->
     <b-container class="mt-4 p-1">
       
-      <h3 label="popboard" class="ml-2">인기게시판</h3>
+      <h3 label="popboard" class="ml-2">최신게시글</h3>
       <popular-table id="popboard" @clickRow="clickOn" />
 
     </b-container> 
@@ -186,7 +186,7 @@ export default {
         .then(res => {
           this.roadmapsharesF = res.data["roadmapshares"][0]
           this.roadmapsharesS = res.data["roadmapshares"][1]
-          this.roadmapshareList = res.data["roadmapshares"]
+          this.roadmapshareList = res.data["roadmapshares"].slice(0, 4)
           // this.roadmapshareList.map((item) => {
           //   this.usernameList.push(getUsernameList(item.uid))
           // })
@@ -248,7 +248,6 @@ export default {
       })
     },
     getUserNameList() {
-      console.log(this.roadmapshareList);
       for(var i = 0; i < this.roadmapshareList.length; i++){
         axios.get(`${this.$store.getters.getUserServer}/user/name/${this.roadmapshareList[i].uid}`)
         .then(res => {

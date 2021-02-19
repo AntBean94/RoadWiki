@@ -10,7 +10,7 @@
     <b-col>
       <a
         @click="goToMain(url)"
-        class="h1 mb-0 mr-2 text-black text-uppercase d-none d-lg-inline-block active router-link-active nanum-extra-bold"
+        class="h1 mb-0 mr-2 text-black text-uppercase d-none d-lg-inline-block active router-link-active nanum-extra-bold cursor-event"
       >
         <img src="/img/brand/logo_word.png" alt="roadwiki" width="200rem;" />
       </a>
@@ -38,6 +38,7 @@
             <b-row class="justify-content-center">
               <i
                 class="btn ni ni-map-big text-black nav-btn"
+                variant="link"
               ></i>
             </b-row>
             <b-row class="justify-content-center">
@@ -237,7 +238,7 @@
         class="px-3"
       >
         <!-- chatting -->
-        <i class="far fa-comment-dots fa-2x"></i>
+        <i class="far fa-comment-dots fa-2x cursor-event"></i>
       </b-button>
     </div>
   </div>
@@ -380,7 +381,9 @@ export default {
       this.$store
         .dispatch("LOGOUT")
         .then(() => {
-          // this.$router.push("/");
+          if(this.url != 'MAINPAGE')
+            this.$router.push("MAINPAGE");
+          
         })
         .catch(() => {
           alert("로그아웃에 실패했습니다.");

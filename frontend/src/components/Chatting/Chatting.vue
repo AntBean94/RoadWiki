@@ -18,12 +18,12 @@
           <b-col cols="5">
             <chatting-list
               @selectRoom="changeRoom"
-              class="mb-2"
+              class="mb-2 cursor-event"
             />
           </b-col>
           <b-col cols="1">
             <i 
-              class="fas fa-times"
+              class="fas fa-times cursor-event"
               @click="close"
             >
             </i>
