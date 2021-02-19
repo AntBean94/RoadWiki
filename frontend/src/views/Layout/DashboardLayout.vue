@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper nanum-bold">
     <notifications></notifications>
     <side-bar v-if="isHeader">
       <template slot="links">
@@ -21,14 +21,14 @@
         >
         </sidebar-item>
 
-        <sidebar-item
+        <!-- <sidebar-item
           :link="{
             name: 'Profile',
             path: '/profile',
             icon: 'ni ni-single-02 text-yellow'
           }"
         >
-        </sidebar-item>
+        </sidebar-item> -->
 
         <sidebar-item
           :link="{
@@ -61,8 +61,17 @@
         <sidebar-item
           :link="{
             name: 'Roadmap Share',
-            path: '/shareroadmap',
+            path: '/shareboard',
             icon: 'ni ni-bullet-list-67 text-red'
+          }"
+        >
+        </sidebar-item>
+
+        <sidebar-item
+          :link="{
+            name: 'Chatting',
+            path: '/chatting-main',
+            icon: 'ni ni-chat-33 text-red'
           }"
         >
         </sidebar-item>
@@ -106,10 +115,6 @@
 
       <content-footer v-if="!$route.meta.hideFooter"></content-footer>
     </div>
-    <div>
-      <Chatting v-on:remove="removeChatting" v-if="chattingOn" />
-      <button id="chat" @click="createChatting" v-else>chatting</button>
-    </div>
   </div>
 </template>
 
@@ -134,18 +139,12 @@ function initScrollbar(className) {
     }, 100);
   }
 }
-// flatpickr
-// import flatPickr from "vue-flatpickr-component";
-// import "flatpickr/dist/flatpickr.css";
-// import 'flatpickr/dist/themes/material_blue.css';
-// import {Hindi} from 'flatpickr/dist/l10n/hi.js';
 
 import DashboardNavbar from "./DashboardNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
 import DashboardContent from "./Content.vue";
 import { FadeTransition } from "vue2-transitions";
 import { mapGetters } from "vuex";
-import Chatting from "@/components/Chatting/Chatting";
 
 export default {
   components: {
@@ -154,8 +153,7 @@ export default {
     DashboardContent,
     FadeTransition,
     LoginContent,
-    LogoutContent,
-    Chatting
+    LogoutContent
   },
   created() {
     let url = this.$route.name;
@@ -165,7 +163,7 @@ export default {
   data() {
     return {
       isHeader: true,
-      chattingOn: true
+      chattingOn: false
     };
   },
   methods: {
@@ -177,18 +175,12 @@ export default {
     },
     // 특정 컴포넌트에서 nav바 제거
     checkUrl(url) {
-      let array = ["Roadmap", "update_user_roamdap"];
+      let array = ["Roadmap", "update_user_roamdap", "roadback"];
       let isHeader = true;
       array.map(path => {
         if (url === path) isHeader = false;
       });
       this.isHeader = isHeader;
-    },
-    removeChatting() {
-      this.chattingOn = false;
-    },
-    createChatting() {
-      this.chattingOn = true;
     }
   },
   logOut() {

@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     getPosting() {
-      const adr = `${this.$store.getters.getServer}/freeboard/posting/${this.pid}`;
+      const adr = `${this.$store.getters.getBoardServer}/freeboard/posting/${this.pid}`;
       axios
         .get(adr)
         .then(response => {
@@ -61,7 +61,8 @@ export default {
           this.posting.name = response.data.name;
         })
         .catch(response => {
-          console.log("FAIL", response);
+          alert("죄송합니다. 문제가 생겼습니다");
+          
         });
       axios
         .get(adr)
@@ -70,7 +71,8 @@ export default {
           this.posting.name = response.data.name;
         })
         .catch(response => {
-          console.log("FAIL", response);
+          alert("죄송합니다. 문제가 생겼습니다");
+          
         });
     }
   },

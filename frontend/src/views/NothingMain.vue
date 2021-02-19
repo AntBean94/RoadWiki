@@ -1,7 +1,7 @@
 <template>
-  <div class="nothing-main">
+  <div class="nothing-main nanum-bold">
     <b-navbar-brand to="/" class="mt-5 ml-5">
-      <img src="img/brand/logo_blue.png" width="250rem;">
+      <img src="img/brand/logo_blue.png" width="250rem;" />
     </b-navbar-brand>
     <!-- <base-nav
       :transparent="true"
@@ -17,34 +17,34 @@
     <b-container>
       <b-jumbotron class="mt-5">
         <template #header>
-          <div class="display-1">
+          <div class="display-1 source-han-serif-k-bold">
             개발자 로드맵을 그려보세요
           </div>
-          <h1>with ROADWIKI</h1>
+          <h1 class="source-han-serif-k-extralight">with ROADWIKI</h1>
         </template>
         <template #lead>
         </template>
-        <p>
+        <p class="source-han-serif-k-extralight">
           Ask and it will be given to you
  seek and you will find
  knock and the door will be opened to you.
         </p>
-        <LoginContent class="mb-3"/>
-        계정이 없다면?
-        <b-link href="/#/register"><strong>가입하러 가기</strong></b-link>
+        <LoginContent class="mb-3 source-han-serif-k-extralight"/>
+        <span class="source-han-serif-k-extralight">계정이 없다면?</span>
+        <router-link to="/register" class="source-han-serif-k-extralight">가입하러 가기</router-link>
       </b-jumbotron>
     </b-container>
   </div>
 </template>
 
 <script>
-import LoginContent from '@/components/Login/LoginContent.vue'
+import LoginContent from "@/components/Login/LoginContent.vue";
 
 export default {
   components: {
-    LoginContent,
-  },
-}
+    LoginContent
+  }
+};
 </script>
 
 <style>

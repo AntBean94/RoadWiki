@@ -2,11 +2,12 @@
   <!--goJS/start-->
   <div
     style="width: 100%; display: flex; justify-content: space-between; z-index:1;"
+    class="nanum-bold"
   >
     <div
-      v-show="roadmapMode"
+      v-show="roadmapMode && !isroadback"
       ref="myPaletteDiv"
-      style="width: 150px; margin-right: 2px; background-color: #F9F8F3;"
+      style="width: 170px; margin-right: 2px; background-color: #F9F8F3;"
     ></div>
     <div
       ref="myDiagramDiv"
@@ -14,11 +15,31 @@
       @click="checkCur"
     ></div>
     <!-- 커리큘럼 데이터 출력 카드/start -->
-    <b-card title="Curriculum Information" style="width: 252px;">
-      <hr />
-      <h3>{{ headertext }}</h3>
-      <hr />
-      <b-card-text>
+    <b-card
+      v-if="!isroadback"
+      style="width: 252px;"
+      class="text-center"
+    >
+      <!-- 헤더텍스트 색 구분 blue, black, green (대, 중, 소) -->
+      <div v-if="curriculumData === -1">
+        <h1 class="bold">{{ roadmapname }}</h1>
+      </div>
+      <div v-else-if="curriculumData.category === 'blue'" class="bigCur">
+        <h2>{{ headertext }}</h2>
+      </div>
+      <div v-else-if="curriculumData.category === 'black'" class="middleCur">
+        <h2>{{ headertext }}</h2>
+      </div>
+      <div v-else-if="curriculumData.category === 'green'" class="smallCur">
+        <h2>{{ headertext }}</h2>
+      </div>
+      <div v-else class="otherCur">
+        <h2>{{ headertext }}</h2>
+      </div>
+      <hr>
+
+
+      <b-card-text v-if="roadmapMode && !isroadback">
         <base-input label="시작날짜-종료날짜">
           <flat-pickr
             slot-scope="{ focus, blur }"
@@ -32,15 +53,24 @@
           </flat-pickr>
         </base-input>
       </b-card-text>
+
+      <b-card-text v-else-if="dates">
+        <h3>시작날짜-종료날짜</h3>
+        <p>{{ dates }}</p>
       <hr />
+      </b-card-text>
+
       <span>{{ descript }}</span>
-      <hr />
-      <b-card-text>
+      <hr v-show="descript.length > 0"/>
+
+      <b-card-text v-if="roadmapMode">
         <b-form-input
           v-model="memotext"
           placeholder="Enter your memo"
-          :readonly="!roadmapMode"
         ></b-form-input>
+      </b-card-text>
+      <b-card-text v-else>
+        <p>{{ memotext }}</p>
       </b-card-text>
     </b-card>
     <!-- 커리큘럼 데이터 출력 카드/end -->
@@ -61,25 +91,33 @@ let $ = go.GraphObject.make;
 let myDiagram;
 let myPalette;
 // node 속성(card에 띄우기위한) 체크위한 전역변수(여기서만 사용)
-let curriculumData = -1;
+// let curriculumData = -1;
 
 // 커리큘럼 클릭시 요청을통해 받아온 데이터를 여기에 저장하면 됨
 let recommendCurData = [
   // 실제 프로젝트 default data 최초 클릭할 정보가 필요
 ];
-
+let iseditable = true;
+let roadbacktimer = "";
 export default {
   name: "Roadmap",
   props: {
-    roadmapMode: Number,
-    roadmapData: Object
+    roadmapMode: Number, //0 읽기 1 쓰기 2 로드백 모드
+    roadmapData: Object, // 변수 하나를 줘가지고 그러네
+    inputText: String,
+    isroadback: Boolean,
+    rmid: Number,
+    roadmapname: String,
+    checkName: Boolean,
   },
   data() {
     return {
       headertext: "",
+      isworking: false,
       dates: "",
       memotext: "",
       descript: "",
+      recommend : "",
       // Get more form https://flatpickr.js.org/options/
       config: {
         wrap: true, // set wrap to true only when using 'input-group'
@@ -87,18 +125,57 @@ export default {
         altInput: true,
         dateFormat: "Y-m-d",
         locale: Hindi // locale for this instance only
-      }
+      },
+      curData: {
+        category: "",
+        startdate: "",
+        enddate: "",
+        memo: "",
+        bdid: 0,
+        mdid: 0,
+        sdid: 0,
+        text: "",
+        content: ""
+      },
+      curriculumData: -1,
     };
   },
   components: {
     dropdown: dropdown
   },
-  created() {},
+  created() {
+    iseditable = !this.isroadback;
+  },
   mounted() {
-    myDiagram = $(go.Diagram, this.$refs.myDiagramDiv, {
-      initialContentAlignment: go.Spot.Center,
-      "undoManager.isEnabled": true
-    });
+    if (!iseditable) {
+      myDiagram = $(go.Diagram, this.$refs.myDiagramDiv, {
+        initialContentAlignment: go.Spot.Center,
+        initialAutoScale: go.Diagram.Uniform,
+        "undoManager.isEnabled": true,
+        "animationManager.isEnabled": false,
+        allowLink: false,
+        allowRelink: false,
+        allowReshape: false,
+        allowZoom: false,
+        allowVerticalScroll: false,
+        allowHorizontalScroll: false,
+        "clickCreatingTool.archetypeNodeData": {
+          text: "피드백 할 내용을 적으세요.",
+          category: "comment"
+        },
+
+        positionComputation: function(diagram, pt) {
+          return new go.Point(Math.floor(pt.x), Math.floor(pt.y));
+        }
+      });
+    } else {
+      myDiagram = $(go.Diagram, this.$refs.myDiagramDiv, {
+        initialContentAlignment: go.Spot.Center,
+        initialAutoScale: go.Diagram.Uniform,
+        
+        "undoManager.isEnabled": true
+      });
+    }
 
     // 페이지에 변화가 있을 때 title 및 save 버튼 활성화
     // when the document is modified, add a "*" to the title and enable the "Save" button
@@ -134,7 +211,7 @@ export default {
             {
               fill: "rgb(255, 255 ,255)",
               stroke: "rgb(15, 76, 129)",
-              strokeWidth: 3,
+              strokeWidth: 0.5,
               strokeJoin: "round",
               strokeCap: "square"
             },
@@ -144,7 +221,7 @@ export default {
             go.TextBlock,
             this.textStyle(),
             {
-              margin: 8,
+              margin: 10,
               maxSize: new go.Size(160, NaN),
               wrap: go.TextBlock.WrapFit,
               editable: false
@@ -176,8 +253,8 @@ export default {
             "RoundedRectangle",
             {
               fill: "rgb(255, 255, 255)",
-              stroke: "rgb(132, 137, 140)",
-              strokeWidth: 2.5,
+              stroke: "rgb(137, 119, 173)",
+              strokeWidth: 0.5,
               strokeJoin: "round",
               strokeCap: "square"
             },
@@ -187,7 +264,7 @@ export default {
             go.TextBlock,
             this.textStyle(),
             {
-              margin: 8,
+              margin: 10,
               maxSize: new go.Size(160, NaN),
               wrap: go.TextBlock.WrapFit,
               editable: false
@@ -220,7 +297,7 @@ export default {
             {
               fill: "rgb(255, 255, 255)",
               stroke: "#307363",
-              strokeWidth: 2,
+              strokeWidth: 0.5,
               strokeJoin: "round",
               strokeCap: "square"
             },
@@ -230,7 +307,7 @@ export default {
             go.TextBlock,
             this.textStyle(),
             {
-              margin: 8,
+              margin: 10,
               maxSize: new go.Size(160, NaN),
               wrap: go.TextBlock.WrapFit,
               editable: false
@@ -260,7 +337,7 @@ export default {
             desiredSize: new go.Size(70, 70),
             fill: "#ffffff",
             stroke: "#F04A5E",
-            strokeWidth: 3.5
+            strokeWidth: 1
           }),
           $(go.TextBlock, "Start", this.textStyle(), new go.Binding("text"))
         ),
@@ -270,29 +347,126 @@ export default {
         this.makePort("B", go.Spot.Bottom, go.Spot.Bottom, true, false)
       )
     );
-
-    // 종료 모델
+    // 맨위 빈칸 만들기 모델
     myDiagram.nodeTemplateMap.add(
-      "End",
+      "Blank",
       $(
         go.Node,
         "Table",
-        this.nodeStyle(),
+        {
+          // the Node.location is at the center of each node
+          locationSpot: go.Spot.Center,
+          movable: false,
+          deletable: false,
+          selectable: false
+        },
         $(
           go.Panel,
           "Spot",
           $(go.Shape, "Circle", {
-            desiredSize: new go.Size(60, 60),
-            fill: "#ffffff",
-            stroke: "#8D2040",
-            strokeWidth: 3.5
+            desiredSize: new go.Size(70, 70),
+            fill: "#F9F8F3",
+            stroke: "#F9F8F3",
+            strokeWidth: 1
           }),
-          $(go.TextBlock, "End", this.textStyle(), new go.Binding("text"))
+          $(go.TextBlock, "Start", this.textStyle(), new go.Binding("text"))
         ),
-        // three named ports, one on each side except the bottom, all input only:
-        this.makePort("T", go.Spot.Top, go.Spot.Top, false, true),
-        this.makePort("L", go.Spot.Left, go.Spot.Left, false, true),
-        this.makePort("R", go.Spot.Right, go.Spot.Right, false, true)
+        // three named ports, one on each side except the top, all output only:
+        this.makePort("L", go.Spot.Left, go.Spot.Left, false, false),
+        this.makePort("R", go.Spot.Right, go.Spot.Right, false, false),
+        this.makePort("B", go.Spot.Bottom, go.Spot.Bottom, false, false)
+      )
+    );
+    // custom 모델
+    myDiagram.nodeTemplateMap.add(
+      "Custom",
+      $(
+        go.Node,
+        "Table",
+        this.nodeStyle(),
+        // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
+        $(
+          go.Panel,
+          "Auto",
+          $(
+            go.Shape,
+            "RoundedRectangle",
+            {
+              fill: "rgb(255, 255, 255)",
+              stroke: "rgb(234, 218, 79)",
+              strokeWidth: 0.5,
+              strokeJoin: "round",
+              strokeCap: "square"
+            },
+            new go.Binding("figure", "figure")
+          ),
+          $(
+            go.TextBlock,
+            this.textStyle(),
+            {
+              margin: 10,
+              maxSize: new go.Size(160, NaN),
+              wrap: go.TextBlock.WrapFit,
+              editable: iseditable
+            },
+            new go.Binding("text").makeTwoWay()
+          )
+        ),
+        // four named ports, one on each side: node의 가지 옵션
+        this.makePort("T", go.Spot.Top, go.Spot.TopSide, true, true),
+        this.makePort("L", go.Spot.Left, go.Spot.LeftSide, true, true),
+        this.makePort("R", go.Spot.Right, go.Spot.RightSide, true, true),
+        this.makePort("B", go.Spot.Bottom, go.Spot.BottomSide, true, true)
+      )
+    );
+
+    // comment 모델
+    myDiagram.nodeTemplateMap.add(
+      "comment",
+      $(
+        go.Node,
+        "Table",
+        new go.Binding("location", "loc", go.Point.parse).makeTwoWay(
+          go.Point.stringify
+        ),
+        {
+          // the Node.location is at the center of each node
+          locationSpot: go.Spot.Center,
+          movable: true
+        },
+        // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
+        $(
+          go.Panel,
+          "Auto",
+          $(
+            go.Shape,
+            "RoundedRectangle",
+            {
+              fill: "#F9F8F3",
+              stroke: "#F9F8F3",
+              strokeWidth: 0,
+              strokeJoin: "round",
+              strokeCap: "square"
+            },
+            new go.Binding("figure", "figure")
+          ),
+          $(
+            go.TextBlock,
+            this.textStyle(),
+            {
+              margin: 1,
+              maxSize: new go.Size(160, NaN),
+              wrap: go.TextBlock.WrapFit,
+              editable: true
+            },
+            new go.Binding("text").makeTwoWay()
+          )
+        ),
+        // four named ports, one on each side: node의 가지 옵션
+        this.makePort("T", go.Spot.Top, go.Spot.TopSide, false, false),
+        this.makePort("L", go.Spot.Left, go.Spot.LeftSide, false, false),
+        this.makePort("R", go.Spot.Right, go.Spot.RightSide, false, false),
+        this.makePort("B", go.Spot.Bottom, go.Spot.BottomSide, false, false)
       )
     );
 
@@ -328,7 +502,7 @@ export default {
         relinkableTo: true,
         reshapable: true,
         resegmentable: true,
-
+        isEnabled: iseditable,
         // mode에 따라 바뀌어야 하는 부분--------------------------------------------------------|
         // 마우스 오버시 이펙트 효과 부여
         mouseEnter: function(e, link) {
@@ -352,18 +526,18 @@ export default {
       ),
       $(
         go.Shape, // 화살표 바디 모양
-        { isPanelMain: true, stroke: "#1B443C", strokeWidth: 2.5 },
+        { isPanelMain: true, stroke: "#2a446f", strokeWidth: 1.5 },
         new go.Binding("stroke", "isSelected", function(sel) {
-          return sel ? "#1B443C" : "#1B443C";
+          return sel ? "#2a446f" : "#2a446f";
         }).ofObject()
       ),
       $(
         go.Shape, // 화살표 모양
         {
           toArrow: "Triangle",
-          strokeWidth: 1.5,
-          stroke: "#1B443C",
-          fill: "#307362"
+          strokeWidth: 1,
+          stroke: "#2a446f",
+          fill: "#2a446f"
         }
       ),
       $(
@@ -397,15 +571,33 @@ export default {
 
     // 어떤 커리큘럼을 눌렀는지 체크 => 커리큘럼 추천에 활용할 데이터 추출
     // 추천 로직 1 단계
-    myDiagram.addDiagramListener("ObjectSingleClicked", function(e) {
-      curriculumData = e.subject.part.data;
+    myDiagram.addDiagramListener("ObjectSingleClicked", (e) => {
+      this.curriculumData = e.subject.part.data;
     });
 
-    myDiagram.addDiagramListener("BackgroundSingleClicked", function(e) {
-      curriculumData = -1;
-    });
+    if (!iseditable) {
+      myDiagram.addDiagramListener("PartCreated", e => {
+        this.saveComment(e.subject.part.data);
+      });
 
-    myDiagram.addDiagramListener("ObjectDoubleClicked", function(e) {});
+      myDiagram.addDiagramListener("SelectionMoved", e => {
+        e.subject.each(p => {
+          this.updateComment(p.part.data);
+        });
+      });
+      myDiagram.addDiagramListener("TextEdited", e => {
+        this.updateComment(e.subject.part.data);
+      });
+      myDiagram.addDiagramListener("SelectionDeleted", e => {
+        e.subject.each(p => {
+          this.deleteComment(p.part.data);
+        });
+      });
+    }
+
+    myDiagram.addDiagramListener("BackgroundSingleClicked", (e) => {
+      this.curriculumData = -1;
+    });
 
     // 팔레트 설정 관련 코드
     // 노드모델에 변경사항이 있다면 반드시 여기서 확인 해주셔야 합니다.
@@ -422,7 +614,8 @@ export default {
         model: new go.GraphLinksModel(
           // 추천 커리큘럼 전역변수로 저장되어있음
           recommendCurData
-        )
+        ),
+        autoScale: go.Diagram.UniformToFill
       }
     );
 
@@ -440,38 +633,57 @@ export default {
       myDiagram.isReadOnly = true;
     }
     //-----------------------------------------------------------------------------------|
-
-    // 필요없음
     this.readRoadmap();
     // // 수정로그 가져오기
     // update쪽으로 옮기기
     // this.readRoadmapLog();
-    this.getRecommendCur();
+    if(this.roadmapMode == 1)
+      this.getRecommendCur();
     // 팔레트 초기화
-    curriculumData = -1;
+    this.curriculumData = -1;
+
+    //로드백 타이머 시작
+    if (!iseditable) {
+      this.startRoadback();
+    }
   },
   watch: {
     // head 데이터 변경때 마다 실행(즉, 커리큘럼 클릭시 실행)
     headertext: function() {
       // 데이터 호출하는 함수
+      if (
+        this.curriculumData.bdid == 0 &&
+        this.curriculumData.mdid == 0 &&
+        this.curriculumData.sdid == 0
+      ) {
+        return;
+      }
       this.getRecommendCur();
     },
     memotext: function() {
-      if (curriculumData != -1) curriculumData.memo = this.memotext;
+      if (this.curriculumData != -1) this.curriculumData.memo = this.memotext;
     },
     dates: function() {
-      if (curriculumData != -1) {
+      if (this.curriculumData != -1) {
         if (this.dates.length > 10) {
-          curriculumData.startdate = this.dates.slice(0, 10);
-          curriculumData.enddate = this.dates.slice(14, 24);
+          this.curriculumData.startdate = this.dates.slice(0, 10);
+          this.curriculumData.enddate = this.dates.slice(14, 24);
         } else {
-          curriculumData.startdate = this.dates;
-          curriculumData.enddate = this.dates;
+          this.curriculumData.startdate = this.dates;
+          this.curriculumData.enddate = this.dates;
         }
       }
     },
     roadmapData: function(e) {
       myDiagram.model = go.Model.fromJson(e);
+    },
+    inputText: function() {
+      // 검색메서드 실행
+      if (this.inputText != "") this.getSearchCur();
+      else this.getRecommendCur();
+    },
+    roadmapname: function() {
+      this.curriculumData = -1
     }
   },
   computed: {},
@@ -488,7 +700,10 @@ export default {
         ),
         {
           // the Node.location is at the center of each node
-          locationSpot: go.Spot.Center
+          locationSpot: go.Spot.Center,
+          movable: iseditable,
+          deletable: iseditable,
+          selectable: iseditable
         }
       ];
     },
@@ -517,7 +732,7 @@ export default {
     // 글씨체, 스타일 수정 필요(프론트 집중기간)
     textStyle() {
       return {
-        font: "bold 11pt Lato, Helvetica, Arial, sans-serif",
+        font: "12pt Lato, Helvetica, Arial, sans-serif",
         stroke: "#000000"
       };
     },
@@ -546,39 +761,114 @@ export default {
     },
     checkCur(e) {
       // 차후에 DB에 요청을 보낸다음 DB정보로 반영
-      this.headertext = curriculumData.text;
-      if (curriculumData.category)
-        this.dates = curriculumData.startdate + " to " + curriculumData.enddate;
-      this.memotext = curriculumData.memo;
-      this.descript = curriculumData.content;
+      if (this.curriculumData.category == "comment" || this.curriculumData == -1) {
+        this.headertext = "";
+        this.dates = "";
+      this.memotext = "";
+      this.descript = "";  
+        return;
+      }
+      this.headertext = this.curriculumData.text;
+
+      if (this.curriculumData.startdate)
+        this.dates = this.curriculumData.startdate + " to " + this.curriculumData.enddate;
+      else
+        this.dates = ""
+      this.memotext = this.curriculumData.memo;
+      this.descript = this.curriculumData.content;
     },
     getRecommendCur() {
+      const _ = require("lodash");
       let color;
       let url;
-      if (curriculumData == -1 || !curriculumData.category) {
-        url = `${this.$store.getters.getServer}/curriculum/suggest`;
+      if (this.curriculumData == -1 || !this.curriculumData.category) {
+        url = `${this.$store.getters.getRoadmapServer}/curriculum/suggest`;
         color = "blue";
-      } else if (curriculumData.mdid != 0) {
-        url = `${this.$store.getters.getServer}/curriculum/suggest/${curriculumData.bdid}/${curriculumData.mdid}`;
+      } else if (this.curriculumData.mdid != 0) {
+        url = `${this.$store.getters.getRoadmapServer}/curriculum/suggest/${this.curriculumData.bdid}/${this.curriculumData.mdid}`;
         color = "green";
-      } else if (curriculumData.bdid != 0) {
-        url = `${this.$store.getters.getServer}/curriculum/suggest/${curriculumData.bdid}`;
+      } else if (this.curriculumData.bdid != 0) {
+        url = `${this.$store.getters.getRoadmapServer}/curriculum/suggest/${this.curriculumData.bdid}`;
         color = "black";
       }
       axios
         .get(url)
         .then(res => {
+          this.recommend = res.data.recommend.text;
+          this.get_recommend();
           for (var i = 0; i < res.data["suggest"].length; i++) {
             res.data["suggest"][i].category = color;
             res.data["suggest"][i].startdate = "";
             res.data["suggest"][i].enddate = "";
             res.data["suggest"][i].memo = "";
           }
+          if (this.curriculumData == -1) {
+            let custom = _.cloneDeep(this.curData);
+            custom.category = "Custom";
+            custom.text = "User Custom";
+            res.data["suggest"].unshift(custom);
+            let start = _.cloneDeep(this.curData);
+            start.category = "Start";
+            start.text = "시작";
+            res.data["suggest"].unshift(start);
+          }
+          if (this.curriculumData == -1) {
+            let custom = _.cloneDeep(this.curData);
+            custom.category = "Custom";
+            custom.text = "인공지능";
+            res.data["suggest"].push(custom);
+            let start = _.cloneDeep(this.curData);
+            start.category = "Custom";
+            start.text = "Big Data";
+            res.data["suggest"].push(start);
+          }
+                    if (this.curriculumData == -1) {
+            let custom = _.cloneDeep(this.curData);
+            custom.category = "Custom";
+            custom.text = "블록체인";
+            res.data["suggest"].push(custom);
+            let start = _.cloneDeep(this.curData);
+            start.category = "Custom";
+            start.text = "IoT";
+            res.data["suggest"].push(start);
+          }
+          let blank = _.cloneDeep(this.curData);
+          blank.category = "Blank";
+           blank.text = "";
+          res.data["suggest"].unshift(blank);
           recommendCurData = res.data["suggest"];
           myPalette.model.nodeDataArray = recommendCurData;
         })
         .catch(e => {
-          console.error(e);
+          alert("죄송합니다. 문제가 생겼습니다.")
+          //console.error(e);
+        });
+    },
+    getSearchCur() {
+      let url = `${this.$store.getters.getRoadmapServer}/curriculum/search/${this.inputText}`;
+      let color = "";
+      axios
+        .get(url)
+        .then(res => {
+          for (var i = 0; i < res.data["suggest"].length; i++) {
+            if (res.data["suggest"][i].sdid != 0) color = "green";
+            else if (res.data["suggest"][i].mdid != 0) color = "black";
+            else color = "blue";
+            res.data["suggest"][i].category = color;
+            res.data["suggest"][i].startdate = "";
+            res.data["suggest"][i].enddate = "";
+            res.data["suggest"][i].memo = "";
+          }
+           let blank = _.cloneDeep(this.curData);
+          blank.category = "Blank";
+           blank.text = "";
+          res.data["suggest"].unshift(blank);
+          recommendCurData = res.data["suggest"];
+          myPalette.model.nodeDataArray = recommendCurData;
+        })
+        .catch(err => {
+          alert("죄송합니다. 문제가 생겼습니다.")
+          //console.error(err);
         });
     },
     readRoadmap() {
@@ -586,9 +876,100 @@ export default {
     },
     serveRoadmap() {
       return myDiagram.model.toJson();
-    }
-  }
+    },
+    startRoadback() {
+      roadbacktimer = setInterval(() => {
+        if (
+          myDiagram.toolManager.textEditingTool.isActive ||
+          myDiagram.toolManager.draggingTool.Wc ||
+          this.isworking
+        ) {
+          return;
+        }
+        let url = `${this.$store.getters.getRoadmapServer}/roadmap/get/comment/${this.rmid}`;
+        axios
+          .get(url)
+          .then(res => {
+            myDiagram.model = go.Model.fromJson(res.data["roadmaps"].tmp);
+          })
+          .catch(err => {
+            alert("죄송합니다. 문제가 생겼습니다.")
+            //console.error(err);
+          });
+      }, 2000);
+    },
+    saveComment(data) {
+      data.rmid = this.rmid;
+      this.isworking = true;
+      axios
+        .put(`${this.$store.getters.getRoadmapServer}/roadcomment/insert`, data)
+        .then(res => {
+          if (res.data.msg != "success") alert("통신 오류");
+        })
+        .catch(err => {
+          alert("죄송합니다. 문제가 생겼습니다.")
+          //console.error(err);
+        });
+      this.isworking = false;
+    },
+    updateComment(data) {
+      this.isworking = true;
+      axios
+        .put(`${this.$store.getters.getRoadmapServer}/roadcomment/update`, data)
+        .then(res => {
+          if (res.data.msg != "success") alert("통신 오류");
+        })
+        .catch(err => {
+          alert("죄송합니다. 문제가 생겼습니다.")
+          //console.error(err);
+        });
+        this.isworking = false;
+    },
+    deleteComment(data) {
+      this.isworking = true;
+      axios
+        .post(
+          `${this.$store.getters.getRoadmapServer}/roadcomment/delete`,
+          data
+        )
+        .then(res => {
+          if (res.data.msg != "success") alert("통신 오류");
+        })
+        .catch(err => {
+          alert("죄송합니다. 문제가 생겼습니다.")
+          //console.error(err);
+        });
+        this.isworking = false;
+    },
+    get_recommend(){
+      this.$emit('get_recommend',this.recommend);
+    },
+  },
+  destroyed() {
+    clearInterval(roadbacktimer);
+  },
 };
 </script>
 
-<style></style>
+<style>
+.bigCur {
+  display: inline-block;
+  border-bottom: 3px solid #b4e7f8;
+  box-shadow: inset 0 -4px 0 #b4e7f8;
+}
+.middleCur {
+  display: inline-block;
+  border-bottom: 3px solid #ffb3fb;
+  box-shadow: inset 0 -4px 0 #ffb3fb;
+}
+.smallCur {
+  display: inline-block;
+  border-bottom: 3px solid #a9ffae;
+  box-shadow: inset 0 -4px 0 #a9ffae;
+}
+.otherCur {
+  display: inline-block;
+  border-bottom: 3px solid #f4f8b4;
+  box-shadow: inset 0 -4px 0 #f4f8b4;
+}
+</style>

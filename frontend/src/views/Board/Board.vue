@@ -1,23 +1,45 @@
 <template>
-  <div>
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-default">
+  <div class="nanum-bold">
+    <base-header class="pb-3 pt-5 pt-md-8 bg-baby-blue" style="height: 350px;"> 
+      <b-container class="pl-5 pr-2">
+        <b-row align-h="around">
+          <b-col cols="10">
+            <b-form-input form-input
+              v-model="inputtext"
+              placeholder="검색어를 입력해주세요."
+              size="lg"
+            ></b-form-input>
+          </b-col>
+          <b-col cols="1">
+            <b-button size="lg" class="fas fa-search px-5" @keydown.enter="search" @click="search" variant="peach-quartz"></b-button>
+          </b-col>
+          <b-col cols="1"></b-col>
+        </b-row>
+      </b-container>
+      <b-container class="pt-6">
+        <b-row align-h="end">
+          <!-- <b-button variant="primary" class="mt-2" @click="detailBoard">detail board</b-button> -->
+          <b-button variant="classic-blue" class="mt-2 mr-5 nanum-extra-bold" @click="createBoard">새 글 작성
+            </b-button>
+        </b-row>
+      </b-container>
     </base-header>
-    <b-container>
-      <b-row align-h="end">
-        <!-- <b-button variant="primary" class="mt-2" @click="detailBoard">detail board</b-button> -->
-        <b-button variant="primary" class="mt-2" @click="createBoard">새 글 작성</b-button>
-      </b-row>
+    <b-container class="p-1">
+      <!-- <b-row align-h="end">
+        <b-button 
+          variant="classic-blue" 
+          class="mt-2 mr-4" 
+          @click="createBoard"
+          >새 글 작성</b-button
+        >
+      </b-row> -->
+      <light-table @clickRow="clickOn" ref="lightTable"/>
     </b-container>
 
-    <light-table @clickRow="clickOn" />
 
     <!-- <dark-table></dark-table> -->
 
-    <board-sidebar
-      @goBack="clickOff"
-      :selPid="selPid"
-      v-if="isSelected"
-    />
+    <!-- <board-sidebar @goBack="clickOff" :selPid="selPid" v-if="isSelected" /> -->
   </div>
 </template>
 <script>
@@ -49,29 +71,31 @@ export default {
     return {
       isSelected: false,
       tWidth: "550px",
-      selPid: ""
+      selPid: "",
+      inputtext :"",
     };
   },
   methods: {
     clickOn(pid) {
       this.isSelected = true;
       this.selPid = pid;
-      console.log(pid);
-      console.log(this.isSelected);
     },
     clickOff() {
       this.isSelected = false;
-      console.log(this.isSelected);
     },
     createBoard() {
-      this.$router.push({name: 'create_board'})
+      this.$router.push({name: '글쓰기' })
+    },
+    search(){
+      var word = this.inputtext;
+      this.$refs.lightTable.getList(word);
     },
     // detailBoard() {
     //   this.$router.push({name: 'detail_board', query: { pid: pid }})
     // },
   },
   created() {
-    console.log(this.$store.getters.getUid);
+    // console.log(this.$store.getters.getUid);
   }
 };
 </script>

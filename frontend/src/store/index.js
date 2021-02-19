@@ -5,8 +5,20 @@ import Vuex from "vuex";
 
 Vue.use(Vuex);
 
-const SERVER_URL = process.env.VUE_APP_SERVER_URL;
-// console.log(SERVER_URL)
+// 서버
+// const SERVER_URL = [
+//   process.env.VUE_APP_SERVER_URL,
+//   process.env.VUE_APP_SERVER_URL,
+//   process.env.VUE_APP_SERVER_URL,
+//   process.env.VUE_APP_SERVER_URL,
+// ]
+// 로컬
+const SERVER_URL = [
+  process.env.VUE_APP_SERVER_URL_BOARD,
+  process.env.VUE_APP_SERVER_URL_CHATTING,
+  process.env.VUE_APP_SERVER_URL_ROADMAP,
+  process.env.VUE_APP_SERVER_URL_USER,
+]
 
 export default new Vuex.Store({
   state: {
@@ -14,21 +26,30 @@ export default new Vuex.Store({
     accessToken: null,
     user: {
       uid: "",
-      uid: "",
       email: "",
       name: "",
-      createDate: "",
+      createDate: ""
     },
     code: "",
+    pid: ""
   },
   getters: {
-    getServer(state) { 
-      return state.server;
+    getBoardServer(state) {
+      return state.server[0];
+    },
+    getChattingServer(state) {
+      return state.server[1];
+    },
+    getRoadmapServer(state) {
+      return state.server[2];
+    },
+    getUserServer(state) {
+      return state.server[3];
     },
     getAccessToken(state) {
       return state.accessToken;
     },
-    getUid(state) { 
+    getUid(state) {
       return state.user.uid;
     },
     getEmail(state) {
@@ -40,19 +61,20 @@ export default new Vuex.Store({
     getCreateDate(state) {
       return state.user.createDate;
     },
-    getCode(state) { 
+    getCode(state) {
       return state.code;
     },
-    getUser(state) { 
+    getUser(state) {
       return state.user;
+    },
+    getPid(state) {
+      return state.pid;
     }
   },
   mutations: {
     LOADUSERTOKEN(state) {
-      console.log("set token");
-      state.accessToken = sessionStorage.getItem('auth-token');
-      state.user = JSON.parse(sessionStorage.getItem('user'));
-      console.log("load : " + state.user);
+      state.accessToken = sessionStorage.getItem("auth-token");
+      state.user = JSON.parse(sessionStorage.getItem("user"));
       axios.defaults.headers.common["auth-token"] = state.accessToken;
     },
     LOGIN(state, payload) {
@@ -69,47 +91,58 @@ export default new Vuex.Store({
       state.user.name = "";
       state.user.createDate = "";
     },
-    SETINFO(state, payload) { 
+    SETINFO(state, payload) {
       state.user.name = payload["name"];
       state.user.email = payload["email"];
     },
-    SETEMAIL(state, payload) { 
+    SETEMAIL(state, payload) {
       state.user.email = payload;
     },
-    SETCODE(state, payload) { 
+    SETCODE(state, payload) {
       state.code = payload;
     },
+    SETPID(state, payload) {
+      state.pid = payload;
+    }
   },
   actions: {
     LOGIN(context, user) {
       return axios
-        .post(`${SERVER_URL}/user/login`, user)
-        .then((response) => {
-          console.log(response.data)
+        .post(`${SERVER_URL[3]}/user/login`, user)
+        .then(response => {
           context.commit("LOGIN", response.data);
-          if(`${response.data["authorizationToken"]}` == "undefined") reject();
-          axios.defaults.headers.common["auth-token"] = `${response.data["authorizationToken"]}`;
-          sessionStorage.setItem('auth-token', `${response.data["authorizationToken"]}`)
-          sessionStorage.setItem('user', JSON.stringify(this.getters.getUser));
+          if (`${response.data["authorizationToken"]}` == "undefined")
+          axios.defaults.headers.common[
+            "auth-token"
+          ] = `${response.data["authorizationToken"]}`;
+          sessionStorage.setItem(
+            "auth-token",
+            `${response.data["authorizationToken"]}`
+          );
+          sessionStorage.setItem("user", JSON.stringify(this.getters.getUser));
         })
-        .catch(() => {
-          reject();
+        .catch((err) => {
+          alert("죄송합니다. 문제가 생겼습니다.")
+          //console.error(err)
         });
     },
     LOGOUT(context) {
       context.commit("LOGOUT");
       axios.defaults.headers.common["auth-token"] = null;
-      sessionStorage.removeItem('auth-token');
+      sessionStorage.removeItem("auth-token");
     },
     SETINFO(context, user) {
       context.commit("SETINFO", user);
     },
-    SETCODE(context, code) { 
+    SETCODE(context, code) {
       context.commit("SETCODE", code);
     },
     SETEMAIL(context, email) {
       context.commit("SETEMAIL", email);
     },
+    SETPID(context, pid) {
+      context.commit("SETPID", pid);
+    }
   },
   modules: {}
 });

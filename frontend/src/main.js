@@ -37,6 +37,14 @@ import "flatpickr/dist/flatpickr.css";
 import 'flatpickr/dist/themes/material_blue.css';
 Vue.use(VueFlatPickr)
 
+// full-page => intro 페이지 스크롤 이벤트 설정
+// import 'fullpage.js/vendors/scrolloverflow' // Optional. When using scrollOverflow:true
+// import './fullpage.scrollHorizontally.min' // Optional. When using fullpage extensions
+import 'animate.css'
+import VueFullPage from 'vue-fullpage.js'
+
+Vue.use(VueFullPage);
+
 // plugin setup
 Vue.use(VueCarousel)
 Vue.use(DashboardPlugin);
