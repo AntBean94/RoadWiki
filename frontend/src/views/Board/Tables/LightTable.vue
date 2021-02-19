@@ -128,7 +128,6 @@ export default {
   },
   methods: {
     getList(word) {
-      console.log(word)
       let adr = `${this.$store.getters.getBoardServer}/freeboard/list/board/${this.selector}`;
       if (word.length < 1) adr += "/ ";
       else adr += `/${word}`;
@@ -138,7 +137,6 @@ export default {
       axios
         .get(adr)
         .then(response => {
-          console.log(response.data.commentCnts);
           this.postings = response.data.postings;
           this.names = response.data.names;
           this.commentCnts = response.data.commentCnts;
@@ -151,8 +149,7 @@ export default {
           }
         })
         .catch(err => {
-          console.log(err);
-          alert("문제가 생겼습니다");
+          alert("죄송합니다. 문제가 생겼습니다");
         });
     },
     openDetail(row) {
@@ -168,11 +165,9 @@ export default {
         });
     },
     clickName(uid) {
-      console.log(uid);
       this.$router.push({ name: "프로필", query: { profileId: uid } });
     },
     getCommentNum() {
-      console.log(this.row.pid);
       axios.get(
         `${this.$store.getters.getBoardServer}/freeboard/posting/${this.row.pid}`
       );

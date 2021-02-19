@@ -36,7 +36,8 @@ export default {
           this.rooms.unshift({ value: null, text: "선택하세요" });
         })
         .catch((response) => {
-          console.log(response);
+          alert("죄송합니다. 문제가 생겼습니다.")
+          //console.log(response);
         });
     },
     sendRoom: function (roomid) {

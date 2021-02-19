@@ -49,7 +49,8 @@ export default {
             this.content = "";
           })
           .catch(err => {
-            console.log(err);
+            alert("죄송합니다. 문제가 생겼습니다.")
+            //console.log(err);
           });
       } else {
         alert("댓글을 작성해주세요");

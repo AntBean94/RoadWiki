@@ -131,7 +131,7 @@ export default {
           }
         })
         .catch(e => {
-          console.log(e);
+          //console.log(e);
           alert("axios 오류");
         });
     },
@@ -139,7 +139,7 @@ export default {
       axios
         .delete(`${this.$store.getters.getRoadmapServer}/roadmap/delete/${this.$store.getters.getUid}/${clickrmorder}`)
         .then(res => {
-          console.log(res);
+          //console.log(res);
           if (res.data.msg === "success") {
             this.getUserRoadmapList();
             alert("삭제 완료");
@@ -148,7 +148,7 @@ export default {
           }
         })
         .catch(e => {
-          console.log(e);
+          //console.log(e);
           alert("axios 오류");
         });
     },
@@ -177,7 +177,7 @@ export default {
         `${this.$store.getters.getRoadmapServer}/roadmap/list/${this.$store.getters.getUid}`
       )
       .then(res => {
-        console.log(res);
+        //console.log(res);
         if (res.data.msg == "success") {
           // 유저의 roadmaplist
           if (res.data["roadmaps"].length) {
@@ -201,7 +201,7 @@ export default {
         }
       })
       .catch(e => {
-        console.log(e);
+        //console.log(e);
         alert("axios 오류");
       });
     }

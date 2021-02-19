@@ -87,7 +87,6 @@ export default {
       this.$router.push({name: '글쓰기' })
     },
     search(){
-      console.log(this.inputtext)
       var word = this.inputtext;
       this.$refs.lightTable.getList(word);
     },

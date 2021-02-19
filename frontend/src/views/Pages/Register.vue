@@ -9,7 +9,7 @@
             <b-col xl="5" lg="6" md="8" class="px-5 py-5">
               <router-link to="/main">
                 <img
-                  src="/img/brand/logo_blue.png"
+                  src="/img/brand/logo_word.png"
                   alt="roadwiki"
                   width="250rem;"
                 />
@@ -79,10 +79,10 @@
                     <div class="col-3 pl-0 mt-4 pt-2">
                       <!-- 만약 기존에 계정이 존재하는 이메일이라면 this email is already taken 보여주기 -->
                       <b-button
-                        variant="provence"
+                        variant="peach-quartz"
                         v-if="!confirmEmail"
                         @click="emailNumSend"
-                        class="mr-0 ml-0 source-han-serif-k-light"
+                        class="mr-0 ml-0 nanum-bold"
                         size="md"
                         >인증하기</b-button
                       >
@@ -160,7 +160,7 @@
                             <b-link
                               v-b-modal.modal-scrollable
                               variant="link"
-                              class="m-0 p-0 source-han-serif-k-extralight"
+                              class="m-0 p-0 nanum-bold"
                               @click="isPolicyModal = true"
                             >
                               회원 약관
@@ -176,17 +176,17 @@
                       </base-input>
                     </b-col>
                   </b-row>
+                  
                   <div class="text-center">
                     <b-button
                       block
                       type="submit"
-                      variant="provence"
-                      class="mt-4 source-han-serif-k-extralight"
+                      variant="traffic-yellow"
+                      class="mt-4 nanum-bold"
                       @click="signUp"
                       >가입하기</b-button
                     >
                   </div>
-                  <div class="text-center"></div>
                   <div class="text-center"></div>
                 </b-form>
               </validation-observer>
@@ -248,7 +248,7 @@ export default {
             alert('이미 존재하는 닉네임입니다.')
             this.name = ''
           }
-          console.log(res.data);
+          
           //msg == fail 이면 중복
         })
         .catch(err => {
@@ -279,7 +279,7 @@ export default {
             axios
               .get(`${this.$store.getters.getUserServer}/email/${this.email}`)
               .then(res => {
-                console.log(res.data.msg);
+                
                 if (res.data.msg === "success") {
                   this.isEmailModal = true;
                   this.$store.dispatch("SETCODE", res.data["code"]);
@@ -350,7 +350,7 @@ export default {
   },
   watch: {
     selected() {
-      console.log(this.selected);
+      
     },
     password() {
       // isPasswordEqual()

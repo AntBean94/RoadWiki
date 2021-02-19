@@ -148,7 +148,7 @@ export default {
       .get(`${this.$store.getters.getRoadmapServer}/curriculum/suggest`)
       .then(res => {
         // this.curriculumData = res
-        console.log(res);
+        
       })
       .catch(e => {
         alert("axois 오류");

@@ -25,7 +25,6 @@ const router = new VueRouter({
 export default router;
 
 router.beforeEach((to, from, next) => {
-  console.log("################################", to)
 
   if (store.getters.getAccessToken === null)
     if (sessionStorage.getItem('auth-token') !== null)
@@ -36,7 +35,9 @@ router.beforeEach((to, from, next) => {
   // }
   if (to.name !== 'MAINPAGE' && to.name !== '공유로드맵' && to.name !== 'register' && to.name !== '게시글' && to.name !== '공식 로드맵' && to.name !== '공유로드맵\'s' && to.name !== '게시판' && to.name !== '비밀번호찾기' && to.name !== '비밀번호재설정') { 
     if (store.getters.getAccessToken === null) { 
-      next({ name: 'MAINPAGE' })
+      if (to.name != 'MAINPAGE') {
+        next({ path: 'MAINPAGE' })
+      } 
       alert('로그인이 필요한 서비스입니다.')
     }
   }

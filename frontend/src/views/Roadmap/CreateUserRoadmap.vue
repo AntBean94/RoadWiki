@@ -213,7 +213,7 @@ export default {
           }
         })
         .catch(e => {
-          console.log(e);
+          //console.log(e);
           alert("axios 오류");
         });
     },
@@ -228,7 +228,7 @@ export default {
             tmp: childRoadmapData
           })
           .then(res => {
-            console.log(res);
+            
             if (res.data.msg == "success") {
               this.$router.push({ name: "나의 로드맵" });
             } else {

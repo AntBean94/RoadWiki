@@ -154,7 +154,8 @@ export default {
         this.nickname = res.data.name;
       })
       .catch(err => {
-        console.log(err);
+        alert("죄송합니다. 문제가 생겼습니다.")
+        // console.log(err);
       });
   }
 };

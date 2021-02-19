@@ -128,7 +128,7 @@ export default {
         }
       })
       .catch(e => {
-        console.log(e);
+        //console.log(e);
         alert("axios 오류");
       });
   },
@@ -148,7 +148,7 @@ export default {
           }
         })
         .catch(e => {
-          console.log(e);
+          //console.log(e);
           alert("axios 오류");
         });
     },

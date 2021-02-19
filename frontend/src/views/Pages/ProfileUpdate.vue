@@ -231,9 +231,6 @@ export default {
 
     axios.get(`${this.$store.getters.getUserServer}/user/image/${this.uid}`).then(res => {
       this.profileUrl = res.data.path;
-      console.log('##########')
-      console.log(this.profileUrl)
-      console.log('##########')
     });
 
     axios
