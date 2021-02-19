@@ -99,14 +99,18 @@ export default {
   created() {
     // 댓글 이미지
     // 해당 계정의 프로필 사진 가져오는 걸로 해야함
-    axios
+    this.createMethod()
+  },
+  methods: {
+    createMethod() {
+      axios
       .get(`${this.$store.getters.getUserServer}/user/image/${this.comment.uid}`)
       .then(res => {
         this.profileUrl = res.data.path;
       });
 
 
-    axios
+      axios
       .get(`${this.$store.getters.getUserServer}/user/name/${this.comment.uid}`)
       .then(res => {
         this.nickname = res.data.name;
@@ -114,8 +118,7 @@ export default {
       .catch(err => {
         console.log(err);
       });
-  },
-  methods: {
+    },
     // 대댓글 작성 이후 recomment다시 false로 바꿔주기
     makeRecomment() {
       if (this.recomment) {
@@ -124,6 +127,7 @@ export default {
       } else {
         this.recomment = true;
       }
+      this.createMethod()
     },
     // clickLike() {
     //   this.like = true;

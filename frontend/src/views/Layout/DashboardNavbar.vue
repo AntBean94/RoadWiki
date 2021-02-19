@@ -107,6 +107,17 @@
             </i>
             <h6></h6>
           </div> -->
+          <b-col>
+            <b-row class="justify-content-center">
+              <i 
+                class="btn ni ni-single-02 nav-btn"
+              >
+              </i>
+            </b-row>
+            <b-row class="justify-content-center">
+              <h6>로그인</h6>
+            </b-row>
+          </b-col>
         </b-row>
       </div>
 
