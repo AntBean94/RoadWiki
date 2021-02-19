@@ -1,151 +1,161 @@
-
-
-<center>
-    <img src="documents/picture/roadwiki_logo.png" height="300">
-</center>
+![logo](documents/picture/README/logo.png)
 
 
 
 
+# SSAFY 4th 자율 프로젝트 1차 sub3
 
-
-
-# SSAFY 4th 자율 프로젝트 1차 sub2
+> 배포 주소 : https://i4c106.p.ssafy.io/MAINPAGE
 
 개발자를 위한 개발자 로드맵 제시 및 개인 커스터마이징 로드맵 제공 웹 페이지
 
-![main_page](documents/picture/main_page.PNG)
+
+
+#### 제작 기간
+
+> 21.01.11 ~ 21.02.19 (6주간 진행)
+
+
+
+#### 참여 인원
+
+> 6명
+
+| 역할         | 이름   |
+| ------------ | ------ |
+| 팀장, 백엔드 | 김하늘 |
+| 백엔드       | 윤건상 |
+| 백엔드       | 윤승환 |
+| 프론트엔드   | 곽온겸 |
+| 프론트엔드   | 김다민 |
+| 프론트엔드   | 조명희 |
+
+
 
 ## 🚀 Getting Started
 
-### Rererequisites
+### Requisites
 
 - Java
 - npm
 - MySQL Workbench
 - STS
 
-###  Install
-
-#### npm 설치
-
-> 초기 위치 : 프로젝트 폴더
-
-```
-cd frontend/
-npm i
-```
-
-<span style="color: red;">(주의)</span> `$ npm i`는 frontend 디렉토리에서 수행해야 합니다.
-
-
-
-### Usage
-
-#### Front server 구동
-
-```
-npm run serve
-```
-
-<span style="color: red;">(주의)</span> `$ npm run serve`는 frontend 디렉토리에서 수행해야 합니다.
-
-
-
-#### Back server 구동
-
-```
-1. STS 실행
-2. File - Import Projects from File System... 클릭
-3. backend폴더를 Directory로 선택
-4. Package Explorer에 있는 backend를 마우스 우클릭 후 Run As - Spring Boot App 클릭
-```
-
-
-
-#### DataBase 구동
-
-> 실행 파일 이름 : roadwiki.sql
-
-```
-1. MySQL Workbench 실행
-2. Navigator - Administration - Data Import/Restore
-3. Import from Self-Contained File 클릭 후 roadwiki.sql로 파일 설정
-4. Default Target Schema - New... 클릭 후 roadwiki 입력
-5. Start Import 클릭
-```
-
 
 
 ---
 
-
-
 ## 📂프로젝트 구조
 
 ```
-sub02
+project
 ├─backend
-│  ├─.settings
-│  └─src
-│     ├─main
-│     │  ├─java
-│     │  │  └─com
-│     │  │      └─web
-│     │  │          └─blog
-│     │  │              ├─config
-│     │  │              ├─controller
-│     │  │              ├─exception
-│     │  │              ├─interceptor
-│     │  │              └─model
-│     │  │                  ├─dto
-│     │  │                  ├─repo
-│     │  │                  └─service
-│     │  └─resources
-│     │      ├─mapper
-│     │      └─statics
-│     │          └─upload
-│     └─test
-│         └─java
-│             └─com
-│                 └─web
-│                     └─blog
+│  ├─board
+│  │  └─src
+│  │      └─main
+│  │            ├─java
+│  │            │  └─com
+│  │            │      └─web
+│  │            │          └─blog
+│  │            │              ├─config
+│  │            │              ├─controller
+│  │            │              └─model
+│  │            │                  ├─dto
+│  │            │                  ├─repo
+│  │            │                  └─service
+│  │            └─resources
+│  │                └─mapper
+│  ├─chatting
+│  │  └─src
+│  │       └─main
+│  │            ├─java
+│  │            │  └─com
+│  │            │      └─web
+│  │            │          └─blog
+│  │            │              ├─component
+│  │            │              ├─config
+│  │            │              ├─controller
+│  │            │              └─model
+│  │            │                  ├─dto
+│  │            │                  ├─repo
+│  │            │                  └─service
+│  │            └─resources
+│  ├─roadmap
+│  │  └─src
+│  │       └─main
+│  │            ├─java
+│  │            │  └─com
+│  │            │      └─web
+│  │            │          └─blog
+│  │            │              ├─config
+│  │            │              ├─controller
+│  │            │              └─model
+│  │            │                  ├─dto
+│  │            │                  ├─repo
+│  │            │                  └─service
+│  │            └─resources
+│  │                ├─mapper
+│  │                └─statics
+│  │                    └─upload
+│  │                        └─1
+│  └─user
+│      └─src
+│           └─main
+│                ├─java
+│                │  └─com
+│                │      └─web
+│                │          └─blog
+│                │              ├─config
+│                │              ├─controller
+│                │              ├─exception
+│                │              ├─interceptor
+│                │              ├─model
+│                │              │  ├─dto
+│                │              │  ├─repo
+│                │              │  └─service
+│                │              └─util
+│                └─resources
+│                    └─mapper
 └─frontend
-   ├─public
-   │  └─img
-   │      ├─brand
-   │      ├─icons
-   │      │  ├─cards
-   │      │  ├─common
-   │      │  └─flags
-   │      └─theme
-   └─src
-       ├─assets
-       │  └─scss
-       ├─components
-       │  ├─Board
-       │  ├─Login
-       │  ├─Logout
-       │  ├─Navbar
-       │  ├─Profileupdate
-       │  ├─SidebarPlugin
-       │  └─Validation
-       ├─directives
-       ├─plugins
-       ├─routes
-       ├─store
-       ├─util
-       └─views
-           ├─Board
-           │  ├─Posting
-           │  └─Tables
-           ├─Layout
-           ├─Maps
-           ├─Pages
-           │  └─UserProfile
-           ├─Roadmap
-           └─Tables
-               └─RegularTables
+    └─src
+        ├─components
+        │  ├─Board
+        │  ├─Breadcrumb
+        │  ├─Cards
+        │  ├─Charts
+        │  ├─Chatting
+        │  ├─Collapse
+        │  ├─Inputs
+        │  ├─Login
+        │  ├─Logout
+        │  ├─Navbar
+        │  ├─NotificationPlugin
+        │  ├─Profileupdate
+        │  ├─Roadmap
+        │  │  └─ShareRoadmap
+        │  ├─SidebarPlugin
+        │  ├─Tabs
+        │  └─Validation
+        ├─routes
+        ├─store
+        └─views
+            ├─Board
+            │  ├─Posting
+            │  └─Tables
+            ├─Calendar
+            ├─Chatting
+            ├─Dashboard
+            ├─Layout
+            ├─Mainpage
+            ├─Maps
+            ├─Pages
+            │  └─UserProfile
+            ├─Roadmap
+            ├─Search
+            ├─ShareRoadmap
+            ├─Starter
+            └─Tables
+                └─RegularTables
 ```
 
 
@@ -154,29 +164,15 @@ sub02
 
 ## 🖌ERD (Entity-Relationship Diagram)
 
-![ERD](documents/picture/ERD.png)
-
-
-
----
-
-## ✨ Swagger
-
-> http://localhost:8085/swagger-ui.html#/
-
-
-
-![swagger_email_validation](documents/picture/swagger_email_validation.png)
-
-![swagger_email_send](documents/picture/swagger_email_send.png)
-
-![swagger_email_controller_](documents/picture/swagger_email_controller_.png)
-
-
+![ERD](documents/picture/README/ERD.png)
 
 ---
 
 
+
+## ✨아키텍처
+
+![back_architecture](documents/picture/back_architecture.png)
 
 ## 📜 기능 설명
 
@@ -186,11 +182,20 @@ sub02
 
 - 기본적인 로드맵 제공을 통해 사용자 편의성 향상
 
+![officialroadmap](documents/picture/README/official_roadmap.gif)
+
 #### 로드맵 커스터마이징 기능
 
 - 사용자 맞춤형 로드맵 생성 및 수정 가능
-- 로드맵 공유기능을 통해 유저 맞춤 피드백 제공
 - 사용자 참여형 로드맵 생성 기능 제공
+
+![roadmap](README.assets/roadmap.gif)
+
+#### 로드백 기능
+
+- 로드맵 공유기능을 통해 유저 맞춤 피드백 제공
+
+![roadback](documents/picture/README/roadback.gif)
 
 ---
 
@@ -200,21 +205,45 @@ sub02
 
 - 타유저와의 소통 공간
 
+![image-20210219125314043](documents/picture/README/boardlist.png)
+
+![image-20210219125213174](documents/picture/README/detailboard1.png)
+
+![image-20210219125256225](documents/picture/README/detailboard2.png)
+
 ---
 
 ### 😀유저 관리
 
 #### 회원가입
 
-#### 로그인
+![image-20210219125745703](documents/picture/README/register.png)
 
-#### 로그아웃
+#### 로그인 / 로그아웃
 
-#### 회원탈퇴
+![image-20210219125758499](documents/picture/README/login.png)
 
-#### 회원정보 수정
+#### 회원정보
 
+![profile](documents/picture/README/profile.gif)
 
+#### 회원정보 수정 / 회원탈퇴
+
+![profile_update](documents/picture/README/profile_update.gif)
+
+#### 비밀번호 재설정
+
+![reset_password](documents/picture/README/reset_password.gif)
+
+---
+
+### 🤳채팅
+
+#### 실시간 채팅 기능
+
+- 관심 분야별 실시간 채팅 참여 기능 제공
+
+![image-20210219115938897](documents/picture/README/chatting.png)
 
 
 
