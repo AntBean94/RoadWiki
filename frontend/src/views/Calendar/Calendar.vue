@@ -443,6 +443,14 @@ export default {
   background-color: #ccc9c9c2;
 }
 
+.cv-item {
+  cursor: pointer;
+}
+
+.form-control {
+  cursor: pointer;
+}
+
 /* 스케쥴 색상 */
 .theme-default .cv-item.big {
   /* background-color: lemonchiffon; */

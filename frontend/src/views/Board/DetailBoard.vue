@@ -2,6 +2,12 @@
   <div class="source-han-serif-k-medium nanum-bold">
     <base-header class="pt-md-5 pb-2 bg-baby-blue" style="height: 350px;">
       <b-container>	
+        <b-row class="pt-1">
+          <i class="fas fa-arrow-left fa-2x text-classic-blue cursor-event" @click="goToBack"></i>
+        </b-row>
+        <!-- <b-row class="py-2">
+          <h1 class="display-3 text-white nanum-extra-bold">{{ title }}</h1>
+        </b-row> -->
         <b-container class="px-9 py-3">
           <b-row class="py-5">
             <h1 class="display-3 text-white nanum-extra-bold">{{ title }}</h1>
@@ -46,37 +52,37 @@
           <b-row align-h="end" class="my-2" v-if="isWritter">
             <!-- 게시물의 uid와 현재 uid가 동일 할 때 보여줄 내용 -->
             <i
-              class="far fa-trash-alt fa-lg mr-3"
+              class="far fa-trash-alt fa-lg mr-3 cursor-event"
               style="color: tomato"
               @click="deleteBoard"
             ></i>
             <i
-              class="far fa-edit fa-lg mr-3"
+              class="far fa-edit fa-lg mr-3 cursor-event"
               style="color: Dodgerblue"
               @click="updateBoard"
             ></i>
           </b-row>
           <b-row>
             <i
-              class="far fa-thumbs-up fa-2x ml-3 text-traffic-blue"
+              class="far fa-thumbs-up fa-2x ml-3 text-traffic-blue cursor-event"
               v-if="!like"
               @click="clickLike"
               ><span class="h3 ml-1 nanum-bold">{{ likeCnt }}</span></i
             >
             <i
-              class="fas fa-thumbs-up fa-2x ml-3 text-traffic-blue"
+              class="fas fa-thumbs-up fa-2x ml-3 text-traffic-blue cursor-event"
               v-if="like"
               @click="cancelLike"
               ><span class="h3 ml-1 nanum-bold">{{ likeCnt }}</span></i
             >
             <i
-              class="far fa-thumbs-down fa-2x ml-3 text-traffic-red"
+              class="far fa-thumbs-down fa-2x ml-3 text-traffic-red cursor-event"
               v-if="!dislike"
               @click="clickDislike"
               ><span class="h3 ml-1 nanum-bold">{{ dislikeCnt }}</span></i
             >
             <i
-              class="fas fa-thumbs-down fa-2x ml-3 text-traffic-red"
+              class="fas fa-thumbs-down fa-2x ml-3 text-traffic-red cursor-event"
               v-if="dislike"
               @click="cancelDislike"
               ><span class="h3 ml-1 nanum-bold">{{ dislikeCnt }}</span></i
@@ -323,7 +329,10 @@ export default {
         .then(() => {});
       this.dislike = false;
       this.dislikeCnt--;
-    }
+    },
+    goToBack() {
+      this.$router.push({ name: "게시판" });
+    },
   }
 };
 </script>

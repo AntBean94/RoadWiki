@@ -1,6 +1,11 @@
 <template>
   <div class="nanum-bold">
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-baby-blue" style="height: 350px;">
+    <base-header class="pb-6 pb-8 pt-0 bg-baby-blue" style="height: 350px;">
+      <b-container>
+        <b-row class="pt-5">
+          <i class="fas fa-arrow-left fa-2x text-classic-blue cursor-event" @click="goToBack"></i>
+        </b-row>
+      </b-container>
     </base-header>
 
     <b-container
@@ -300,6 +305,9 @@ export default {
          return;
        }
       this.$router.push({ name: "roadback", params: { rmid: this.rmid } });
+    },
+    goToBack() {
+      this.$router.push({ name: "공유로드맵\'s" })
     }
   }
 };

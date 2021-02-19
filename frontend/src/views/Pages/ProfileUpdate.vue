@@ -19,6 +19,7 @@
                   rounded="circle"
                   height="200px"
                   width="200px"
+                  class="cursor-event"
                 />
               </b-row>
               <b-row class="justify-content-end"> </b-row>

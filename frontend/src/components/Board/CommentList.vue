@@ -13,7 +13,7 @@
     </b-row>
     <b-row v-if="!isUpdate">
       <b-col cols="8">
-        <p class="px-3">
+        <p class="px-3" style="white-space: pre-line">
           {{ comment.content }}
         </p>
       </b-col>
